@@ -1,24 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Card
 {
+    public string name;
+    public string id;
 
-
-    void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
+    public Card(string name, string id)
     {
-       
-    }
-
-    void IDragHandler.OnDrag(PointerEventData eventData)
-    {
-        transform.position = eventData.position;
-    }
-
-    void IEndDragHandler.OnEndDrag(PointerEventData eventData)
-    {
-    
+        this.name = name;
+        this.id = id;
     }
 }
