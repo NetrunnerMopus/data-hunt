@@ -1,21 +1,18 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class Grip : MonoBehaviour, IDropHandler
+public class Grip
 {
+    private GameObject zone;
+    private CardPrinter printer;
 
-    void IDropHandler.OnDrop(PointerEventData eventData)
+    public Grip(GameObject zone, CardPrinter printer)
     {
-        throw new System.NotImplementedException();
+        this.zone = zone;
+        this.printer = printer;
     }
 
-    void Start()
+    public void AddCard(Card card)
     {
-
-    }
-
-    void Update()
-    {
-
+        printer.Print(card.name, "Images/Cards/" + card.id, zone.transform);
     }
 }

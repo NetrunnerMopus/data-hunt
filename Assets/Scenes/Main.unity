@@ -148,10 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0111011623fa2124797871fb3680b891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grip: {fileID: 1940409404}
-  stack: {fileID: 1198803621}
-  heap: {fileID: 836102266}
-  serverZone: {fileID: 1942180166}
+  gripZone: {fileID: 1940409404}
+  stackZone: {fileID: 1198803621}
+  heapZone: {fileID: 836102266}
+  serversZone: {fileID: 1942180166}
 --- !u!1 &711624502
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,8 +237,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1940409405}
   - {fileID: 1942180167}
+  - {fileID: 1940409405}
   - {fileID: 1198803622}
   - {fileID: 836102267}
   m_Father: {fileID: 0}
@@ -327,6 +327,7 @@ GameObject:
   - component: {fileID: 1198803622}
   - component: {fileID: 1198803624}
   - component: {fileID: 1198803623}
+  - component: {fileID: 1198803625}
   m_Layer: 5
   m_Name: Stack
   m_TagString: Untagged
@@ -385,6 +386,28 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1198803621}
+--- !u!114 &1198803625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1198803621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -405508275, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
 --- !u!1 &1553442666
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,11 +569,10 @@ GameObject:
   - component: {fileID: 1940409405}
   - component: {fileID: 1940409407}
   - component: {fileID: 1940409406}
-  - component: {fileID: 1940409408}
   - component: {fileID: 1940409409}
   m_Layer: 5
   m_Name: Grip
-  m_TagString: Untagged
+  m_TagString: Grip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -566,7 +588,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 711624506}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -606,17 +628,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1940409404}
---- !u!114 &1940409408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1940409404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4afcdfc990b56f8429bccf2d122888f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1940409409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -668,7 +679,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 711624506}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}

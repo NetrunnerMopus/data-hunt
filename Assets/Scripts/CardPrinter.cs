@@ -28,5 +28,4 @@ public class CardPrinter
         gameObject.transform.SetParent(parent);
         return gameObject;
     }
-
 }

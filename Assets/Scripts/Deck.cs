@@ -22,4 +22,9 @@ public class Deck
         cards.RemoveAt(0);
         return drawn;
     }
+
+    public bool HasCards()
+    {
+        return cards.Count > 0;
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public class Netrunner : MonoBehaviour
 {
@@ -29,31 +28,14 @@ public class Netrunner : MonoBehaviour
 
     private void SetupRunner()
     {
-        SetupStack();
         runnerDeck.Shuffle();
+        var grip = new Grip(gripZone, printer);
+        var stack = new Stack(stackZone, runnerDeck, grip, printer);
+        stack.PrepareTop();
+        
         for (int i = 0; i < 5; i++)
         {
-            RunnerDraw();
+            stack.Draw();
         }
-    }
-
-    private void SetupStack()
-    {
-        var runnerCardBack = "Images/UI/runner-card-back";
-        var stack = printer.PrintRunnerFacedown("Top of the stack", stackZone.transform);
-        stack.transform.rotation *= Quaternion.Euler(0.0f, 0.0f, 90.0f);
-        stack.AddComponent<FaceupCard>();
-    }
-
-    private void RunnerDraw()
-    {
-        var card = runnerDeck.Draw();
-        AddToGrip(card);
-    }
-
-    private void AddToGrip(Card card)
-    {
-        var gameObject = printer.Print(card.name, "Images/Cards/" + card.id, gripZone.gameObject.transform);
-        gameObject.AddComponent<FaceupCard>();
     }
 }

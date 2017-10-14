@@ -1,17 +1,37 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class Stack : MonoBehaviour, IBeginDragHandler
+public class Stack
 {
+    private GameObject zone;
+    private Deck deck;
+    private CardPrinter printer;
+    private Grip grip;
+    private GameObject topFacedown;
 
-    Deck deck;
-    CardPrinter printer;
-
-    private Card dragged;
-
-    void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
+    public Stack(GameObject zone, Deck deck, Grip grip, CardPrinter printer)
     {
-        printer.PrintRunnerFacedown("Top of stack", this.transform);
+        this.zone = zone;
+        this.deck = deck;
+        this.grip = grip;
+        this.printer = printer;
     }
 
+    public void PrepareTop()
+    {
+        if (deck.HasCards())
+        {
+            topFacedown = printer.PrintRunnerFacedown("Top of stack", zone.transform);
+            topFacedown.transform.rotation *= Quaternion.Euler(0.0f, 0.0f, 90.0f);
+            var top = topFacedown.AddComponent<TopOfTheStack>();
+            top.stack = this;
+        }
+    }
+
+    public void Draw()
+    {
+        Object.Destroy(topFacedown);
+        var card = deck.Draw();
+        grip.AddCard(card);
+        PrepareTop();
+    }
 }
