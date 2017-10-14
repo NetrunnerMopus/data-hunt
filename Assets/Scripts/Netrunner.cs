@@ -1,62 +1,59 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Netrunner : MonoBehaviour
 {
+    public GameObject gripZone;
+    public GameObject stackZone;
+    public GameObject heapZone;
+    public GameObject serversZone;
 
-    public Canvas canvas;
-    public Grip grip;
-    public EventSystem eventSystem;
-    private Deck deck = new Decks().DemoRunner();
 
-    private int cards = 0;
+    private Deck runnerDeck = new Decks().DemoRunner();
+    private CardPrinter printer = new CardPrinter();
 
     void Start()
     {
-        deck.Shuffle();
+        SetupCorporation();
+        SetupRunner();
+    }
+
+    private void SetupCorporation()
+    {
+        var serverZoneTransform = serversZone.transform;
+        printer.PrintCorpFacedown("Archives", serverZoneTransform);
+        printer.PrintCorpFacedown("R&D", serverZoneTransform);
+        printer.PrintCorpFacedown("HQ", serverZoneTransform);
+        printer.PrintCorpFacedown("Remote", serverZoneTransform);
+    }
+
+    private void SetupRunner()
+    {
+        SetupStack();
+        runnerDeck.Shuffle();
         for (int i = 0; i < 5; i++)
         {
-            var card = deck.Draw();
-            AddToGrip(card);
+            RunnerDraw();
         }
+    }
+
+    private void SetupStack()
+    {
+        var runnerCardBack = "Images/UI/runner-card-back";
+        var stack = printer.PrintRunnerFacedown("Top of the stack", stackZone.transform);
+        stack.transform.rotation *= Quaternion.Euler(0.0f, 0.0f, 90.0f);
+        stack.AddComponent<FaceupCard>();
+    }
+
+    private void RunnerDraw()
+    {
+        var card = runnerDeck.Draw();
+        AddToGrip(card);
     }
 
     private void AddToGrip(Card card)
     {
-        cards++;
-        GameObject gameObject = new GameObject(card.name)
-        {
-            layer = 5
-        };
-
-        Image image = gameObject.AddComponent<Image>();
-        image.sprite = Resources.Load<Sprite>("Images/Cards/" + card.id);
-        image.preserveAspect = true;
-
-
-        RectTransform rectangle = gameObject.GetComponent<RectTransform>();
-
-        //     rectangle.anchorMin = new Vector2(0.2f, 0.4f);
-        //     rectangle.anchorMax = new Vector2(0.2f, 0.4f);
-        //    rectangle.anchoredPosition = new Vector2(cards * 90.0f, cards * 10.0f);
-        //  rectangle.pivot = new Vector2(0.5f, 0.5f);
-        //    rectangle.sizeDelta = new Vector2(300, 419);
-
-        LayoutElement layoutElement = gameObject.AddComponent<LayoutElement>();
-        //   layoutElement.flexibleHeight = 100.0f;
-        //   layoutElement.flexibleWidth = 100.0f;
-
-        gameObject.transform.SetParent(grip.gameObject.transform);
-
-        FaceupCard faceupCard = gameObject.AddComponent<FaceupCard>();
-        CanvasGroup canvasGroup = gameObject.AddComponent<CanvasGroup>();
-        canvasGroup.blocksRaycasts = false;
-
-        // layoutElement.fl
-        // layoutElement.
+        var gameObject = printer.Print(card.name, "Images/Cards/" + card.id, gripZone.gameObject.transform);
+        gameObject.AddComponent<FaceupCard>();
     }
-
 }

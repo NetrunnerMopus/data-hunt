@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 public class Deck
 {
@@ -24,5 +22,4 @@ public class Deck
         cards.RemoveAt(0);
         return drawn;
     }
-
 }

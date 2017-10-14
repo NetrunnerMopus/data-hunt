@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-public class CardPool {
-
+﻿public class CardPool
+{
     public Card paperclip = new Card("Paperclip", "11024");
     public Card abagnale = new Card("Abagnale", "13006");
     public Card citadelSanctuary = new Card("Citadel Sanctuary", "11070");
