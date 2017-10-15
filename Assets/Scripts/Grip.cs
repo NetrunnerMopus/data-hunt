@@ -13,6 +13,7 @@ public class Grip
 
     public void AddCard(Card card)
     {
-        printer.Print(card.name, "Images/Cards/" + card.id, zone.transform);
+        var cardInGrip = printer.Print(card.name, "Images/Cards/" + card.id, zone.transform);
+        cardInGrip.AddComponent<CardInGrip>();
     }
 }
