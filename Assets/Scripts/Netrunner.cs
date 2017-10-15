@@ -2,6 +2,8 @@
 
 public class Netrunner : MonoBehaviour
 {
+    public static Game game;
+
     public GameObject gripZone;
     public GameObject stackZone;
     public GameObject heapZone;
@@ -13,25 +15,28 @@ public class Netrunner : MonoBehaviour
 
     void Start()
     {
-        SetupCorporation();
-        SetupRunner();
+        var corp = SetupCorporation();
+        var runner = SetupRunner();
+        game = new Game(corp, runner);
+        game.Start();
     }
 
-    private void SetupCorporation()
+    private Corp SetupCorporation()
     {
         var serverZoneTransform = serversZone.transform;
         printer.PrintCorpFacedown("Archives", serverZoneTransform);
         printer.PrintCorpFacedown("R&D", serverZoneTransform);
         printer.PrintCorpFacedown("HQ", serverZoneTransform);
         printer.PrintCorpFacedown("Remote", serverZoneTransform);
+        return new Corp();
     }
 
-    private void SetupRunner()
+    private Runner SetupRunner()
     {
         var grip = new Grip(gripZone, printer);
         var stack = new Stack(stackZone, runnerDeck, grip, printer);
         var creditPool = new CreditPool(creditsZone);
         var runner = new Runner(grip, stack, creditPool);
-        runner.StartGame();
+        return runner;
     }
 }

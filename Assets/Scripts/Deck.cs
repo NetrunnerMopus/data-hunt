@@ -4,9 +4,9 @@ public class Deck
 {
     private System.Random rng = new System.Random();
 
-    private List<Card> cards;
+    private List<ICard> cards;
 
-    public Deck(List<Card> cards)
+    public Deck(List<ICard> cards)
     {
         this.cards = cards;
     }
@@ -16,11 +16,18 @@ public class Deck
         cards.Sort((card1, card2) => rng.Next().CompareTo(rng.Next()));
     }
 
-    public Card Draw()
+    public ICard Draw()
     {
-        Card drawn = cards[0];
-        cards.RemoveAt(0);
-        return drawn;
+        if (HasCards())
+        {
+            ICard drawn = cards[0];
+            cards.RemoveAt(0);
+            return drawn;
+        }
+        else
+        {
+            throw new System.Exception("Trying to draw from an empty deck");
+        }
     }
 
     public bool HasCards()

@@ -2,34 +2,14 @@
 
 public class Decks
 {
-    private CardPool pool = new CardPool();
-
     public Deck DemoRunner()
     {
-        var cards = new List<Card>
+        var cards = new List<ICard>();
+        for (int i = 0; i < 7; i++)
         {
-            pool.abagnale,
-            pool.abagnale,
-            pool.abagnale,
-            pool.paperclip,
-            pool.paperclip,
-            pool.citadelSanctuary,
-            pool.mongoose,
-            pool.mongoose,
-            pool.mongoose,
-            pool.securityTesting,
-            pool.securityTesting,
-            pool.securityTesting,
-            pool.hqInterface,
-            pool.hqInterface,
-            pool.sneakdoorBeta,
-            pool.spyCamera,
-            pool.spyCamera,
-            pool.spyCamera,
-            pool.spyCamera,
-            pool.spyCamera,
-            pool.spyCamera
-        };
+            cards.Add(new Diesel());
+            cards.Add(new SureGamble());
+        }
         return new Deck(cards);
     }
 }

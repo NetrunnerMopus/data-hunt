@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    public ICard Card { private get; set; }
+
     private Vector3 originalPosition;
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
@@ -24,7 +26,7 @@ public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         var onGrip = raycast.Where(r => r.gameObject.tag == "Play").Any();
         if (onGrip)
         {
-            Debug.Log("Playing " + this.name);
+            Card.Play();
         }
         else
         {

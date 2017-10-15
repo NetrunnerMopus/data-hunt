@@ -25,7 +25,6 @@ public class TopOfTheStack : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         var onGrip = raycast.Where(r => r.gameObject.tag == "Grip").Any();
         if (onGrip)
         {
-            Debug.Log("Drawing from stack");
             stack.Draw();
         }
         else

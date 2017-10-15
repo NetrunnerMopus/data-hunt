@@ -1,9 +1,9 @@
 ﻿public class Runner
 {
     private int tags = 0;
-    private Grip grip;
-    private Stack stack;
-    private CreditPool creditPool;
+    public readonly Grip grip;
+    public readonly Stack stack;
+    public readonly CreditPool creditPool;
 
     public Runner(Grip grip, Stack stack, CreditPool creditPool)
     {

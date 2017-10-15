@@ -11,9 +11,10 @@ public class Grip
         this.printer = printer;
     }
 
-    public void AddCard(Card card)
+    public void AddCard(ICard card)
     {
-        var cardInGrip = printer.Print(card.name, "Images/Cards/" + card.id, zone.transform);
-        cardInGrip.AddComponent<CardInGrip>();
+        var visual = printer.Print(card.GetName(), "Images/Cards/" + card.GetImageAsset(), zone.transform);
+        var cardInGrip = visual.AddComponent<CardInGrip>();
+        cardInGrip.Card = card;
     }
 }

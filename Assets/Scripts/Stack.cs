@@ -16,7 +16,15 @@ public class Stack
         this.printer = printer;
     }
 
-    public void PrepareTop()
+    public void Draw()
+    {
+        Object.Destroy(topFacedown);
+        var card = deck.Draw();
+        grip.AddCard(card);
+        ActivateTop();
+    }
+
+    private void ActivateTop()
     {
         if (deck.HasCards())
         {
@@ -25,14 +33,6 @@ public class Stack
             var top = topFacedown.AddComponent<TopOfTheStack>();
             top.stack = this;
         }
-    }
-
-    public void Draw()
-    {
-        Object.Destroy(topFacedown);
-        var card = deck.Draw();
-        grip.AddCard(card);
-        PrepareTop();
     }
 
     public void Shuffle()
