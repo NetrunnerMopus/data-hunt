@@ -19,12 +19,15 @@ public class Stack
 
     public void Draw()
     {
-        Object.Destroy(top);
-        var card = deck.Draw();
-        grip.AddCard(card);
-        ActivateTop();
-        var text = zone.GetComponentInChildren<Text>();
-        text.text = deck.Size() + " cards";
+        if (deck.HasCards())
+        {
+            Object.Destroy(top);
+            var card = deck.Draw();
+            grip.AddCard(card);
+            ActivateTop();
+            var text = zone.GetComponentInChildren<Text>();
+            text.text = deck.Size() + " cards";
+        }
     }
 
     private void ActivateTop()
