@@ -34,4 +34,9 @@ public class Deck
     {
         return cards.Count > 0;
     }
+
+    public int Size()
+    {
+        return cards.Count;
+    }
 }
