@@ -6,7 +6,7 @@ public class Netrunner : MonoBehaviour
     public GameObject stackZone;
     public GameObject heapZone;
     public GameObject serversZone;
-
+    public GameObject creditsZone;
 
     private Deck runnerDeck = new Decks().DemoRunner();
     private CardPrinter printer = new CardPrinter();
@@ -28,14 +28,10 @@ public class Netrunner : MonoBehaviour
 
     private void SetupRunner()
     {
-        runnerDeck.Shuffle();
         var grip = new Grip(gripZone, printer);
         var stack = new Stack(stackZone, runnerDeck, grip, printer);
-        stack.PrepareTop();
-        
-        for (int i = 0; i < 5; i++)
-        {
-            stack.Draw();
-        }
+        var creditPool = new CreditPool(creditsZone);
+        var runner = new Runner(grip, stack, creditPool);
+        runner.StartGame();
     }
 }

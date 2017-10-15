@@ -34,4 +34,9 @@ public class Stack
         grip.AddCard(card);
         PrepareTop();
     }
+
+    public void Shuffle()
+    {
+        deck.Shuffle();
+    }
 }

@@ -1,9 +1,11 @@
 fileFormatVersion: 2
-guid: 6173ebdddc4afe04b87011ab85897515
-timeCreated: 1507984970
+guid: 1b2aadd903d49284782f22c8a8e463de
+timeCreated: 1508081837
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: symbols_trash
+    21300002: symbols_credit
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -39,8 +41,8 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
-  spriteExtrude: 0
+  spriteMode: 2
+  spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -73,7 +75,35 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: symbols_trash
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 4
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: symbols_credit
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 199
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
     outline: []
     physicsShape: []
   spritePackingTag: 
