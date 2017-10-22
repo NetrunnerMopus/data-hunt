@@ -6,14 +6,19 @@ using UnityEngine.EventSystems;
 public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public ICard Card { private get; set; }
+    public PlayZone playZone;
 
     private Vector3 originalPosition;
     private int originalIndex;
+    private CanvasGroup CanvasGroup { get { return GetComponent<CanvasGroup>(); } }
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
+        eventData.selectedObject = this.gameObject;
         originalPosition = transform.position;
         BringToFront();
+        CanvasGroup.blocksRaycasts = false;
+        playZone.UpdateHighlights(eventData);
     }
 
     private void BringToFront()
@@ -30,9 +35,11 @@ public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
+        eventData.selectedObject = null;
+        CanvasGroup.blocksRaycasts = true;
         var raycast = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, raycast);
-        var onGrip = raycast.Where(r => r.gameObject.tag == "Play").Any();
+        var onGrip = raycast.Where(r => r.gameObject == playZone.gameObject).Any();
         if (onGrip)
         {
             Card.Play();
@@ -41,6 +48,7 @@ public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         {
             PutBack();
         }
+        playZone.UpdateHighlights(eventData);
     }
 
     private void PutBack()
