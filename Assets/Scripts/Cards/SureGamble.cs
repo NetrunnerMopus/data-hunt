@@ -10,10 +10,11 @@
         return "Sure Gamble";
     }
 
-    void ICard.Play()
+    bool ICard.PlayFromGrip()
     {
         var pool = Netrunner.game.runner.creditPool;
         pool.Pay(5);
         pool.Gain(9);
+        return true;
     }
 }

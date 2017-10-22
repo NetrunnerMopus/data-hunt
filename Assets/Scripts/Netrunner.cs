@@ -36,8 +36,9 @@ public class Netrunner : MonoBehaviour
     {
         var grip = new Grip(gripZone, playZone, printer);
         var stack = new Stack(stackZone, runnerDeck, grip, printer);
+        var heap = new Heap(heapZone);
         var creditPool = new CreditPool(creditsZone);
-        var runner = new Runner(grip, stack, creditPool);
+        var runner = new Runner(grip, stack, heap, creditPool);
         return runner;
     }
 }

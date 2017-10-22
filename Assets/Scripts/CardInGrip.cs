@@ -42,7 +42,12 @@ public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         var onGrip = raycast.Where(r => r.gameObject == playZone.gameObject).Any();
         if (onGrip)
         {
-            Card.Play();
+            var shouldGoToHeap = Card.PlayFromGrip();
+            if (shouldGoToHeap)
+            {
+                transform.SetParent(Netrunner.game.runner.heap.Zone.transform);
+            }
+            Destroy(this);
         }
         else
         {

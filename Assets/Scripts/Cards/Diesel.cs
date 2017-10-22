@@ -10,12 +10,13 @@
         return "Diesel";
     }
 
-    void ICard.Play()
+    bool ICard.PlayFromGrip()
     {
         var stack = Netrunner.game.runner.stack;
         for (int i = 0; i < 3; i++)
         {
             stack.Draw();
         }
+        return true;
     }
 }
