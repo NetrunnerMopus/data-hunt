@@ -20,7 +20,7 @@ public class CreditPool
     {
         if (cost > credits)
         {
-            throw new System.Exception("");
+            throw new System.Exception("Cannot pay " + cost + " credits while there's only " + credits + " in the pool");
         }
         else
         {
