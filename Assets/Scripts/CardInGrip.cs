@@ -8,10 +8,19 @@ public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     public ICard Card { private get; set; }
 
     private Vector3 originalPosition;
+    private int originalIndex;
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
-        originalPosition = this.transform.position;
+        originalPosition = transform.position;
+        BringToFront();
+    }
+
+    private void BringToFront()
+    {
+        originalIndex = transform.GetSiblingIndex();
+        transform.SetAsLastSibling();
+        transform.parent.SetAsLastSibling();
     }
 
     void IDragHandler.OnDrag(PointerEventData eventData)
@@ -30,7 +39,13 @@ public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         }
         else
         {
-            this.transform.position = originalPosition;
+            PutBack();
         }
+    }
+
+    private void PutBack()
+    {
+        transform.SetSiblingIndex(originalIndex);
+        transform.position = originalPosition;
     }
 }

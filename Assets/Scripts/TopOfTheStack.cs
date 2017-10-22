@@ -11,6 +11,12 @@ public class TopOfTheStack : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
         originalPosition = this.transform.position;
+        BringToFront();
+    }
+
+    private void BringToFront()
+    {
+        transform.parent.SetAsLastSibling();
     }
 
     void IDragHandler.OnDrag(PointerEventData eventData)
