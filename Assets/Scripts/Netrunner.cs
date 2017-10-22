@@ -7,6 +7,7 @@ public class Netrunner : MonoBehaviour
     public GripZone gripZone;
     public GameObject stackZone;
     public GameObject heapZone;
+    public PlayZone playZone;
     public GameObject serversZone;
     public GameObject creditsZone;
 
@@ -33,7 +34,7 @@ public class Netrunner : MonoBehaviour
 
     private Runner SetupRunner()
     {
-        var grip = new Grip(gripZone, printer);
+        var grip = new Grip(gripZone, playZone, printer);
         var stack = new Stack(stackZone, runnerDeck, grip, printer);
         var creditPool = new CreditPool(creditsZone);
         var runner = new Runner(grip, stack, creditPool);
