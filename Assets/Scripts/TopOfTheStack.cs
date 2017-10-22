@@ -10,6 +10,8 @@ public class TopOfTheStack : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
+        eventData.selectedObject = gameObject;
+        GetComponent<CanvasGroup>().blocksRaycasts = false;
         originalPosition = this.transform.position;
         BringToFront();
     }
@@ -26,6 +28,8 @@ public class TopOfTheStack : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
+        eventData.selectedObject = null;
+        GetComponent<CanvasGroup>().blocksRaycasts = true;
         var raycast = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, raycast);
         var onGrip = raycast.Where(r => r.gameObject.tag == "Grip").Any();
