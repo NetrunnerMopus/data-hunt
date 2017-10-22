@@ -5,15 +5,19 @@ using UnityEngine.EventSystems;
 
 public class TopOfTheStack : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private Vector3 originalPosition;
     public Stack stack;
+    public GripZone gripZone;
+    private Vector3 originalPosition;
+
+    private CanvasGroup CanvasGroup { get { return GetComponent<CanvasGroup>(); } }
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
         eventData.selectedObject = gameObject;
-        GetComponent<CanvasGroup>().blocksRaycasts = false;
+        CanvasGroup.blocksRaycasts = false;
         originalPosition = this.transform.position;
         BringToFront();
+        gripZone.UpdateHighlights(eventData);
     }
 
     private void BringToFront()
@@ -29,10 +33,10 @@ public class TopOfTheStack : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
         eventData.selectedObject = null;
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
+        CanvasGroup.blocksRaycasts = true;
         var raycast = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, raycast);
-        var onGrip = raycast.Where(r => r.gameObject.tag == "Grip").Any();
+        var onGrip = raycast.Where(r => r.gameObject == gripZone.gameObject).Any();
         if (onGrip)
         {
             stack.Draw();
@@ -41,5 +45,6 @@ public class TopOfTheStack : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             this.transform.position = originalPosition;
         }
+        gripZone.UpdateHighlights(eventData);
     }
 }

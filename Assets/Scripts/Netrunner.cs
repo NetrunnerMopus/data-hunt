@@ -4,7 +4,7 @@ public class Netrunner : MonoBehaviour
 {
     public static Game game;
 
-    public GameObject gripZone;
+    public GripZone gripZone;
     public GameObject stackZone;
     public GameObject heapZone;
     public GameObject serversZone;

@@ -4,27 +4,62 @@ using UnityEngine.UI;
 
 public class GripZone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private Color? original;
     private Image Image { get { return GetComponent<Image>(); } }
+    private Color Color { set { Image.color = value; } }
+
+    void Start()
+    {
+        ResetHighlights();
+    }
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
+    {
+        if (TopOfTheStackIsDragged(eventData))
+        {
+            Color = Color.green;
+        }
+    }
+
+    private bool TopOfTheStackIsDragged(PointerEventData eventData)
     {
         if (eventData.selectedObject != null)
         {
             if (eventData.selectedObject.GetComponent<TopOfTheStack>() != null)
             {
-                original = Image.color;
-                Image.color = Color.green;
+                return true;
             }
         }
+        return false;
     }
 
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
-        if (original != null)
+        UpdateHighlights(eventData);
+    }
+
+    public void UpdateHighlights(PointerEventData eventData)
+    {
+        if (TopOfTheStackIsDragged(eventData))
         {
-            Image.color = original.Value;
-            original = null;
+            HighlightAvailability();
         }
+        else
+        {
+            ResetHighlights();
+        }
+    }
+
+    private void HighlightAvailability()
+    {
+        var potentialHighlight = Color.green;
+        potentialHighlight.a = 0.5f;
+        Color = potentialHighlight;
+    }
+
+    private void ResetHighlights()
+    {
+        var neutral = Color.white;
+        neutral.a = 0.2f;
+        Color = neutral;
     }
 }

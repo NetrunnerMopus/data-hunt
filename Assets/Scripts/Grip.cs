@@ -1,19 +1,17 @@
-﻿using UnityEngine;
-
-public class Grip
+﻿public class Grip
 {
-    private GameObject zone;
+    public GripZone Zone { get; private set; }
     private CardPrinter printer;
 
-    public Grip(GameObject zone, CardPrinter printer)
+    public Grip(GripZone zone, CardPrinter printer)
     {
-        this.zone = zone;
+        Zone = zone;
         this.printer = printer;
     }
 
     public void AddCard(ICard card)
     {
-        var visual = printer.Print(card.GetName(), "Images/Cards/" + card.GetImageAsset(), zone.transform);
+        var visual = printer.Print(card.GetName(), "Images/Cards/" + card.GetImageAsset(), Zone.transform);
         var cardInGrip = visual.AddComponent<CardInGrip>();
         cardInGrip.Card = card;
     }

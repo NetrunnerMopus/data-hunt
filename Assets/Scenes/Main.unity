@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0111011623fa2124797871fb3680b891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gripZone: {fileID: 1940409404}
+  gripZone: {fileID: 1940409409}
   stackZone: {fileID: 1198803621}
   heapZone: {fileID: 836102266}
   serversZone: {fileID: 1942180166}
@@ -801,7 +801,7 @@ GameObject:
   - component: {fileID: 1940409409}
   m_Layer: 5
   m_Name: Grip
-  m_TagString: Grip
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
