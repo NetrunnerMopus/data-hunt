@@ -1,10 +1,10 @@
-﻿namespace effects
+﻿namespace effects.runner
 {
-    public class RunnerCardDraw : IEffect
+    public class Draw : IEffect
     {
         private int cards;
 
-        public RunnerCardDraw(int cards)
+        public Draw(int cards)
         {
             this.cards = cards;
         }
