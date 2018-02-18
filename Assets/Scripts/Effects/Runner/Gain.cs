@@ -1,4 +1,6 @@
-﻿namespace effects.runner
+﻿using UnityEngine;
+
+namespace effects.runner
 {
     public class Gain : IEffect
     {
@@ -9,7 +11,7 @@
             this.credits = credits;
         }
 
-        void IEffect.Resolve(Game game)
+        void IEffect.Resolve(Game game, MonoBehaviour source)
         {
             game.runner.creditPool.Gain(credits);
         }

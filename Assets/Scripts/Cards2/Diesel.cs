@@ -2,7 +2,7 @@
 using effects;
 using effects.runner;
 
-namespace cards2
+namespace cards
 {
     public class Diesel : ICard2
     {
@@ -12,6 +12,6 @@ namespace cards2
         Faction ICard2.Faction { get { return Factions.SHAPER; } }
         int ICard2.InfluenceCost { get { return 2; } }
         ICost ICard2.PlayCost { get { return new RunnerCreditCost(0); } }
-        IEffect ICard2.PlayEffect { get { return new Sequence(new Draw(3), new Trash(this)); } }
+        IEffect ICard2.PlayEffect { get { return new Sequence(new Draw(3), new SelfTrash(this)); } }
     }
 }

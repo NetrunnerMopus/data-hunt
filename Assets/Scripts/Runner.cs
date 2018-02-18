@@ -23,14 +23,4 @@
             stack.Draw();
         }
     }
-
-    public void Trash(ICard2 card)
-    {
-
-    }
-
-    public void Discard(ICard2 card)
-    {
-
-    }
 }

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using cards;
+using System.Collections.Generic;
 
 public class Decks
 {
     public Deck DemoRunner()
     {
-        var cards = new List<ICard>();
+        var cards = new List<ICard2>();
         for (int i = 0; i < 5; i++)
         {
             cards.Add(new Diesel());

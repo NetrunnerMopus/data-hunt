@@ -1,4 +1,6 @@
-﻿namespace effects
+﻿using UnityEngine;
+
+namespace effects
 {
     public class Sequence : IEffect
     {
@@ -9,11 +11,11 @@
             this.effects = effects;
         }
 
-        void IEffect.Resolve(Game game)
+        void IEffect.Resolve(Game game, MonoBehaviour source)
         {
             foreach (var effect in effects)
             {
-                effect.Resolve(game);
+                effect.Resolve(game, source);
             }
         }
     }

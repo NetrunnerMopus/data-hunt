@@ -1,4 +1,6 @@
-﻿namespace effects
+﻿using UnityEngine;
+
+namespace effects
 {
     public class TagRemoval : IEffect
     {
@@ -11,7 +13,7 @@
             this.runner = runner;
         }
 
-        void IEffect.Resolve(Game game)
+        void IEffect.Resolve(Game game, MonoBehaviour source)
         {
             runner.tags -= tags;
         }

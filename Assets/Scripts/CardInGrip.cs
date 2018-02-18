@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public ICard Card { private get; set; }
+    public ICard2 Card { private get; set; }
     public PlayZone playZone;
 
     private Vector3 originalPosition;
@@ -42,12 +42,15 @@ public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         var onGrip = raycast.Where(r => r.gameObject == playZone.gameObject).Any();
         if (onGrip)
         {
-            var shouldGoToHeap = Card.PlayFromGrip();
-            if (shouldGoToHeap)
+            var game = Netrunner.game;
+            if (Card.PlayCost.Pay(game))
             {
-                transform.SetParent(Netrunner.game.runner.heap.Zone.transform);
+                Card.PlayEffect.Resolve(game, this);
             }
-            Destroy(this);
+            else
+            {
+                PutBack();
+            }
         }
         else
         {

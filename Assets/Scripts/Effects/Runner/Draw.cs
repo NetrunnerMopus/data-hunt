@@ -1,4 +1,6 @@
-﻿namespace effects.runner
+﻿using UnityEngine;
+
+namespace effects.runner
 {
     public class Draw : IEffect
     {
@@ -9,7 +11,7 @@
             this.cards = cards;
         }
 
-        void IEffect.Resolve(Game game)
+        void IEffect.Resolve(Game game, MonoBehaviour source)
         {
             for (int i = 0; i < cards; i++)
             {

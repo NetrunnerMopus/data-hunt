@@ -1,4 +1,6 @@
-﻿public interface IEffect
+﻿using UnityEngine;
+
+public interface IEffect
 {
-    void Resolve(Game game);
+    void Resolve(Game game, MonoBehaviour source);
 }

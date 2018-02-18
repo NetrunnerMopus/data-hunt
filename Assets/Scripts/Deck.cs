@@ -4,9 +4,9 @@ public class Deck
 {
     private System.Random rng = new System.Random();
 
-    private List<ICard> cards;
+    private List<ICard2> cards;
 
-    public Deck(List<ICard> cards)
+    public Deck(List<ICard2> cards)
     {
         this.cards = cards;
     }
@@ -16,11 +16,11 @@ public class Deck
         cards.Sort((card1, card2) => rng.Next().CompareTo(rng.Next()));
     }
 
-    public ICard Draw()
+    public ICard2 Draw()
     {
         if (HasCards())
         {
-            ICard drawn = cards[0];
+            ICard2 drawn = cards[0];
             cards.RemoveAt(0);
             return drawn;
         }

@@ -2,7 +2,7 @@
 using effects;
 using effects.runner;
 
-namespace cards2
+namespace cards
 {
     public class SureGamble : ICard2
     {
@@ -12,6 +12,6 @@ namespace cards2
         Faction ICard2.Faction { get { return Factions.MASK; } }
         int ICard2.InfluenceCost { get { return 0; } }
         ICost ICard2.PlayCost { get { return new RunnerCreditCost(5); } }
-        IEffect ICard2.PlayEffect { get { return new Sequence(new Gain(9), new Trash(this)); } }
+        IEffect ICard2.PlayEffect { get { return new Sequence(new Gain(9), new SelfTrash(this)); } }
     }
 }
