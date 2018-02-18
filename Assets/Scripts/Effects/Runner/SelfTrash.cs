@@ -4,9 +4,9 @@ namespace effects.runner
 {
     public class SelfTrash : IEffect
     {
-        private ICard2 card;
+        private ICard card;
 
-        public SelfTrash(ICard2 card)
+        public SelfTrash(ICard card)
         {
             this.card = card;
         }

@@ -5,7 +5,7 @@ public class Decks
 {
     public Deck DemoRunner()
     {
-        var cards = new List<ICard2>();
+        var cards = new List<ICard>();
         for (int i = 0; i < 5; i++)
         {
             cards.Add(new Diesel());

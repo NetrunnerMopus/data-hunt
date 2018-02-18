@@ -1,4 +1,4 @@
-﻿public interface ICard2
+﻿public interface ICard
 {
     bool Faceup { get; }
     Faction Faction { get; }

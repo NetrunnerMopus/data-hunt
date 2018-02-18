@@ -11,7 +11,7 @@
         this.playZone = playZone;
     }
 
-    public void AddCard(ICard2 card)
+    public void AddCard(ICard card)
     {
         var visual = printer.Print(card.Name, "Images/Cards/" + card.FaceupArt, Zone.transform);
         var cardInGrip = visual.AddComponent<CardInGrip>();

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public ICard2 Card { private get; set; }
+    public ICard Card { private get; set; }
     public PlayZone playZone;
 
     private Vector3 originalPosition;

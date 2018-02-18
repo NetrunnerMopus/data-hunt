@@ -4,14 +4,14 @@ using effects.runner;
 
 namespace cards
 {
-    public class QualityTime : ICard2
+    public class QualityTime : ICard
     {
-        string ICard2.FaceupArt { get { return "quality-time"; } }
-        string ICard2.Name { get { return "Quality Time"; } }
-        bool ICard2.Faceup { get { return false; } }
-        Faction ICard2.Faction { get { return Factions.SHAPER; } }
-        int ICard2.InfluenceCost { get { return 1; } }
-        ICost ICard2.PlayCost { get { return new RunnerCreditCost(3); } }
-        IEffect ICard2.PlayEffect { get { return new Sequence(new Draw(5), new SelfTrash(this)); } }
+        string ICard.FaceupArt { get { return "quality-time"; } }
+        string ICard.Name { get { return "Quality Time"; } }
+        bool ICard.Faceup { get { return false; } }
+        Faction ICard.Faction { get { return Factions.SHAPER; } }
+        int ICard.InfluenceCost { get { return 1; } }
+        ICost ICard.PlayCost { get { return new RunnerCreditCost(3); } }
+        IEffect ICard.PlayEffect { get { return new Sequence(new Draw(5), new SelfTrash(this)); } }
     }
 }
