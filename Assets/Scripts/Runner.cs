@@ -1,6 +1,6 @@
 ﻿public class Runner
 {
-    private int tags = 0;
+    public int tags = 0;
     public readonly Grip grip;
     public readonly Stack stack;
     public readonly Heap heap;
@@ -23,4 +23,6 @@
             stack.Draw();
         }
     }
+
+
 }

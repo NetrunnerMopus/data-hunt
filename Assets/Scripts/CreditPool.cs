@@ -16,16 +16,22 @@ public class CreditPool
         return credits;
     }
 
+    public bool CanPay(int cost)
+    {
+        return credits >= cost;
+    }
+
     public void Pay(int cost)
     {
-        if (cost > credits)
-        {
-            throw new System.Exception("Cannot pay " + cost + " credits while there's only " + credits + " in the pool");
-        }
-        else
+        if (CanPay(cost))
         {
             credits -= cost;
             UpdateText();
+        }
+        else
+        {
+            throw new System.Exception("Cannot pay " + cost + " credits while there's only " + credits + " in the pool");
+
         }
     }
 
