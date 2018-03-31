@@ -1,4 +1,6 @@
-﻿namespace costs
+﻿using model;
+
+namespace costs
 {
     public class RunnerCreditCost : ICost
     {

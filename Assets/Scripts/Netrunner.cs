@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using model;
+using view;
 
 public class Netrunner : MonoBehaviour
 {
@@ -9,7 +11,7 @@ public class Netrunner : MonoBehaviour
     public GameObject heapZone;
     public PlayZone playZone;
     public GameObject serversZone;
-    public GameObject creditsZone;
+    public CreditPoolView creditPoolView;
 
     private Deck runnerDeck = new Decks().DemoRunner();
     private CardPrinter printer = new CardPrinter();
@@ -37,7 +39,7 @@ public class Netrunner : MonoBehaviour
         var grip = new Grip(gripZone, playZone, printer);
         var stack = new Stack(stackZone, runnerDeck, grip, printer);
         var heap = new Heap(heapZone);
-        var creditPool = new CreditPool(creditsZone);
+        var creditPool = new CreditPool(creditPoolView);
         var runner = new Runner(grip, stack, heap, creditPool);
         return runner;
     }

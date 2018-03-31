@@ -1,4 +1,6 @@
-﻿public class Runner
+﻿using model;
+
+public class Runner
 {
     public int tags = 0;
 	public int clicks = 4;
