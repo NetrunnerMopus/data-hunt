@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using controller;
+using model;
 
 public class Stack
 {
