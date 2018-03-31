@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using controller;
 
 public class Stack
 {
@@ -39,7 +40,6 @@ public class Stack
             var rect = top.GetComponent<RectTransform>();
             rect.anchoredPosition = new Vector3(0.0f, 0.0f, 0.0f);
             var topOfTheStack = top.AddComponent<TopOfTheStack>();
-            topOfTheStack.stack = this;
             topOfTheStack.gripZone = grip.Zone;
         }
     }

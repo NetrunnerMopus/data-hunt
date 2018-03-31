@@ -1,4 +1,6 @@
-﻿public class Grip
+﻿using controller;
+
+public class Grip
 {
     public GripZone Zone { get; private set; }
     private PlayZone playZone;
