@@ -158,7 +158,7 @@ MonoBehaviour:
   heapZone: {fileID: 836102266}
   playZone: {fileID: 1115497748}
   serversZone: {fileID: 1942180166}
-  creditPoolView: {fileID: 0}
+  creditPoolView: {fileID: 1965454923}
 --- !u!1 &172455761
 GameObject:
   m_ObjectHideFlags: 0
