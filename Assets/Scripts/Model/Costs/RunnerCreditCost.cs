@@ -1,6 +1,4 @@
-﻿using model;
-
-namespace costs
+﻿namespace model.costs
 {
     public class RunnerCreditCost : ICost
     {

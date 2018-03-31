@@ -1,4 +1,5 @@
 ﻿using controller;
+using model;
 
 public class Grip
 {

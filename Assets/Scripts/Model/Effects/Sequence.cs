@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace effects
+namespace model.effects
 {
     public class Sequence : IEffect
     {

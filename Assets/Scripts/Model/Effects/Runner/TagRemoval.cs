@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace effects
+namespace model.effects.runner
 {
     public class TagRemoval : IEffect
     {

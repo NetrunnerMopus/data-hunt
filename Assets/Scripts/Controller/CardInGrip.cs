@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using model;
 
 namespace controller
 {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace effects.runner
+namespace model.effects.runner
 {
     public class Gain : IEffect
     {

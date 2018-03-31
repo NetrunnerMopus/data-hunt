@@ -1,5 +1,6 @@
-﻿using cards;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using model;
+using model.cards;
 
 public class Decks
 {
