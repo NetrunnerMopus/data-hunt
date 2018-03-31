@@ -1,12 +1,10 @@
 fileFormatVersion: 2
-guid: 1b2aadd903d49284782f22c8a8e463de
-timeCreated: 1508081837
+guid: 6ef443193194d46fe90613be092333a4
+timeCreated: 1522499831
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: symbols_trash
-    21300002: symbols_credit
-    21300004: symbols_click
+    21300000: runner-actions-card
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -49,7 +47,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 356, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -84,41 +82,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: symbols_trash
+      name: runner-actions-card
       rect:
         serializedVersion: 2
-        x: 12
-        y: 4
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: symbols_credit
-      rect:
-        serializedVersion: 2
-        x: 15
-        y: 199
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: symbols_click
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 123
-        width: 38
-        height: 38
+        x: 356
+        y: 0
+        width: 244
+        height: 340
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

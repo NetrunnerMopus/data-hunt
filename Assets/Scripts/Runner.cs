@@ -1,6 +1,7 @@
 ﻿public class Runner
 {
     public int tags = 0;
+	public int clicks = 4;
     public readonly Grip grip;
     public readonly Stack stack;
     public readonly Heap heap;
