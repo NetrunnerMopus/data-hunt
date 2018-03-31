@@ -1,4 +1,5 @@
 ﻿using model;
+using view;
 
 namespace model
 {
@@ -6,14 +7,12 @@ namespace model
     {
         public int tags = 0;
         public int clicks = 4;
-        public readonly Grip grip;
         public readonly Stack stack;
         public readonly Heap heap;
         public readonly CreditPool creditPool;
 
-        public Runner(Grip grip, Stack stack, Heap heap, CreditPool creditPool)
+        public Runner(Stack stack, Heap heap, CreditPool creditPool)
         {
-            this.grip = grip;
             this.stack = stack;
             this.heap = heap;
             this.creditPool = creditPool;

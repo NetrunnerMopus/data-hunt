@@ -8,14 +8,14 @@ public class Netrunner : MonoBehaviour
     public static Game game;
 
     public GripZone gripZone;
-    public GameObject stackZone;
+    public GripFan gripFan;
+    public StackPile stackPile;
     public GameObject heapZone;
     public PlayZone playZone;
-    public GameObject serversZone;
+    public CardPrinter serversZone;
     public CreditPoolView creditPoolView;
 
     private Deck runnerDeck = new Decks().DemoRunner();
-    private CardPrinter printer = new CardPrinter();
 
     void Start()
     {
@@ -27,21 +27,20 @@ public class Netrunner : MonoBehaviour
 
     private Corp SetupCorporation()
     {
-        var serverZoneTransform = serversZone.transform;
-        printer.PrintCorpFacedown("Archives", serverZoneTransform);
-        printer.PrintCorpFacedown("R&D", serverZoneTransform);
-        printer.PrintCorpFacedown("HQ", serverZoneTransform);
-        printer.PrintCorpFacedown("Remote", serverZoneTransform);
+        var printer = serversZone.GetComponent<CardPrinter>();
+        printer.PrintCorpFacedown("Archives");
+        printer.PrintCorpFacedown("R&D");
+        printer.PrintCorpFacedown("HQ");
+        printer.PrintCorpFacedown("Remote");
         return new Corp();
     }
 
     private Runner SetupRunner()
     {
-        var grip = new Grip(gripZone, playZone, printer);
-        var stack = new Stack(stackZone, runnerDeck, grip, printer);
+        var stack = new Stack(runnerDeck, stackPile, gripFan);
         var heap = new Heap(heapZone);
         var creditPool = new CreditPool(creditPoolView);
-        var runner = new Runner(grip, stack, heap, creditPool);
+        var runner = new Runner(stack, heap, creditPool);
         return runner;
     }
 }
