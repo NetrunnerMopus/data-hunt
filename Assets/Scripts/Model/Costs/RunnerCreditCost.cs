@@ -11,7 +11,7 @@
 
         bool ICost.Pay(Game game)
         {
-            CreditPool creditPool = game.runner.creditPool;
+            CreditPool creditPool = game.runner.credits;
             if (creditPool.CanPay(credits))
             {
                 creditPool.Pay(credits);

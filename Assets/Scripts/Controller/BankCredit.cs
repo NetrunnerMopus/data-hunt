@@ -45,7 +45,7 @@ namespace controller
             var onDrop = raycast.Where(r => r.gameObject == drop.gameObject).Any();
             if (onDrop)
             {
-                Netrunner.game.runner.creditPool.Gain(1);
+                Netrunner.game.runner.credits.Gain(1);
             }
             PutBack();
             drop.UpdateHighlights(eventData);

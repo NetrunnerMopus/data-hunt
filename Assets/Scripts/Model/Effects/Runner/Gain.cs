@@ -11,7 +11,7 @@
 
         void IEffect.Resolve(Game game)
         {
-            game.runner.creditPool.Gain(credits);
+            game.runner.credits.Gain(credits);
         }
     }
 }
