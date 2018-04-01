@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace model
+﻿namespace model
 {
     public interface IEffect
     {

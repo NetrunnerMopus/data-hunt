@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace model.effects
+﻿namespace model.effects
 {
     public class Sequence : IEffect
     {

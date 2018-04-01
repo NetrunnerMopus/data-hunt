@@ -1,7 +1,4 @@
-﻿using model;
-using view;
-
-namespace model
+﻿namespace model
 {
     public class Runner
     {

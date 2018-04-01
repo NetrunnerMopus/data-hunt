@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace model.effects.runner
+﻿namespace model.effects.runner
 {
     public class SelfTrash : IEffect
     {

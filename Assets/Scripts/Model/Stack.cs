@@ -1,5 +1,4 @@
-﻿using System;
-using view;
+﻿using view;
 
 namespace model
 {
@@ -16,11 +15,13 @@ namespace model
             this.gripFan = gripFan;
         }
 
-        public void Shuffle() {
+        public void Shuffle()
+        {
             deck.Shuffle();
         }
 
-        public void Draw() {
+        public void Draw()
+        {
             var card = deck.Draw();
             stackPile.UpdateCardsLeft(deck.Size());
             gripFan.AddCard(card);

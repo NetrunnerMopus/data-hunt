@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using view;
+﻿using view;
 
 namespace model
 {
