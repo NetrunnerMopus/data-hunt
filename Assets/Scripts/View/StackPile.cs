@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using controller;
-using model;
-using view;
+using UnityEngine.UI;
 
 namespace view
 {

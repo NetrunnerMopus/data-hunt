@@ -1,6 +1,6 @@
-﻿using controller;
-using model;
+﻿using model;
 using UnityEngine;
+using controller;
 
 namespace view
 {
