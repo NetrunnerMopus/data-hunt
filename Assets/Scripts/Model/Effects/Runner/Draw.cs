@@ -11,7 +11,7 @@ namespace model.effects.runner
             this.cards = cards;
         }
 
-        void IEffect.Resolve(Game game, MonoBehaviour source)
+        void IEffect.Resolve(Game game)
         {
             for (int i = 0; i < cards; i++)
             {

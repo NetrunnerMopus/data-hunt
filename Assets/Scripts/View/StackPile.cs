@@ -13,6 +13,7 @@ namespace view
 
         void Start()
         {
+            gameObject.AddComponent<CardPrinter>();
         }
 
         public void UpdateCardsLeft(int cardsLeft)

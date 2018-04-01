@@ -11,11 +11,11 @@ namespace model.effects
             this.effects = effects;
         }
 
-        void IEffect.Resolve(Game game, MonoBehaviour source)
+        void IEffect.Resolve(Game game)
         {
             foreach (var effect in effects)
             {
-                effect.Resolve(game, source);
+                effect.Resolve(game);
             }
         }
     }

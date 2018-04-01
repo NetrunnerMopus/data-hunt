@@ -13,7 +13,7 @@ namespace model.effects.runner
             this.runner = runner;
         }
 
-        void IEffect.Resolve(Game game, MonoBehaviour source)
+        void IEffect.Resolve(Game game)
         {
             runner.tags -= tags;
         }

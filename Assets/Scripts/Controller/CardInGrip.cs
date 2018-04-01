@@ -50,7 +50,8 @@ namespace controller
                 var game = Netrunner.game;
                 if (Card.PlayCost.Pay(game))
                 {
-                    Card.PlayEffect.Resolve(game, this);
+                    Card.PlayEffect.Resolve(game);
+                    Object.Destroy(gameObject);
                 }
                 else
                 {

@@ -11,7 +11,7 @@ namespace model.effects.runner
             this.credits = credits;
         }
 
-        void IEffect.Resolve(Game game, MonoBehaviour source)
+        void IEffect.Resolve(Game game)
         {
             game.runner.creditPool.Gain(credits);
         }

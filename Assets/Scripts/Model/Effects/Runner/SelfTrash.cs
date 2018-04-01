@@ -11,10 +11,9 @@ namespace model.effects.runner
             this.card = card;
         }
 
-        void IEffect.Resolve(Game game, MonoBehaviour source)
+        void IEffect.Resolve(Game game)
         {
-            source.transform.SetParent(game.runner.heap.Zone.transform);
-            Object.Destroy(source);
+            game.runner.heap.Add(card);
         }
     }
 }

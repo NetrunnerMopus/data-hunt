@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using model;
 
 namespace view
 {
@@ -13,6 +14,11 @@ namespace view
         public GameObject PrintRunnerFacedown(string name)
         {
             return Print(name, "Images/UI/runner-card-back");
+        }
+
+        public GameObject Print(ICard card)
+        {
+            return Print(card.Name, "Images/Cards/" + card.FaceupArt);
         }
 
         public GameObject Print(string name, string asset)

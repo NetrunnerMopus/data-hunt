@@ -10,7 +10,7 @@ public class Netrunner : MonoBehaviour
     public GripZone gripZone;
     public GripFan gripFan;
     public StackPile stackPile;
-    public GameObject heapZone;
+    public HeapPile heapPile;
     public PlayZone playZone;
     public CardPrinter serversZone;
     public CreditPoolView creditPoolView;
@@ -38,7 +38,7 @@ public class Netrunner : MonoBehaviour
     private Runner SetupRunner()
     {
         var stack = new Stack(runnerDeck, stackPile, gripFan);
-        var heap = new Heap(heapZone);
+        var heap = new Heap(heapPile);
         var creditPool = new CreditPool(creditPoolView);
         var runner = new Runner(stack, heap, creditPool);
         return runner;
