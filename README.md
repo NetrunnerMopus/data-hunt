@@ -19,3 +19,4 @@
 * Educate new players.
   E.g. include visual aids of turn and run structures and progress. Explain why certain plays would be illegal.
   Include beginner decks by default. Consider a simple, short tutorial with a "static" AI.
+* Do not rely on chat for core game mechanics, like asking "action?" every time there's a paid ability window.
