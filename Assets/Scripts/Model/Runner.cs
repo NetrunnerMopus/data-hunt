@@ -28,8 +28,6 @@
             {
                 clicks.Gain();
             }
-
-            clicks.Spend();
         }
     }
 }

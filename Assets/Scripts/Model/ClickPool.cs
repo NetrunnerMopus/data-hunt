@@ -20,11 +20,11 @@ namespace model
             UpdateView();
         }
 
-        public void Spend()
+        public void Spend(int clicks)
         {
-            if (spent < capacity)
+            if (CanSpend(clicks))
             {
-                spent += 1;
+                spent += clicks;
                 UpdateView();
             }
             else
@@ -51,6 +51,11 @@ namespace model
         private void UpdateView()
         {
             view.UpdateClicks(spent, capacity - spent);
+        }
+
+        public bool CanSpend(int cost)
+        {
+            return (capacity - spent) >= cost;
         }
     }
 }

@@ -44,13 +44,11 @@ namespace controller
             CanvasGroup.blocksRaycasts = true;
             var raycast = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, raycast);
-            var onGrip = raycast.Where(r => r.gameObject == playZone.gameObject).Any();
-            if (onGrip)
+            var onPlay = raycast.Where(r => r.gameObject == playZone.gameObject).Any();
+            if (onPlay)
             {
-                var game = Netrunner.game;
-                if (Card.PlayCost.Pay(game))
+                if (Netrunner.game.Play(Card))
                 {
-                    Card.PlayEffect.Resolve(game);
                     Object.Destroy(gameObject);
                 }
                 else

@@ -1,4 +1,6 @@
-﻿namespace model
+﻿using model.costs;
+
+namespace model
 {
     public class Game
     {
@@ -14,6 +16,21 @@
         public void Start()
         {
             runner.StartGame();
+        }
+
+        public bool Play(ICard card)
+        {
+            ICost totalCost = new Conjunction(new RunnerClickCost(1), card.PlayCost);
+            if (totalCost.CanPay(this))
+            {
+                totalCost.Pay(this);
+                card.PlayEffect.Resolve(this);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

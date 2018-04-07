@@ -9,19 +9,14 @@
             this.credits = credits;
         }
 
-        bool ICost.Pay(Game game)
+        bool ICost.CanPay(Game game)
         {
-            CreditPool creditPool = game.runner.credits;
-            if (creditPool.CanPay(credits))
-            {
-                creditPool.Pay(credits);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return game.runner.credits.CanPay(credits);
+        }
+
+        void ICost.Pay(Game game)
+        {
+            game.runner.credits.Pay(credits);
         }
     }
-
 }
