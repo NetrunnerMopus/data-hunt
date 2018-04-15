@@ -23,7 +23,7 @@ namespace controller
 
         private void BringToFront()
         {
-            transform.parent.SetAsLastSibling();
+            transform.parent.parent.SetAsLastSibling();
         }
 
         void IDragHandler.OnDrag(PointerEventData eventData)

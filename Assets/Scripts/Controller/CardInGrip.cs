@@ -32,6 +32,7 @@ namespace controller
             originalIndex = transform.GetSiblingIndex();
             transform.SetAsLastSibling();
             transform.parent.SetAsLastSibling();
+            transform.parent.parent.SetAsLastSibling();
         }
 
         private void UpdateHighlights(PointerEventData eventData)
