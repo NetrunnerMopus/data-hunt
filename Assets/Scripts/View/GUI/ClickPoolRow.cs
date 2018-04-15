@@ -1,12 +1,11 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace view
+namespace view.gui
 {
-    public class ClickPoolView : MonoBehaviour
+    public class ClickPoolRow : MonoBehaviour, IClickPoolView
     {
         private Sprite clickSprite;
 
@@ -17,7 +16,7 @@ namespace view
             clickSprite = Resources.LoadAll<Sprite>("Images/UI/symbols").Where(r => r.name == "symbols_click").First();
         }
 
-        public void UpdateClicks(int spent, int unspent)
+        void IClickPoolView.UpdateClicks(int spent, int unspent)
         {
             var total = spent + unspent;
             RenderMissing(total);
@@ -69,7 +68,7 @@ namespace view
             image.sprite = clickSprite;
             image.preserveAspect = true;
             click.layer = 5;
-            click.transform.SetParent(transform);  
+            click.transform.SetParent(transform);
             clicks.Add(click);
         }
     }

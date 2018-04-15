@@ -7,9 +7,9 @@ namespace model
     {
         private int capacity = 0;
         private int spent = 0;
-        private ClickPoolView view;
+        private IClickPoolView view;
 
-        public ClickPool(ClickPoolView view)
+        public ClickPool(IClickPoolView view)
         {
             this.view = view;
         }

@@ -7,17 +7,17 @@ namespace model
     public class Heap
     {
         private List<ICard> cards = new List<ICard>();
-        private HeapPile pile;
+        private IHeapView view;
 
-        public Heap(HeapPile pile)
+        public Heap(IHeapView view)
         {
-            this.pile = pile;
+            this.view = view;
         }
 
         public void Add(ICard card)
         {
             cards.Add(card);
-            pile.Add(card);
+            view.Add(card);
         }
     }
 }

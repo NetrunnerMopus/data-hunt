@@ -7,17 +7,17 @@ namespace model
     public class Rig
     {
         private List<ICard> cards = new List<ICard>();
-        private RigGrid grid;
+        private IRigView view;
 
-        public Rig(RigGrid grid)
+        public Rig(IRigView view)
         {
-            this.grid = grid;
+            this.view = view;
         }
 
         public void Install(ICard card)
         {
             cards.Add(card);
-            grid.Place(card);
+            view.Place(card);
         }
     }
 }

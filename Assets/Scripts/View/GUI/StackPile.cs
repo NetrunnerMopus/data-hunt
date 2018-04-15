@@ -2,9 +2,9 @@
 using controller;
 using UnityEngine.UI;
 
-namespace view
+namespace view.gui
 {
-    public class StackPile : MonoBehaviour
+    public class StackPile : MonoBehaviour, IStackView
     {
         public GripZone grip;
         private GameObject top;
@@ -14,7 +14,7 @@ namespace view
             gameObject.AddComponent<CardPrinter>();
         }
 
-        public void UpdateCardsLeft(int cardsLeft)
+        void IStackView.UpdateCardsLeft(int cardsLeft)
         {
             Object.Destroy(top);
             var text = GetComponentInChildren<Text>();

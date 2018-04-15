@@ -5,9 +5,9 @@ namespace model
     public class CreditPool
     {
         private int credits = 0;
-        private CreditPoolView view;
+        private ICreditPoolView view;
 
-        public CreditPool(CreditPoolView view)
+        public CreditPool(ICreditPoolView view)
         {
             this.view = view;
         }

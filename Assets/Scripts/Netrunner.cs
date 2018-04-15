@@ -17,8 +17,8 @@ public class Netrunner : MonoBehaviour
     public RigGrid rigGrid;
     public PlayZone playZone;
     public CardPrinter serversZone;
-    public ClickPoolView clickPoolView;
-    public CreditPoolView creditPoolView;
+    public ClickPoolRow clickPoolRow;
+    public CreditPoolText creditPoolText;
 
     private Deck runnerDeck = new Decks().DemoRunner();
 
@@ -50,8 +50,8 @@ public class Netrunner : MonoBehaviour
         var stack = new Stack(runnerDeck, stackPile);
         var heap = new Heap(heapPile);
         var rig = new Rig(rigGrid);
-        var clicks = new ClickPool(clickPoolView);
-        var credits = new CreditPool(creditPoolView);
+        var clicks = new ClickPool(clickPoolRow);
+        var credits = new CreditPool(creditPoolText);
         var runner = new Runner(game, grip, stack, heap, rig, clicks, credits);
         return runner;
     }

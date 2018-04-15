@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 using model.cards;
 
-namespace view
+namespace view.gui
 {
-    public class HeapPile : MonoBehaviour
+    public class RigGrid : MonoBehaviour, IRigView
     {
         void Start()
         {
             gameObject.AddComponent<CardPrinter>();
         }
 
-        public void Add(ICard card)
+        void IRigView.Place(ICard card)
         {
             GetComponent<CardPrinter>().Print(card);
         }

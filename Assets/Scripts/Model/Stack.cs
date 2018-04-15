@@ -6,12 +6,12 @@ namespace model
     public class Stack
     {
         private Deck deck;
-        private StackPile stackPile;
+        private IStackView view;
 
-        public Stack(Deck deck, StackPile stackPile)
+        public Stack(Deck deck, IStackView view)
         {
             this.deck = deck;
-            this.stackPile = stackPile;
+            this.view = view;
         }
 
         public void Shuffle()
@@ -22,7 +22,7 @@ namespace model
         public ICard RemoveTop()
         {
             var card = deck.RemoveTop();
-            stackPile.UpdateCardsLeft(deck.Size());
+            view.UpdateCardsLeft(deck.Size());
             return card;
         }
     }

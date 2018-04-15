@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace view
+namespace view.gui
 {
-    public class CreditPoolView : MonoBehaviour
+    public class CreditPoolText : MonoBehaviour, ICreditPoolView
     {
-        public void UpdateBalance(int newBalance)
+        void ICreditPoolView.UpdateBalance(int newBalance)
         {
             GetComponent<Text>().text = newBalance + " credits";
         }
