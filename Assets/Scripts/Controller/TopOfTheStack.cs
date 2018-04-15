@@ -40,7 +40,7 @@ namespace controller
             var onGrip = raycast.Where(r => r.gameObject == gripZone.gameObject).Any();
             if (onGrip)
             {
-                Netrunner.game.runner.stack.Draw();
+                Netrunner.game.runner.Draw();
             }
             this.transform.position = originalPosition;
             gripZone.UpdateHighlights(eventData);

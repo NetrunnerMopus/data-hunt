@@ -24,9 +24,9 @@ public class Netrunner : MonoBehaviour
         if (!started)
         {
             started = true;
-            var corp = SetupCorporation();
-            var runner = SetupRunner();
-            game = new Game(corp, runner);
+            game = new Game();
+            game.runner = SetupRunner(game);
+            game.corp = SetupCorporation();
             game.Start();
         }
     }
@@ -41,13 +41,13 @@ public class Netrunner : MonoBehaviour
         return new Corp();
     }
 
-    private Runner SetupRunner()
+    private Runner SetupRunner(Game game)
     {
         var stack = new Stack(runnerDeck, stackPile, gripFan);
         var heap = new Heap(heapPile);
         var clicks = new ClickPool(clickPoolView);
         var credits = new CreditPool(creditPoolView);
-        var runner = new Runner(stack, heap, clicks, credits);
+        var runner = new Runner(game, stack, heap, clicks, credits);
         return runner;
     }
 }

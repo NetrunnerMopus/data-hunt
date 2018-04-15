@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
@@ -45,7 +44,7 @@ namespace controller
             var onDrop = raycast.Where(r => r.gameObject == drop.gameObject).Any();
             if (onDrop)
             {
-                Netrunner.game.runner.credits.Gain(1);
+                Netrunner.game.runner.GainCredit();
             }
             PutBack();
             drop.UpdateHighlights(eventData);

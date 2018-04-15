@@ -47,7 +47,7 @@ namespace controller
             var onPlay = raycast.Where(r => r.gameObject == playZone.gameObject).Any();
             if (onPlay)
             {
-                if (Netrunner.game.Play(Card))
+                if (Netrunner.game.runner.Play(Card))
                 {
                     Object.Destroy(gameObject);
                 }
