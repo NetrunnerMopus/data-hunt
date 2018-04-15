@@ -24,7 +24,7 @@ namespace model
         {
             var card = deck.Draw();
             stackPile.UpdateCardsLeft(deck.Size());
-            gripFan.AddCard(card);
+            gripFan.Add(card);
         }
     }
 }

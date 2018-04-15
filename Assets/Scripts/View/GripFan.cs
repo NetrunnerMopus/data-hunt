@@ -14,7 +14,7 @@ namespace view
             gameObject.AddComponent<CardPrinter>();
         }
 
-        public void AddCard(ICard card)
+        public void Add(ICard card)
         {
             var visual = GetComponent<CardPrinter>().Print(card);
             var cardInGrip = visual.AddComponent<CardInGrip>();

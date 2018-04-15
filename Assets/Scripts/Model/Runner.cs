@@ -9,14 +9,16 @@ namespace model
         public int tags = 0;
         public readonly Stack stack;
         public readonly Heap heap;
+        public readonly Rig rig;
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
 
-        public Runner(Game game, Stack stack, Heap heap, ClickPool clicks, CreditPool credits)
+        public Runner(Game game, Stack stack, Heap heap, Rig rig, ClickPool clicks, CreditPool credits)
         {
             this.game = game;
             this.stack = stack;
             this.heap = heap;
+            this.rig = rig;
             this.clicks = clicks;
             this.credits = credits;
         }
@@ -67,7 +69,17 @@ namespace model
 
         public bool Install(ICard card)
         {
-            throw new System.Exception("Not implemented yet");
+            ICost totalCost = new Conjunction(new RunnerClickCost(1), card.PlayCost);
+            if (totalCost.CanPay(game))
+            {
+                totalCost.Pay(game);
+                card.PlayEffect.Resolve(game);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool Play(ICard card)
