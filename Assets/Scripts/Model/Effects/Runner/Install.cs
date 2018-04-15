@@ -2,18 +2,18 @@
 
 namespace model.effects.runner
 {
-    public class SelfTrash : IEffect
+    public class Install : IEffect
     {
         private ICard card;
 
-        public SelfTrash(ICard card)
+        public Install(ICard card)
         {
             this.card = card;
         }
 
         void IEffect.Resolve(Game game)
         {
-            game.runner.heap.Add(card);
+            game.runner.Install(card);
         }
     }
 }

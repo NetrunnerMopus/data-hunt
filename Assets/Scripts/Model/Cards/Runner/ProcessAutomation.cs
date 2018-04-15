@@ -1,8 +1,9 @@
 ﻿using model.effects.runner;
 using model.costs;
 using model.effects;
+using model.cards.types;
 
-namespace model.cards
+namespace model.cards.runner
 {
     public class ProcessAutomation : ICard
     {
@@ -19,5 +20,7 @@ namespace model.cards
         ICost ICard.PlayCost { get { return new RunnerCreditCost(0); } }
 
         IEffect ICard.PlayEffect { get { return new Sequence(new Gain(2), new Draw(1), new SelfTrash(this)); } }
+
+        IType ICard.Type { get { return new Event(); } }
     }
 }

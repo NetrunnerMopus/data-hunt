@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using model;
+using model.cards;
 
 namespace view
 {

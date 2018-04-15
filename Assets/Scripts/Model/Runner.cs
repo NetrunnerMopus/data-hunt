@@ -1,4 +1,5 @@
-﻿using model.costs;
+﻿using model.cards;
+using model.costs;
 
 namespace model
 {

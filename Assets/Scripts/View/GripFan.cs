@@ -1,12 +1,13 @@
-﻿using model;
-using UnityEngine;
+﻿using UnityEngine;
 using controller;
+using model.cards;
 
 namespace view
 {
     public class GripFan : MonoBehaviour
     {
         public PlayZone playZone;
+        public RigZone rigZone;
 
         void Start()
         {
@@ -19,6 +20,7 @@ namespace view
             var cardInGrip = visual.AddComponent<CardInGrip>();
             cardInGrip.Card = card;
             cardInGrip.playZone = playZone;
+            cardInGrip.rigZone = rigZone;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using model.cards;
 using System.Collections.Generic;
 using view;
 

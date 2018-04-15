@@ -1,4 +1,4 @@
-﻿namespace model
+﻿namespace model.cards
 {
     public interface ICard
     {
@@ -15,5 +15,7 @@
         IEffect PlayEffect { get; }
 
         string Name { get; }
+
+        IType Type { get; }
     }
 }

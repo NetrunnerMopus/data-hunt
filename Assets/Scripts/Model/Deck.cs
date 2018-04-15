@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using model;
+using model.cards;
 
 namespace model
 {

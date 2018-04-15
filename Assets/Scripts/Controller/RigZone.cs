@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace controller
 {
-    public class PlayZone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class RigZone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         private Image Image { get { return GetComponent<Image>(); } }
 
@@ -17,18 +17,18 @@ namespace controller
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
         {
-            if (CardInGripDragged(eventData))
+            if (InstallableDragged(eventData))
             {
                 Color = Color.green;
             }
         }
 
-        private bool CardInGripDragged(PointerEventData eventData)
+        private bool InstallableDragged(PointerEventData eventData)
         {
             if (eventData.selectedObject != null)
             {
                 var cardInGrip = eventData.selectedObject.GetComponent<CardInGrip>();
-                if (cardInGrip != null && cardInGrip.Card.Type.Playable)
+                if (cardInGrip != null && cardInGrip.Card.Type.Installable)
                 {
                     return true;
                 }
@@ -43,7 +43,7 @@ namespace controller
 
         public void UpdateHighlights(PointerEventData eventData)
         {
-            if (CardInGripDragged(eventData))
+            if (InstallableDragged(eventData))
             {
                 HighlightAvailability();
             }

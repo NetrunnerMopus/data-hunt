@@ -1,8 +1,9 @@
 ﻿using model.effects.runner;
 using model.costs;
 using model.effects;
+using model.cards.types;
 
-namespace model.cards
+namespace model.cards.runner
 {
     public class QualityTime : ICard
     {
@@ -19,5 +20,7 @@ namespace model.cards
         ICost ICard.PlayCost { get { return new RunnerCreditCost(3); } }
 
         IEffect ICard.PlayEffect { get { return new Sequence(new Draw(5), new SelfTrash(this)); } }
+
+        IType ICard.Type { get { return new Event(); } }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using model;
+using model.cards;
 
 namespace view
 {

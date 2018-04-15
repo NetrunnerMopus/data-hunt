@@ -2,15 +2,16 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using model;
+using model.cards;
 
 namespace controller
 {
     public class CardInGrip : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        public ICard Card { private get; set; }
+        public ICard Card;
 
         public PlayZone playZone;
+        public RigZone rigZone;
 
         private Vector3 originalPosition;
         private int originalIndex;
@@ -19,11 +20,11 @@ namespace controller
 
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
         {
-            eventData.selectedObject = this.gameObject;
+            eventData.selectedObject = gameObject;
             originalPosition = transform.position;
             BringToFront();
             CanvasGroup.blocksRaycasts = false;
-            playZone.UpdateHighlights(eventData);
+            UpdateHighlights(eventData);
         }
 
         private void BringToFront()
@@ -33,9 +34,21 @@ namespace controller
             transform.parent.SetAsLastSibling();
         }
 
+        private void UpdateHighlights(PointerEventData eventData)
+        {
+            if (Card.Type.Playable)
+            {
+                playZone.UpdateHighlights(eventData);
+            }
+            if (Card.Type.Installable)
+            {
+                rigZone.UpdateHighlights(eventData);
+            }
+        }
+
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
-            this.transform.position = eventData.position;
+            transform.position = eventData.position;
         }
 
         void IEndDragHandler.OnEndDrag(PointerEventData eventData)
@@ -44,23 +57,36 @@ namespace controller
             CanvasGroup.blocksRaycasts = true;
             var raycast = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, raycast);
+            Play(raycast);
+            Install(raycast);
+            PutBack();
+            UpdateHighlights(eventData);
+        }
+
+        private void Play(List<RaycastResult> raycast)
+        {
             var onPlay = raycast.Where(r => r.gameObject == playZone.gameObject).Any();
-            if (onPlay)
+            if (onPlay && Card.Type.Playable)
             {
                 if (Netrunner.game.runner.Play(Card))
                 {
-                    Object.Destroy(gameObject);
+                    Destroy(gameObject);
                 }
-                else
-                {
-                    PutBack();
-                }
+
             }
-            else
+        }
+
+        private void Install(List<RaycastResult> raycast)
+        {
+            var onRig = raycast.Where(r => r.gameObject == rigZone.gameObject).Any();
+            if (onRig && Card.Type.Installable)
             {
-                PutBack();
+                if (Netrunner.game.runner.Install(Card))
+                {
+                    Destroy(gameObject);
+                }
+
             }
-            playZone.UpdateHighlights(eventData);
         }
 
         private void PutBack()
