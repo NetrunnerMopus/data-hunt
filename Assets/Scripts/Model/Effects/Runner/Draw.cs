@@ -13,7 +13,8 @@
         {
             for (int i = 0; i < cards; i++)
             {
-                game.runner.stack.Draw();
+                var drawn = game.runner.stack.RemoveTop();
+                game.runner.grip.Add(drawn);
             }
         }
     }

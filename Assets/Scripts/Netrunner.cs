@@ -2,13 +2,15 @@
 using model;
 using view;
 using controller;
+using view.gui;
+using view.composite;
+using view.log;
 
 public class Netrunner : MonoBehaviour
 {
     public static Game game;
 
     private bool started = false;
-    public GripZone gripZone;
     public GripFan gripFan;
     public StackPile stackPile;
     public HeapPile heapPile;
@@ -44,12 +46,13 @@ public class Netrunner : MonoBehaviour
 
     private Runner SetupRunner(Game game)
     {
-        var stack = new Stack(runnerDeck, stackPile, gripFan);
+        var grip = new Grip(new CompositeGripView(new GripLog(), gripFan));
+        var stack = new Stack(runnerDeck, stackPile);
         var heap = new Heap(heapPile);
         var rig = new Rig(rigGrid);
         var clicks = new ClickPool(clickPoolView);
         var credits = new CreditPool(creditPoolView);
-        var runner = new Runner(game, stack, heap, rig, clicks, credits);
+        var runner = new Runner(game, grip, stack, heap, rig, clicks, credits);
         return runner;
     }
 }

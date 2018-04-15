@@ -1,5 +1,6 @@
 ﻿using model.cards;
 using model.costs;
+using model.effects.runner;
 
 namespace model
 {
@@ -7,15 +8,17 @@ namespace model
     {
         private Game game;
         public int tags = 0;
+        public readonly Grip grip;
         public readonly Stack stack;
         public readonly Heap heap;
         public readonly Rig rig;
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
 
-        public Runner(Game game, Stack stack, Heap heap, Rig rig, ClickPool clicks, CreditPool credits)
+        public Runner(Game game, Grip grip, Stack stack, Heap heap, Rig rig, ClickPool clicks, CreditPool credits)
         {
             this.game = game;
+            this.grip = grip;
             this.stack = stack;
             this.heap = heap;
             this.rig = rig;
@@ -27,10 +30,7 @@ namespace model
         {
             credits.Gain(5);
             stack.Shuffle();
-            for (int i = 0; i < 5; i++)
-            {
-                stack.Draw();
-            }
+            ((IEffect)new Draw(5)).Resolve(game);
             for (int i = 0; i < 4; i++)
             {
                 clicks.Gain();
@@ -43,7 +43,7 @@ namespace model
             if (cost.CanPay(game))
             {
                 cost.Pay(game);
-                stack.Draw();
+                ((IEffect)new Draw(1)).Resolve(game);
                 return true;
             }
             else
@@ -58,7 +58,7 @@ namespace model
             if (cost.CanPay(game))
             {
                 cost.Pay(game);
-                credits.Gain(1);
+                ((IEffect)new Gain(1)).Resolve(game);
                 return true;
             }
             else
@@ -73,7 +73,7 @@ namespace model
             if (totalCost.CanPay(game))
             {
                 totalCost.Pay(game);
-                card.PlayEffect.Resolve(game);
+                ((IEffect)new Install(card)).Resolve(game);
                 return true;
             }
             else

@@ -19,7 +19,7 @@ namespace model
             cards.Sort((card1, card2) => rng.Next().CompareTo(rng.Next()));
         }
 
-        public ICard Draw()
+        public ICard RemoveTop()
         {
             if (HasCards())
             {

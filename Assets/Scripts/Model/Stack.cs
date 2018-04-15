@@ -1,4 +1,5 @@
-﻿using view;
+﻿using model.cards;
+using view;
 
 namespace model
 {
@@ -6,13 +7,11 @@ namespace model
     {
         private Deck deck;
         private StackPile stackPile;
-        private GripFan gripFan;
 
-        public Stack(Deck deck, StackPile stackPile, GripFan gripFan)
+        public Stack(Deck deck, StackPile stackPile)
         {
             this.deck = deck;
             this.stackPile = stackPile;
-            this.gripFan = gripFan;
         }
 
         public void Shuffle()
@@ -20,11 +19,11 @@ namespace model
             deck.Shuffle();
         }
 
-        public void Draw()
+        public ICard RemoveTop()
         {
-            var card = deck.Draw();
+            var card = deck.RemoveTop();
             stackPile.UpdateCardsLeft(deck.Size());
-            gripFan.Add(card);
+            return card;
         }
     }
 }

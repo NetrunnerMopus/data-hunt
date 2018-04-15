@@ -16,7 +16,7 @@ namespace controller
         {
             eventData.selectedObject = gameObject;
             CanvasGroup.blocksRaycasts = false;
-            originalPosition = this.transform.position;
+            originalPosition = transform.position;
             BringToFront();
             gripZone.UpdateHighlights(eventData);
         }
@@ -28,7 +28,7 @@ namespace controller
 
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
-            this.transform.position = eventData.position;
+            transform.position = eventData.position;
         }
 
         void IEndDragHandler.OnEndDrag(PointerEventData eventData)
@@ -42,7 +42,7 @@ namespace controller
             {
                 Netrunner.game.runner.Draw();
             }
-            this.transform.position = originalPosition;
+            transform.position = originalPosition;
             gripZone.UpdateHighlights(eventData);
         }
     }

@@ -2,9 +2,9 @@
 using controller;
 using model.cards;
 
-namespace view
+namespace view.gui
 {
-    public class GripFan : MonoBehaviour
+    public class GripFan : MonoBehaviour, IGripView
     {
         public PlayZone playZone;
         public RigZone rigZone;
@@ -14,7 +14,7 @@ namespace view
             gameObject.AddComponent<CardPrinter>();
         }
 
-        public void Add(ICard card)
+        void IGripView.Add(ICard card)
         {
             var visual = GetComponent<CardPrinter>().Print(card);
             var cardInGrip = visual.AddComponent<CardInGrip>();
