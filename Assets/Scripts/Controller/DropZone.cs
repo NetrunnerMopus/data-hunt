@@ -10,6 +10,11 @@ namespace controller
         private Color Color { set { Image.color = value; } }
         private bool droppableDragged;
 
+        void Start()
+        {
+            UpdateHighlights();
+        }
+
         public void StartDragging()
         {
             droppableDragged = true;
@@ -20,11 +25,6 @@ namespace controller
         {
             droppableDragged = false;
             UpdateHighlights();
-        }
-
-        void Start()
-        {
-            ResetHighlights();
         }
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
