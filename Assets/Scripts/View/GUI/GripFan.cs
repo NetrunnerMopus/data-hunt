@@ -6,9 +6,6 @@ namespace view.gui
 {
     public class GripFan : MonoBehaviour, IGripView
     {
-        public PlayZone playZone;
-        public RigZone rigZone;
-
         void Start()
         {
             gameObject.AddComponent<CardPrinter>();
@@ -17,10 +14,17 @@ namespace view.gui
         void IGripView.Add(ICard card)
         {
             var visual = GetComponent<CardPrinter>().Print(card);
-            var cardInGrip = visual.AddComponent<CardInGrip>();
-            cardInGrip.Card = card;
-            cardInGrip.playZone = playZone;
-            cardInGrip.rigZone = rigZone;
+            var type = card.Type;
+            if (type.Playable)
+            {
+                var playable = visual.AddComponent<PlayableInGrip>();
+                playable.Card = card;
+            }
+            if (type.Installable)
+            {
+                var installable = visual.AddComponent<InstallableInGrip>();
+                installable.Card = card;
+            }
         }
     }
 }
