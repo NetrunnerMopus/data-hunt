@@ -2,11 +2,11 @@
 
 namespace model.play
 {
-    public class Ability : IAvailabilityObserver<ICost>
+    public class Ability : IPayabilityObserver
     {
         public readonly ICost cost;
         public readonly IEffect effect;
-        private HashSet<IAvailabilityObserver<Ability>> observers = new HashSet<IAvailabilityObserver<Ability>>();
+        private HashSet<IUsabilityObserver> observers = new HashSet<IUsabilityObserver>();
 
         public Ability(ICost cost, IEffect effect)
         {
@@ -23,18 +23,23 @@ namespace model.play
             }
         }
 
-        public void Observe(IAvailabilityObserver<Ability> observer, Game game)
+        public void Observe(IUsabilityObserver observer, Game game)
         {
             observers.Add(observer);
             cost.Observe(this, game);
         }
 
-        public void Notify(bool available, ICost resource)
+        void IPayabilityObserver.NotifyPayable(bool payable)
         {
-            foreach (IAvailabilityObserver<Ability> observer in observers)
+            foreach (IUsabilityObserver observer in observers)
             {
-                observer.Notify(available, this);
+                observer.NotifyUsable(payable);
             }
         }
+    }
+
+    public interface IUsabilityObserver
+    {
+        void NotifyUsable(bool usable);
     }
 }

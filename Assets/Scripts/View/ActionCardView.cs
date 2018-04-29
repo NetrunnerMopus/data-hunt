@@ -4,10 +4,10 @@ namespace view
 {
     public class ActionCardView
     {
-        public readonly IAvailabilityObserver<Ability> draw;
-        public readonly IAvailabilityObserver<Ability> credit;
+        public readonly IUsabilityObserver draw;
+        public readonly IUsabilityObserver credit;
 
-        public ActionCardView(IAvailabilityObserver<Ability> draw, IAvailabilityObserver<Ability> credit)
+        public ActionCardView(IUsabilityObserver draw, IUsabilityObserver credit)
         {
             this.draw = draw;
             this.credit = credit;

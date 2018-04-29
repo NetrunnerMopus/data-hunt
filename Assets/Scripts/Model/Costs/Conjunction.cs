@@ -1,6 +1,4 @@
-﻿using model.play;
-
-namespace model.costs
+﻿namespace model.costs
 {
     public class Conjunction : ICost
     {
@@ -23,7 +21,7 @@ namespace model.costs
             return true;
         }
 
-        void ICost.Observe(IAvailabilityObserver<ICost> observer, Game game)
+        void ICost.Observe(IPayabilityObserver observer, Game game)
         {
             throw new System.NotImplementedException();
         }

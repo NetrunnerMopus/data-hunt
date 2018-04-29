@@ -54,4 +54,9 @@ namespace model
             observer.NotifyBalance(credits);
         }
     }
+
+    public interface IBalanceObserver
+    {
+        void NotifyBalance(int balance);
+    }
 }

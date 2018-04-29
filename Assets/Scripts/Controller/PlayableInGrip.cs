@@ -4,12 +4,12 @@ using model.play;
 
 namespace controller
 {
-    public class PlayableInGrip : Droppable, IAvailabilityObserver<Ability>, IAvailabilityObserver<ICost>
+    public class PlayableInGrip : Droppable, IUsabilityObserver, IPayabilityObserver
     {
         public ICard Card;
         private Game game;
         private Ability ability;
-        private bool abilityAvailable;
+        private bool abilityUsable;
         private bool costPayable;
 
         void Start()
@@ -23,7 +23,7 @@ namespace controller
 
         protected override bool IsDroppable()
         {
-            return abilityAvailable && costPayable;
+            return abilityUsable && costPayable;
         }
 
         protected override void Drop()
@@ -32,14 +32,14 @@ namespace controller
             Destroy(gameObject);
         }
 
-        public void Notify(bool available, Ability resource)
+        void IUsabilityObserver.NotifyUsable(bool usable)
         {
-            abilityAvailable = available;
+            abilityUsable = usable;
         }
 
-        public void Notify(bool available, ICost resource)
+        void IPayabilityObserver.NotifyPayable(bool payable)
         {
-            costPayable = available;
+            costPayable = payable;
         }
     }
 }

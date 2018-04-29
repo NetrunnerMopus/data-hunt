@@ -74,4 +74,9 @@ namespace model
             observer.NotifyClicks(spent, Unspent());
         }
     }
+
+    public interface IClickObserver
+    {
+        void NotifyClicks(int spent, int unspent);
+    }
 }

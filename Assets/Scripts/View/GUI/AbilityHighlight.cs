@@ -4,7 +4,7 @@ using view.gui;
 
 namespace view
 {
-    public class AbilityHighlight : IAvailabilityObserver<Ability>
+    public class AbilityHighlight : IUsabilityObserver
     {
         public Highlight[] highlights;
 
@@ -13,9 +13,9 @@ namespace view
             this.highlights = highlights;
         }
 
-        void IAvailabilityObserver<Ability>.Notify(bool available, Ability ability)
+        void IUsabilityObserver.NotifyUsable(bool usable)
         {
-            if (available)
+            if (usable)
             {
                 Array.ForEach(highlights, (highlight) => highlight.TurnOn());
             }
