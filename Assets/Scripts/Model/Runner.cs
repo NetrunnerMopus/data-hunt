@@ -46,21 +46,6 @@ namespace model
             }
         }
 
-        public bool Install(ICard card)
-        {
-            ICost totalCost = new Conjunction(new RunnerClickCost(1), card.PlayCost);
-            if (totalCost.CanPay(game))
-            {
-                totalCost.Pay(game);
-                ((IEffect)new Install(card)).Resolve(game);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         public bool RemoveTag()
         {
             throw new System.Exception("Not implemented yet");

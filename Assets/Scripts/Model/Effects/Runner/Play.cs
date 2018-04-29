@@ -2,11 +2,11 @@
 
 namespace model.effects.runner
 {
-    public class PlayEventFromGrip : IEffect
+    public class Play : IEffect
     {
         private ICard card;
 
-        public PlayEventFromGrip(ICard card)
+        public Play(ICard card)
         {
             this.card = card;
         }
