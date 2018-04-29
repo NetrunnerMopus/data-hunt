@@ -1,15 +1,25 @@
-﻿namespace controller
+﻿using model;
+
+namespace controller
 {
     public class TopOfTheStack : Droppable
     {
-        private void Start()
+        private Game game;
+
+        void Start()
         {
+            game = GameConfig.game;
             zone = FindObjectOfType<GripZone>();
+        }
+
+        protected override bool IsDroppable()
+        {
+            return game.runner.actionCard.draw.cost.CanPay(game);
         }
 
         protected override void Drop()
         {
-            GameConfig.game.runner.actionCard.draw.Make(GameConfig.game);
+            game.runner.actionCard.draw.Trigger(GameConfig.game);
         }
     }
 }

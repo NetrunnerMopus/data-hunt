@@ -18,7 +18,6 @@ namespace model
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
 
-
         public Runner(Game game, ActionCard actions, Grip grip, Stack stack, Heap heap, Rig rig, ClickPool clicks, CreditPool credits)
         {
             this.game = game;
@@ -54,21 +53,6 @@ namespace model
             {
                 totalCost.Pay(game);
                 ((IEffect)new Install(card)).Resolve(game);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool Play(ICard card)
-        {
-            ICost totalCost = new Conjunction(new RunnerClickCost(1), card.PlayCost);
-            if (totalCost.CanPay(game))
-            {
-                totalCost.Pay(game);
-                card.PlayEffect.Resolve(game);
                 return true;
             }
             else

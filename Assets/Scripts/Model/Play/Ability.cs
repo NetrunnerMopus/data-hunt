@@ -14,7 +14,7 @@ namespace model.play
             this.effect = effect;
         }
 
-        public void Make(Game game)
+        public void Trigger(Game game)
         {
             if (cost.CanPay(game))
             {

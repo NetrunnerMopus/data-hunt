@@ -6,9 +6,14 @@ namespace controller
     {
         public ICard Card;
 
-        private void Start()
+        void Start()
         {
             zone = FindObjectOfType<RigZone>();
+        }
+
+        protected override bool IsDroppable()
+        {
+            return true;
         }
 
         protected override void Drop()

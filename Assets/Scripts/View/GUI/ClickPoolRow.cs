@@ -11,7 +11,7 @@ namespace view.gui
 
         private List<GameObject> clicks = new List<GameObject>();
 
-        void Start()
+        void Awake()
         {
             clickSprite = Resources.LoadAll<Sprite>("Images/UI/symbols").Where(r => r.name == "symbols_click").First();
         }

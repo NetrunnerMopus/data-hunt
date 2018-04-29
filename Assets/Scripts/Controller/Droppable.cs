@@ -20,7 +20,10 @@ namespace controller
             originalPosition = transform.position;
             BringToFront();
             CanvasGroup.blocksRaycasts = false;
-            zone.StartDragging();
+            if (IsDroppable())
+            {
+                zone.StartDragging();
+            }
         }
 
         private void BringToFront()
@@ -31,6 +34,8 @@ namespace controller
                 t.SetAsLastSibling();
             }
         }
+
+        protected abstract bool IsDroppable();
 
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
@@ -44,7 +49,7 @@ namespace controller
             var raycast = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, raycast);
             var onDrop = raycast.Where(r => r.gameObject == zone.gameObject).Any();
-            if (onDrop)
+            if (onDrop && IsDroppable())
             {
                 Drop();
             }

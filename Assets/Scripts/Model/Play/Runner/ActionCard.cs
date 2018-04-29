@@ -1,6 +1,7 @@
 ﻿using model.costs;
 using model.effects.runner;
 using view;
+using model.cards;
 
 namespace model.play.runner
 {
@@ -19,6 +20,11 @@ namespace model.play.runner
         {
             draw.Observe(view.draw, game);
             credit.Observe(view.credit, game);
+        }
+
+        public Ability Play(ICard card)
+        {
+            return new Ability(new RunnerClickCost(1), new PlayEventFromGrip(card));
         }
     }
 }

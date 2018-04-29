@@ -6,7 +6,7 @@ namespace view.gui
 {
     public class GripFan : MonoBehaviour, IGripView
     {
-        void Start()
+        void Awake()
         {
             gameObject.AddComponent<CardPrinter>();
         }

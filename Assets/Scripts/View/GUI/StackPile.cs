@@ -8,7 +8,7 @@ namespace view.gui
     {
         private GameObject top;
 
-        void Start()
+        void Awake()
         {
             gameObject.AddComponent<CardPrinter>();
         }

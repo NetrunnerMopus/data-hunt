@@ -7,7 +7,7 @@ namespace model
     {
         private int credits = 0;
         private ICreditPoolView view;
-        public readonly List<IBalanceObserver> observers = new List<IBalanceObserver>();
+        private HashSet<IBalanceObserver> observers = new HashSet<IBalanceObserver>();
 
         public CreditPool(ICreditPoolView view)
         {
@@ -24,7 +24,7 @@ namespace model
             if (CanPay(cost))
             {
                 credits -= cost;
-                view.UpdateBalance(credits);
+                UpdateBalance(credits);
             }
             else
             {
@@ -35,7 +35,7 @@ namespace model
         public void Gain(int income)
         {
             credits += income;
-            view.UpdateBalance(credits);
+            UpdateBalance(credits);
         }
 
         private void UpdateBalance(int newBalance)
@@ -44,8 +44,14 @@ namespace model
             view.UpdateBalance(newBalance);
             foreach (IBalanceObserver observer in observers)
             {
-                observer.Notify(newBalance);
+                observer.NotifyBalance(newBalance);
             }
+        }
+
+        public void Observe(IBalanceObserver observer)
+        {
+            observers.Add(observer);
+            observer.NotifyBalance(credits);
         }
     }
 }

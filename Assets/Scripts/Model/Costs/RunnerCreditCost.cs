@@ -1,10 +1,12 @@
 ﻿using model.play;
+using System.Collections.Generic;
 
 namespace model.costs
 {
-    public class RunnerCreditCost : ICost
+    public class RunnerCreditCost : ICost, IBalanceObserver
     {
         private int credits;
+        private HashSet<IAvailabilityObserver<ICost>> observers = new HashSet<IAvailabilityObserver<ICost>>();
 
         public RunnerCreditCost(int credits)
         {
@@ -18,12 +20,22 @@ namespace model.costs
 
         void ICost.Observe(IAvailabilityObserver<ICost> observer, Game game)
         {
-            throw new System.NotImplementedException();
+            observers.Add(observer);
+            game.runner.credits.Observe(this);
         }
 
         void ICost.Pay(Game game)
         {
             game.runner.credits.Pay(credits);
+        }
+
+        public void NotifyBalance(int balance)
+        {
+            var payable = balance >= credits;
+            foreach (var observer in observers)
+            {
+                observer.Notify(payable, this);
+            }
         }
     }
 }

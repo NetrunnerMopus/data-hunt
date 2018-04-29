@@ -52,21 +52,26 @@ namespace model
 
         private void Update()
         {
-            view.UpdateClicks(spent, capacity - spent);
+            view.UpdateClicks(spent, Unspent());
             foreach (IClickObserver observer in observers)
             {
-                observer.NotifyClicks(spent, capacity - spent);
+                observer.NotifyClicks(spent, Unspent());
             }
+        }
+
+        private int Unspent() {
+            return capacity - spent;
         }
 
         public bool CanSpend(int cost)
         {
-            return (capacity - spent) >= cost;
+            return Unspent() >= cost;
         }
 
         public void Observe(IClickObserver observer)
         {
             observers.Add(observer);
+            observer.NotifyClicks(spent, Unspent());
         }
     }
 }

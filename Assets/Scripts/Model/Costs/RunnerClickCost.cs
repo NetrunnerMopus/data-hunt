@@ -20,8 +20,8 @@ namespace model.costs
 
         void ICost.Observe(IAvailabilityObserver<ICost> observer, Game game)
         {
-            game.runner.clicks.Observe(this);
             observers.Add(observer);
+            game.runner.clicks.Observe(this);
         }
 
         void ICost.Pay(Game game)

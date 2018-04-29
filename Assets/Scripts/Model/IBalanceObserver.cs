@@ -2,6 +2,6 @@
 {
     public interface IBalanceObserver
     {
-        void Notify(int balance);
+        void NotifyBalance(int balance);
     }
 }

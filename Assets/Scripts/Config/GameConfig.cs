@@ -11,7 +11,6 @@ public class GameConfig : MonoBehaviour
 {
     public static Game game;
 
-    private bool started = false;
     public ActionCardConfig actionCardConfig;
     public GripFan gripFan;
     public StackPile stackPile;
@@ -24,17 +23,17 @@ public class GameConfig : MonoBehaviour
 
     private Deck runnerDeck = new Decks().DemoRunner();
 
-    void Update()
+    void Awake()
     {
-        if (!started)
-        {
-            started = true;
-            game = new Game();
-            game.runner = SetupRunner(game);
-            game.corp = SetupCorporation();
-            game.AttachView(new RunnerView(actionCardConfig.View()));
-            game.Start();
-        }
+        game = new Game();
+        game.runner = SetupRunner(game);
+        game.corp = SetupCorporation();
+    }
+
+    void Start()
+    {
+        game.AttachView(new RunnerView(actionCardConfig.View()));
+        game.Start();
     }
 
     private Corp SetupCorporation()
@@ -50,7 +49,7 @@ public class GameConfig : MonoBehaviour
     private Runner SetupRunner(Game game)
     {
         var actionCard = new ActionCard();
-        var grip = new Grip(new CompositeGripView(new GripLog(), gripFan));
+        var grip = new Grip(gripFan);
         var stack = new Stack(runnerDeck, stackPile);
         var heap = new Heap(heapPile);
         var rig = new Rig(rigGrid);
