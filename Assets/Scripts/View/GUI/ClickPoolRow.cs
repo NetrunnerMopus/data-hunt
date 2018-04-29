@@ -56,7 +56,7 @@ namespace view.gui
                 }
                 else
                 {
-                    image.color = Color.cyan;
+                    image.color = Color.yellow;
                 }
             }
         }

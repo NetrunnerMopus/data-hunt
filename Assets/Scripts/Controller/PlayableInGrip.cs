@@ -13,7 +13,7 @@ namespace controller
 
         protected override void Drop()
         {
-            if (Netrunner.game.runner.Play(Card))
+            if (GameConfig.game.runner.Play(Card))
             {
                 Destroy(gameObject);
             }

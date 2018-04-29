@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 115784155}
   - component: {fileID: 115784156}
   m_Layer: 0
-  m_Name: Netrunner
+  m_Name: Game config
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,12 +135,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 115784154}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -538.47797, y: -214.92271, z: 7.462184}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_Father: {fileID: 779579842}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &115784156
 MonoBehaviour:
@@ -150,9 +150,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 115784154}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0111011623fa2124797871fb3680b891, type: 3}
+  m_Script: {fileID: 11500000, guid: 2779b23bfeb3c7f4a8183e0a7460fa6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionCardConfig: {fileID: 1237749286}
   gripFan: {fileID: 1940409411}
   stackPile: {fileID: 1198803625}
   heapPile: {fileID: 836102272}
@@ -492,6 +493,36 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &779579841
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 779579842}
+  m_Layer: 0
+  m_Name: Config
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &779579842
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 779579841}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 538.47797, y: 214.92271, z: -7.462184}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 115784155}
+  - {fileID: 1237749287}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &836102266
 GameObject:
   m_ObjectHideFlags: 0
@@ -873,7 +904,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00128c1dbdc474e81a9df0547eaba73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grip: {fileID: 1940409409}
+--- !u!1 &1237749285
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1237749287}
+  - component: {fileID: 1237749286}
+  m_Layer: 0
+  m_Name: Action card config
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1237749286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1237749285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98d013dc57cb304780a7c16ac9bcff8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stack: {fileID: 1198803621}
+  grip: {fileID: 1940409404}
+  bank: {fileID: 1261533424}
+  credits: {fileID: 222865688}
+--- !u!4 &1237749287
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1237749285}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 22.522034, y: 100.577286, z: 7.462184}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 779579842}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1261533424
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,7 +1029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c19f19193286c498f91d11f413d96b34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drop: {fileID: 222865692}
+  zone: {fileID: 0}
 --- !u!225 &1261533429
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1187,7 +1261,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1685858174
 MonoBehaviour:
@@ -1373,8 +1447,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b7d49baef6c147ffbaecc1b20ae5144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playZone: {fileID: 1115497748}
-  rigZone: {fileID: 976488798}
 --- !u!1 &1942180166
 GameObject:
   m_ObjectHideFlags: 0

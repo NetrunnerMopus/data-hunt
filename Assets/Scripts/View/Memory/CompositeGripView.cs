@@ -1,6 +1,6 @@
 ﻿using model.cards;
 
-namespace view.composite
+namespace view.memory
 {
     public class CompositeGripView : IGripView
     {

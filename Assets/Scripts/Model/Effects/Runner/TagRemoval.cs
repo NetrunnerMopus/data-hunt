@@ -2,18 +2,16 @@
 {
     public class TagRemoval : IEffect
     {
-        private Runner runner;
         private int tags;
 
-        public TagRemoval(int tags, Runner runner)
+        public TagRemoval(int tags)
         {
             this.tags = tags;
-            this.runner = runner;
         }
 
         void IEffect.Resolve(Game game)
         {
-            runner.tags -= tags;
+            game.runner.tags -= tags;
         }
     }
 }

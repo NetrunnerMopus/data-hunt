@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using view;
 
 namespace model
@@ -8,6 +9,7 @@ namespace model
         private int capacity = 0;
         private int spent = 0;
         private IClickPoolView view;
+        private HashSet<IClickObserver> observers = new HashSet<IClickObserver>();
 
         public ClickPool(IClickPoolView view)
         {
@@ -17,7 +19,7 @@ namespace model
         public void Replenish()
         {
             spent = 0;
-            UpdateView();
+            Update();
         }
 
         public void Spend(int clicks)
@@ -25,7 +27,7 @@ namespace model
             if (CanSpend(clicks))
             {
                 spent += clicks;
-                UpdateView();
+                Update();
             }
             else
             {
@@ -36,7 +38,7 @@ namespace model
         public void Gain()
         {
             capacity += 1;
-            UpdateView();
+            Update();
         }
 
         public void Lose()
@@ -44,18 +46,27 @@ namespace model
             if (capacity > 0)
             {
                 capacity -= 1;
-                UpdateView();
+                Update();
             }
         }
 
-        private void UpdateView()
+        private void Update()
         {
             view.UpdateClicks(spent, capacity - spent);
+            foreach (IClickObserver observer in observers)
+            {
+                observer.NotifyClicks(spent, capacity - spent);
+            }
         }
 
         public bool CanSpend(int cost)
         {
             return (capacity - spent) >= cost;
+        }
+
+        public void Observe(IClickObserver observer)
+        {
+            observers.Add(observer);
         }
     }
 }

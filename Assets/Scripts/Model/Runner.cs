@@ -1,12 +1,15 @@
 ﻿using model.cards;
 using model.costs;
 using model.effects.runner;
+using model.play.runner;
+using view;
 
 namespace model
 {
     public class Runner
     {
         private Game game;
+        public readonly ActionCard actionCard;
         public int tags = 0;
         public readonly Grip grip;
         public readonly Stack stack;
@@ -15,15 +18,22 @@ namespace model
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
 
-        public Runner(Game game, Grip grip, Stack stack, Heap heap, Rig rig, ClickPool clicks, CreditPool credits)
+
+        public Runner(Game game, ActionCard actions, Grip grip, Stack stack, Heap heap, Rig rig, ClickPool clicks, CreditPool credits)
         {
             this.game = game;
+            this.actionCard = actions;
             this.grip = grip;
             this.stack = stack;
             this.heap = heap;
             this.rig = rig;
             this.clicks = clicks;
             this.credits = credits;
+        }
+
+        public void AttachView(RunnerView view)
+        {
+            actionCard.AttachView(view.actionCard, game);
         }
 
         public void StartGame()
@@ -34,36 +44,6 @@ namespace model
             for (int i = 0; i < 4; i++)
             {
                 clicks.Gain();
-            }
-        }
-
-        public bool Draw()
-        {
-            ICost cost = new RunnerClickCost(1);
-            if (cost.CanPay(game))
-            {
-                cost.Pay(game);
-                ((IEffect)new Draw(1)).Resolve(game);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool GainCredit()
-        {
-            ICost cost = new RunnerClickCost(1);
-            if (cost.CanPay(game))
-            {
-                cost.Pay(game);
-                ((IEffect)new Gain(1)).Resolve(game);
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
 

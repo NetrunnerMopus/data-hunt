@@ -9,7 +9,7 @@
 
         protected override void Drop()
         {
-            Netrunner.game.runner.GainCredit();
+            GameConfig.game.runner.actionCard.credit.Make(GameConfig.game);
         }
     }
 }

@@ -9,7 +9,7 @@
 
         protected override void Drop()
         {
-            Netrunner.game.runner.Draw();
+            GameConfig.game.runner.actionCard.draw.Make(GameConfig.game);
         }
     }
 }

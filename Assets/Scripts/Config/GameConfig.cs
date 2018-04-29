@@ -3,14 +3,16 @@ using model;
 using view;
 using controller;
 using view.gui;
-using view.composite;
 using view.log;
+using model.play.runner;
+using view.memory;
 
-public class Netrunner : MonoBehaviour
+public class GameConfig : MonoBehaviour
 {
     public static Game game;
 
     private bool started = false;
+    public ActionCardConfig actionCardConfig;
     public GripFan gripFan;
     public StackPile stackPile;
     public HeapPile heapPile;
@@ -30,6 +32,7 @@ public class Netrunner : MonoBehaviour
             game = new Game();
             game.runner = SetupRunner(game);
             game.corp = SetupCorporation();
+            game.AttachView(new RunnerView(actionCardConfig.View()));
             game.Start();
         }
     }
@@ -46,13 +49,14 @@ public class Netrunner : MonoBehaviour
 
     private Runner SetupRunner(Game game)
     {
+        var actionCard = new ActionCard();
         var grip = new Grip(new CompositeGripView(new GripLog(), gripFan));
         var stack = new Stack(runnerDeck, stackPile);
         var heap = new Heap(heapPile);
         var rig = new Rig(rigGrid);
         var clicks = new ClickPool(clickPoolRow);
         var credits = new CreditPool(creditPoolText);
-        var runner = new Runner(game, grip, stack, heap, rig, clicks, credits);
+        var runner = new Runner(game, actionCard, grip, stack, heap, rig, clicks, credits);
         return runner;
     }
 }

@@ -1,8 +1,12 @@
-﻿namespace model.costs
+﻿using model.play;
+using System.Collections.Generic;
+
+namespace model.costs
 {
-    public class RunnerClickCost : ICost
+    public class RunnerClickCost : ICost, IClickObserver
     {
         private int clicks;
+        private HashSet<IAvailabilityObserver<ICost>> observers = new HashSet<IAvailabilityObserver<ICost>>();
 
         public RunnerClickCost(int clicks)
         {
@@ -14,9 +18,23 @@
             return game.runner.clicks.CanSpend(clicks);
         }
 
+        void ICost.Observe(IAvailabilityObserver<ICost> observer, Game game)
+        {
+            game.runner.clicks.Observe(this);
+            observers.Add(observer);
+        }
+
         void ICost.Pay(Game game)
         {
             game.runner.clicks.Spend(clicks);
+        }
+
+        public void NotifyClicks(int spent, int unspent)
+        {
+            foreach (var observer in observers)
+            {
+                observer.Notify(unspent >= clicks, this);
+            }
         }
     }
 }

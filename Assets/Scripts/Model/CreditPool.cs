@@ -1,4 +1,5 @@
-﻿using view;
+﻿using System.Collections.Generic;
+using view;
 
 namespace model
 {
@@ -6,15 +7,11 @@ namespace model
     {
         private int credits = 0;
         private ICreditPoolView view;
+        public readonly List<IBalanceObserver> observers = new List<IBalanceObserver>();
 
         public CreditPool(ICreditPoolView view)
         {
             this.view = view;
-        }
-
-        public int MaxPayout()
-        {
-            return credits;
         }
 
         public bool CanPay(int cost)
@@ -39,6 +36,16 @@ namespace model
         {
             credits += income;
             view.UpdateBalance(credits);
+        }
+
+        private void UpdateBalance(int newBalance)
+        {
+            credits = newBalance;
+            view.UpdateBalance(newBalance);
+            foreach (IBalanceObserver observer in observers)
+            {
+                observer.Notify(newBalance);
+            }
         }
     }
 }
