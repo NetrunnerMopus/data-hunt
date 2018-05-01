@@ -15,5 +15,8 @@ namespace view.gui
         }
 
         public IGripView Grip { get { return FindObjectOfType<GripFan>(); } }
+        public IStackView Stack { get { return FindObjectOfType<StackPile>(); } }
+        public IHeapView Heap { get { return FindObjectOfType<HeapPile>(); } }
+        public IRigView Rig { get { return FindObjectOfType<RigGrid>(); } }
     }
 }

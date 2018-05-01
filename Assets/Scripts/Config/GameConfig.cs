@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using model;
 using view;
-using controller;
 using view.gui;
 using model.play.runner;
 
@@ -10,10 +9,6 @@ public class GameConfig : MonoBehaviour
     public static Game game;
 
     public RunnerView runnerView;
-    public StackPile stackPile;
-    public HeapPile heapPile;
-    public RigGrid rigGrid;
-    public PlayZone playZone;
     public CardPrinter serversZone;
 
     private Deck runnerDeck = new Decks().DemoRunner();
@@ -45,9 +40,9 @@ public class GameConfig : MonoBehaviour
     {
         var actionCard = new ActionCard();
         var grip = new Grip(runnerView.Grip);
-        var stack = new Stack(runnerDeck, stackPile);
-        var heap = new Heap(heapPile);
-        var rig = new Rig(rigGrid);
+        var stack = new Stack(runnerDeck, runnerView.Stack);
+        var heap = new Heap(runnerView.Heap);
+        var rig = new Rig(runnerView.Rig);
         var clicks = new ClickPool();
         var credits = new CreditPool();
         var runner = new Runner(game, actionCard, grip, stack, heap, rig, clicks, credits);
