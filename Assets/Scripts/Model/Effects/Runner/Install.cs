@@ -13,7 +13,6 @@ namespace model.effects.runner
 
         void IEffect.Resolve(Game game)
         {
-            card.PlayCost.Pay(game);
             game.runner.rig.Install(card);
         }
     }

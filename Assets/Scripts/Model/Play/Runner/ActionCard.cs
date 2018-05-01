@@ -29,7 +29,7 @@ namespace model.play.runner
 
         public Ability Install(ICard card)
         {
-            return new Ability(new RunnerClickCost(1), new Install(card));
+            return new Ability(new Conjunction(new RunnerClickCost(1), card.PlayCost), new Install(card));
         }
     }
 }
