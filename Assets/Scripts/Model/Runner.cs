@@ -1,6 +1,4 @@
-﻿using model.cards;
-using model.costs;
-using model.effects.runner;
+﻿using model.effects.runner;
 using model.play.runner;
 using view;
 
@@ -30,9 +28,9 @@ namespace model
             this.credits = credits;
         }
 
-        public void AttachView(RunnerView view)
+        public void AttachView(IRunnerView view)
         {
-            actionCard.AttachView(view.actionCard, game);
+            actionCard.AttachView(view.ActionCard, game);
         }
 
         public void StartGame()

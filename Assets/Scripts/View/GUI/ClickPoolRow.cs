@@ -2,10 +2,11 @@
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
+using model;
 
 namespace view.gui
 {
-    public class ClickPoolRow : MonoBehaviour, IClickPoolView
+    public class ClickPoolRow : MonoBehaviour, IClickObserver
     {
         private Sprite clickSprite;
 
@@ -16,7 +17,7 @@ namespace view.gui
             clickSprite = Resources.LoadAll<Sprite>("Images/UI/symbols").Where(r => r.name == "symbols_click").First();
         }
 
-        void IClickPoolView.UpdateClicks(int spent, int unspent)
+        void IClickObserver.NotifyClicks(int spent, int unspent)
         {
             var total = spent + unspent;
             RenderMissing(total);

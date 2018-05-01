@@ -3,14 +3,13 @@ using model;
 using view;
 using controller;
 using view.gui;
-using view.log;
 using model.play.runner;
-using view.memory;
 
 public class GameConfig : MonoBehaviour
 {
     public static Game game;
 
+    public RunnerView runnerView;
     public ActionCardConfig actionCardConfig;
     public GripFan gripFan;
     public StackPile stackPile;
@@ -18,7 +17,6 @@ public class GameConfig : MonoBehaviour
     public RigGrid rigGrid;
     public PlayZone playZone;
     public CardPrinter serversZone;
-    public ClickPoolRow clickPoolRow;
     public CreditPoolText creditPoolText;
 
     private Deck runnerDeck = new Decks().DemoRunner();
@@ -32,7 +30,9 @@ public class GameConfig : MonoBehaviour
 
     void Start()
     {
-        game.AttachView(new RunnerView(actionCardConfig.View()));
+        runnerView.ActionCard = actionCardConfig.View();
+        runnerView.Display(game);
+        game.AttachView(runnerView);
         game.Start();
     }
 
@@ -53,7 +53,7 @@ public class GameConfig : MonoBehaviour
         var stack = new Stack(runnerDeck, stackPile);
         var heap = new Heap(heapPile);
         var rig = new Rig(rigGrid);
-        var clicks = new ClickPool(clickPoolRow);
+        var clicks = new ClickPool();
         var credits = new CreditPool(creditPoolText);
         var runner = new Runner(game, actionCard, grip, stack, heap, rig, clicks, credits);
         return runner;

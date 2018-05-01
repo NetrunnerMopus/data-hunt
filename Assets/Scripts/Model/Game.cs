@@ -7,7 +7,7 @@ namespace model
         public Corp corp;
         public Runner runner;
 
-        public void AttachView(RunnerView view)
+        public void AttachView(IRunnerView view)
         {
             runner.AttachView(view);
         }

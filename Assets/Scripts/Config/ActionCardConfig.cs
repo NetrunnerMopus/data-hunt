@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using model;
 using view;
 using view.gui;
 

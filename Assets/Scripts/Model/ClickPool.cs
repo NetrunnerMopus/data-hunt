@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using view;
 
 namespace model
 {
@@ -8,13 +7,7 @@ namespace model
     {
         private int capacity = 0;
         private int spent = 0;
-        private IClickPoolView view;
         private HashSet<IClickObserver> observers = new HashSet<IClickObserver>();
-
-        public ClickPool(IClickPoolView view)
-        {
-            this.view = view;
-        }
 
         public void Replenish()
         {
@@ -52,7 +45,6 @@ namespace model
 
         private void Update()
         {
-            view.UpdateClicks(spent, Unspent());
             foreach (IClickObserver observer in observers)
             {
                 observer.NotifyClicks(spent, Unspent());
