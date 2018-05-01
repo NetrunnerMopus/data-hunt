@@ -10,7 +10,6 @@ public class GameConfig : MonoBehaviour
     public static Game game;
 
     public RunnerView runnerView;
-    public ActionCardConfig actionCardConfig;
     public GripFan gripFan;
     public StackPile stackPile;
     public HeapPile heapPile;
@@ -29,9 +28,7 @@ public class GameConfig : MonoBehaviour
 
     void Start()
     {
-        runnerView.ActionCard = actionCardConfig.View();
         runnerView.Display(game);
-        game.AttachView(runnerView);
         game.Start();
     }
 

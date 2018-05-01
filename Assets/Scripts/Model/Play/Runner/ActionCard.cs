@@ -1,6 +1,5 @@
 ﻿using model.costs;
 using model.effects.runner;
-using view;
 using model.cards;
 
 namespace model.play.runner
@@ -14,11 +13,6 @@ namespace model.play.runner
         {
             draw = new Ability(new RunnerClickCost(1), new Draw(1));
             credit = new Ability(new RunnerClickCost(1), new Gain(1));
-        }
-
-        public void AttachView(ActionCardView view, Game game)
-        {
-            draw.Observe(view.draw, game);
         }
 
         public Ability Play(ICard card)

@@ -28,11 +28,6 @@ namespace model
             this.credits = credits;
         }
 
-        public void AttachView(IRunnerView view)
-        {
-            actionCard.AttachView(view.ActionCard, game);
-        }
-
         public void StartGame()
         {
             credits.Gain(5);
