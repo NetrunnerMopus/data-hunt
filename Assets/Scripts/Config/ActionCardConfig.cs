@@ -12,7 +12,6 @@ public class ActionCardConfig : MonoBehaviour
     public ActionCardView View()
     {
         var draw = new AbilityHighlight(stack.AddComponent<Highlight>());
-        var credit = new AbilityHighlight(bank.AddComponent<Highlight>());
-        return new ActionCardView(draw, credit);
+        return new ActionCardView(draw);
     }
 }

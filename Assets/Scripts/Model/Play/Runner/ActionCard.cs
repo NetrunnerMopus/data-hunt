@@ -19,7 +19,6 @@ namespace model.play.runner
         public void AttachView(ActionCardView view, Game game)
         {
             draw.Observe(view.draw, game);
-            credit.Observe(view.credit, game);
         }
 
         public Ability Play(ICard card)

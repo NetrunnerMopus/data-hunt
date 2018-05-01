@@ -1,4 +1,5 @@
-﻿using model;
+﻿using controller;
+using model;
 using UnityEngine;
 
 namespace view.gui
@@ -11,6 +12,7 @@ namespace view.gui
         {
             game.runner.clicks.Observe(FindObjectOfType<ClickPoolRow>());
             game.runner.credits.Observe(FindObjectOfType<CreditPoolText>());
+            game.runner.actionCard.credit.Observe(new AbilityHighlight(FindObjectOfType<BankCredit>().gameObject.AddComponent<Highlight>()) , game);
         }
     }
 }
