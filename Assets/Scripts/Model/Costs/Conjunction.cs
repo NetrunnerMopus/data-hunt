@@ -1,8 +1,17 @@
-﻿namespace model.costs
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace model.costs
 {
-    public class Conjunction : ICost
+    /// <summary>
+    /// A conjunction of <em>independent</em> costs.
+    /// </summary>
+    public class Conjunction : ICost, IPayabilityObserver
     {
         private ICost[] costs;
+        private IDictionary<ICost, bool> payabilities = new Dictionary<ICost, bool>();
+        private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
 
         public Conjunction(params ICost[] costs)
         {
@@ -21,9 +30,20 @@
             return true;
         }
 
+        void IPayabilityObserver.NotifyPayable(bool payable, ICost source)
+        {
+            payabilities[source] = payable;
+            var allPayable = payabilities.All(payability => payability.Value);
+            foreach (var observer in observers)
+            {
+                observer.NotifyPayable(allPayable, this);
+            }
+        }
+
         void ICost.Observe(IPayabilityObserver observer, Game game)
         {
-            throw new System.NotImplementedException();
+            observers.Add(observer);
+            Array.ForEach(costs, (cost) => cost.Observe(this, game));
         }
 
         void ICost.Pay(Game game)

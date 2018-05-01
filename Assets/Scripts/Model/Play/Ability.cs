@@ -16,11 +16,8 @@ namespace model.play
 
         public void Trigger(Game game)
         {
-            if (cost.CanPay(game))
-            {
-                cost.Pay(game);
-                effect.Resolve(game);
-            }
+            cost.Pay(game);
+            effect.Resolve(game);
         }
 
         public void Observe(IUsabilityObserver observer, Game game)
@@ -29,7 +26,12 @@ namespace model.play
             cost.Observe(this, game);
         }
 
-        void IPayabilityObserver.NotifyPayable(bool payable)
+        public void Unobserve(IUsabilityObserver observer)
+        {
+            observers.Remove(observer);
+        }
+
+        void IPayabilityObserver.NotifyPayable(bool payable, ICost source)
         {
             foreach (IUsabilityObserver observer in observers)
             {

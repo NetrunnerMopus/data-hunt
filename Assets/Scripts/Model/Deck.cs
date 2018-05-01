@@ -5,7 +5,7 @@ namespace model
 {
     public class Deck
     {
-        private System.Random rng = new System.Random();
+        private System.Random rng = new System.Random(10006);
 
         private List<ICard> cards;
 

@@ -33,7 +33,7 @@ namespace model.costs
             var payable = unspent >= clicks;
             foreach (var observer in observers)
             {
-                observer.NotifyPayable(payable);
+                observer.NotifyPayable(payable, this);
             }
         }
     }

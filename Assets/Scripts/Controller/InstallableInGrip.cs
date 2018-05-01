@@ -37,7 +37,7 @@ namespace controller
             abilityUsable = usable;
         }
 
-        void IPayabilityObserver.NotifyPayable(bool payable)
+        void IPayabilityObserver.NotifyPayable(bool payable, ICost source)
         {
             costPayable = payable;
         }

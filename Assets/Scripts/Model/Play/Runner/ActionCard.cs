@@ -24,7 +24,7 @@ namespace model.play.runner
 
         public Ability Play(ICard card)
         {
-            return new Ability(new RunnerClickCost(1), new Play(card));
+            return new Ability(new Conjunction(new RunnerClickCost(1), card.PlayCost), new Play(card));
         }
 
         public Ability Install(ICard card)

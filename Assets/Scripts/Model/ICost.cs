@@ -9,6 +9,6 @@
 
     public interface IPayabilityObserver
     {
-        void NotifyPayable(bool payable);
+        void NotifyPayable(bool payable, ICost source);
     }
 }
