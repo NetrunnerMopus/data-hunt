@@ -10,6 +10,7 @@ namespace view.gui
         public void Display(Game game)
         {
             game.runner.clicks.Observe(FindObjectOfType<ClickPoolRow>());
+            game.runner.credits.Observe(FindObjectOfType<CreditPoolText>());
         }
     }
 }

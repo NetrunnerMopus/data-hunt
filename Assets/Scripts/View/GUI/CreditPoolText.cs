@@ -1,13 +1,14 @@
-﻿using UnityEngine;
+﻿using model;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class CreditPoolText : MonoBehaviour, ICreditPoolView
+    public class CreditPoolText : MonoBehaviour, IBalanceObserver
     {
-        void ICreditPoolView.UpdateBalance(int newBalance)
+        void IBalanceObserver.NotifyBalance(int balance)
         {
-            GetComponent<Text>().text = newBalance + " credits";
+            GetComponent<Text>().text = balance + " credits";
         }
     }
 }

@@ -6,13 +6,7 @@ namespace model
     public class CreditPool
     {
         private int credits = 0;
-        private ICreditPoolView view;
         private HashSet<IBalanceObserver> observers = new HashSet<IBalanceObserver>();
-
-        public CreditPool(ICreditPoolView view)
-        {
-            this.view = view;
-        }
 
         public bool CanPay(int cost)
         {
@@ -41,7 +35,6 @@ namespace model
         private void UpdateBalance(int newBalance)
         {
             credits = newBalance;
-            view.UpdateBalance(newBalance);
             foreach (IBalanceObserver observer in observers)
             {
                 observer.NotifyBalance(newBalance);

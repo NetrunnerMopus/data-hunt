@@ -17,7 +17,6 @@ public class GameConfig : MonoBehaviour
     public RigGrid rigGrid;
     public PlayZone playZone;
     public CardPrinter serversZone;
-    public CreditPoolText creditPoolText;
 
     private Deck runnerDeck = new Decks().DemoRunner();
 
@@ -54,7 +53,7 @@ public class GameConfig : MonoBehaviour
         var heap = new Heap(heapPile);
         var rig = new Rig(rigGrid);
         var clicks = new ClickPool();
-        var credits = new CreditPool(creditPoolText);
+        var credits = new CreditPool();
         var runner = new Runner(game, actionCard, grip, stack, heap, rig, clicks, credits);
         return runner;
     }
