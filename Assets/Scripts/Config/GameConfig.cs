@@ -10,7 +10,6 @@ public class GameConfig : MonoBehaviour
     public static Game game;
 
     public RunnerView runnerView;
-    public GripFan gripFan;
     public StackPile stackPile;
     public HeapPile heapPile;
     public RigGrid rigGrid;
@@ -45,7 +44,7 @@ public class GameConfig : MonoBehaviour
     private Runner SetupRunner(Game game)
     {
         var actionCard = new ActionCard();
-        var grip = new Grip(gripFan);
+        var grip = new Grip(runnerView.Grip);
         var stack = new Stack(runnerDeck, stackPile);
         var heap = new Heap(heapPile);
         var rig = new Rig(rigGrid);

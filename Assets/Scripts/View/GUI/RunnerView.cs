@@ -13,5 +13,7 @@ namespace view.gui
             game.runner.actionCard.credit.Observe(new AbilityHighlight(FindObjectOfType<BankCredit>().gameObject.AddComponent<Highlight>()) , game);
             game.runner.actionCard.draw.Observe(new AbilityHighlight(FindObjectOfType<StackPile>().gameObject.AddComponent<Highlight>()), game);
         }
+
+        public IGripView Grip { get { return FindObjectOfType<GripFan>(); } }
     }
 }
