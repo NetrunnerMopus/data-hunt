@@ -23,14 +23,17 @@ public class SureGambleTest
         game.Start();
         var balance = new LastBalanceObserver();
         var clicks = new SpentClicksObserver();
+        var heap = new HeapObserver();
         game.runner.credits.Observe(balance);
         game.runner.clicks.Observe(clicks);
+        game.runner.heap.Observe(heap);
         var play = game.runner.actionCard.Play(sureGamble);
 
         play.Trigger(game);
 
         Assert.AreEqual(9, balance.LastBalance);
         Assert.AreEqual(1, clicks.Spent);
+        Assert.AreEqual(sureGamble, heap.LastAdded);
     }
 
     private class MockRunnerView : IRunnerView
@@ -76,6 +79,16 @@ public class SureGambleTest
         void IClickObserver.NotifyClicks(int spent, int unspent)
         {
             Spent = spent;
+        }
+    }
+
+    private class HeapObserver : IHeapObserver
+    {
+        public ICard LastAdded { get; private set; }
+
+        void IHeapObserver.NotifyCardAdded(ICard card)
+        {
+            LastAdded = card;
         }
     }
 }
