@@ -5,11 +5,16 @@ using model;
 
 namespace view.log
 {
-    public class GripLog : IGripObserver
+    public class GripLog : IGripAdditionObserver, IGripRemovalObserver
     {
-        void IGripObserver.NotifyCardAdded(ICard card)
+        void IGripAdditionObserver.NotifyCardAdded(ICard card)
         {
             Debug.Log("Adding " + card + " to the grip");
+        }
+
+        void IGripRemovalObserver.NotifyCardRemoved(ICard card)
+        {
+            Debug.Log("Removed " + card + " from the grip");
         }
     }
 }

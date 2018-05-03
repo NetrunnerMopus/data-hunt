@@ -6,25 +6,45 @@ namespace model
     public class Grip
     {
         private List<ICard> cards = new List<ICard>();
-        private HashSet<IGripObserver> observers = new HashSet<IGripObserver>();
+        private HashSet<IGripAdditionObserver> additions = new HashSet<IGripAdditionObserver>();
+        private HashSet<IGripRemovalObserver> removals = new HashSet<IGripRemovalObserver>();
 
         public void Add(ICard card)
         {
             cards.Add(card);
-            foreach (var observer in observers)
+            foreach (var observer in additions)
             {
                 observer.NotifyCardAdded(card);
             }
         }
 
-        public void Observe(IGripObserver observer)
+        public void Remove(ICard card)
         {
-            observers.Add(observer);
+            cards.Remove(card);
+            foreach (var observer in removals)
+            {
+                observer.NotifyCardRemoved(card);
+            }
+        }
+
+        public void ObserveAdditions(IGripAdditionObserver observer)
+        {
+            additions.Add(observer);
+        }
+
+        public void ObserveRemovals(IGripRemovalObserver observer)
+        {
+            removals.Add(observer);
         }
     }
 
-    public interface IGripObserver
+    public interface IGripAdditionObserver
     {
         void NotifyCardAdded(ICard card);
+    }
+
+    public interface IGripRemovalObserver
+    {
+        void NotifyCardRemoved(ICard card);
     }
 }

@@ -23,9 +23,11 @@ public class SureGambleTest
         game.Start();
         var balance = new LastBalanceObserver();
         var clicks = new SpentClicksObserver();
+        var grip = new GripObserver();
         var heap = new HeapObserver();
         game.runner.credits.Observe(balance);
         game.runner.clicks.Observe(clicks);
+        game.runner.grip.ObserveRemovals(grip);
         game.runner.heap.Observe(heap);
         var play = game.runner.actionCard.Play(sureGamble);
 
@@ -33,6 +35,7 @@ public class SureGambleTest
 
         Assert.AreEqual(9, balance.LastBalance);
         Assert.AreEqual(1, clicks.Spent);
+        Assert.AreEqual(sureGamble, grip.LastRemoved);
         Assert.AreEqual(sureGamble, heap.LastAdded);
     }
 
@@ -72,6 +75,16 @@ public class SureGambleTest
         void IClickObserver.NotifyClicks(int spent, int unspent)
         {
             Spent = spent;
+        }
+    }
+
+    private class GripObserver : IGripRemovalObserver
+    {
+        public ICard LastRemoved { get; private set; }
+
+        void IGripRemovalObserver.NotifyCardRemoved(ICard card)
+        {
+            LastRemoved = card;
         }
     }
 

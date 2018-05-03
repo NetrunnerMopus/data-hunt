@@ -31,9 +31,12 @@ namespace controller
         protected override void Drop()
         {
             ability.Trigger(Game);
+        }
+
+        void OnDestroy()
+        {
             ability.Unobserve(this);
             ability.Unobserve(highlight);
-            Destroy(gameObject);
         }
 
         void IUsabilityObserver.NotifyUsable(bool usable)

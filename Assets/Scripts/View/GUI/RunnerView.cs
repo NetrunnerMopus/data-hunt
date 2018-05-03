@@ -18,7 +18,8 @@ namespace view.gui
             game.runner.credits.Observe(FindObjectOfType<CreditPoolText>());
             game.runner.actionCard.credit.Observe(new AbilityHighlight(bankCredit.gameObject.AddComponent<Highlight>()) , game);
             game.runner.actionCard.draw.Observe(new AbilityHighlight(stackPile.gameObject.AddComponent<Highlight>()), game);
-            game.runner.grip.Observe(grip);
+            game.runner.grip.ObserveAdditions(grip);
+            game.runner.grip.ObserveRemovals(grip);
             game.runner.heap.Observe(FindObjectOfType<HeapPile>());
         }
 

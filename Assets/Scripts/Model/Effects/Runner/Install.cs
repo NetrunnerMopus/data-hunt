@@ -14,6 +14,7 @@ namespace model.effects.runner
         void IEffect.Resolve(Game game)
         {
             game.runner.rig.Install(card);
+            game.runner.grip.Remove(card);
         }
     }
 }
