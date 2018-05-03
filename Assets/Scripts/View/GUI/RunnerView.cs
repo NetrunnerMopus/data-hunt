@@ -9,11 +9,15 @@ namespace view.gui
         public void Display(Game game)
         {
             GripFan grip = FindObjectOfType<GripFan>();
+            BankCredit bankCredit = FindObjectOfType<BankCredit>();
+            StackPile stackPile = FindObjectOfType<StackPile>();
             grip.Game = game;
+            bankCredit.Game = game;
+            stackPile.Game = game;
             game.runner.clicks.Observe(FindObjectOfType<ClickPoolRow>());
             game.runner.credits.Observe(FindObjectOfType<CreditPoolText>());
-            game.runner.actionCard.credit.Observe(new AbilityHighlight(FindObjectOfType<BankCredit>().gameObject.AddComponent<Highlight>()) , game);
-            game.runner.actionCard.draw.Observe(new AbilityHighlight(FindObjectOfType<StackPile>().gameObject.AddComponent<Highlight>()), game);
+            game.runner.actionCard.credit.Observe(new AbilityHighlight(bankCredit.gameObject.AddComponent<Highlight>()) , game);
+            game.runner.actionCard.draw.Observe(new AbilityHighlight(stackPile.gameObject.AddComponent<Highlight>()), game);
             game.runner.grip.Observe(grip);
             game.runner.heap.Observe(FindObjectOfType<HeapPile>());
         }

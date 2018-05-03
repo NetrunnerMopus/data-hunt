@@ -4,22 +4,21 @@ namespace controller
 {
     public class TopOfTheStack : Droppable
     {
-        private Game game;
+        public Game Game { private get; set; }
 
         void Start()
         {
-            game = GameConfig.game;
             zone = FindObjectOfType<GripZone>();
         }
 
         protected override bool IsDroppable()
         {
-            return game.runner.actionCard.draw.cost.CanPay(game);
+            return Game.runner.actionCard.draw.cost.CanPay(Game);
         }
 
         protected override void Drop()
         {
-            game.runner.actionCard.draw.Trigger(GameConfig.game);
+            Game.runner.actionCard.draw.Trigger(Game);
         }
     }
 }

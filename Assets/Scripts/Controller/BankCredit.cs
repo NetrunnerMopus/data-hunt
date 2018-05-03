@@ -4,22 +4,21 @@ namespace controller
 {
     public class BankCredit : Droppable
     {
-        private Game game;
+        public Game Game { private get; set; }
 
         void Start()
         {
             zone = FindObjectOfType<CreditDropZone>();
-            game = GameConfig.game;
         }
 
         protected override bool IsDroppable()
         {
-            return game.runner.actionCard.credit.cost.CanPay(game);
+            return Game.runner.actionCard.credit.cost.CanPay(Game);
         }
 
         protected override void Drop()
         {
-            game.runner.actionCard.credit.Trigger(GameConfig.game);
+            Game.runner.actionCard.credit.Trigger(Game);
         }
     }
 }

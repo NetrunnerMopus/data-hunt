@@ -27,6 +27,7 @@ namespace view.gui
             if (type.Installable)
             {
                 var installable = visual.AddComponent<InstallableInGrip>();
+                installable.Game = Game;
                 installable.Card = card;
             }
         }

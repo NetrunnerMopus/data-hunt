@@ -5,11 +5,10 @@ using view.gui;
 
 public class GameConfig : MonoBehaviour
 {
-    public static Game game;
-
     public RunnerView runnerView;
     public CardPrinter serversZone;
 
+    private Game game;
     private Deck runnerDeck = new Decks().DemoRunner();
 
     void Awake()
