@@ -2,7 +2,6 @@
 using model;
 using view;
 using view.gui;
-using model.play.runner;
 
 public class GameConfig : MonoBehaviour
 {

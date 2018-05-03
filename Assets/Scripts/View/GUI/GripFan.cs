@@ -7,6 +7,8 @@ namespace view.gui
 {
     public class GripFan : MonoBehaviour, IGripObserver
     {
+        public Game Game { private get; set; }
+
         void Awake()
         {
             gameObject.AddComponent<CardPrinter>();
@@ -19,6 +21,7 @@ namespace view.gui
             if (type.Playable)
             {
                 var playable = visual.AddComponent<PlayableInGrip>();
+                playable.Game = Game;
                 playable.Card = card;
             }
             if (type.Installable)

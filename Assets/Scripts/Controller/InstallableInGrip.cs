@@ -8,8 +8,8 @@ namespace controller
 {
     public class InstallableInGrip : Droppable, IUsabilityObserver
     {
-        public ICard Card;
-        private Game game;
+        public ICard Card { private get; set; }
+        public Game Game { private get; set; }
         private Ability ability;
         private AbilityHighlight highlight;
         private bool abilityUsable;
@@ -17,11 +17,10 @@ namespace controller
         void Start()
         {
             zone = FindObjectOfType<RigZone>();
-            game = GameConfig.game;
-            ability = game.runner.actionCard.Install(Card);
-            ability.Observe(this, game);
+            ability = Game.runner.actionCard.Install(Card);
+            ability.Observe(this, Game);
             highlight = new AbilityHighlight(gameObject.AddComponent<Highlight>());
-            ability.Observe(highlight, game);
+            ability.Observe(highlight, Game);
         }
 
         protected override bool IsDroppable()
@@ -31,7 +30,7 @@ namespace controller
 
         protected override void Drop()
         {
-            ability.Trigger(game);
+            ability.Trigger(Game);
             ability.Unobserve(this);
             ability.Unobserve(highlight);
             Destroy(gameObject);
