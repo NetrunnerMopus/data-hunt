@@ -42,7 +42,7 @@ public class GameConfig : MonoBehaviour
         var actionCard = new ActionCard();
         var grip = new Grip(runnerView.Grip);
         var stack = new Stack(runnerDeck, runnerView.Stack);
-        var heap = new Heap(runnerView.Heap);
+        var heap = new Heap();
         var rig = new Rig(runnerView.Rig);
         var clicks = new ClickPool();
         var credits = new CreditPool();

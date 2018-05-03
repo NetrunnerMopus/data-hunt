@@ -45,7 +45,7 @@ namespace model
 
         private void Update()
         {
-            foreach (IClickObserver observer in observers)
+            foreach (var observer in observers)
             {
                 observer.NotifyClicks(spent, Unspent());
             }

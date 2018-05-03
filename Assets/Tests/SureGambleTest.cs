@@ -39,8 +39,6 @@ public class SureGambleTest
 
         IStackView IRunnerView.Stack => new MockStackView();
 
-        IHeapView IRunnerView.Heap => new MockHeapView();
-
         IRigView IRunnerView.Rig => new MockRigView();
 
         void IRunnerView.Display(Game game) { }
@@ -54,15 +52,6 @@ public class SureGambleTest
     private class MockStackView : IStackView
     {
         void IStackView.UpdateCardsLeft(int cardsLeft) { }
-    }
-
-    private class MockHeapView : IHeapView
-    {
-        public ICard LastAdded { get; private set; }
-
-        void IHeapView.Add(ICard card) {
-            LastAdded = card;
-        }
     }
 
     private class MockRigView : IRigView
