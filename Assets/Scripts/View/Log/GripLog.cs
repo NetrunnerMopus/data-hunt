@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using controller;
 using model.cards;
+using model;
 
 namespace view.log
 {
-    public class GripLog : IGripView
+    public class GripLog : IGripObserver
     {
-        void IGripView.Add(ICard card)
+        void IGripObserver.NotifyCardAdded(ICard card)
         {
             Debug.Log("Adding " + card + " to the grip");
         }

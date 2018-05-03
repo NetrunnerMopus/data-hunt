@@ -38,18 +38,11 @@ public class SureGambleTest
 
     private class MockRunnerView : IRunnerView
     {
-        IGripView IRunnerView.Grip => new MockGripView();
-
         IStackView IRunnerView.Stack => new MockStackView();
 
         IRigView IRunnerView.Rig => new MockRigView();
 
         void IRunnerView.Display(Game game) { }
-    }
-
-    private class MockGripView : IGripView
-    {
-        void IGripView.Add(ICard card) { }
     }
 
     private class MockStackView : IStackView

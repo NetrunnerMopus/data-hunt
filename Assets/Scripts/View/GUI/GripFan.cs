@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
 using controller;
 using model.cards;
+using model;
 
 namespace view.gui
 {
-    public class GripFan : MonoBehaviour, IGripView
+    public class GripFan : MonoBehaviour, IGripObserver
     {
         void Awake()
         {
             gameObject.AddComponent<CardPrinter>();
         }
 
-        void IGripView.Add(ICard card)
+        void IGripObserver.NotifyCardAdded(ICard card)
         {
             var visual = GetComponent<CardPrinter>().Print(card);
             var type = card.Type;

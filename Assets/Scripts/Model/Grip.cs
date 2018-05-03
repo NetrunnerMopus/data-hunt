@@ -1,23 +1,30 @@
 ﻿using model.cards;
 using System.Collections.Generic;
-using view;
 
 namespace model
 {
     public class Grip
     {
         private List<ICard> cards = new List<ICard>();
-        private IGripView view;
-
-        public Grip(IGripView view)
-        {
-            this.view = view;
-        }
+        private HashSet<IGripObserver> observers = new HashSet<IGripObserver>();
 
         public void Add(ICard card)
         {
             cards.Add(card);
-            view.Add(card);
+            foreach (var observer in observers)
+            {
+                observer.NotifyCardAdded(card);
+            }
         }
+
+        public void Observe(IGripObserver observer)
+        {
+            observers.Add(observer);
+        }
+    }
+
+    public interface IGripObserver
+    {
+        void NotifyCardAdded(ICard card);
     }
 }
