@@ -15,9 +15,10 @@ public class GameConfig : MonoBehaviour
 
     void Awake()
     {
-        game = new Game();
-        game.runner = SetupRunner(game);
-        game.corp = SetupCorporation();
+        game = new Game(runnerDeck, runnerView)
+        {
+            corp = SetupCorporation()
+        };
     }
 
     void Start()

@@ -5,13 +5,16 @@ namespace model
 {
     public class Deck
     {
-        private System.Random rng = new System.Random(10006);
+        private System.Random rng;
 
         private List<ICard> cards;
 
-        public Deck(List<ICard> cards)
+        public Deck(List<ICard> cards) : this(cards, new System.Random().Next()) { }
+
+        public Deck(List<ICard> cards, int seed)
         {
             this.cards = cards;
+            rng = new System.Random(seed);
         }
 
         public void Shuffle()

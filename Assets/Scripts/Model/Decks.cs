@@ -20,7 +20,7 @@ namespace model
                 cards.Add(new SpyCamera());
                 cards.Add(new SpyCamera());
             }
-            return new Deck(cards);
+            return new Deck(cards, 10006);
         }
     }
 }
