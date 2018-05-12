@@ -96,17 +96,12 @@ namespace model.timing
             ClosePaidWindow();
             CloseRezWindow();
             // 2.3
-            LoseRemainingClicks();
+            game.runner.clicks.Reset();
             // 2.4
             TriggerRunnerTurnEndAbilities();
         }
 
         private void Discard()
-        {
-
-        }
-
-        private void LoseRemainingClicks()
         {
 
         }

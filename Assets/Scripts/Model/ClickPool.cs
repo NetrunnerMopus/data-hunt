@@ -9,12 +9,6 @@ namespace model
         private int spent = 0;
         private HashSet<IClickObserver> observers = new HashSet<IClickObserver>();
 
-        public void Replenish()
-        {
-            spent = 0;
-            Update();
-        }
-
         public void Spend(int clicks)
         {
             if (Remaining() >= clicks)
@@ -41,6 +35,13 @@ namespace model
                 allotted -= 1;
                 Update();
             }
+        }
+
+        public void Reset()
+        {
+            allotted = 0;
+            spent = 0;
+            Update();
         }
 
         private void Update()

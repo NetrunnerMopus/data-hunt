@@ -1,5 +1,5 @@
 ﻿using model.play.runner;
-using view;
+using model.timing;
 
 namespace model
 {
@@ -7,6 +7,7 @@ namespace model
     {
         public Corp corp;
         public readonly Runner runner;
+        public bool ended;
 
         public Game(Deck runnerDeck)
         {
@@ -22,7 +23,8 @@ namespace model
 
         async public void Start()
         {
-            await runner.StartGame();
+            runner.StartGame();
+            await new GameFlow(this).Start();
         }
     }
 }
