@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace view.gui
 {
-    public class RunnerView : MonoBehaviour, IRunnerView
+    public class RunnerView : MonoBehaviour
     {
         public void Display(Game game)
         {
@@ -16,15 +16,14 @@ namespace view.gui
             stackPile.Game = game;
             game.runner.clicks.Observe(FindObjectOfType<ClickPoolRow>());
             game.runner.credits.Observe(FindObjectOfType<CreditPoolText>());
-            game.runner.actionCard.credit.Observe(new AbilityHighlight(bankCredit.gameObject.AddComponent<Highlight>()) , game);
+            game.runner.actionCard.credit.Observe(new AbilityHighlight(bankCredit.gameObject.AddComponent<Highlight>()), game);
             game.runner.actionCard.draw.Observe(new AbilityHighlight(stackPile.gameObject.AddComponent<Highlight>()), game);
             game.runner.stack.ObserveCount(stackPile);
             game.runner.stack.ObservePopping(stackPile);
             game.runner.grip.ObserveAdditions(grip);
             game.runner.grip.ObserveRemovals(grip);
             game.runner.heap.Observe(FindObjectOfType<HeapPile>());
+            game.runner.rig.ObserveInstallations(FindObjectOfType<RigGrid>());
         }
-
-        public IRigView Rig { get { return FindObjectOfType<RigGrid>(); } }
     }
 }

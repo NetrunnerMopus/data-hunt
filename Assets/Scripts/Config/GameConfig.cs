@@ -2,6 +2,7 @@
 using model;
 using view;
 using view.gui;
+using controller;
 
 public class GameConfig : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class GameConfig : MonoBehaviour
 
     void Awake()
     {
-        game = new Game(runnerDeck, runnerView)
+        game = new Game(runnerDeck)
         {
             corp = SetupCorporation()
         };

@@ -18,8 +18,7 @@ public class SureGambleTest
         }
         var sureGamble = cards.First();
         var deck = new Deck(cards);
-        var view = new MockRunnerView();
-        var game = new Game(deck, view);
+        var game = new Game(deck);
         game.Start();
         var balance = new LastBalanceObserver();
         var clicks = new SpentClicksObserver();
@@ -37,18 +36,6 @@ public class SureGambleTest
         Assert.AreEqual(1, clicks.Spent);
         Assert.AreEqual(sureGamble, grip.LastRemoved);
         Assert.AreEqual(sureGamble, heap.LastAdded);
-    }
-
-    private class MockRunnerView : IRunnerView
-    {
-        IRigView IRunnerView.Rig => new MockRigView();
-
-        void IRunnerView.Display(Game game) { }
-    }
-
-    private class MockRigView : IRigView
-    {
-        void IRigView.Place(ICard card) { }
     }
 
     private class LastBalanceObserver : IBalanceObserver
