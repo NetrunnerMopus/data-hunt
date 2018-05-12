@@ -1,5 +1,7 @@
 ﻿using model.effects.runner;
 using model.play.runner;
+using model.timing;
+using System.Threading.Tasks;
 using view;
 
 namespace model
@@ -28,15 +30,13 @@ namespace model
             this.credits = credits;
         }
 
-        public void StartGame()
+        async public Task StartGame()
         {
             credits.Gain(5);
             stack.Shuffle();
             ((IEffect)new Draw(5)).Resolve(game);
-            for (int i = 0; i < 4; i++)
-            {
-                clicks.Gain();
-            }
+            var turn = new RunnerTurn(game);
+            await turn.Start();
         }
 
         public bool RemoveTag()

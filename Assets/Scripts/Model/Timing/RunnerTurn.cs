@@ -1,0 +1,119 @@
+﻿using System.Threading.Tasks;
+
+namespace model.timing
+{
+    public class RunnerTurn
+    {
+        private Game game;
+
+        public RunnerTurn(Game game)
+        {
+            this.game = game;
+        }
+
+        async public Task Start()
+        {
+            // 1
+            await ActionPhase();
+            // 2
+            DiscardPhase();
+        }
+
+        async private Task ActionPhase()
+        {
+            // 1.1
+            game.runner.clicks.Gain(4);
+            // 1.2
+            OpenPaidWindow();
+            OpenRezWindow();
+            ClosePaidWindow();
+            CloseRezWindow();
+            // 1.3
+            RefillRecurringCredits();
+            // 1.4
+            TriggerRunnerTurnStartAbilities();
+            // 1.5
+            OpenPaidWindow();
+            OpenRezWindow();
+            ClosePaidWindow();
+            CloseRezWindow();
+            // 1.6
+            await TakeActions();
+        }
+
+        private void OpenPaidWindow()
+        {
+
+        }
+
+        private void ClosePaidWindow()
+        {
+
+        }
+
+        private void OpenRezWindow()
+        {
+
+        }
+
+        private void CloseRezWindow()
+        {
+
+        }
+
+        private void RefillRecurringCredits()
+        {
+
+        }
+
+        private void TriggerRunnerTurnStartAbilities()
+        {
+
+        }
+
+        async private Task TakeActions()
+        {
+            UnityEngine.Debug.Log("Taking actions");
+            while (game.runner.clicks.Remaining() > 0)
+            {
+                await game.runner.actionCard.TakeAction();
+                UnityEngine.Debug.Log("Action taken");
+                OpenPaidWindow();
+                OpenRezWindow();
+                ClosePaidWindow();
+                CloseRezWindow();
+            }
+        }
+
+        private void DiscardPhase()
+        {
+            // 2.1
+            UnityEngine.Debug.Log("Discarding");
+            Discard();
+            // 2.2
+            OpenPaidWindow();
+            OpenRezWindow();
+            ClosePaidWindow();
+            CloseRezWindow();
+            // 2.3
+            LoseRemainingClicks();
+            // 2.4
+            TriggerRunnerTurnEndAbilities();
+        }
+
+        private void Discard()
+        {
+
+        }
+
+        private void LoseRemainingClicks()
+        {
+
+        }
+
+        private void TriggerRunnerTurnEndAbilities()
+        {
+
+        }
+    }
+}

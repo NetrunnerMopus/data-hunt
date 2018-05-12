@@ -28,8 +28,8 @@ namespace controller
             this.game = game;
             this.zone = zone;
             highlight = new AbilityHighlight(gameObject.AddComponent<Highlight>());
-            ability.Observe(this, game);
-            ability.Observe(highlight, game);
+            ability.ObserveUsability(this, game);
+            ability.ObserveUsability(highlight, game);
         }
 
         void IUsabilityObserver.NotifyUsable(bool usable)

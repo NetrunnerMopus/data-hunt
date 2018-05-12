@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.play
 {
@@ -6,7 +7,8 @@ namespace model.play
     {
         public readonly ICost cost;
         public readonly IEffect effect;
-        private HashSet<IUsabilityObserver> observers = new HashSet<IUsabilityObserver>();
+        private HashSet<IUsabilityObserver> usabilities = new HashSet<IUsabilityObserver>();
+        private HashSet<IResolutionObserver> resolutions = new HashSet<IResolutionObserver>();
 
         public Ability(ICost cost, IEffect effect)
         {
@@ -18,22 +20,31 @@ namespace model.play
         {
             cost.Pay(game);
             effect.Resolve(game);
+            foreach (var observer in resolutions)
+            {
+                observer.NotifyResolved();
+            }
         }
 
-        public void Observe(IUsabilityObserver observer, Game game)
+        public void ObserveUsability(IUsabilityObserver observer, Game game)
         {
-            observers.Add(observer);
+            usabilities.Add(observer);
             cost.Observe(this, game);
+        }
+
+        public void ObserveResolution(IResolutionObserver observer)
+        {
+            resolutions.Add(observer);
         }
 
         public void Unobserve(IUsabilityObserver observer)
         {
-            observers.Remove(observer);
+            usabilities.Remove(observer);
         }
 
         void IPayabilityObserver.NotifyPayable(bool payable, ICost source)
         {
-            foreach (IUsabilityObserver observer in observers)
+            foreach (var observer in usabilities)
             {
                 observer.NotifyUsable(payable);
             }
@@ -43,5 +54,10 @@ namespace model.play
     public interface IUsabilityObserver
     {
         void NotifyUsable(bool usable);
+    }
+
+    public interface IResolutionObserver
+    {
+        void NotifyResolved();
     }
 }

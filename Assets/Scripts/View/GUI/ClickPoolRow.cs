@@ -17,9 +17,9 @@ namespace view.gui
             clickSprite = Resources.LoadAll<Sprite>("Images/UI/symbols").Where(r => r.name == "symbols_click").First();
         }
 
-        void IClickObserver.NotifyClicks(int spent, int unspent)
+        void IClickObserver.NotifyClicks(int spent, int remaining)
         {
-            var total = spent + unspent;
+            var total = spent + remaining;
             RenderMissing(total);
             RemoveExtra(total);
             Paint(spent);

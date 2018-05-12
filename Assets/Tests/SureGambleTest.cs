@@ -52,7 +52,7 @@ public class SureGambleTest
     {
         public int Spent { get; private set; }
 
-        void IClickObserver.NotifyClicks(int spent, int unspent)
+        void IClickObserver.NotifyClicks(int spent, int remaining)
         {
             Spent = spent;
         }

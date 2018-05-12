@@ -5,7 +5,7 @@ namespace model
 {
     public class ClickPool
     {
-        private int capacity = 0;
+        private int allotted = 0;
         private int spent = 0;
         private HashSet<IClickObserver> observers = new HashSet<IClickObserver>();
 
@@ -17,7 +17,7 @@ namespace model
 
         public void Spend(int clicks)
         {
-            if (Unspent() >= clicks)
+            if (Remaining() >= clicks)
             {
                 spent += clicks;
                 Update();
@@ -28,17 +28,17 @@ namespace model
             }
         }
 
-        public void Gain()
+        public void Gain(int clicks)
         {
-            capacity += 1;
+            allotted += clicks;
             Update();
         }
 
         public void Lose()
         {
-            if (capacity > 0)
+            if (allotted > 0)
             {
-                capacity -= 1;
+                allotted -= 1;
                 Update();
             }
         }
@@ -47,23 +47,23 @@ namespace model
         {
             foreach (var observer in observers)
             {
-                observer.NotifyClicks(spent, Unspent());
+                observer.NotifyClicks(spent, Remaining());
             }
         }
 
-        private int Unspent() {
-            return capacity - spent;
+        public int Remaining() {
+            return allotted - spent;
         }
 
         public void Observe(IClickObserver observer)
         {
             observers.Add(observer);
-            observer.NotifyClicks(spent, Unspent());
+            observer.NotifyClicks(spent, Remaining());
         }
     }
 
     public interface IClickObserver
     {
-        void NotifyClicks(int spent, int unspent);
+        void NotifyClicks(int spent, int remaining);
     }
 }

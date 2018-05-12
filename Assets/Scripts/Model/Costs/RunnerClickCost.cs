@@ -23,9 +23,9 @@ namespace model.costs
             game.runner.clicks.Spend(clicks);
         }
 
-        public void NotifyClicks(int spent, int unspent)
+        public void NotifyClicks(int spent, int remaining)
         {
-            var payable = unspent >= clicks;
+            var payable = remaining >= clicks;
             foreach (var observer in observers)
             {
                 observer.NotifyPayable(payable, this);

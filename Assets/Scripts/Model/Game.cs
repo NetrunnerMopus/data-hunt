@@ -20,9 +20,9 @@ namespace model
             runner = new Runner(this, actionCard, grip, stack, heap, rig, clicks, credits);
         }
 
-        public void Start()
+        async public void Start()
         {
-            runner.StartGame();
+            await runner.StartGame();
         }
     }
 }
