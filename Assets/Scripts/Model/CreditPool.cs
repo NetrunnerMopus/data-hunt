@@ -8,14 +8,9 @@ namespace model
         private int credits = 0;
         private HashSet<IBalanceObserver> observers = new HashSet<IBalanceObserver>();
 
-        public bool CanPay(int cost)
-        {
-            return credits >= cost;
-        }
-
         public void Pay(int cost)
         {
-            if (CanPay(cost))
+            if (credits >= cost)
             {
                 credits -= cost;
                 UpdateBalance(credits);

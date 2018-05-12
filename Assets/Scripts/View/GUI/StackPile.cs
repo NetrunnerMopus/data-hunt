@@ -9,10 +9,12 @@ namespace view.gui
     {
         public Game Game { private get; set; }
         private GameObject top;
+        private DropZone grip;
 
         void Awake()
         {
             gameObject.AddComponent<CardPrinter>();
+            grip = GameObject.Find("Grip").AddComponent<DropZone>();
         }
 
         void IStackPopObserver.NotifyCardPopped(bool empty)
@@ -24,7 +26,13 @@ namespace view.gui
                 top.transform.rotation *= Quaternion.Euler(0.0f, 0.0f, 90.0f);
                 var rect = top.GetComponent<RectTransform>();
                 rect.anchoredPosition = new Vector3(0.0f, 0.0f, 0.0f);
-                top.AddComponent<TopOfTheStack>().Game = Game;
+                top
+                    .AddComponent<Droppable>()
+                    .Represent(
+                        Game.runner.actionCard.draw,
+                        Game,
+                        grip
+                    );
             }
         }
 

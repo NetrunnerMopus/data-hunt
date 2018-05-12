@@ -40,7 +40,7 @@ namespace view.gui
             {
                 foreach (GameObject click in clicks.GetRange(0, extra))
                 {
-                    UnityEngine.Object.Destroy(click);
+                    Destroy(click);
                     clicks.Remove(click);
                 }
             }

@@ -12,11 +12,6 @@ namespace model.costs
             this.clicks = clicks;
         }
 
-        bool ICost.CanPay(Game game)
-        {
-            return game.runner.clicks.CanSpend(clicks);
-        }
-
         void ICost.Observe(IPayabilityObserver observer, Game game)
         {
             observers.Add(observer);

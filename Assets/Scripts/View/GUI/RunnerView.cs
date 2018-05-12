@@ -9,15 +9,18 @@ namespace view.gui
         public void Display(Game game)
         {
             GripFan grip = FindObjectOfType<GripFan>();
-            BankCredit bankCredit = FindObjectOfType<BankCredit>();
             StackPile stackPile = FindObjectOfType<StackPile>();
             grip.Game = game;
-            bankCredit.Game = game;
             stackPile.Game = game;
+            GameObject.Find("Bank/Credit")
+                .AddComponent<Droppable>()
+                .Represent(
+                    game.runner.actionCard.credit,
+                    game,
+                    GameObject.Find("Credits").AddComponent<DropZone>()
+                );
             game.runner.clicks.Observe(FindObjectOfType<ClickPoolRow>());
             game.runner.credits.Observe(FindObjectOfType<CreditPoolText>());
-            game.runner.actionCard.credit.Observe(new AbilityHighlight(bankCredit.gameObject.AddComponent<Highlight>()), game);
-            game.runner.actionCard.draw.Observe(new AbilityHighlight(stackPile.gameObject.AddComponent<Highlight>()), game);
             game.runner.stack.ObserveCount(stackPile);
             game.runner.stack.ObservePopping(stackPile);
             game.runner.grip.ObserveAdditions(grip);

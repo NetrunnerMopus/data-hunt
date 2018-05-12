@@ -17,7 +17,7 @@ namespace model
 
         public void Spend(int clicks)
         {
-            if (CanSpend(clicks))
+            if (Unspent() >= clicks)
             {
                 spent += clicks;
                 Update();
@@ -53,11 +53,6 @@ namespace model
 
         private int Unspent() {
             return capacity - spent;
-        }
-
-        public bool CanSpend(int cost)
-        {
-            return Unspent() >= cost;
         }
 
         public void Observe(IClickObserver observer)

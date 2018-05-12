@@ -241,7 +241,6 @@ GameObject:
   - component: {fileID: 222865691}
   - component: {fileID: 222865690}
   - component: {fileID: 222865689}
-  - component: {fileID: 222865692}
   m_Layer: 5
   m_Name: Credits
   m_TagString: Untagged
@@ -301,17 +300,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.5}
   m_SizeDelta: {x: 0, y: -1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &222865692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 222865688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2dea5f6c7fde944fb8e143ae29a99b71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &392453615
 GameObject:
   m_ObjectHideFlags: 0
@@ -642,7 +630,6 @@ GameObject:
   - component: {fileID: 976488796}
   - component: {fileID: 976488795}
   - component: {fileID: 976488797}
-  - component: {fileID: 976488798}
   - component: {fileID: 976488799}
   m_Layer: 5
   m_Name: Rig
@@ -713,17 +700,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719fad782f42f394fbde013a198da790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &976488798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 976488793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5c2b88033f5cac4991886fc4baacf43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &976488799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,7 +733,6 @@ GameObject:
   - component: {fileID: 1115497745}
   - component: {fileID: 1115497747}
   - component: {fileID: 1115497746}
-  - component: {fileID: 1115497748}
   m_Layer: 5
   m_Name: Play
   m_TagString: Play
@@ -816,17 +791,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1115497744}
---- !u!114 &1115497748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1115497744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a96eb4715db39b94d8e289e577e4bbbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1198803621
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,7 +882,6 @@ GameObject:
   - component: {fileID: 1261533425}
   - component: {fileID: 1261533427}
   - component: {fileID: 1261533426}
-  - component: {fileID: 1261533428}
   - component: {fileID: 1261533429}
   m_Layer: 5
   m_Name: Credit
@@ -978,18 +941,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1261533424}
---- !u!114 &1261533428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1261533424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c19f19193286c498f91d11f413d96b34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zone: {fileID: 0}
 --- !u!225 &1261533429
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1303,7 +1254,6 @@ GameObject:
   - component: {fileID: 1940409407}
   - component: {fileID: 1940409406}
   - component: {fileID: 1940409408}
-  - component: {fileID: 1940409409}
   - component: {fileID: 1940409411}
   m_Layer: 5
   m_Name: Grip
@@ -1385,17 +1335,6 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
---- !u!114 &1940409409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1940409404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 277c6d98c8b866141b6ca9e0059d158a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1940409411
 MonoBehaviour:
   m_ObjectHideFlags: 0

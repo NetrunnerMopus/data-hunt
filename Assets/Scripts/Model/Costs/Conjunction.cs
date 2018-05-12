@@ -18,18 +18,6 @@ namespace model.costs
             this.costs = costs;
         }
 
-        bool ICost.CanPay(Game game)
-        {
-            foreach (var cost in costs)
-            {
-                if (!cost.CanPay(game))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         void IPayabilityObserver.NotifyPayable(bool payable, ICost source)
         {
             payabilities[source] = payable;

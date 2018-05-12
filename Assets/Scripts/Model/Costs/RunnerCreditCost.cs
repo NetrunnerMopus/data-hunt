@@ -12,11 +12,6 @@ namespace model.costs
             this.credits = credits;
         }
 
-        bool ICost.CanPay(Game game)
-        {
-            return game.runner.credits.CanPay(credits);
-        }
-
         void ICost.Observe(IPayabilityObserver observer, Game game)
         {
             observers.Add(observer);
