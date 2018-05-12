@@ -12,7 +12,7 @@ namespace model
         {
             var actionCard = new ActionCard();
             var grip = new Grip();
-            var stack = new Stack(runnerDeck, runnerView.Stack);
+            var stack = new Stack(runnerDeck);
             var heap = new Heap();
             var rig = new Rig(runnerView.Rig);
             var clicks = new ClickPool();

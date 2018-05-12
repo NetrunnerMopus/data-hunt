@@ -18,12 +18,13 @@ namespace view.gui
             game.runner.credits.Observe(FindObjectOfType<CreditPoolText>());
             game.runner.actionCard.credit.Observe(new AbilityHighlight(bankCredit.gameObject.AddComponent<Highlight>()) , game);
             game.runner.actionCard.draw.Observe(new AbilityHighlight(stackPile.gameObject.AddComponent<Highlight>()), game);
+            game.runner.stack.ObserveCount(stackPile);
+            game.runner.stack.ObservePopping(stackPile);
             game.runner.grip.ObserveAdditions(grip);
             game.runner.grip.ObserveRemovals(grip);
             game.runner.heap.Observe(FindObjectOfType<HeapPile>());
         }
 
-        public IStackView Stack { get { return FindObjectOfType<StackPile>(); } }
         public IRigView Rig { get { return FindObjectOfType<RigGrid>(); } }
     }
 }

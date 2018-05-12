@@ -5,7 +5,7 @@ using model;
 
 namespace view.gui
 {
-    public class StackPile : MonoBehaviour, IStackView
+    public class StackPile : MonoBehaviour, IStackPopObserver, IStackCountObserver
     {
         public Game Game { private get; set; }
         private GameObject top;
@@ -15,12 +15,10 @@ namespace view.gui
             gameObject.AddComponent<CardPrinter>();
         }
 
-        void IStackView.UpdateCardsLeft(int cardsLeft)
+        void IStackPopObserver.NotifyCardPopped(bool empty)
         {
             Destroy(top);
-            var text = GetComponentInChildren<Text>();
-            text.text = cardsLeft + " cards";
-            if (cardsLeft > 0)
+            if (!empty)
             {
                 top = GetComponent<CardPrinter>().PrintRunnerFacedown("Top of stack");
                 top.transform.rotation *= Quaternion.Euler(0.0f, 0.0f, 90.0f);
@@ -28,6 +26,12 @@ namespace view.gui
                 rect.anchoredPosition = new Vector3(0.0f, 0.0f, 0.0f);
                 top.AddComponent<TopOfTheStack>().Game = Game;
             }
+        }
+
+        void IStackCountObserver.NotifyCardCount(int cards)
+        {
+            var text = GetComponentInChildren<Text>();
+            text.text = cards + " cards";
         }
     }
 }
