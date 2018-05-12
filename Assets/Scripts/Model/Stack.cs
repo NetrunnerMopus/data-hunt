@@ -19,6 +19,8 @@ namespace model
             deck.Shuffle();
         }
 
+        public bool HasCards() => deck.Size() > 0;
+
         public ICard RemoveTop()
         {
             var card = deck.RemoveTop();

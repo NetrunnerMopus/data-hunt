@@ -5,7 +5,7 @@ namespace model.costs
     public class RunnerClickCost : ICost, IClickObserver
     {
         private int clicks;
-        private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver> ();
+        private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
 
         public RunnerClickCost(int clicks)
         {

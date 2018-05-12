@@ -13,5 +13,10 @@
         {
             game.runner.credits.Gain(credits);
         }
+
+        void IEffect.Observe(IImpactObserver observer, Game game)
+        {
+            observer.NotifyImpact(true, this);
+        }
     }
 }

@@ -16,5 +16,10 @@ namespace model.effects.runner
             game.runner.rig.Install(card);
             game.runner.grip.Remove(card);
         }
+
+        void IEffect.Observe(IImpactObserver observer, Game game)
+        {
+            observer.NotifyImpact(true, this);
+        }
     }
 }

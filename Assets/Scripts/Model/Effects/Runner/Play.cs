@@ -16,5 +16,10 @@ namespace model.effects.runner
             card.PlayEffect.Resolve(game);
             game.runner.grip.Remove(card);
         }
+
+        void IEffect.Observe(IImpactObserver observer, Game game)
+        {
+            card.PlayEffect.Observe(observer, game);
+        }
     }
 }

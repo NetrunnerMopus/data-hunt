@@ -13,5 +13,10 @@
         {
             game.runner.tags -= tags;
         }
+
+        void IEffect.Observe(IImpactObserver observer, Game game)
+        {
+            observer.NotifyImpact(game.runner.tags > 0, this);
+        }
     }
 }

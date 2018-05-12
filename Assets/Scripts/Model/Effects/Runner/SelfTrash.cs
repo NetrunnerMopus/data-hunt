@@ -15,5 +15,9 @@ namespace model.effects.runner
         {
             game.runner.heap.Add(card);
         }
+
+        void IEffect.Observe(IImpactObserver observer, Game game)
+        {
+        }
     }
 }

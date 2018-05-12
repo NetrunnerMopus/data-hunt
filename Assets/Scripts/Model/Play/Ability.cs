@@ -2,12 +2,15 @@
 
 namespace model.play
 {
-    public class Ability : IPayabilityObserver
+    public class Ability : IPayabilityObserver, IImpactObserver
     {
         public readonly ICost cost;
         public readonly IEffect effect;
         private HashSet<IUsabilityObserver> usabilities = new HashSet<IUsabilityObserver>();
         private HashSet<IResolutionObserver> resolutions = new HashSet<IResolutionObserver>();
+        private bool payable = false;
+        private bool impactful = false;
+        private bool Usable => payable && impactful;
 
         public Ability(ICost cost, IEffect effect)
         {
@@ -29,6 +32,7 @@ namespace model.play
         {
             usabilities.Add(observer);
             cost.Observe(this, game);
+            effect.Observe(this, game);
         }
 
         public void ObserveResolution(IResolutionObserver observer)
@@ -43,9 +47,21 @@ namespace model.play
 
         void IPayabilityObserver.NotifyPayable(bool payable, ICost source)
         {
+            this.payable = payable;
+            Update();
+        }
+
+        void IImpactObserver.NotifyImpact(bool impactful, IEffect source)
+        {
+            this.impactful = impactful;
+            Update();
+        }
+
+        private void Update()
+        {
             foreach (var observer in usabilities)
             {
-                observer.NotifyUsable(payable);
+                observer.NotifyUsable(Usable);
             }
         }
     }
