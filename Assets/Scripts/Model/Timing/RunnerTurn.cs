@@ -73,11 +73,11 @@ namespace model.timing
 
         async private Task TakeActions()
         {
-            UnityEngine.Debug.Log("Taking actions");
+            UnityEngine.Debug.Log("Runner taking actions");
             while (game.runner.clicks.Remaining() > 0)
             {
                 await game.runner.actionCard.TakeAction();
-                UnityEngine.Debug.Log("Action taken");
+                UnityEngine.Debug.Log("Runner action taken");
                 OpenPaidWindow();
                 OpenRezWindow();
                 ClosePaidWindow();

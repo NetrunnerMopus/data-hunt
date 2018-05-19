@@ -15,6 +15,7 @@ namespace model.timing
         {
             while (!game.ended)
             {
+                await new CorpTurn(game).Start();
                 await new RunnerTurn(game).Start();
             }
         }
