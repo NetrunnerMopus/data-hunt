@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 
-namespace model.timing
+namespace model.timing.runner
 {
-    public class RunnerTurn
+    public class Turn
     {
         private Game game;
 
-        public RunnerTurn(Game game)
+        public Turn(Game game)
         {
             this.game = game;
         }

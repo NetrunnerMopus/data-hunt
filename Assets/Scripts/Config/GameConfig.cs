@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using model;
 using view.gui;
+using model.ai;
 
 public class GameConfig : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class GameConfig : MonoBehaviour
     {
         runnerView.Display(game);
         corpView.Display(game);
+        var ai = new CorpAi(game);
+        ai.Play();
         game.Start();
     }
 }

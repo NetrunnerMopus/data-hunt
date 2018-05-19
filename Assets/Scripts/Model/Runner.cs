@@ -1,11 +1,13 @@
 ﻿using model.effects.runner;
 using model.play.runner;
+using model.timing.runner;
 
 namespace model
 {
     public class Runner
     {
         private Game game;
+        public readonly Turn turn;
         public readonly ActionCard actionCard;
         public int tags = 0;
         public readonly Grip grip;
@@ -15,10 +17,12 @@ namespace model
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
 
-        public Runner(Game game, ActionCard actions, Grip grip, Stack stack, Heap heap, Rig rig, ClickPool clicks, CreditPool credits)
+        public Runner(Game game, Turn turn, ActionCard actionCard, int tags, Grip grip, Stack stack, Heap heap, Rig rig, ClickPool clicks, CreditPool credits)
         {
             this.game = game;
-            this.actionCard = actions;
+            this.turn = turn;
+            this.actionCard = actionCard;
+            this.tags = tags;
             this.grip = grip;
             this.stack = stack;
             this.heap = heap;
