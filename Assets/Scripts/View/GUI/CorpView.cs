@@ -1,4 +1,5 @@
 ﻿using model;
+using model.cards.corp;
 using UnityEngine;
 
 namespace view.gui
@@ -12,7 +13,7 @@ namespace view.gui
             var printer = serverZone.AddComponent<CardPrinter>();
             printer.PrintCorpFacedown("Archives");
             printer.PrintCorpFacedown("R&D");
-            printer.PrintCorpFacedown("HQ");
+            printer.Print(new CustomBiotics());
             printer.PrintCorpFacedown("Remote");
         }
     }
