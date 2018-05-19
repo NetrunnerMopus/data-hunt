@@ -1,5 +1,5 @@
-﻿using model;
-using model.cards;
+﻿using model.cards;
+using model.zones.runner;
 
 namespace tests.observers
 {

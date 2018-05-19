@@ -13,8 +13,8 @@ namespace model.effects.runner
 
         void IEffect.Resolve(Game game)
         {
-            game.runner.rig.Install(card);
-            game.runner.grip.Remove(card);
+            game.runner.zones.rig.Install(card);
+            game.runner.zones.grip.Remove(card);
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

@@ -1,7 +1,7 @@
 ﻿using model.cards;
 using System.Collections.Generic;
 
-namespace model
+namespace model.zones.runner
 {
     public class Heap
     {

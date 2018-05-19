@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using model.zones.runner;
+using System.Collections.Generic;
 
 namespace model.effects.runner
 {
@@ -16,10 +17,10 @@ namespace model.effects.runner
         {
             for (int i = 0; i < cards; i++)
             {
-                if (game.runner.stack.HasCards())
+                if (game.runner.zones.stack.HasCards())
                 {
-                    var drawn = game.runner.stack.RemoveTop();
-                    game.runner.grip.Add(drawn);
+                    var drawn = game.runner.zones.stack.RemoveTop();
+                    game.runner.zones.grip.Add(drawn);
                 }
             }
         }
@@ -27,7 +28,7 @@ namespace model.effects.runner
         void IEffect.Observe(IImpactObserver observer, Game game)
         {
             observers.Add(observer);
-            game.runner.stack.ObserveCount(this);
+            game.runner.zones.stack.ObserveCount(this);
         }
 
         void IStackCountObserver.NotifyCardCount(int cards)

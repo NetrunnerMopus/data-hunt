@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using controller;
 using model.cards;
-using model;
+using model.zones.runner;
 
 namespace view.log
 {

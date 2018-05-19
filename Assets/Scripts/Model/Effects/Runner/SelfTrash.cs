@@ -13,7 +13,7 @@ namespace model.effects.runner
 
         void IEffect.Resolve(Game game)
         {
-            game.runner.heap.Add(card);
+            game.runner.zones.heap.Add(card);
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

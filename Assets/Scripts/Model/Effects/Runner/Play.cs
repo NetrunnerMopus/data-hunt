@@ -14,7 +14,7 @@ namespace model.effects.runner
         void IEffect.Resolve(Game game)
         {
             card.PlayEffect.Resolve(game);
-            game.runner.grip.Remove(card);
+            game.runner.zones.grip.Remove(card);
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

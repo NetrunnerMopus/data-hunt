@@ -1,6 +1,7 @@
 ﻿using model.effects.runner;
 using model.play.runner;
 using model.timing.runner;
+using model.zones.runner;
 
 namespace model
 {
@@ -10,23 +11,17 @@ namespace model
         public readonly Turn turn;
         public readonly ActionCard actionCard;
         public int tags = 0;
-        public readonly Grip grip;
-        public readonly Stack stack;
-        public readonly Heap heap;
-        public readonly Rig rig;
+        public readonly Zones zones;
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
 
-        public Runner(Game game, Turn turn, ActionCard actionCard, int tags, Grip grip, Stack stack, Heap heap, Rig rig, ClickPool clicks, CreditPool credits)
+        public Runner(Game game, Turn turn, ActionCard actionCard, int tags, Zones zones, ClickPool clicks, CreditPool credits)
         {
             this.game = game;
             this.turn = turn;
             this.actionCard = actionCard;
             this.tags = tags;
-            this.grip = grip;
-            this.stack = stack;
-            this.heap = heap;
-            this.rig = rig;
+            this.zones = zones;
             this.clicks = clicks;
             this.credits = credits;
         }
@@ -34,7 +29,7 @@ namespace model
         public void StartGame()
         {
             credits.Gain(5);
-            stack.Shuffle();
+            zones.stack.Shuffle();
             ((IEffect)new Draw(5)).Resolve(game);
         }
 

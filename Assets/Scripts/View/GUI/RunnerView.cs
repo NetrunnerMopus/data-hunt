@@ -21,12 +21,13 @@ namespace view.gui
                 );
             game.runner.clicks.Observe(FindObjectOfType<ClickPoolRow>());
             game.runner.credits.Observe(GameObject.Find("Runner/Left panel/Credits/Credits text").AddComponent<CreditPoolText>());
-            game.runner.stack.ObserveCount(stackPile);
-            game.runner.stack.ObservePopping(stackPile);
-            game.runner.grip.ObserveAdditions(grip);
-            game.runner.grip.ObserveRemovals(grip);
-            game.runner.heap.Observe(FindObjectOfType<HeapPile>());
-            game.runner.rig.ObserveInstallations(FindObjectOfType<RigGrid>());
+            var zones = game.runner.zones;
+            zones.stack.ObserveCount(stackPile);
+            zones.stack.ObservePopping(stackPile);
+            zones.grip.ObserveAdditions(grip);
+            zones.grip.ObserveRemovals(grip);
+            zones.heap.Observe(FindObjectOfType<HeapPile>());
+            zones.rig.ObserveInstallations(FindObjectOfType<RigGrid>());
         }
     }
 }

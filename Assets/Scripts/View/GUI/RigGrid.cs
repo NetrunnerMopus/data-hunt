@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using model.cards;
-using model;
+using model.zones.runner;
 
 namespace view.gui
 {

@@ -2,6 +2,7 @@
 using controller;
 using UnityEngine.UI;
 using model;
+using model.zones.runner;
 
 namespace view.gui
 {

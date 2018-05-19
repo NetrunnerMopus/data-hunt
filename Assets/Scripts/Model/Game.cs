@@ -25,13 +25,15 @@ namespace model
         {
             var turn = new timing.runner.Turn(this);
             var actionCard = new play.runner.ActionCard();
-            var grip = new Grip();
-            var stack = new Stack(runnerDeck);
-            var heap = new Heap();
-            var rig = new Rig();
+            var zones = new zones.runner.Zones(
+                new zones.runner.Grip(),
+                new zones.runner.Stack(runnerDeck),
+                new zones.runner.Heap(),
+                new zones.runner.Rig()
+            );
             var clicks = new ClickPool();
             var credits = new CreditPool();
-            return new Runner(this, turn, actionCard, 0, grip, stack, heap, rig, clicks, credits);
+            return new Runner(this, turn, actionCard, 0, zones, clicks, credits);
         }
 
         async public void Start()
