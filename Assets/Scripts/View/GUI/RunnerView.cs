@@ -17,10 +17,10 @@ namespace view.gui
                 .Represent(
                     game.runner.actionCard.credit,
                     game,
-                    GameObject.Find("Credits").AddComponent<DropZone>()
+                    GameObject.Find("Runner/Left panel/Credits").AddComponent<DropZone>()
                 );
             game.runner.clicks.Observe(FindObjectOfType<ClickPoolRow>());
-            game.runner.credits.Observe(FindObjectOfType<CreditPoolText>());
+            game.runner.credits.Observe(GameObject.Find("Runner/Left panel/Credits/Credits text").AddComponent<CreditPoolText>());
             game.runner.stack.ObserveCount(stackPile);
             game.runner.stack.ObservePopping(stackPile);
             game.runner.grip.ObserveAdditions(grip);

@@ -19,10 +19,12 @@ namespace model
             var clicks = new ClickPool();
             var credits = new CreditPool();
             runner = new Runner(this, actionCard, grip, stack, heap, rig, clicks, credits);
+            corp = new Corp(new CreditPool());
         }
 
         async public void Start()
         {
+            corp.StartGame();
             runner.StartGame();
             await new GameFlow(this).Start();
         }
