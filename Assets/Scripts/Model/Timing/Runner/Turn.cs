@@ -31,7 +31,7 @@ namespace model.timing.runner
             // 1.3
             RefillRecurringCredits();
             // 1.4
-            TriggerRunnerTurnStartAbilities();
+            TriggerTurnBeginning();
             // 1.5
             OpenPaidWindow();
             OpenRezWindow();
@@ -66,7 +66,7 @@ namespace model.timing.runner
 
         }
 
-        private void TriggerRunnerTurnStartAbilities()
+        private void TriggerTurnBeginning()
         {
 
         }
@@ -98,7 +98,7 @@ namespace model.timing.runner
             // 2.3
             game.runner.clicks.Reset();
             // 2.4
-            TriggerRunnerTurnEndAbilities();
+            TriggerTurnEnding();
         }
 
         private void Discard()
@@ -106,7 +106,7 @@ namespace model.timing.runner
 
         }
 
-        private void TriggerRunnerTurnEndAbilities()
+        private void TriggerTurnEnding()
         {
 
         }

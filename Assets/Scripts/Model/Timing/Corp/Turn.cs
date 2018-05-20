@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace model.timing.corp
@@ -15,7 +16,61 @@ namespace model.timing.corp
 
         async public Task Start()
         {
+            // 1
+            DrawPhase();
+            // 2
+            await ActionPhase();
+            // 3
+            DiscardPhase();
+        }
+
+        private void DrawPhase()
+        {
+            // 1.1
             game.corp.clicks.Gain(3);
+            // 1.2
+            OpenPaidWindow();
+            OpenRezWindow();
+            OpenScoreWindow();
+            // 1.3
+            RefillRecurringCredits();
+            // 1.4
+            TriggerTurnBeginning();
+            // 1.5
+            MandatoryDraw();
+        }
+
+        private void OpenPaidWindow()
+        {
+        }
+
+        private void OpenRezWindow()
+        {
+        }
+
+        private void OpenScoreWindow()
+        {
+        }
+
+        private void RefillRecurringCredits()
+        {
+        }
+
+        private void TriggerTurnBeginning()
+        {
+        }
+
+        private void MandatoryDraw()
+        {
+        }
+
+        async private Task ActionPhase()
+        {
+            // 2.1
+            OpenPaidWindow();
+            OpenRezWindow();
+            OpenScoreWindow();
+            // 2.2
             await TakeActions();
         }
 
@@ -32,6 +87,31 @@ namespace model.timing.corp
                 await actionTaking;
                 UnityEngine.Debug.Log("Corp action taken");
             }
+        }
+
+        private void DiscardPhase()
+        {
+            // 3.1
+            Discard();
+            // 3.2
+            OpenPaidWindow();
+            OpenRezWindow();
+            // 3.3
+            LoseUnspentClicks();
+            // 3.4
+            TriggerTurnEnding();
+        }
+
+        private void Discard()
+        {
+        }
+
+        private void LoseUnspentClicks()
+        {
+        }
+
+        private void TriggerTurnEnding()
+        {
         }
 
         public void ObserveActionStep(IActionStepObserver observer)
