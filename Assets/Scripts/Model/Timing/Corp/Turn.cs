@@ -1,4 +1,4 @@
-﻿using System;
+﻿using model.effects.corp;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -62,6 +62,12 @@ namespace model.timing.corp
 
         private void MandatoryDraw()
         {
+            var rd = game.corp.zones.rd;
+            if (rd.HasCards())
+            {
+                IEffect draw = new Draw(1);
+                draw.Resolve(game);
+            }
         }
 
         async private Task ActionPhase()
