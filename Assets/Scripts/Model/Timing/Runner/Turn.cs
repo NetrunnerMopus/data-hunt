@@ -16,7 +16,7 @@ namespace model.timing.runner
             // 1
             await ActionPhase();
             // 2
-            DiscardPhase();
+            await DiscardPhase();
         }
 
         async private Task ActionPhase()
@@ -85,11 +85,10 @@ namespace model.timing.runner
             }
         }
 
-        private void DiscardPhase()
+        async private Task DiscardPhase()
         {
             // 2.1
-            UnityEngine.Debug.Log("Discarding");
-            Discard();
+            await Discard();
             // 2.2
             OpenPaidWindow();
             OpenRezWindow();
@@ -101,9 +100,13 @@ namespace model.timing.runner
             TriggerTurnEnding();
         }
 
-        private void Discard()
+        async private Task Discard()
         {
-
+            while (game.runner.zones.grip.Count > 5)
+            {
+                UnityEngine.Debug.Log("Discarding");
+                await game.runner.zones.grip.Discard();
+            }
         }
 
         private void TriggerTurnEnding()

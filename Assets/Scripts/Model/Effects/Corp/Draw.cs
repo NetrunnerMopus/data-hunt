@@ -13,14 +13,7 @@
         {
             var rd = game.corp.zones.rd;
             var hq = game.corp.zones.hq;
-            for (int i = 0; i < cards; i++)
-            {
-                if (rd.HasCards())
-                {
-                    var drawn = rd.RemoveTop();
-                    hq.Add(drawn);
-                }
-            }
+            rd.Draw(cards, hq);
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

@@ -26,7 +26,7 @@ namespace model
         {
             credits.Gain(5);
             zones.rd.Shuffle();
-            ((IEffect)new Draw(5)).Resolve(game);
+            zones.rd.Draw(5, zones.hq);
         }
     }
 }

@@ -21,6 +21,17 @@ namespace model.zones.runner
 
         public bool HasCards() => deck.Size() > 0;
 
+        internal void Draw(int cards, Grip grip)
+        {
+            for (int i = 0; i < cards; i++)
+            {
+                if (HasCards())
+                {
+                    grip.Add(RemoveTop());
+                }
+            }
+        }
+
         public ICard RemoveTop()
         {
             var card = deck.RemoveTop();

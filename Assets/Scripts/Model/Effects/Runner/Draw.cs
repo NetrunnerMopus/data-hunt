@@ -15,14 +15,9 @@ namespace model.effects.runner
 
         void IEffect.Resolve(Game game)
         {
-            for (int i = 0; i < cards; i++)
-            {
-                if (game.runner.zones.stack.HasCards())
-                {
-                    var drawn = game.runner.zones.stack.RemoveTop();
-                    game.runner.zones.grip.Add(drawn);
-                }
-            }
+            var stack = game.runner.zones.stack;
+            var grip = game.runner.zones.grip;
+            stack.Draw(cards, grip);
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

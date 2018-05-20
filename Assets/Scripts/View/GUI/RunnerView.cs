@@ -13,7 +13,7 @@ namespace view.gui
             grip.Game = game;
             stackPile.Game = game;
             GameObject.Find("Bank/Credit")
-                .AddComponent<Droppable>()
+                .AddComponent<DroppableAbility>()
                 .Represent(
                     game.runner.actionCard.credit,
                     game,

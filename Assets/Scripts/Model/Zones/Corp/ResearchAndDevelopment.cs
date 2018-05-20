@@ -18,6 +18,17 @@ namespace model.zones.corp
 
         public bool HasCards() => deck.Size() > 0;
 
+        internal void Draw(int cards, Headquarters hq)
+        {
+            for (int i = 0; i < cards; i++)
+            {
+                if (HasCards())
+                {
+                    hq.Add(RemoveTop());
+                }
+            }
+        }
+
         public ICard RemoveTop()
         {
             return deck.RemoveTop();

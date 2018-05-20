@@ -28,7 +28,7 @@ namespace model
         {
             credits.Gain(5);
             zones.stack.Shuffle();
-            ((IEffect)new Draw(5)).Resolve(game);
+            zones.stack.Draw(5, zones.grip);
         }
 
         public bool RemoveTag()

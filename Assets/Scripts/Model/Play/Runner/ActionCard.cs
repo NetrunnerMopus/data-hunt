@@ -9,7 +9,7 @@ namespace model.play.runner
     {
         public readonly Ability draw;
         public readonly Ability credit;
-        private TaskCompletionSource<bool> completion;
+        private TaskCompletionSource<bool> actionTaken;
         private ActionPermission permission = new ActionPermission(false);
 
         public ActionCard()
@@ -37,13 +37,13 @@ namespace model.play.runner
         async public Task TakeAction()
         {
             permission.Grant();
-            completion = new TaskCompletionSource<bool>();
-            await completion.Task;
+            actionTaken = new TaskCompletionSource<bool>();
+            await actionTaken.Task;
         }
 
         void IResolutionObserver.NotifyResolved()
         {
-            completion.SetResult(true);
+            actionTaken.SetResult(true);
         }
     }
 }

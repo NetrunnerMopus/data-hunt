@@ -2,39 +2,48 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
-using model.play;
-using model;
 using view.gui;
 using view;
+using model.zones.runner;
+using model.cards;
 
 namespace controller
 {
-    public class Droppable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IUsabilityObserver
+    public class Discardable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IGripDiscardObserver
     {
-        private Ability ability;
-        private Game game;
+        private ICard card;
+        private Grip grip;
+        private Heap heap;
         private DropZone zone;
         private bool usable = false;
-        private AbilityHighlight highlight;
+        private Highlight highlight;
 
         private Vector3 originalPosition;
         private int originalIndex;
 
         private CanvasGroup CanvasGroup { get { return GetComponent<CanvasGroup>(); } }
 
-        public void Represent(Ability ability, Game game, DropZone zone)
+        public void Represent(ICard card, Grip grip, Heap heap, DropZone zone)
         {
-            this.ability = ability;
-            this.game = game;
+            this.card = card;
+            this.grip = grip;
+            this.heap = heap;
             this.zone = zone;
-            highlight = new AbilityHighlight(gameObject.AddComponent<Highlight>());
-            ability.ObserveUsability(this, game);
-            ability.ObserveUsability(highlight, game);
+            grip.ObserveDiscarding(this);
+            highlight = gameObject.AddComponent<Highlight>();
         }
 
-        void IUsabilityObserver.NotifyUsable(bool usable)
+        void IGripDiscardObserver.NotifyDiscarding(bool discarding)
         {
-            this.usable = usable;
+            usable = discarding;
+            if (discarding)
+            {
+                highlight.TurnOn();
+            }
+            else
+            {
+                highlight.TurnOff();
+            }
         }
 
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
@@ -72,7 +81,7 @@ namespace controller
             var onDrop = raycast.Where(r => r.gameObject == zone.gameObject).Any();
             if (onDrop && usable)
             {
-                ability.Trigger(game);
+                grip.Discard(card, heap);
             }
             PutBack();
             zone.StopDragging();
@@ -86,8 +95,7 @@ namespace controller
 
         void OnDestroy()
         {
-            ability.Unobserve(this);
-            ability.Unobserve(highlight);
+            grip.UnobserveDiscarding(this);
         }
     }
 }

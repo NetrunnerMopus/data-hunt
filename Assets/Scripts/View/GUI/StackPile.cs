@@ -28,7 +28,7 @@ namespace view.gui
                 var rect = top.GetComponent<RectTransform>();
                 rect.anchoredPosition = new Vector3(0.0f, 0.0f, 0.0f);
                 top
-                    .AddComponent<Droppable>()
+                    .AddComponent<DroppableAbility>()
                     .Represent(
                         Game.runner.actionCard.draw,
                         Game,
