@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using model.timing.corp;
 using model.timing.runner;
 
@@ -19,10 +20,20 @@ namespace model.timing
 
         async public Task Start()
         {
-            while (!game.ended)
+            try
             {
-                await corpTurn.Start();
-                await runnerTurn.Start();
+                while (!game.ended)
+                {
+                    await corpTurn.Start();
+                    await runnerTurn.Start();
+                }
+            }
+            catch (Exception e)
+            {
+                if (game.ended)
+                {
+                    UnityEngine.Debug.Log("The game is over! " + e.Message);
+                }
             }
         }
     }

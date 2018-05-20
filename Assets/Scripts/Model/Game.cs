@@ -49,5 +49,11 @@ namespace model
             var flow = new GameFlow(this, corp.turn, runner.turn);
             await flow.Start();
         }
+
+        public void DeckCorp()
+        {
+            ended = true;
+            throw new System.Exception("Corp is decked, the Runner wins!");
+        }
     }
 }

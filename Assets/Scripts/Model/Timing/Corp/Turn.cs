@@ -68,6 +68,10 @@ namespace model.timing.corp
                 IEffect draw = new Draw(1);
                 draw.Resolve(game);
             }
+            else
+            {
+                game.DeckCorp();
+            }
         }
 
         async private Task ActionPhase()

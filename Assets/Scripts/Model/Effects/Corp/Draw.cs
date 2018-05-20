@@ -20,10 +20,6 @@
                     var drawn = rd.RemoveTop();
                     hq.Add(drawn);
                 }
-                else
-                {
-                    game.ended = true;
-                }
             }
         }
 
