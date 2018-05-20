@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using model.cards;
+using model.cards.corp;
 using model.cards.runner;
 
 namespace model
@@ -21,6 +22,16 @@ namespace model
                 cards.Add(new SpyCamera());
             }
             return new Deck(cards, 10006);
+        }
+
+        public Deck DemoCorp()
+        {
+            var cards = new List<ICard>();
+            for (int i = 0; i < 9; i++)
+            {
+                cards.Add(new HedgeFund());
+            }
+            return new Deck(cards, 1234);
         }
     }
 }

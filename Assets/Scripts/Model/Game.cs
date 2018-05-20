@@ -6,19 +6,25 @@ namespace model
     {
         public readonly Corp corp;
         public readonly Runner runner;
-        public readonly GameFlow flow;
         public bool ended;
 
-        public Game(Deck runnerDeck)
+        public Game(Deck corpDeck, Deck runnerDeck)
         {
-            corp = CreateCorp();
+            corp = CreateCorp(corpDeck);
             runner = CreateRunner(runnerDeck);
-            flow = new GameFlow(this, corp.turn, runner.turn);
         }
 
-        private Corp CreateCorp()
+        private Corp CreateCorp(Deck corpDeck)
         {
-            return new Corp(new timing.corp.Turn(this), new play.corp.ActionCard(), new ClickPool(), new CreditPool());
+            var turn = new timing.corp.Turn(this);
+            var actionCard = new play.corp.ActionCard();
+            var zones = new zones.corp.Zones(
+                new zones.corp.Headquarters(),
+                new zones.corp.ResearchAndDevelopment(corpDeck)
+            );
+            var clicks = new ClickPool();
+            var credits = new CreditPool();
+            return new Corp(turn, actionCard, zones, clicks, credits);
         }
 
         private Runner CreateRunner(Deck runnerDeck)
@@ -33,13 +39,14 @@ namespace model
             );
             var clicks = new ClickPool();
             var credits = new CreditPool();
-            return new Runner(this, turn, actionCard, 0, zones, clicks, credits);
+            return new Runner(turn, actionCard, 0, zones, clicks, credits);
         }
 
         async public void Start()
         {
-            corp.StartGame();
-            runner.StartGame();
+            corp.Start(this);
+            runner.Start(this);
+            var flow = new GameFlow(this, corp.turn, runner.turn);
             await flow.Start();
         }
     }

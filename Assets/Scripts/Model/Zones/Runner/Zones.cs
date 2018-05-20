@@ -1,7 +1,4 @@
-﻿using model.cards;
-using System.Collections.Generic;
-
-namespace model.zones.runner
+﻿namespace model.zones.runner
 {
     public class Zones
     {

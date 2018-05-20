@@ -13,14 +13,13 @@ namespace tests
         [Test]
         public void ShouldPlay()
         {
-            var cards = new List<ICard>();
+            var runnerCards = new List<ICard>();
             for (int i = 0; i < 5; i++)
             {
-                cards.Add(new SureGamble());
+                runnerCards.Add(new SureGamble());
             }
-            var sureGamble = cards.First();
-            var deck = new Deck(cards);
-            var game = new Game(deck);
+            var sureGamble = runnerCards.First();
+            var game = new Game(new Decks().DemoCorp(), new Deck(runnerCards));
             game.Start();
             SkipCorpTurn(game);
             var balance = new LastBalanceObserver();

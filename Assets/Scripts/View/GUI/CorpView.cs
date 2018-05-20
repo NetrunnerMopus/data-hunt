@@ -13,7 +13,8 @@ namespace view.gui
             var printer = serverZone.AddComponent<CardPrinter>();
             printer.PrintCorpFacedown("Archives");
             printer.PrintCorpFacedown("R&D");
-            printer.Print(new CustomBiotics());
+            var hq = printer.Print(new CustomBiotics());
+            game.corp.zones.hq.ObserveCount(hq.AddComponent<HqCount>());
             printer.PrintCorpFacedown("Remote");
         }
     }

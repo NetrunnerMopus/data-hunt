@@ -7,13 +7,11 @@ public class GameConfig : MonoBehaviour
 {
     public RunnerView runnerView;
     public CorpView corpView;
-
     private Game game;
-    private Deck runnerDeck = new Decks().DemoRunner();
 
     void Awake()
     {
-        game = new Game(runnerDeck);
+        game = new Game(new Decks().DemoCorp(), new Decks().DemoRunner());
     }
 
     void Start()

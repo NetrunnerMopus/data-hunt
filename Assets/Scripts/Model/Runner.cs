@@ -7,7 +7,6 @@ namespace model
 {
     public class Runner
     {
-        private Game game;
         public readonly Turn turn;
         public readonly ActionCard actionCard;
         public int tags = 0;
@@ -15,9 +14,8 @@ namespace model
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
 
-        public Runner(Game game, Turn turn, ActionCard actionCard, int tags, Zones zones, ClickPool clicks, CreditPool credits)
+        public Runner(Turn turn, ActionCard actionCard, int tags, Zones zones, ClickPool clicks, CreditPool credits)
         {
-            this.game = game;
             this.turn = turn;
             this.actionCard = actionCard;
             this.tags = tags;
@@ -26,7 +24,7 @@ namespace model
             this.credits = credits;
         }
 
-        public void StartGame()
+        public void Start(Game game)
         {
             credits.Gain(5);
             zones.stack.Shuffle();
