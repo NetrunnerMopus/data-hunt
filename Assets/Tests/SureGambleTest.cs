@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using model.cards.runner;
 using System.Linq;
 using tests.observers;
+using tests.mocks;
 
 namespace tests
 {
@@ -21,7 +22,7 @@ namespace tests
             var sureGamble = runnerCards.First();
             var game = new Game(new Decks().DemoCorp(), new Deck(runnerCards));
             game.Start();
-            SkipCorpTurn(game);
+            new PassiveCorp(game).SkipTurn();
             var balance = new LastBalanceObserver();
             var clicks = new SpentClicksObserver();
             var grip = new GripObserver();
@@ -38,15 +39,6 @@ namespace tests
             Assert.AreEqual(1, clicks.Spent);
             Assert.AreEqual(sureGamble, grip.LastRemoved);
             Assert.AreEqual(sureGamble, heap.LastAdded);
-        }
-
-        private void SkipCorpTurn(Game game)
-        {
-            var clickForCredit = game.corp.actionCard.credit;
-            for (int i = 0; i < 3; i++)
-            {
-                clickForCredit.Trigger(game);
-            }
         }
     }
 }

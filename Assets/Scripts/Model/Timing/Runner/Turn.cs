@@ -73,11 +73,10 @@ namespace model.timing.runner
 
         async private Task TakeActions()
         {
-            UnityEngine.Debug.Log("Runner taking actions");
             while (game.runner.clicks.Remaining() > 0)
             {
+                UnityEngine.Debug.Log("Runner taking action");
                 await game.runner.actionCard.TakeAction();
-                UnityEngine.Debug.Log("Runner action taken");
                 OpenPaidWindow();
                 OpenRezWindow();
                 ClosePaidWindow();
@@ -102,10 +101,11 @@ namespace model.timing.runner
 
         async private Task Discard()
         {
-            while (game.runner.zones.grip.Count > 5)
+            var grip = game.runner.zones.grip;
+            while (grip.Count > 5)
             {
-                UnityEngine.Debug.Log("Discarding");
-                await game.runner.zones.grip.Discard();
+                UnityEngine.Debug.Log("Runner discarding");
+                await grip.Discard();
             }
         }
 

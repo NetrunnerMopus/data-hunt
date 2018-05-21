@@ -21,7 +21,7 @@ namespace model.timing.corp
             // 2
             await ActionPhase();
             // 3
-            DiscardPhase();
+            await DiscardPhase();
         }
 
         private void DrawPhase()
@@ -86,23 +86,22 @@ namespace model.timing.corp
 
         async private Task TakeActions()
         {
-            UnityEngine.Debug.Log("Corp taking actions");
             while (game.corp.clicks.Remaining() > 0)
             {
+                UnityEngine.Debug.Log("Corp taking action");
                 Task actionTaking = game.corp.actionCard.TakeAction();
                 foreach (var observer in actionSteps)
                 {
                     await observer.NotifyActionStep();
                 }
                 await actionTaking;
-                UnityEngine.Debug.Log("Corp action taken");
             }
         }
 
-        private void DiscardPhase()
+        async private Task DiscardPhase()
         {
             // 3.1
-            Discard();
+            await Discard();
             // 3.2
             OpenPaidWindow();
             OpenRezWindow();
@@ -112,8 +111,14 @@ namespace model.timing.corp
             TriggerTurnEnding();
         }
 
-        private void Discard()
+        async private Task Discard()
         {
+            var hq = game.corp.zones.hq;
+            while (hq.Count > 5)
+            {
+                UnityEngine.Debug.Log("Corp discarding");
+                await hq.Discard();
+            }
         }
 
         private void LoseUnspentClicks()

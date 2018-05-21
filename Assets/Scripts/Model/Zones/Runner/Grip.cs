@@ -34,11 +34,11 @@ namespace model.zones.runner
 
         async internal Task Discard()
         {
+            discarded = new TaskCompletionSource<bool>();
             foreach (var observer in discards)
             {
                 observer.NotifyDiscarding(true);
             }
-            discarded = new TaskCompletionSource<bool>();
             await discarded.Task;
         }
 

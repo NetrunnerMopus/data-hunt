@@ -4,6 +4,7 @@ using model.cards;
 using System.Collections.Generic;
 using model.cards.runner;
 using tests.observers;
+using tests.mocks;
 
 namespace tests
 {
@@ -19,7 +20,8 @@ namespace tests
             }
             var game = new Game(new Decks().DemoCorp(), new Deck(runnerCards));
             game.Start();
-            SkipCorpTurn(game);
+            var passiveCorp = new PassiveCorp(game);
+            passiveCorp.SkipTurn();
             var grip = game.runner.zones.grip;
             var heap = game.runner.zones.heap;
             var actionCard = game.runner.actionCard;
@@ -41,20 +43,11 @@ namespace tests
                 var card = grip.Find<Diesel>();
                 game.runner.zones.grip.Discard(card, heap);
             }
-            SkipCorpTurn(game);
+            passiveCorp.SkipTurn();
 
             Assert.AreEqual(0, clicksObserver.Spent);
             Assert.AreEqual(10, gripObserver.TotalRemoved);
             Assert.AreEqual(10, heapObserver.TotalAdded);
-        }
-
-        private void SkipCorpTurn(Game game)
-        {
-            var clickForCredit = game.corp.actionCard.credit;
-            for (int i = 0; i < 3; i++)
-            {
-                clickForCredit.Trigger(game);
-            }
         }
     }
 }
