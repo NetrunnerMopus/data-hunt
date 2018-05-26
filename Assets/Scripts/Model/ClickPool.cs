@@ -28,13 +28,17 @@ namespace model
             Update();
         }
 
-        public void Lose()
+        public void Lose(int loss)
         {
-            if (allotted > 0)
+            if (allotted >= loss)
             {
-                allotted -= 1;
-                Update();
+                allotted -= loss;
             }
+            else
+            {
+                allotted = 0;
+            }
+            Update();
         }
 
         public void Reset()
@@ -52,7 +56,8 @@ namespace model
             }
         }
 
-        public int Remaining() {
+        public int Remaining()
+        {
             return allotted - spent;
         }
 

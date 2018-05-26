@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.timing.runner
 {
     public class Turn
     {
         private Game game;
+        private HashSet<IRunnerTurnStartObserver> starts = new HashSet<IRunnerTurnStartObserver>();
 
         public Turn(Game game)
         {
@@ -68,7 +70,10 @@ namespace model.timing.runner
 
         private void TriggerTurnBeginning()
         {
-
+            foreach (var observer in starts)
+            {
+                observer.NotifyTurnStarted(game);
+            }
         }
 
         async private Task TakeActions()
@@ -113,5 +118,16 @@ namespace model.timing.runner
         {
 
         }
+
+        internal void ObserveStart(IRunnerTurnStartObserver observer)
+        {
+            starts.Add(observer);
+        }
     }
+
+    internal interface IRunnerTurnStartObserver
+    {
+        void NotifyTurnStarted(Game game);
+    }
+
 }

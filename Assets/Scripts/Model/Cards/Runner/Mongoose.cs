@@ -1,5 +1,4 @@
-﻿using model.effects.runner;
-using model.costs;
+﻿using model.costs;
 using model.cards.types;
 
 namespace model.cards.runner
@@ -18,7 +17,7 @@ namespace model.cards.runner
 
         ICost ICard.PlayCost { get { return new RunnerCreditCost(3); } }
 
-        IEffect ICard.PlayEffect { get { return new Install(this); } }
+        IEffect ICard.PlayEffect => new effects.Nothing();
 
         IType ICard.Type { get { return new Program(); } }
     }

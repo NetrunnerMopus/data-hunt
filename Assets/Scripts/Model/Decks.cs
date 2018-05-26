@@ -19,7 +19,7 @@ namespace model
                 cards.Add(new ProcessAutomation());
                 cards.Add(new Mongoose());
                 cards.Add(new SpyCamera());
-                cards.Add(new SpyCamera());
+                cards.Add(new Wyldside());
             }
             return new Deck(cards, 10006);
         }

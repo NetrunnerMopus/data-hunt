@@ -35,7 +35,7 @@ namespace view.gui
 
         private void RemoveExtra(int total)
         {
-            var extra = total - clicks.Count;
+            var extra = clicks.Count - total;
             if (extra > 0)
             {
                 foreach (GameObject click in clicks.GetRange(0, extra))
