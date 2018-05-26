@@ -31,7 +31,7 @@ namespace controller
         {
             if (droppableDragged)
             {
-                Color = Color.green;
+                Color = Color.cyan;
             }
         }
 
@@ -54,16 +54,14 @@ namespace controller
 
         private void HighlightAvailability()
         {
-            var potentialHighlight = Color.green;
-            potentialHighlight.a = 0.5f;
-            Color = potentialHighlight;
+            Color = Color.green;
         }
 
         private void ResetHighlights()
         {
-            var neutral = Color.white;
-            neutral.a = 0.2f;
-            Color = neutral;
+            var reset = Color.white;
+            reset.a = 0.1f;
+            Color = reset;
         }
     }
 }

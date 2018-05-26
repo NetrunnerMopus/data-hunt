@@ -27,13 +27,17 @@ namespace view
             {
                 layer = 5
             };
-
             var image = gameObject.AddComponent<Image>();
             image.sprite = Resources.Load<Sprite>(asset);
             image.preserveAspect = true;
             var canvasGroup = gameObject.AddComponent<CanvasGroup>();
             canvasGroup.blocksRaycasts = true;
             gameObject.transform.SetParent(transform);
+            var rectangle = image.rectTransform;
+            rectangle.anchorMin = new Vector2(0.1f, 0.1f);
+            rectangle.anchorMax = new Vector2(0.9f, 0.9f);
+            rectangle.offsetMin = Vector2.zero;
+            rectangle.offsetMax = Vector2.zero;
             return gameObject;
         }
     }
