@@ -18,8 +18,6 @@ namespace model.effects.runner
             game.runner.zones.heap.Add(card);
         }
 
-        void IEffect.Perish(Game game) { }
-
         void IEffect.Observe(IImpactObserver observer, Game game)
         {
             card.Activation.Observe(observer, game);

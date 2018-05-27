@@ -23,14 +23,6 @@ namespace model.effects
             }
         }
 
-        void IEffect.Perish(Game game)
-        {
-            foreach (var effect in effects)
-            {
-                effect.Perish(game);
-            }
-        }
-
         void IEffect.Observe(IImpactObserver observer, Game game)
         {
             observers.Add(observer);

@@ -10,8 +10,14 @@ namespace view.gui
         {
             GripFan grip = FindObjectOfType<GripFan>();
             StackPile stackPile = FindObjectOfType<StackPile>();
-            grip.Game = game;
-            stackPile.Game = game;
+            RigGrid rig = FindObjectOfType<RigGrid>();
+            var playZone = GameObject.Find("Play").AddComponent<DropZone>();
+            var rigZone = GameObject.Find("Rig").AddComponent<DropZone>();
+            var heapZone = GameObject.Find("Heap").AddComponent<DropZone>();
+            var gripZone = GameObject.Find("Grip").AddComponent<DropZone>();
+            grip.Contstruct(game, playZone, rigZone, heapZone);
+            stackPile.Construct(game, gripZone);
+            rig.Construct(game, playZone);
             GameObject.Find("Bank/Credit")
                 .AddComponent<DroppableAbility>()
                 .Represent(
@@ -32,7 +38,6 @@ namespace view.gui
             zones.grip.ObserveAdditions(grip);
             zones.grip.ObserveRemovals(grip);
             zones.heap.Observe(FindObjectOfType<HeapPile>());
-            zones.rig.ObserveInstallations(FindObjectOfType<RigGrid>());
         }
     }
 }

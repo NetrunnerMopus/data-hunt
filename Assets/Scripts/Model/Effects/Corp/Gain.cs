@@ -14,8 +14,6 @@
             game.corp.credits.Gain(credits);
         }
 
-        void IEffect.Perish(Game game) { }
-
         void IEffect.Observe(IImpactObserver observer, Game game)
         {
             observer.NotifyImpact(true, this);

@@ -16,8 +16,6 @@
             rd.Draw(cards, hq);
         }
 
-        void IEffect.Perish(Game game) { }
-
         void IEffect.Observe(IImpactObserver observer, Game game)
         {
             observer.NotifyImpact(true, this);

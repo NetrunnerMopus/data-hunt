@@ -2,6 +2,7 @@
 using model.cards.types;
 using model.play;
 using model.effects.runner;
+using model.zones.runner;
 
 namespace model.cards.runner
 {
@@ -23,23 +24,35 @@ namespace model.cards.runner
 
         IType ICard.Type => new Hardware();
 
-        private class SportsHopperActivation : IEffect
+        private class SportsHopperActivation : IEffect, IUninstallationObserver
         {
+            private ICard card;
             private Ability pop;
+            private Game game;
 
             public SportsHopperActivation(ICard card)
             {
-                pop = new Ability(new SelfTrash(card), new Draw(3));
+                this.card = card;
             }
 
             void IEffect.Resolve(Game game)
             {
-                game.runner.turn.paidWindow.Add(pop);
+                var paidWindow = game.runner.turn.paidWindow;
+                this.game = game;
+                if (pop == null)
+                {
+                    pop = new Ability(new Conjunction(paidWindow.Permission(), new SelfTrash(card)), new Draw(3));
+                }
+                paidWindow.Add(pop, card);
+                game.runner.zones.rig.ObserveUninstallations(this);
             }
 
-            void IEffect.Perish(Game game)
+            void IUninstallationObserver.NotifyUninstalled(ICard card)
             {
-                game.runner.turn.paidWindow.Remove(pop);
+                if (card == this.card)
+                {
+                    game.runner.turn.paidWindow.Remove(pop);
+                }
             }
 
             void IEffect.Observe(IImpactObserver observer, Game game)

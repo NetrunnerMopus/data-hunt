@@ -8,14 +8,20 @@ namespace view.gui
 {
     public class StackPile : MonoBehaviour, IStackPopObserver, IStackCountObserver
     {
-        public Game Game { private get; set; }
+        private Game game;
+        private DropZone gripZone;
         private GameObject top;
-        private DropZone grip;
+        private CardPrinter printer;
+
+        internal void Construct(Game game, DropZone gripZone)
+        {
+            this.game = game;
+            this.gripZone = gripZone;
+        }
 
         void Awake()
         {
-            gameObject.AddComponent<CardPrinter>();
-            grip = GameObject.Find("Grip").AddComponent<DropZone>();
+            printer = gameObject.AddComponent<CardPrinter>();
         }
 
         void IStackPopObserver.NotifyCardPopped(bool empty)
@@ -23,16 +29,16 @@ namespace view.gui
             Destroy(top);
             if (!empty)
             {
-                top = GetComponent<CardPrinter>().PrintRunnerFacedown("Top of stack");
+                top = printer.PrintRunnerFacedown("Top of stack");
                 top.transform.rotation *= Quaternion.Euler(0.0f, 0.0f, 90.0f);
                 var rect = top.GetComponent<RectTransform>();
                 rect.anchoredPosition = new Vector3(0.0f, 0.0f, 0.0f);
                 top
                     .AddComponent<DroppableAbility>()
                     .Represent(
-                        Game.runner.actionCard.draw,
-                        Game,
-                        grip
+                        game.runner.actionCard.draw,
+                        game,
+                        gripZone
                     );
             }
         }

@@ -16,7 +16,7 @@ namespace controller
             var pass = CreatePass(gameObject).AddComponent<DropZone>();
             flag.Represent(window, pass);
             gameObject.SetActive(false);
-            window.Observe(this);
+            window.ObserveWindow(this);
         }
 
         private GameObject CreateFlag(GameObject parent)
@@ -87,7 +87,7 @@ namespace controller
 
         void OnDestroy()
         {
-            window.Unobserve(this);
+            window.UnobserveWindow(this);
         }
     }
 }

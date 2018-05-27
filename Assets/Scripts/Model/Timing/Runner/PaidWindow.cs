@@ -1,4 +1,5 @@
-﻿using model.play;
+﻿using model.cards;
+using model.play;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,10 +7,14 @@ namespace model.timing.runner
 {
     public class PaidWindow
     {
+        private PaidWindowPermission permission = new PaidWindowPermission();
         private TaskCompletionSource<bool> windowClosing;
         private bool used = false;
-        private HashSet<IPaidWindowObserver> observers = new HashSet<IPaidWindowObserver>();
+        private HashSet<IPaidWindowObserver> windowObservers = new HashSet<IPaidWindowObserver>();
+        private HashSet<IPaidAbilityObserver> abilityObservers = new HashSet<IPaidAbilityObserver>();
         private List<Ability> abilities = new List<Ability>();
+
+        internal ICost Permission() => permission;
 
         async internal Task<bool> Open()
         {
@@ -19,12 +24,14 @@ namespace model.timing.runner
                 return false;
             }
             used = false;
-            foreach (var observer in observers)
+            permission.Grant();
+            foreach (var observer in windowObservers)
             {
                 observer.NotifyPaidWindowOpened();
             }
             await windowClosing.Task;
-            foreach (var observer in observers)
+            permission.Revoke();
+            foreach (var observer in windowObservers)
             {
                 observer.NotifyPaidWindowClosed();
             }
@@ -41,9 +48,13 @@ namespace model.timing.runner
             windowClosing.SetResult(used);
         }
 
-        internal void Add(Ability ability)
+        internal void Add(Ability ability, ICard source)
         {
             abilities.Add(ability);
+            foreach (var observer in abilityObservers)
+            {
+                observer.NotifyPaidAbilityAvailable(ability, source);
+            }
         }
 
         internal void Remove(Ability ability)
@@ -51,14 +62,59 @@ namespace model.timing.runner
             abilities.Remove(ability);
         }
 
-        internal void Observe(IPaidWindowObserver observer)
+        internal void ObserveWindow(IPaidWindowObserver observer)
         {
-            observers.Add(observer);
+            windowObservers.Add(observer);
         }
 
-        internal void Unobserve(IPaidWindowObserver observer)
+        internal void UnobserveWindow(IPaidWindowObserver observer)
         {
-            observers.Remove(observer);
+            windowObservers.Remove(observer);
+        }
+
+        internal void ObserveAbility(IPaidAbilityObserver observer)
+        {
+            abilityObservers.Add(observer);
+        }
+
+        private class PaidWindowPermission : ICost
+        {
+            private bool allowed = false;
+            private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
+
+            void ICost.Pay(Game game)
+            {
+                if (!allowed)
+                {
+                    throw new System.Exception("Tried to fire a paid ability while the window was closed");
+                }
+            }
+
+            void ICost.Observe(IPayabilityObserver observer, Game game)
+            {
+                observers.Add(observer);
+                observer.NotifyPayable(allowed, this);
+            }
+
+            internal void Grant()
+            {
+                allowed = true;
+                Update();
+            }
+
+            internal void Revoke()
+            {
+                allowed = false;
+                Update();
+            }
+
+            private void Update()
+            {
+                foreach (var observer in observers)
+                {
+                    observer.NotifyPayable(allowed, this);
+                }
+            }
         }
     }
 
@@ -66,5 +122,10 @@ namespace model.timing.runner
     {
         void NotifyPaidWindowOpened();
         void NotifyPaidWindowClosed();
+    }
+
+    internal interface IPaidAbilityObserver
+    {
+        void NotifyPaidAbilityAvailable(Ability ability, ICard source);
     }
 }

@@ -9,24 +9,29 @@ namespace view.gui
 {
     public class GripFan : MonoBehaviour, IGripAdditionObserver, IGripRemovalObserver
     {
-        public Game Game { private get; set; }
-
-        private Dictionary<ICard, GameObject> visuals = new Dictionary<ICard, GameObject>();
+        private Game game;
         private DropZone playZone;
         private DropZone rigZone;
         private DropZone heapZone;
+        private Dictionary<ICard, GameObject> visuals = new Dictionary<ICard, GameObject>();
+        private CardPrinter printer;
+
+        internal void Contstruct(Game game, DropZone playZone, DropZone rigZone, DropZone heapZone)
+        {
+            this.game = game;
+            this.playZone = playZone;
+            this.rigZone = rigZone;
+            this.heapZone = heapZone;
+        }
 
         void Awake()
         {
-            gameObject.AddComponent<CardPrinter>();
-            playZone = GameObject.Find("Play").AddComponent<DropZone>();
-            rigZone = GameObject.Find("Rig").AddComponent<DropZone>();
-            heapZone = GameObject.Find("Heap").AddComponent<DropZone>();
+            printer = gameObject.AddComponent<CardPrinter>();
         }
 
         void IGripAdditionObserver.NotifyCardAdded(ICard card)
         {
-            var visual = GetComponent<CardPrinter>().Print(card);
+            var visual = printer.Print(card);
             visuals[card] = visual;
             var type = card.Type;
             if (type.Playable)
@@ -34,8 +39,8 @@ namespace view.gui
                 visual
                     .AddComponent<DroppableAbility>()
                     .Represent(
-                        Game.runner.actionCard.Play(card),
-                        Game,
+                        game.runner.actionCard.Play(card),
+                        game,
                         playZone
                     );
             }
@@ -44,8 +49,8 @@ namespace view.gui
                 visual
                      .AddComponent<DroppableAbility>()
                      .Represent(
-                         Game.runner.actionCard.Install(card),
-                         Game,
+                         game.runner.actionCard.Install(card),
+                         game,
                          rigZone
                      );
             }
@@ -53,8 +58,8 @@ namespace view.gui
                 .AddComponent<Discardable>()
                 .Represent(
                     card,
-                    Game.runner.zones.grip,
-                    Game.runner.zones.heap,
+                    game.runner.zones.grip,
+                    game.runner.zones.heap,
                     heapZone
                 );
         }

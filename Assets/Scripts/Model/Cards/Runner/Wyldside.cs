@@ -28,7 +28,6 @@ namespace model.cards.runner
             private WyldsideTrigger trigger = new WyldsideTrigger();
 
             void IEffect.Resolve(Game game) => game.runner.turn.ObserveStart(trigger);
-            void IEffect.Perish(Game game) => game.runner.turn.UnobserveStart(trigger);
             void IEffect.Observe(IImpactObserver observer, Game game) { }
         }
 
