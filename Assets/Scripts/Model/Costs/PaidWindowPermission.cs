@@ -2,16 +2,20 @@
 
 namespace model.costs
 {
-    public class ActionPermission : ICost
+    public class PaidWindowPermission : ICost
     {
         private bool allowed = false;
         private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
 
         void ICost.Pay(Game game)
         {
-            if (!allowed)
+            if (allowed)
             {
-                throw new System.Exception("Tried to fire an action while it was forbidden");
+                Revoke();
+            }
+            else
+            {
+                throw new System.Exception("Tried to fire a paid ability while the window was closed");
             }
         }
 
@@ -29,7 +33,7 @@ namespace model.costs
 
         public void Revoke()
         {
-            allowed = false;
+            allowed = true;
             Update();
         }
 

@@ -10,7 +10,7 @@ namespace model.cards.corp
         Faction ICard.Faction => Factions.HAAS_BIOROID;
         int ICard.InfluenceCost => 0;
         ICost ICard.PlayCost => new costs.Nothing();
-        IEffect ICard.PlayEffect => new effects.Nothing();
+        IEffect ICard.Activation => new effects.Nothing();
         IType ICard.Type => new Identity();
     }
 }

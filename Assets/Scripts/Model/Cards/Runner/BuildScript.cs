@@ -19,7 +19,7 @@ namespace model.cards.runner
 
         ICost ICard.PlayCost { get { return new RunnerCreditCost(0); } }
 
-        IEffect ICard.PlayEffect { get { return new Sequence(new Gain(1), new Draw(2), new SelfTrash(this)); } }
+        IEffect ICard.Activation => new Sequence(new Gain(1), new Draw(2));
 
         IType ICard.Type { get { return new Event(); } }
     }

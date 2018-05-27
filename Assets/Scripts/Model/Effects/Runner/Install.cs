@@ -15,8 +15,10 @@ namespace model.effects.runner
         {
             game.runner.zones.rig.Install(card);
             game.runner.zones.grip.Remove(card);
-            card.PlayEffect.Resolve(game);
+            card.Activation.Resolve(game);
         }
+
+        void IEffect.Perish(Game game) { }
 
         void IEffect.Observe(IImpactObserver observer, Game game)
         {

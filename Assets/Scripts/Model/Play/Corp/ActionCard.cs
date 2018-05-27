@@ -8,7 +8,7 @@ namespace model.play.corp
     {
         public readonly Ability credit;
         private TaskCompletionSource<bool> completion;
-        private ActionPermission permission = new ActionPermission(false);
+        private ActionPermission permission = new ActionPermission();
 
         public ActionCard()
         {

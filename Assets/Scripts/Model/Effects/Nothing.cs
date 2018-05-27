@@ -2,9 +2,9 @@
 {
     public class Nothing : IEffect
     {
-        void IEffect.Resolve(Game game)
-        {
-        }
+        void IEffect.Resolve(Game game) { }
+
+        void IEffect.Perish(Game game) { }
 
         void IEffect.Observe(IImpactObserver observer, Game game)
         {

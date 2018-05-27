@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using model.timing.corp;
-using model.timing.runner;
 
 namespace model.timing
 {

@@ -18,7 +18,7 @@ namespace model.cards.corp
 
         ICost ICard.PlayCost => new CorpCreditCost(5);
 
-        IEffect ICard.PlayEffect => new Gain(9);
+        IEffect ICard.Activation => new Gain(9);
 
         IType ICard.Type => new Operation();
     }

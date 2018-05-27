@@ -1,7 +1,10 @@
 ﻿using model.effects.runner;
+using model.play;
 using model.play.runner;
 using model.timing.runner;
 using model.zones.runner;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model
 {
@@ -29,16 +32,6 @@ namespace model
             credits.Gain(5);
             zones.stack.Shuffle();
             zones.stack.Draw(5, zones.grip);
-        }
-
-        public bool RemoveTag()
-        {
-            throw new System.Exception("Not implemented yet");
-        }
-
-        public bool Run()
-        {
-            throw new System.Exception("Not implemented yet");
         }
     }
 }

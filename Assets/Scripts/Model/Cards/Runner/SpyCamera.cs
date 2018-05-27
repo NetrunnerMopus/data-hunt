@@ -17,7 +17,7 @@ namespace model.cards.runner
 
         ICost ICard.PlayCost { get { return new RunnerCreditCost(0); } }
 
-        IEffect ICard.PlayEffect => new effects.Nothing();
+        IEffect ICard.Activation => new effects.Nothing();
 
         IType ICard.Type { get { return new Hardware(); } }
     }

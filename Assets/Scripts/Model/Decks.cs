@@ -20,6 +20,7 @@ namespace model
                 cards.Add(new Mongoose());
                 cards.Add(new SpyCamera());
                 cards.Add(new Wyldside());
+                cards.Add(new SportsHopper());
             }
             return new Deck(cards, 10006);
         }
@@ -27,7 +28,7 @@ namespace model
         public Deck DemoCorp()
         {
             var cards = new List<ICard>();
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 49; i++)
             {
                 cards.Add(new HedgeFund());
             }

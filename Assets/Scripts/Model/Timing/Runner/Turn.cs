@@ -5,6 +5,7 @@ namespace model.timing.runner
 {
     public class Turn
     {
+        public readonly PaidWindow paidWindow = new PaidWindow();
         private Game game;
         private HashSet<IRunnerTurnStartObserver> starts = new HashSet<IRunnerTurnStartObserver>();
 
@@ -26,7 +27,7 @@ namespace model.timing.runner
             // 1.1
             game.runner.clicks.Gain(4);
             // 1.2
-            OpenPaidWindow();
+            await OpenPaidWindow();
             OpenRezWindow();
             ClosePaidWindow();
             CloseRezWindow();
@@ -35,7 +36,7 @@ namespace model.timing.runner
             // 1.4
             TriggerTurnBeginning();
             // 1.5
-            OpenPaidWindow();
+            await OpenPaidWindow();
             OpenRezWindow();
             ClosePaidWindow();
             CloseRezWindow();
@@ -43,9 +44,9 @@ namespace model.timing.runner
             await TakeActions();
         }
 
-        private void OpenPaidWindow()
+        async private Task OpenPaidWindow()
         {
-
+            await paidWindow.Open();
         }
 
         private void ClosePaidWindow()
@@ -82,7 +83,7 @@ namespace model.timing.runner
             {
                 UnityEngine.Debug.Log("Runner taking action");
                 await game.runner.actionCard.TakeAction();
-                OpenPaidWindow();
+                await OpenPaidWindow();
                 OpenRezWindow();
                 ClosePaidWindow();
                 CloseRezWindow();
@@ -94,7 +95,7 @@ namespace model.timing.runner
             // 2.1
             await Discard();
             // 2.2
-            OpenPaidWindow();
+            await OpenPaidWindow();
             OpenRezWindow();
             ClosePaidWindow();
             CloseRezWindow();
@@ -123,11 +124,15 @@ namespace model.timing.runner
         {
             starts.Add(observer);
         }
+
+        internal void UnobserveStart(IRunnerTurnStartObserver observer)
+        {
+            starts.Remove(observer);
+        }
     }
 
     internal interface IRunnerTurnStartObserver
     {
         void NotifyTurnStarted(Game game);
     }
-
 }

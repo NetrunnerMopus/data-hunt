@@ -19,21 +19,17 @@ namespace model.cards.runner
 
         ICost ICard.PlayCost => new RunnerCreditCost(3);
 
-        IEffect ICard.PlayEffect => new WyldsideActivation();
+        IEffect ICard.Activation => new WyldsideActivation();
 
         IType ICard.Type => new Resource();
 
         private class WyldsideActivation : IEffect
         {
-            void IEffect.Resolve(Game game)
-            {
-                game.runner.turn.ObserveStart(new WyldsideTrigger());
-            }
+            private WyldsideTrigger trigger = new WyldsideTrigger();
 
-            void IEffect.Observe(IImpactObserver observer, Game game)
-            {
-                observer.NotifyImpact(true, this);
-            }
+            void IEffect.Resolve(Game game) => game.runner.turn.ObserveStart(trigger);
+            void IEffect.Perish(Game game) => game.runner.turn.UnobserveStart(trigger);
+            void IEffect.Observe(IImpactObserver observer, Game game) { }
         }
 
         private class WyldsideTrigger : IRunnerTurnStartObserver

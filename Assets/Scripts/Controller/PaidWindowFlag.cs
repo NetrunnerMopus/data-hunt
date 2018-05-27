@@ -2,47 +2,27 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
+using model.timing.runner;
 using view.gui;
-using model.zones.runner;
-using model.cards;
 
 namespace controller
 {
-    public class Discardable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IGripDiscardObserver
+    public class PaidWindowFlag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private ICard card;
-        private Grip grip;
-        private Heap heap;
+        private PaidWindow window;
         private DropZone zone;
-        private bool usable = false;
-        private Highlight highlight;
 
         private Vector3 originalPosition;
         private int originalIndex;
 
-        private CanvasGroup CanvasGroup { get { return GetComponent<CanvasGroup>(); } }
+        private CanvasGroup canvasGroup;
 
-        public void Represent(ICard card, Grip grip, Heap heap, DropZone zone)
+        public void Represent(PaidWindow window, DropZone zone)
         {
-            this.card = card;
-            this.grip = grip;
-            this.heap = heap;
+            this.window = window;
             this.zone = zone;
-            grip.ObserveDiscarding(this);
-            highlight = gameObject.AddComponent<Highlight>();
-        }
-
-        void IGripDiscardObserver.NotifyDiscarding(bool discarding)
-        {
-            usable = discarding;
-            if (discarding)
-            {
-                highlight.TurnOn();
-            }
-            else
-            {
-                highlight.TurnOff();
-            }
+            gameObject.AddComponent<Highlight>().TurnOn();
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
         }
 
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
@@ -50,11 +30,8 @@ namespace controller
             eventData.selectedObject = gameObject;
             originalPosition = transform.position;
             BringToFront();
-            CanvasGroup.blocksRaycasts = false;
-            if (usable)
-            {
-                zone.StartDragging();
-            }
+            canvasGroup.blocksRaycasts = false;
+            zone.StartDragging();
         }
 
         private void BringToFront()
@@ -74,13 +51,13 @@ namespace controller
         void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
             eventData.selectedObject = null;
-            CanvasGroup.blocksRaycasts = true;
+            canvasGroup.blocksRaycasts = true;
             var raycast = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, raycast);
             var onDrop = raycast.Where(r => r.gameObject == zone.gameObject).Any();
-            if (onDrop && usable)
+            if (onDrop)
             {
-                grip.Discard(card, heap);
+                window.Pass();
             }
             PutBack();
             zone.StopDragging();
@@ -90,11 +67,6 @@ namespace controller
         {
             transform.SetSiblingIndex(originalIndex);
             transform.position = originalPosition;
-        }
-
-        void OnDestroy()
-        {
-            grip.UnobserveDiscarding(this);
         }
     }
 }

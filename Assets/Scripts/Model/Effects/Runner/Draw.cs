@@ -20,6 +20,8 @@ namespace model.effects.runner
             stack.Draw(cards, grip);
         }
 
+        void IEffect.Perish(Game game) { }
+
         void IEffect.Observe(IImpactObserver observer, Game game)
         {
             observers.Add(observer);

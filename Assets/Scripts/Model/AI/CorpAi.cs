@@ -21,7 +21,7 @@ namespace model.ai
 
         async Task IActionStepObserver.NotifyActionStep()
         {
-            await Task.Delay(1000);
+            await Task.Delay(600);
             game.corp.actionCard.credit.Trigger(game);
         }
 

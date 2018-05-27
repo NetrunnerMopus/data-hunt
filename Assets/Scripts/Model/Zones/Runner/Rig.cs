@@ -17,6 +17,11 @@ namespace model.zones.runner
             }
         }
 
+        public void Uninstall(ICard card)
+        {
+            cards.Remove(card);
+        }
+
         public void ObserveInstallations(IInstallationObserver observer)
         {
             installations.Add(observer);

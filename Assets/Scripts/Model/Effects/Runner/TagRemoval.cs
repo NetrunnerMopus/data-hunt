@@ -14,6 +14,8 @@
             game.runner.tags -= tags;
         }
 
+        void IEffect.Perish(Game game) { }
+
         void IEffect.Observe(IImpactObserver observer, Game game)
         {
             observer.NotifyImpact(game.runner.tags > 0, this);

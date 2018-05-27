@@ -12,7 +12,7 @@
 
         ICost PlayCost { get; }
 
-        IEffect PlayEffect { get; }
+        IEffect Activation { get; }
 
         string Name { get; }
 
