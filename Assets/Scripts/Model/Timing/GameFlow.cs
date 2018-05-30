@@ -5,13 +5,13 @@ namespace model.timing
 {
     public class GameFlow
     {
-        private Game game;
-        private corp.Turn corpTurn;
-        private runner.Turn runnerTurn;
+        public readonly PaidWindow paidWindow = new PaidWindow();
+        public readonly corp.Turn corpTurn;
+        public readonly runner.Turn runnerTurn;
+        private bool ended;
 
-        public GameFlow(Game game, corp.Turn corpTurn, runner.Turn runnerTurn)
+        public GameFlow(corp.Turn corpTurn, runner.Turn runnerTurn)
         {
-            this.game = game;
             this.corpTurn = corpTurn;
             this.runnerTurn = runnerTurn;
         }
@@ -20,7 +20,7 @@ namespace model.timing
         {
             try
             {
-                while (!game.ended)
+                while (!ended)
                 {
                     await corpTurn.Start();
                     await runnerTurn.Start();
@@ -28,11 +28,17 @@ namespace model.timing
             }
             catch (Exception e)
             {
-                if (game.ended)
+                if (ended)
                 {
                     UnityEngine.Debug.Log("The game is over! " + e.Message);
                 }
             }
+        }
+
+        public void DeckCorp()
+        {
+            ended = true;
+            throw new System.Exception("Corp is decked, the Runner wins!");
         }
     }
 }

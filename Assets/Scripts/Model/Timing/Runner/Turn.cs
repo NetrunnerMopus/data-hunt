@@ -5,7 +5,6 @@ namespace model.timing.runner
 {
     public class Turn
     {
-        public readonly PaidWindow paidWindow = new PaidWindow();
         private Game game;
         private HashSet<IRunnerTurnStartObserver> starts = new HashSet<IRunnerTurnStartObserver>();
 
@@ -46,7 +45,7 @@ namespace model.timing.runner
 
         async private Task OpenPaidWindow()
         {
-            await paidWindow.Open();
+            await game.flow.paidWindow.Open();
         }
 
         private void ClosePaidWindow()

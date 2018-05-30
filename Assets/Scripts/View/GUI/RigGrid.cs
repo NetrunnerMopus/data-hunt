@@ -2,10 +2,10 @@
 using model.cards;
 using model.zones.runner;
 using System.Collections.Generic;
-using model.timing.runner;
 using model.play;
 using controller;
 using model;
+using model.timing;
 
 namespace view.gui
 {
@@ -20,7 +20,7 @@ namespace view.gui
         {
             this.game = game;
             this.playZone = playZone;
-            game.runner.turn.paidWindow.ObserveAbility(this);
+            game.flow.paidWindow.ObserveAbility(this);
             game.runner.zones.rig.ObserveInstallations(this);
             game.runner.zones.rig.ObserveUninstallations(this);
         }

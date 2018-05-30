@@ -1,4 +1,4 @@
-﻿using model.timing.runner;
+﻿using model.timing;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;

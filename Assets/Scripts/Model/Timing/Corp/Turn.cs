@@ -70,7 +70,7 @@ namespace model.timing.corp
             }
             else
             {
-                game.DeckCorp();
+                game.flow.DeckCorp();
             }
         }
 

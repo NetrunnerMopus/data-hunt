@@ -2,8 +2,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
-using model.timing.runner;
 using view.gui;
+using model.timing;
 
 namespace controller
 {

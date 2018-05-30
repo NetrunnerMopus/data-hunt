@@ -15,7 +15,7 @@ namespace model.ai
 
         public void Play()
         {
-            game.corp.turn.ObserveActionStep(this);
+            game.flow.corpTurn.ObserveActionStep(this);
             game.corp.zones.hq.ObserveDiscarding(this);
         }
 

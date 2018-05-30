@@ -3,7 +3,7 @@ using model.play;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace model.timing.runner
+namespace model.timing
 {
     public class PaidWindow
     {

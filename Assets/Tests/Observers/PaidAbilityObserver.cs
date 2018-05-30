@@ -1,6 +1,6 @@
 ﻿using model.cards;
 using model.play;
-using model.timing.runner;
+using model.timing;
 
 namespace tests.observers
 {

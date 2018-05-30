@@ -8,7 +8,7 @@ using tests.mocks;
 
 namespace tests
 {
-    public class RunnerPaidAbilityWindowTest
+    public class PaidAbilityWindowTest
     {
         [Test, Timeout(1000)]
         public void ShouldPopHopper()
@@ -32,7 +32,7 @@ namespace tests
             heap.Observe(heapObserver);
             rig.ObserveUninstallations(rigObserver);
             var hopper = new SportsHopper();
-            var window = game.runner.turn.paidWindow;
+            var window = game.flow.paidWindow;
             window.ObserveAbility(paidAbilityObserver);
 
             game.Start();

@@ -37,7 +37,7 @@ namespace model.cards.runner
 
             void IEffect.Resolve(Game game)
             {
-                var paidWindow = game.runner.turn.paidWindow;
+                var paidWindow = game.flow.paidWindow;
                 this.game = game;
                 if (pop == null)
                 {
@@ -51,7 +51,7 @@ namespace model.cards.runner
             {
                 if (card == this.card)
                 {
-                    game.runner.turn.paidWindow.Remove(pop);
+                    game.flow.paidWindow.Remove(pop);
                 }
             }
 
