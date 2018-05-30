@@ -7,7 +7,7 @@ namespace model.play.corp
     public class ActionCard : IResolutionObserver
     {
         public readonly Ability credit;
-        private TaskCompletionSource<bool> completion;
+        private TaskCompletionSource<bool> actionTaking;
         private ActionPermission permission = new ActionPermission();
 
         public ActionCard()
@@ -19,13 +19,14 @@ namespace model.play.corp
         async public Task TakeAction()
         {
             permission.Grant();
-            completion = new TaskCompletionSource<bool>();
-            await completion.Task;
+            actionTaking = new TaskCompletionSource<bool>();
+            await actionTaking.Task;
+            permission.Revoke();
         }
 
         void IResolutionObserver.NotifyResolved()
         {
-            completion.SetResult(true);
+            actionTaking.SetResult(true);
         }
     }
 }
