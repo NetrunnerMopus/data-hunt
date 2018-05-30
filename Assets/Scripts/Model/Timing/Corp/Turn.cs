@@ -18,17 +18,17 @@ namespace model.timing.corp
 
         async public Task Start()
         {
-            DrawPhase();
+            await DrawPhase();
             await ActionPhase();
             await DiscardPhase();
         }
 
-        private void DrawPhase()
+        async private Task DrawPhase()
         {
             Step(1, 1);
             game.corp.clicks.Gain(3);
             Step(1, 2);
-            OpenPaidWindow();
+            await OpenPaidWindow();
             OpenRezWindow();
             OpenScoreWindow();
             Step(1, 3);
@@ -39,8 +39,9 @@ namespace model.timing.corp
             MandatoryDraw();
         }
 
-        private void OpenPaidWindow()
+        async private Task OpenPaidWindow()
         {
+            await game.flow.paidWindow.Open();
         }
 
         private void OpenRezWindow()
@@ -76,7 +77,7 @@ namespace model.timing.corp
         async private Task ActionPhase()
         {
             Step(2, 1);
-            OpenPaidWindow();
+            await OpenPaidWindow();
             OpenRezWindow();
             OpenScoreWindow();
             Step(2, 2);
@@ -101,7 +102,7 @@ namespace model.timing.corp
             Step(3, 1);
             await Discard();
             Step(3, 2);
-            OpenPaidWindow();
+            await OpenPaidWindow();
             OpenRezWindow();
             Step(3, 3);
             LoseUnspentClicks();
