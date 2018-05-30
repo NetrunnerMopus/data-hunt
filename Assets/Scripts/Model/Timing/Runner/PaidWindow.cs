@@ -29,13 +29,13 @@ namespace model.timing.runner
             {
                 observer.NotifyPaidWindowOpened();
             }
-            await windowClosing.Task;
+            var result = await windowClosing.Task;
             permission.Revoke();
             foreach (var observer in windowObservers)
             {
                 observer.NotifyPaidWindowClosed();
             }
-            return windowClosing.Task.Result;
+            return result;
         }
 
         internal void Use()
