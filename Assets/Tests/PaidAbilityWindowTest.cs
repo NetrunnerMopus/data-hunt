@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using model.cards.runner;
 using tests.observers;
 using tests.mocks;
+using view.log;
 
 namespace tests
 {
@@ -19,6 +20,8 @@ namespace tests
                 runnerCards.Add(new Diesel());
             }
             var game = new Game(new Decks().DemoCorp(), new Deck(runnerCards));
+            var gameFlowLog = new GameFlowLog();
+            gameFlowLog.Display(game);
             var passiveCorp = new PassiveCorp(game);
             var grip = game.runner.zones.grip;
             var heap = game.runner.zones.heap;

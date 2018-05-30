@@ -11,7 +11,7 @@ namespace model.zones.corp
         private List<ICard> cards = new List<ICard>();
         private HashSet<IHqCountObserver> counts = new HashSet<IHqCountObserver>();
         private HashSet<IHqDiscardObserver> discards = new HashSet<IHqDiscardObserver>();
-        private TaskCompletionSource<bool> discarded;
+        private TaskCompletionSource<bool> discarding;
         private Random random;
 
         internal Headquarters()
@@ -46,12 +46,12 @@ namespace model.zones.corp
 
         async internal Task Discard()
         {
-            discarded = new TaskCompletionSource<bool>();
+            discarding = new TaskCompletionSource<bool>();
             foreach (var observer in discards)
             {
                 observer.NotifyDiscarding(true);
             }
-            await discarded.Task;
+            await discarding.Task;
         }
 
         internal void Discard(ICard card, Archives heap)
@@ -62,7 +62,7 @@ namespace model.zones.corp
             {
                 observer.NotifyDiscarding(false);
             }
-            discarded.SetResult(true);
+            discarding.SetResult(true);
         }
 
         internal ICard Random() => cards[random.Next(0, Count)];

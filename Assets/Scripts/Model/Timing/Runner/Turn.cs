@@ -6,7 +6,9 @@ namespace model.timing.runner
     public class Turn
     {
         private Game game;
+        private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
         private HashSet<IRunnerTurnStartObserver> starts = new HashSet<IRunnerTurnStartObserver>();
+        private HashSet<IRunnerActionObserver> actions = new HashSet<IRunnerActionObserver>();
 
         public Turn(Game game)
         {
@@ -15,31 +17,26 @@ namespace model.timing.runner
 
         async public Task Start()
         {
-            // 1
             await ActionPhase();
-            // 2
             await DiscardPhase();
         }
 
         async private Task ActionPhase()
         {
-            // 1.1
+            Step(1, 1);
             game.runner.clicks.Gain(4);
-            // 1.2
+            Step(1, 2);
             await OpenPaidWindow();
             OpenRezWindow();
-            ClosePaidWindow();
-            CloseRezWindow();
-            // 1.3
+            Step(1, 3);
             RefillRecurringCredits();
-            // 1.4
+            Step(1, 4);
             TriggerTurnBeginning();
-            // 1.5
+            Step(1, 5);
             await OpenPaidWindow();
             OpenRezWindow();
-            ClosePaidWindow();
-            CloseRezWindow();
-            // 1.6
+
+            Step(1, 6);
             await TakeActions();
         }
 
@@ -48,17 +45,7 @@ namespace model.timing.runner
             await game.flow.paidWindow.Open();
         }
 
-        private void ClosePaidWindow()
-        {
-
-        }
-
         private void OpenRezWindow()
-        {
-
-        }
-
-        private void CloseRezWindow()
         {
 
         }
@@ -80,27 +67,27 @@ namespace model.timing.runner
         {
             while (game.runner.clicks.Remaining() > 0)
             {
-                UnityEngine.Debug.Log("Runner taking action");
-                await game.runner.actionCard.TakeAction();
+                Task actionTaking = game.runner.actionCard.TakeAction();
+                foreach (var observer in actions)
+                {
+                    observer.NotifyActionTaking();
+                }
+                await actionTaking;
                 await OpenPaidWindow();
                 OpenRezWindow();
-                ClosePaidWindow();
-                CloseRezWindow();
             }
         }
 
         async private Task DiscardPhase()
         {
-            // 2.1
+            Step(2, 1);
             await Discard();
-            // 2.2
+            Step(2, 2);
             await OpenPaidWindow();
             OpenRezWindow();
-            ClosePaidWindow();
-            CloseRezWindow();
-            // 2.3
+            Step(2, 3);
             game.runner.clicks.Reset();
-            // 2.4
+            Step(2, 4);
             TriggerTurnEnding();
         }
 
@@ -109,7 +96,6 @@ namespace model.timing.runner
             var grip = game.runner.zones.grip;
             while (grip.Count > 5)
             {
-                UnityEngine.Debug.Log("Runner discarding");
                 await grip.Discard();
             }
         }
@@ -117,6 +103,19 @@ namespace model.timing.runner
         private void TriggerTurnEnding()
         {
 
+        }
+
+        private void Step(int phase, int step)
+        {
+            foreach (var observer in steps)
+            {
+                observer.NotifyStep("Runner turn", phase, step);
+            }
+        }
+
+        internal void ObserveSteps(IStepObserver observer)
+        {
+            steps.Add(observer);
         }
 
         internal void ObserveStart(IRunnerTurnStartObserver observer)
@@ -128,10 +127,20 @@ namespace model.timing.runner
         {
             starts.Remove(observer);
         }
+
+        internal void ObserveActions(IRunnerActionObserver observer)
+        {
+            actions.Add(observer);
+        }
     }
 
     internal interface IRunnerTurnStartObserver
     {
         void NotifyTurnStarted(Game game);
+    }
+
+    internal interface IRunnerActionObserver
+    {
+        void NotifyActionTaking();
     }
 }

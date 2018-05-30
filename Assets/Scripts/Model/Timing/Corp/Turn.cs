@@ -7,7 +7,9 @@ namespace model.timing.corp
     public class Turn
     {
         private Game game;
-        private HashSet<IActionStepObserver> actionSteps = new HashSet<IActionStepObserver>();
+
+        private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
+        private HashSet<ICorpActionObserver> actions = new HashSet<ICorpActionObserver>();
 
         public Turn(Game game)
         {
@@ -16,27 +18,24 @@ namespace model.timing.corp
 
         async public Task Start()
         {
-            // 1
             DrawPhase();
-            // 2
             await ActionPhase();
-            // 3
             await DiscardPhase();
         }
 
         private void DrawPhase()
         {
-            // 1.1
+            Step(1, 1);
             game.corp.clicks.Gain(3);
-            // 1.2
+            Step(1, 2);
             OpenPaidWindow();
             OpenRezWindow();
             OpenScoreWindow();
-            // 1.3
+            Step(1, 3);
             RefillRecurringCredits();
-            // 1.4
+            Step(1, 4);
             TriggerTurnBeginning();
-            // 1.5
+            Step(1, 5);
             MandatoryDraw();
         }
 
@@ -76,11 +75,11 @@ namespace model.timing.corp
 
         async private Task ActionPhase()
         {
-            // 2.1
+            Step(2, 1);
             OpenPaidWindow();
             OpenRezWindow();
             OpenScoreWindow();
-            // 2.2
+            Step(2, 2);
             await TakeActions();
         }
 
@@ -88,11 +87,10 @@ namespace model.timing.corp
         {
             while (game.corp.clicks.Remaining() > 0)
             {
-                UnityEngine.Debug.Log("Corp taking action");
                 Task actionTaking = game.corp.actionCard.TakeAction();
-                foreach (var observer in actionSteps)
+                foreach (var observer in actions)
                 {
-                    await observer.NotifyActionStep();
+                    observer.NotifyActionTaking();
                 }
                 await actionTaking;
             }
@@ -100,14 +98,14 @@ namespace model.timing.corp
 
         async private Task DiscardPhase()
         {
-            // 3.1
+            Step(3, 1);
             await Discard();
-            // 3.2
+            Step(3, 2);
             OpenPaidWindow();
             OpenRezWindow();
-            // 3.3
+            Step(3, 3);
             LoseUnspentClicks();
-            // 3.4
+            Step(3, 4);
             TriggerTurnEnding();
         }
 
@@ -116,7 +114,6 @@ namespace model.timing.corp
             var hq = game.corp.zones.hq;
             while (hq.Count > 5)
             {
-                UnityEngine.Debug.Log("Corp discarding");
                 await hq.Discard();
             }
         }
@@ -129,14 +126,27 @@ namespace model.timing.corp
         {
         }
 
-        public void ObserveActionStep(IActionStepObserver observer)
+        private void Step(int phase, int step)
         {
-            actionSteps.Add(observer);
+            foreach (var observer in steps)
+            {
+                observer.NotifyStep("Corp turn", phase, step);
+            }
+        }
+
+        internal void ObserveSteps(IStepObserver observer)
+        {
+            steps.Add(observer);
+        }
+
+        public void ObserveActions(ICorpActionObserver observer)
+        {
+            actions.Add(observer);
         }
     }
 
-    public interface IActionStepObserver
+    public interface ICorpActionObserver
     {
-        Task NotifyActionStep();
+        void NotifyActionTaking();
     }
 }

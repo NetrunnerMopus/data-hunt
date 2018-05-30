@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace model.ai
 {
-    public class CorpAi : IActionStepObserver, IHqDiscardObserver
+    public class CorpAi : ICorpActionObserver, IHqDiscardObserver
     {
         private Game game;
 
@@ -15,11 +15,11 @@ namespace model.ai
 
         public void Play()
         {
-            game.flow.corpTurn.ObserveActionStep(this);
+            game.flow.corpTurn.ObserveActions(this);
             game.corp.zones.hq.ObserveDiscarding(this);
         }
 
-        async Task IActionStepObserver.NotifyActionStep()
+        async void ICorpActionObserver.NotifyActionTaking()
         {
             await Task.Delay(600);
             game.corp.actionCard.credit.Trigger(game);
