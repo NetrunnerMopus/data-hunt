@@ -49,7 +49,8 @@ namespace tests
             clickForCredit.Trigger(game);
             window.Pass();
             window.Pass();
-            passiveCorp.SkipTurn();
+            passiveCorp.SkipTurnIgnoringWindows();
+            window.Pass();
             window.Pass();
             window.Pass();
             clickForCredit.Trigger(game);

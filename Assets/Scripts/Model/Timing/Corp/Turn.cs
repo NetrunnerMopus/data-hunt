@@ -94,6 +94,9 @@ namespace model.timing.corp
                     observer.NotifyActionTaking();
                 }
                 await actionTaking;
+                await OpenPaidWindow();
+                OpenRezWindow();
+                OpenScoreWindow();
             }
         }
 
