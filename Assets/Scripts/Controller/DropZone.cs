@@ -12,17 +12,19 @@ namespace controller
 
         void Start()
         {
-            UpdateHighlights();
+            StopDragging();
         }
 
         public void StartDragging()
         {
+            Image.raycastTarget = true;
             droppableDragged = true;
             UpdateHighlights();
         }
 
         public void StopDragging()
         {
+            Image.raycastTarget = false;
             droppableDragged = false;
             UpdateHighlights();
         }

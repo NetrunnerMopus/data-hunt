@@ -15,9 +15,6 @@ namespace view.gui
             image.type = Image.Type.Sliced;
             image.fillCenter = false;
             Printer = gameObject.AddComponent<CardPrinter>();
-            var aspect = gameObject.AddComponent<AspectRatioFitter>();
-            aspect.aspectMode = AspectRatioFitter.AspectMode.WidthControlsHeight;
-            aspect.aspectRatio = 300f / 418f;
         }
     }
 }

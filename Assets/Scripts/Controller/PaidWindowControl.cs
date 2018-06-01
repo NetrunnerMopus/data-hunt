@@ -28,7 +28,7 @@ namespace controller
             image.preserveAspect = true;
             var rectangle = image.rectTransform;
             rectangle.anchorMin = Vector2.zero;
-            rectangle.anchorMax = new Vector2(0.4f, 1.0f);
+            rectangle.anchorMax = new Vector2(0.3f, 1.0f);
             rectangle.offsetMin = Vector2.zero;
             rectangle.offsetMax = Vector2.zero;
             return flag;
@@ -43,12 +43,12 @@ namespace controller
             image.type = Image.Type.Sliced;
             image.fillCenter = true;
             var rectangle = image.rectTransform;
-            rectangle.anchorMin = new Vector2(0.6f, 0.0f);
+            rectangle.anchorMin = new Vector2(0.7f, 0.0f);
             rectangle.anchorMax = Vector2.one;
             rectangle.offsetMin = Vector2.zero;
             rectangle.offsetMax = Vector2.zero;
             var aspect = pass.AddComponent<AspectRatioFitter>();
-            aspect.aspectMode = AspectRatioFitter.AspectMode.WidthControlsHeight;
+            aspect.aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
             aspect.aspectRatio = 1f;
             CreatePassLabel(pass);
             return pass;

@@ -25,7 +25,7 @@ namespace view.gui
                     game,
                     GameObject.Find("Runner/Left panel/Credits").AddComponent<DropZone>()
                 );
-            GameObject.Find("Runner/Middle panel/Turn/Paid window")
+            GameObject.Find("Paid window")
                 .AddComponent<PaidWindowControl>()
                 .Represent(
                     game.flow.paidWindow
