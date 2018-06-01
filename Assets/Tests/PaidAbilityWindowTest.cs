@@ -6,8 +6,7 @@ using model.cards.runner;
 using tests.observers;
 using tests.mocks;
 using view.log;
-using model.play;
-using model.timing;
+
 
 namespace tests
 {
@@ -15,11 +14,8 @@ namespace tests
     {
         private Game game;
         private PassiveCorp passiveCorp;
-        private Ability runnerAction;
-        private Ability corpAction;
         private PaidAbilityObserver paidAbilityObserver;
         private SportsHopper hopper;
-        private PaidWindow window;
 
         [SetUp]
         public void SetUp()
@@ -33,12 +29,9 @@ namespace tests
             var gameFlowLog = new GameFlowLog();
             gameFlowLog.Display(game);
             passiveCorp = new PassiveCorp(game);
-            runnerAction = game.runner.actionCard.credit;
-            corpAction = game.corp.actionCard.credit;
             paidAbilityObserver = new PaidAbilityObserver();
             hopper = new SportsHopper();
-            window = game.flow.paidWindow;
-            window.ObserveAbility(paidAbilityObserver);
+            game.flow.paidWindow.ObserveAbility(paidAbilityObserver);
         }
 
         [Test, Timeout(1000)]
@@ -71,33 +64,33 @@ namespace tests
             passiveCorp.SkipTurn();
             game.runner.zones.grip.Add(hopper);
 
-            runnerAction.Trigger(game);
-            runnerAction.Trigger(game);
+            RunnerAction();
+            RunnerAction();
             game.runner.actionCard.Install(hopper).Trigger(game);
             var popHopper = paidAbilityObserver.NewestPaidAbility;
-            window.Pass();
-            runnerAction.Trigger(game);
-            window.Pass();
-            window.Pass();
-            window.Pass();
-            window.Pass();
-            corpAction.Trigger(game);
-            window.Pass();
-            corpAction.Trigger(game);
-            window.Pass();
-            corpAction.Trigger(game);
-            window.Pass();
+            PassWindow();
+            RunnerAction();
+            PassWindow();
+            PassWindow();
+            PassWindow();
+            PassWindow();
+            CorpAction();
+            PassWindow();
+            CorpAction();
+            PassWindow();
+            CorpAction();
+            PassWindow();
             passiveCorp.DiscardRandomCards();
-            window.Pass();
-            window.Pass();
-            window.Pass();
-            runnerAction.Trigger(game);
-            window.Pass();
-            runnerAction.Trigger(game);
+            PassWindow();
+            PassWindow();
+            PassWindow();
+            RunnerAction();
+            PassWindow();
+            RunnerAction();
             popHopper.Trigger(game);
-            window.Pass();
-            runnerAction.Trigger(game);
-            runnerAction.Trigger(game);
+            PassWindow();
+            RunnerAction();
+            RunnerAction();
         }
 
         [Test, Timeout(1000)]
@@ -107,27 +100,42 @@ namespace tests
             passiveCorp.SkipTurn();
             game.runner.zones.grip.Add(hopper);
 
-            runnerAction.Trigger(game);
-            runnerAction.Trigger(game);
+            RunnerAction();
+            RunnerAction();
             game.runner.actionCard.Install(hopper).Trigger(game);
             var popHopper = paidAbilityObserver.NewestPaidAbility;
-            window.Pass();
-            runnerAction.Trigger(game);
-            window.Pass();
-            window.Pass();
-            window.Pass();
-            window.Pass();
-            corpAction.Trigger(game);
-            window.Pass();
-            corpAction.Trigger(game);
+            PassWindow();
+            RunnerAction();
+            PassWindow();
+            PassWindow();
+            PassWindow();
+            PassWindow();
+            CorpAction();
+            PassWindow();
+            CorpAction();
             popHopper.Trigger(game);
-            window.Pass();
-            corpAction.Trigger(game);
+            PassWindow();
+            CorpAction();
             passiveCorp.DiscardRandomCards();
-            runnerAction.Trigger(game);
-            runnerAction.Trigger(game);
-            runnerAction.Trigger(game);
-            runnerAction.Trigger(game);
+            RunnerAction();
+            RunnerAction();
+            RunnerAction();
+            RunnerAction();
+        }
+
+        private void RunnerAction()
+        {
+            game.runner.actionCard.credit.Trigger(game);
+        }
+
+        private void CorpAction()
+        {
+            game.corp.actionCard.credit.Trigger(game);
+        }
+
+        private void PassWindow()
+        {
+            game.flow.paidWindow.Pass();
         }
     }
 }
