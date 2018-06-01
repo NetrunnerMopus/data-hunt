@@ -16,6 +16,7 @@ namespace tests
         private Game game;
         private PassiveCorp passiveCorp;
         private Ability runnerAction;
+        private Ability corpAction;
         private PaidAbilityObserver paidAbilityObserver;
         private SportsHopper hopper;
         private PaidWindow window;
@@ -33,6 +34,7 @@ namespace tests
             gameFlowLog.Display(game);
             passiveCorp = new PassiveCorp(game);
             runnerAction = game.runner.actionCard.credit;
+            corpAction = game.corp.actionCard.credit;
             paidAbilityObserver = new PaidAbilityObserver();
             hopper = new SportsHopper();
             window = game.flow.paidWindow;
@@ -77,16 +79,53 @@ namespace tests
             runnerAction.Trigger(game);
             window.Pass();
             window.Pass();
-            passiveCorp.SkipTurnIgnoringWindows();
+            window.Pass();
+            window.Pass();
+            corpAction.Trigger(game);
+            window.Pass();
+            corpAction.Trigger(game);
+            window.Pass();
+            corpAction.Trigger(game);
+            window.Pass();
+            passiveCorp.DiscardRandomCards();
             window.Pass();
             window.Pass();
             window.Pass();
             runnerAction.Trigger(game);
             window.Pass();
             runnerAction.Trigger(game);
-
             popHopper.Trigger(game);
             window.Pass();
+            runnerAction.Trigger(game);
+            runnerAction.Trigger(game);
+        }
+
+        [Test, Timeout(1000)]
+        public void ShouldUsePaidAbilityOnCorpTurn()
+        {
+            game.Start();
+            passiveCorp.SkipTurn();
+            game.runner.zones.grip.Add(hopper);
+
+            runnerAction.Trigger(game);
+            runnerAction.Trigger(game);
+            game.runner.actionCard.Install(hopper).Trigger(game);
+            var popHopper = paidAbilityObserver.NewestPaidAbility;
+            window.Pass();
+            runnerAction.Trigger(game);
+            window.Pass();
+            window.Pass();
+            window.Pass();
+            window.Pass();
+            corpAction.Trigger(game);
+            window.Pass();
+            corpAction.Trigger(game);
+            popHopper.Trigger(game);
+            window.Pass();
+            corpAction.Trigger(game);
+            passiveCorp.DiscardRandomCards();
+            runnerAction.Trigger(game);
+            runnerAction.Trigger(game);
             runnerAction.Trigger(game);
             runnerAction.Trigger(game);
         }
