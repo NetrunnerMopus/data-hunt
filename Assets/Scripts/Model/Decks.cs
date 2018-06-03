@@ -28,9 +28,10 @@ namespace model
         public Deck DemoCorp()
         {
             var cards = new List<ICard>();
-            for (int i = 0; i < 49; i++)
+            for (int i = 0; i < 20; i++)
             {
                 cards.Add(new HedgeFund());
+                cards.Add(new PadCampaign());
             }
             return new Deck(cards, 1234);
         }

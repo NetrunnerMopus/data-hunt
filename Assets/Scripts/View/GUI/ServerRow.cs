@@ -1,11 +1,17 @@
-﻿using UnityEngine;
+﻿using model.zones.corp;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class ServerRow : MonoBehaviour
+    public class ServerRow : MonoBehaviour, IServerCreationObserver
     {
         private HorizontalLayoutGroup layout;
+
+        internal void Represent(Zones zones)
+        {
+            zones.ObserveServerCreation(this);
+        }
 
         void Awake()
         {
@@ -23,8 +29,15 @@ namespace view.gui
             var gameObject = new GameObject(serverName);
             Server server = gameObject.AddComponent<Server>();
             gameObject.transform.SetParent(transform, false);
+            server.transform.SetAsFirstSibling();
             LayoutRebuilder.ForceRebuildLayoutImmediate(layout.GetComponent<RectTransform>());
             return server;
+        }
+
+        void IServerCreationObserver.NotifyRemoteCreated(Remote remote)
+        {
+            var server = CreateServer("Remote");
+            remote.ObserveInstallations(server);
         }
     }
 }

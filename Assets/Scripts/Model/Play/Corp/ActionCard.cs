@@ -1,5 +1,7 @@
-﻿using model.costs;
+﻿using model.cards;
+using model.costs;
 using model.effects.corp;
+using model.zones.corp;
 using System.Threading.Tasks;
 
 namespace model.play.corp
@@ -14,6 +16,13 @@ namespace model.play.corp
         {
             credit = new Ability(new Conjunction(new CorpClickCost(1), permission), new Gain(1));
             credit.ObserveResolution(this);
+        }
+
+        internal Ability InstallInServer(ICard card, Remote remote)
+        {
+            Ability install = new Ability(new Conjunction(new CorpClickCost(1), permission), new InstallInServer(card, remote));
+            install.ObserveResolution(this);
+            return install;
         }
 
         async public Task TakeAction()

@@ -1,10 +1,12 @@
-﻿using UnityEditor;
+﻿using model.cards;
+using model.zones.corp;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class Server : MonoBehaviour
+    public class Server : MonoBehaviour, IServerContentObserver
     {
         internal CardPrinter Printer { get; private set; }
 
@@ -15,6 +17,11 @@ namespace view.gui
             image.type = Image.Type.Sliced;
             image.fillCenter = false;
             Printer = gameObject.AddComponent<CardPrinter>();
+        }
+
+        void IServerContentObserver.NotifyCardInstalled(ICard card)
+        {
+            Printer.PrintCorpFacedown(card.Name);
         }
     }
 }

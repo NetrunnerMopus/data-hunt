@@ -1,6 +1,7 @@
 ﻿using model.cards;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace model.zones.corp
@@ -64,6 +65,8 @@ namespace model.zones.corp
             }
             discarding.SetResult(true);
         }
+
+        internal ICard Find<T>() where T : ICard => cards.OfType<T>().FirstOrDefault();
 
         internal ICard Random() => cards[random.Next(0, Count)];
 

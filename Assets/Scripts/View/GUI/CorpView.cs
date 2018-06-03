@@ -8,13 +8,15 @@ namespace view.gui
     {
         public void Display(Game game)
         {
+            var zones = game.corp.zones;
             game.corp.credits.Observe(GameObject.Find("Corp/Credits/Credits text").AddComponent<CreditPoolText>());
             var servers = GameObject.Find("Servers").AddComponent<ServerRow>();
-            servers.CreateServer("R&D");
-            var hq = servers.CreateServer("HQ").Printer.Print(new CustomBiotics());
+            servers.Represent(zones);
             var archives = servers.CreateServer("Archives").gameObject;
-            game.corp.zones.hq.ObserveCount(hq.AddComponent<HqCount>());
-            game.corp.zones.archives.Observe(archives.AddComponent<ArchivesPile>());
+            var hq = servers.CreateServer("HQ").Printer.Print(new CustomBiotics());
+            servers.CreateServer("R&D");
+            zones.hq.ObserveCount(hq.AddComponent<HqCount>());
+            zones.archives.Observe(archives.AddComponent<ArchivesPile>());
         }
     }
 }
