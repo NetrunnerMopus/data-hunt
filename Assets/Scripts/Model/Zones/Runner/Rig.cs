@@ -5,11 +5,11 @@ namespace model.zones.runner
 {
     public class Rig
     {
-        private List<ICard> cards = new List<ICard>();
+        private List<Card> cards = new List<Card>();
         private HashSet<IInstallationObserver> installations = new HashSet<IInstallationObserver>();
         private HashSet<IUninstallationObserver> uninstallations = new HashSet<IUninstallationObserver>();
 
-        public void Install(ICard card)
+        public void Install(Card card)
         {
             cards.Add(card);
             foreach (var observer in installations)
@@ -18,7 +18,7 @@ namespace model.zones.runner
             }
         }
 
-        public void Uninstall(ICard card)
+        public void Uninstall(Card card)
         {
             cards.Remove(card);
             foreach (var observer in uninstallations)
@@ -40,11 +40,11 @@ namespace model.zones.runner
 
     public interface IInstallationObserver
     {
-        void NotifyInstalled(ICard card);
+        void NotifyInstalled(Card card);
     }
 
     public interface IUninstallationObserver
     {
-        void NotifyUninstalled(ICard card);
+        void NotifyUninstalled(Card card);
     }
 }

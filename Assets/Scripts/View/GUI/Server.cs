@@ -8,7 +8,7 @@ namespace view.gui
 {
     public class Server : MonoBehaviour, IServerContentObserver
     {
-        internal CardPrinter Printer { get; private set; }
+        public CardPrinter Printer { get; private set; }
 
         void Awake()
         {
@@ -19,7 +19,7 @@ namespace view.gui
             Printer = gameObject.AddComponent<CardPrinter>();
         }
 
-        void IServerContentObserver.NotifyCardInstalled(ICard card)
+        void IServerContentObserver.NotifyCardInstalled(Card card)
         {
             Printer.PrintCorpFacedown(card.Name);
         }

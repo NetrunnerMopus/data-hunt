@@ -5,10 +5,10 @@ namespace model.effects.corp
 {
     public class InstallInServer : IEffect
     {
-        private readonly ICard card;
+        private readonly Card card;
         private Remote remote;
 
-        internal InstallInServer(ICard card, Remote remote)
+        public InstallInServer(Card card, Remote remote)
         {
             this.card = card;
             this.remote = remote;

@@ -2,7 +2,7 @@
 
 namespace tests.mocks
 {
-    internal class PassiveCorp
+    public class PassiveCorp
     {
         private Game game;
 
@@ -11,7 +11,7 @@ namespace tests.mocks
             this.game = game;
         }
 
-        internal void SkipTurn()
+        public void SkipTurn()
         {
             var clickForCredit = game.corp.actionCard.credit;
             for (int i = 0; i < 3; i++)
@@ -21,7 +21,7 @@ namespace tests.mocks
             DiscardRandomCards();
         }
 
-        internal void DiscardRandomCards()
+        public void DiscardRandomCards()
         {
             var hq = game.corp.zones.hq;
             hq.Discard(hq.Random(), game.corp.zones.archives);

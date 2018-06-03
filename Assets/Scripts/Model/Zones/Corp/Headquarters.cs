@@ -9,29 +9,29 @@ namespace model.zones.corp
     public class Headquarters
     {
         public int Count => cards.Count;
-        private List<ICard> cards = new List<ICard>();
+        private List<Card> cards = new List<Card>();
         private HashSet<IHqCountObserver> counts = new HashSet<IHqCountObserver>();
         private HashSet<IHqDiscardObserver> discards = new HashSet<IHqDiscardObserver>();
         private TaskCompletionSource<bool> discarding;
         private Random random;
 
-        internal Headquarters()
+        public Headquarters()
         {
             random = new Random();
         }
 
-        internal Headquarters(int seed)
+        public Headquarters(int seed)
         {
             random = new Random(seed);
         }
 
-        public void Add(ICard card)
+        public void Add(Card card)
         {
             cards.Add(card);
             NotifyCount();
         }
 
-        public void Remove(ICard card)
+        public void Remove(Card card)
         {
             cards.Remove(card);
             NotifyCount();
@@ -45,7 +45,7 @@ namespace model.zones.corp
             }
         }
 
-        async internal Task Discard()
+        async public Task Discard()
         {
             discarding = new TaskCompletionSource<bool>();
             foreach (var observer in discards)
@@ -55,7 +55,7 @@ namespace model.zones.corp
             await discarding.Task;
         }
 
-        internal void Discard(ICard card, Archives heap)
+        public void Discard(Card card, Archives heap)
         {
             Remove(card);
             heap.Add(card);
@@ -66,16 +66,16 @@ namespace model.zones.corp
             discarding.SetResult(true);
         }
 
-        internal ICard Find<T>() where T : ICard => cards.OfType<T>().FirstOrDefault();
+        public Card Find<T>() where T : Card => cards.OfType<T>().FirstOrDefault();
 
-        internal ICard Random() => cards[random.Next(0, Count)];
+        public Card Random() => cards[random.Next(0, Count)];
 
         public void ObserveCount(IHqCountObserver observer)
         {
             counts.Add(observer);
         }
 
-        internal void ObserveDiscarding(IHqDiscardObserver observer)
+        public void ObserveDiscarding(IHqDiscardObserver observer)
         {
             discards.Add(observer);
         }
@@ -86,7 +86,7 @@ namespace model.zones.corp
         void NotifyCardCount(int cards);
     }
 
-    internal interface IHqDiscardObserver
+    public interface IHqDiscardObserver
     {
         void NotifyDiscarding(bool discarding);
     }

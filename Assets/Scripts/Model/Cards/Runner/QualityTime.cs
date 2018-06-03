@@ -5,22 +5,14 @@ using model.cards.types;
 
 namespace model.cards.runner
 {
-    public class QualityTime : ICard
+    public class QualityTime : Card
     {
-        string ICard.FaceupArt { get { return "quality-time"; } }
-
-        string ICard.Name { get { return "Quality Time"; } }
-
-        bool ICard.Faceup { get { return false; } }
-
-        Faction ICard.Faction { get { return Factions.SHAPER; } }
-
-        int ICard.InfluenceCost { get { return 1; } }
-
-        ICost ICard.PlayCost { get { return new RunnerCreditCost(3); } }
-
-        IEffect ICard.Activation => new Draw(5);
-
-        IType ICard.Type { get { return new Event(); } }
+        override public string FaceupArt { get { return "quality-time"; } }
+        override public string Name { get { return "Quality Time"; } }
+        override public Faction Faction { get { return Factions.SHAPER; } }
+        override public int InfluenceCost { get { return 1; } }
+        override public ICost PlayCost { get { return new RunnerCreditCost(3); } }
+        override public IEffect Activation => new Draw(5);
+        override public IType Type { get { return new Event(); } }
     }
 }

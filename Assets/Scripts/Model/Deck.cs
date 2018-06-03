@@ -7,11 +7,11 @@ namespace model
     {
         private System.Random rng;
 
-        private List<ICard> cards;
+        private List<Card> cards;
 
-        public Deck(List<ICard> cards) : this(cards, new System.Random().Next()) { }
+        public Deck(List<Card> cards) : this(cards, new System.Random().Next()) { }
 
-        public Deck(List<ICard> cards, int seed)
+        public Deck(List<Card> cards, int seed)
         {
             this.cards = cards;
             rng = new System.Random(seed);
@@ -22,11 +22,11 @@ namespace model
             cards.Sort((card1, card2) => rng.Next().CompareTo(rng.Next()));
         }
 
-        public ICard RemoveTop()
+        public Card RemoveTop()
         {
             if (HasCards())
             {
-                ICard drawn = cards[0];
+                Card drawn = cards[0];
                 cards.RemoveAt(0);
                 return drawn;
             }

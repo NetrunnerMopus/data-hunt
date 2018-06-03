@@ -4,9 +4,9 @@ namespace model.costs
 {
     public class SelfTrash : ICost
     {
-        private ICard card;
+        private Card card;
 
-        public SelfTrash(ICard card)
+        public SelfTrash(Card card)
         {
             this.card = card;
         }

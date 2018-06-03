@@ -5,22 +5,14 @@ using model.cards.types;
 
 namespace model.cards.runner
 {
-    public class SureGamble : ICard
+    public class SureGamble : Card
     {
-        string ICard.FaceupArt { get { return "sure-gamble"; } }
-
-        string ICard.Name { get { return "Sure Gamble"; } }
-
-        bool ICard.Faceup { get { return false; } }
-
-        Faction ICard.Faction { get { return Factions.MASK; } }
-
-        int ICard.InfluenceCost { get { return 0; } }
-
-        ICost ICard.PlayCost { get { return new RunnerCreditCost(5); } }
-
-        IEffect ICard.Activation => new Gain(9);
-
-        IType ICard.Type { get { return new Event(); } }
+        override public string FaceupArt { get { return "sure-gamble"; } }
+        override public string Name { get { return "Sure Gamble"; } }
+        override public Faction Faction { get { return Factions.MASK; } }
+        override public int InfluenceCost { get { return 0; } }
+        override public ICost PlayCost { get { return new RunnerCreditCost(5); } }
+        override public IEffect Activation => new Gain(9);
+        override public IType Type { get { return new Event(); } }
     }
 }

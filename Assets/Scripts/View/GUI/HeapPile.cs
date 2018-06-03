@@ -11,7 +11,7 @@ namespace view.gui
             gameObject.AddComponent<CardPrinter>();
         }
 
-        void IHeapObserver.NotifyCardAdded(ICard card)
+        void IHeapObserver.NotifyCardAdded(Card card)
         {
             GetComponent<CardPrinter>().Print(card);
         }

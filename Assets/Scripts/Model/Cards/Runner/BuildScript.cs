@@ -5,22 +5,14 @@ using model.cards.types;
 
 namespace model.cards.runner
 {
-    public class BuildScript : ICard
+    public class BuildScript : Card
     {
-        string ICard.FaceupArt { get { return "build-script"; } }
-
-        string ICard.Name { get { return "Build Script"; } }
-
-        bool ICard.Faceup { get { return false; } }
-
-        Faction ICard.Faction { get { return Factions.MASK; } }
-
-        int ICard.InfluenceCost { get { return 1; } }
-
-        ICost ICard.PlayCost { get { return new RunnerCreditCost(0); } }
-
-        IEffect ICard.Activation => new Sequence(new Gain(1), new Draw(2));
-
-        IType ICard.Type { get { return new Event(); } }
+        override public string FaceupArt { get { return "build-script"; } }
+        override public string Name { get { return "Build Script"; } }
+        override public Faction Faction { get { return Factions.MASK; } }
+        override public int InfluenceCost { get { return 1; } }
+        override public ICost PlayCost { get { return new RunnerCreditCost(0); } }
+        override public IEffect Activation => new Sequence(new Gain(1), new Draw(2));
+        override public IType Type { get { return new Event(); } }
     }
 }

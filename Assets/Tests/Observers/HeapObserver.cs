@@ -5,10 +5,10 @@ namespace tests.observers
 {
     class HeapObserver : IHeapObserver
     {
-        public ICard LastAdded { get; private set; }
+        public Card LastAdded { get; private set; }
         public int TotalAdded { get; private set; } = 0;
 
-        void IHeapObserver.NotifyCardAdded(ICard card)
+        void IHeapObserver.NotifyCardAdded(Card card)
         {
             LastAdded = card;
             TotalAdded++;

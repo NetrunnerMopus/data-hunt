@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace model.zones.corp
 {
-    internal class Remote
+    public class Remote
     {
-        private List<ICard> cards = new List<ICard>();
+        private List<Card> cards = new List<Card>();
         private HashSet<IServerContentObserver> observers = new HashSet<IServerContentObserver>();
 
-        internal void InstallWithin(ICard card)
+        public void InstallWithin(Card card)
         {
             cards.Add(card);
             foreach (var observer in observers)
@@ -17,14 +17,14 @@ namespace model.zones.corp
             }
         }
 
-        internal void ObserveInstallations(IServerContentObserver observer)
+        public void ObserveInstallations(IServerContentObserver observer)
         {
             observers.Add(observer);
         }
     }
 
-    internal interface IServerContentObserver
+    public interface IServerContentObserver
     {
-        void NotifyCardInstalled(ICard card);
+        void NotifyCardInstalled(Card card);
     }
 }

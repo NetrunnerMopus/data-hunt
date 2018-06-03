@@ -13,7 +13,7 @@ namespace view.gui
         private GameObject top;
         private CardPrinter printer;
 
-        internal void Construct(Game game, DropZone gripZone)
+        public void Construct(Game game, DropZone gripZone)
         {
             this.game = game;
             this.gripZone = gripZone;

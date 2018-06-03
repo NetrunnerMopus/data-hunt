@@ -16,7 +16,7 @@ namespace view
             return Print(name, "Images/UI/runner-card-back");
         }
 
-        public GameObject Print(ICard card)
+        public GameObject Print(Card card)
         {
             return Print(card.Name, "Images/Cards/" + card.FaceupArt);
         }

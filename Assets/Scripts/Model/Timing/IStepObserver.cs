@@ -1,6 +1,6 @@
 ﻿namespace model.timing
 {
-    internal interface IStepObserver
+    public interface IStepObserver
     {
         void NotifyStep(string structure, int phase, int step);
     }

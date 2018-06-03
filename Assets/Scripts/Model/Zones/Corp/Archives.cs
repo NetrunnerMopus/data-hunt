@@ -5,10 +5,10 @@ namespace model.zones.corp
 {
     public class Archives
     {
-        private List<ICard> cards = new List<ICard>();
+        private List<Card> cards = new List<Card>();
         private HashSet<IArchivesObserver> observers = new HashSet<IArchivesObserver>();
 
-        public void Add(ICard card)
+        public void Add(Card card)
         {
             cards.Add(card);
             foreach (var observer in observers)
@@ -25,6 +25,6 @@ namespace model.zones.corp
 
     public interface IArchivesObserver
     {
-        void NotifyCardAdded(ICard card);
+        void NotifyCardAdded(Card card);
     }
 }

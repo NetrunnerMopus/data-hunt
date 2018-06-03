@@ -11,7 +11,7 @@ namespace tests
         [Test]
         public void ShouldClickForCredit()
         {
-            var game = new Game(new Decks().DemoCorp(), new Deck(new List<ICard>()));
+            var game = new Game(new Decks().DemoCorp(), new Deck(new List<Card>()));
             game.Start();
             var balance = new LastBalanceObserver();
             var clicks = new SpentClicksObserver();

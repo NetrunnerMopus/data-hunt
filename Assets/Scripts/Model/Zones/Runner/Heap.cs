@@ -5,10 +5,10 @@ namespace model.zones.runner
 {
     public class Heap
     {
-        private List<ICard> cards = new List<ICard>();
+        private List<Card> cards = new List<Card>();
         private HashSet<IHeapObserver> observers = new HashSet<IHeapObserver>();
 
-        public void Add(ICard card)
+        public void Add(Card card)
         {
             cards.Add(card);
             foreach (var observer in observers)
@@ -25,6 +25,6 @@ namespace model.zones.runner
 
     public interface IHeapObserver
     {
-        void NotifyCardAdded(ICard card);
+        void NotifyCardAdded(Card card);
     }
 }

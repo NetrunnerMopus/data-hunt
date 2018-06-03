@@ -10,7 +10,7 @@ namespace controller
 {
     public class Discardable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IGripDiscardObserver
     {
-        private ICard card;
+        private Card card;
         private Grip grip;
         private Heap heap;
         private DropZone zone;
@@ -22,7 +22,7 @@ namespace controller
 
         private CanvasGroup CanvasGroup { get { return GetComponent<CanvasGroup>(); } }
 
-        public void Represent(ICard card, Grip grip, Heap heap, DropZone zone)
+        public void Represent(Card card, Grip grip, Heap heap, DropZone zone)
         {
             this.card = card;
             this.grip = grip;

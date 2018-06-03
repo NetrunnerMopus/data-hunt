@@ -5,9 +5,9 @@ namespace tests.observers
 {
     class RigObserver : IUninstallationObserver
     {
-        public ICard LastUninstalled { get; private set; }
+        public Card LastUninstalled { get; private set; }
 
-        void IUninstallationObserver.NotifyUninstalled(ICard card)
+        void IUninstallationObserver.NotifyUninstalled(Card card)
         {
             LastUninstalled = card;
         }

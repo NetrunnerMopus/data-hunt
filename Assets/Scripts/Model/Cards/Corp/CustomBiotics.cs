@@ -2,15 +2,14 @@
 
 namespace model.cards.corp
 {
-    public class CustomBiotics : ICard
+    public class CustomBiotics : Card
     {
-        string ICard.FaceupArt => "custom-biotics";
-        string ICard.Name => "Custom Biotics";
-        bool ICard.Faceup => true;
-        Faction ICard.Faction => Factions.HAAS_BIOROID;
-        int ICard.InfluenceCost => 0;
-        ICost ICard.PlayCost => new costs.Nothing();
-        IEffect ICard.Activation => new effects.Nothing();
-        IType ICard.Type => new Identity();
+        override public string FaceupArt => "custom-biotics";
+        override public string Name => "Custom Biotics";
+        override public Faction Faction => Factions.HAAS_BIOROID;
+        override public int InfluenceCost => 0;
+        override public ICost PlayCost => new costs.Nothing();
+        override public IEffect Activation => new effects.Nothing();
+        override public IType Type => new Identity();
     }
 }

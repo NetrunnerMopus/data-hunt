@@ -20,7 +20,7 @@ namespace tests
         [SetUp]
         public void SetUp()
         {
-            var runnerCards = new List<ICard>();
+            var runnerCards = new List<Card>();
             for (int i = 0; i < 20; i++)
             {
                 runnerCards.Add(new Diesel());

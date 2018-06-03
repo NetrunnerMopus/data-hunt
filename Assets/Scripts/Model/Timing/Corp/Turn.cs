@@ -138,7 +138,7 @@ namespace model.timing.corp
             }
         }
 
-        internal void ObserveSteps(IStepObserver observer)
+        public void ObserveSteps(IStepObserver observer)
         {
             steps.Add(observer);
         }

@@ -18,7 +18,7 @@ namespace model.zones.corp
 
         public bool HasCards() => deck.Size() > 0;
 
-        internal void Draw(int cards, Headquarters hq)
+        public void Draw(int cards, Headquarters hq)
         {
             for (int i = 0; i < cards; i++)
             {
@@ -29,7 +29,7 @@ namespace model.zones.corp
             }
         }
 
-        public ICard RemoveTop()
+        public Card RemoveTop()
         {
             return deck.RemoveTop();
         }

@@ -20,14 +20,14 @@ namespace model.play.runner
             credit.ObserveResolution(this);
         }
 
-        public Ability Play(ICard card)
+        public Ability Play(Card card)
         {
             Ability play = new Ability(new Conjunction(new RunnerClickCost(1), card.PlayCost, permission), new Play(card));
             play.ObserveResolution(this);
             return play;
         }
 
-        public Ability Install(ICard card)
+        public Ability Install(Card card)
         {
             Ability install = new Ability(new Conjunction(new RunnerClickCost(1), card.PlayCost, permission), new Install(card));
             install.ObserveResolution(this);

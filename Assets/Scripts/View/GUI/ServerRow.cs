@@ -8,7 +8,7 @@ namespace view.gui
     {
         private HorizontalLayoutGroup layout;
 
-        internal void Represent(Zones zones)
+        public void Represent(Zones zones)
         {
             zones.ObserveServerCreation(this);
         }
@@ -24,7 +24,7 @@ namespace view.gui
             layout.spacing = 4;
         }
 
-        internal Server CreateServer(string serverName)
+        public Server CreateServer(string serverName)
         {
             var gameObject = new GameObject(serverName);
             Server server = gameObject.AddComponent<Server>();

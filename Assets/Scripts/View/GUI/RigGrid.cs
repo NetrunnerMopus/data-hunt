@@ -13,10 +13,10 @@ namespace view.gui
     {
         private Game game;
         private DropZone playZone;
-        private Dictionary<ICard, GameObject> visuals = new Dictionary<ICard, GameObject>();
+        private Dictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
         private CardPrinter printer;
 
-        internal void Construct(Game game, DropZone playZone)
+        public void Construct(Game game, DropZone playZone)
         {
             this.game = game;
             this.playZone = playZone;
@@ -30,18 +30,18 @@ namespace view.gui
             printer = gameObject.AddComponent<CardPrinter>();
         }
 
-        void IInstallationObserver.NotifyInstalled(ICard card)
+        void IInstallationObserver.NotifyInstalled(Card card)
         {
             var visual = printer.Print(card);
             visuals[card] = visual;
         }
 
-        void IUninstallationObserver.NotifyUninstalled(ICard card)
+        void IUninstallationObserver.NotifyUninstalled(Card card)
         {
             Destroy(visuals[card]);
         }
 
-        void IPaidAbilityObserver.NotifyPaidAbilityAvailable(Ability ability, ICard source)
+        void IPaidAbilityObserver.NotifyPaidAbilityAvailable(Ability ability, Card source)
         {
             var droppable = visuals[source].AddComponent<DroppableAbility>();
             droppable.Represent(ability, game, playZone);

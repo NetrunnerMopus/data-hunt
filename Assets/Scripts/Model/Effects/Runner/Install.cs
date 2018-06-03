@@ -4,9 +4,9 @@ namespace model.effects.runner
 {
     public class Install : IEffect
     {
-        private ICard card;
+        private Card card;
 
-        public Install(ICard card)
+        public Install(Card card)
         {
             this.card = card;
         }

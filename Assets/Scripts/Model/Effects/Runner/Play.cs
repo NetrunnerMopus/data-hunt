@@ -4,9 +4,9 @@ namespace model.effects.runner
 {
     public class Play : IEffect
     {
-        private ICard card;
+        private Card card;
 
-        public Play(ICard card)
+        public Play(Card card)
         {
             this.card = card;
         }

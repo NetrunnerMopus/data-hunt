@@ -18,14 +18,14 @@ namespace model.play.corp
             credit.ObserveResolution(this);
         }
 
-        public Ability Play(ICard card)
+        public Ability Play(Card card)
         {
             Ability play = new Ability(new Conjunction(new CorpClickCost(1), card.PlayCost, permission), new Play(card));
             play.ObserveResolution(this);
             return play;
         }
 
-        internal Ability InstallInServer(ICard card, Remote remote)
+        public Ability InstallInServer(Card card, Remote remote)
         {
             Ability install = new Ability(new Conjunction(new CorpClickCost(1), permission), new InstallInServer(card, remote));
             install.ObserveResolution(this);

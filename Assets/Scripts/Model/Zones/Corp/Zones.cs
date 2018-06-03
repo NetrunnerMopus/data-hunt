@@ -7,7 +7,7 @@ namespace model.zones.corp
         public readonly Headquarters hq;
         public readonly ResearchAndDevelopment rd;
         public readonly Archives archives;
-        internal readonly List<Remote> remotes = new List<Remote>();
+        public readonly List<Remote> remotes = new List<Remote>();
         private HashSet<IServerCreationObserver> creationObservers = new HashSet<IServerCreationObserver>();
 
         public Zones(Headquarters hq, ResearchAndDevelopment rd, Archives archives)
@@ -17,7 +17,7 @@ namespace model.zones.corp
             this.archives = archives;
         }
 
-        internal Remote CreateRemote()
+        public Remote CreateRemote()
         {
             var remote = new Remote();
             remotes.Add(remote);
@@ -28,13 +28,13 @@ namespace model.zones.corp
             return remote;
         }
 
-        internal void ObserveServerCreation(IServerCreationObserver observer)
+        public void ObserveServerCreation(IServerCreationObserver observer)
         {
             creationObservers.Add(observer);
         }
     }
 
-    internal interface IServerCreationObserver
+    public interface IServerCreationObserver
     {
         void NotifyRemoteCreated(Remote remote);
     }

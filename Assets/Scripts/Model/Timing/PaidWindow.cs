@@ -14,9 +14,9 @@ namespace model.timing
         private HashSet<IPaidAbilityObserver> abilityObservers = new HashSet<IPaidAbilityObserver>();
         private List<Ability> abilities = new List<Ability>();
 
-        internal ICost Permission() => permission;
+        public ICost Permission() => permission;
 
-        async internal Task<bool> Open()
+        async public Task<bool> Open()
         {
             windowClosing = new TaskCompletionSource<bool>();
             if (abilities.Count == 0)
@@ -38,17 +38,17 @@ namespace model.timing
             return result;
         }
 
-        internal void Use()
+        public void Use()
         {
             used = true;
         }
 
-        internal void Pass()
+        public void Pass()
         {
             windowClosing.SetResult(used);
         }
 
-        internal void Add(Ability ability, ICard source)
+        public void Add(Ability ability, Card source)
         {
             abilities.Add(ability);
             foreach (var observer in abilityObservers)
@@ -57,22 +57,22 @@ namespace model.timing
             }
         }
 
-        internal void Remove(Ability ability)
+        public void Remove(Ability ability)
         {
             abilities.Remove(ability);
         }
 
-        internal void ObserveWindow(IPaidWindowObserver observer)
+        public void ObserveWindow(IPaidWindowObserver observer)
         {
             windowObservers.Add(observer);
         }
 
-        internal void UnobserveWindow(IPaidWindowObserver observer)
+        public void UnobserveWindow(IPaidWindowObserver observer)
         {
             windowObservers.Remove(observer);
         }
 
-        internal void ObserveAbility(IPaidAbilityObserver observer)
+        public void ObserveAbility(IPaidAbilityObserver observer)
         {
             abilityObservers.Add(observer);
         }
@@ -96,13 +96,13 @@ namespace model.timing
                 observer.NotifyPayable(allowed, this);
             }
 
-            internal void Grant()
+            public void Grant()
             {
                 allowed = true;
                 Update();
             }
 
-            internal void Revoke()
+            public void Revoke()
             {
                 allowed = false;
                 Update();
@@ -118,14 +118,14 @@ namespace model.timing
         }
     }
 
-    internal interface IPaidWindowObserver
+    public interface IPaidWindowObserver
     {
         void NotifyPaidWindowOpened();
         void NotifyPaidWindowClosed();
     }
 
-    internal interface IPaidAbilityObserver
+    public interface IPaidAbilityObserver
     {
-        void NotifyPaidAbilityAvailable(Ability ability, ICard source);
+        void NotifyPaidAbilityAvailable(Ability ability, Card source);
     }
 }

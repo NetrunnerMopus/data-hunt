@@ -8,13 +8,13 @@ namespace model.zones.runner
     public class Grip
     {
         public int Count => cards.Count;
-        private List<ICard> cards = new List<ICard>();
+        private List<Card> cards = new List<Card>();
         private HashSet<IGripAdditionObserver> additions = new HashSet<IGripAdditionObserver>();
         private HashSet<IGripRemovalObserver> removals = new HashSet<IGripRemovalObserver>();
         private HashSet<IGripDiscardObserver> discards = new HashSet<IGripDiscardObserver>();
         private TaskCompletionSource<bool> discarded;
 
-        public void Add(ICard card)
+        public void Add(Card card)
         {
             cards.Add(card);
             foreach (var observer in additions)
@@ -23,7 +23,7 @@ namespace model.zones.runner
             }
         }
 
-        public void Remove(ICard card)
+        public void Remove(Card card)
         {
             cards.Remove(card);
             foreach (var observer in removals)
@@ -32,7 +32,7 @@ namespace model.zones.runner
             }
         }
 
-        async internal Task Discard()
+        async public Task Discard()
         {
             discarded = new TaskCompletionSource<bool>();
             foreach (var observer in discards)
@@ -42,7 +42,7 @@ namespace model.zones.runner
             await discarded.Task;
         }
 
-        internal void Discard(ICard card, Heap heap)
+        public void Discard(Card card, Heap heap)
         {
             Remove(card);
             heap.Add(card);
@@ -53,7 +53,7 @@ namespace model.zones.runner
             discarded.SetResult(true);
         }
 
-        internal ICard Find<T>() where T : ICard => cards.OfType<T>().First();
+        public Card Find<T>() where T : Card => cards.OfType<T>().First();
 
         public void ObserveAdditions(IGripAdditionObserver observer)
         {
@@ -78,12 +78,12 @@ namespace model.zones.runner
 
     public interface IGripAdditionObserver
     {
-        void NotifyCardAdded(ICard card);
+        void NotifyCardAdded(Card card);
     }
 
     public interface IGripRemovalObserver
     {
-        void NotifyCardRemoved(ICard card);
+        void NotifyCardRemoved(Card card);
     }
 
     public interface IGripDiscardObserver

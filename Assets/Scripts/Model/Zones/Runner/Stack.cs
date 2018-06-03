@@ -21,7 +21,7 @@ namespace model.zones.runner
 
         public bool HasCards() => deck.Size() > 0;
 
-        internal void Draw(int cards, Grip grip)
+        public void Draw(int cards, Grip grip)
         {
             for (int i = 0; i < cards; i++)
             {
@@ -32,7 +32,7 @@ namespace model.zones.runner
             }
         }
 
-        public ICard RemoveTop()
+        public Card RemoveTop()
         {
             var card = deck.RemoveTop();
             var cards = deck.Size();

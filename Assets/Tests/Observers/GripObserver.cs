@@ -5,18 +5,18 @@ namespace tests.observers
 {
     class GripObserver : IGripAdditionObserver, IGripRemovalObserver
     {
-        public ICard LastRemoved { get; private set; }
+        public Card LastRemoved { get; private set; }
         public int TotalRemoved { get; private set; } = 0;
-        public ICard LastAdded { get; private set; }
+        public Card LastAdded { get; private set; }
         public int TotalAdded { get; private set; } = 0;
 
-        void IGripAdditionObserver.NotifyCardAdded(ICard card)
+        void IGripAdditionObserver.NotifyCardAdded(Card card)
         {
             LastAdded = card;
             TotalAdded++;
         }
 
-        void IGripRemovalObserver.NotifyCardRemoved(ICard card)
+        void IGripRemovalObserver.NotifyCardRemoved(Card card)
         {
             LastRemoved = card;
             TotalRemoved++;

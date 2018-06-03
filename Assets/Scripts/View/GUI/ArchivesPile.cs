@@ -11,7 +11,7 @@ namespace view.gui
             gameObject.AddComponent<CardPrinter>();
         }
 
-        void IArchivesObserver.NotifyCardAdded(ICard card)
+        void IArchivesObserver.NotifyCardAdded(Card card)
         {
             var printer = GetComponent<CardPrinter>();
             if (card.Faceup)

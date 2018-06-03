@@ -6,31 +6,23 @@ using model.zones.runner;
 
 namespace model.cards.runner
 {
-    public class SportsHopper : ICard
+    public class SportsHopper : Card
     {
-        string ICard.FaceupArt => "sports-hopper";
-
-        string ICard.Name => "Sports Hopper";
-
-        bool ICard.Faceup => false;
-
-        Faction ICard.Faction => Factions.MASK;
-
-        int ICard.InfluenceCost => 0;
-
-        ICost ICard.PlayCost => new RunnerCreditCost(3);
-
-        IEffect ICard.Activation => new SportsHopperActivation(this);
-
-        IType ICard.Type => new Hardware();
+        override public string FaceupArt => "sports-hopper";
+        override public string Name => "Sports Hopper";
+        override public Faction Faction => Factions.MASK;
+        override public int InfluenceCost => 0;
+        override public ICost PlayCost => new RunnerCreditCost(3);
+        override public IEffect Activation => new SportsHopperActivation(this);
+        override public IType Type => new Hardware();
 
         private class SportsHopperActivation : IEffect, IUninstallationObserver
         {
-            private ICard card;
+            private Card card;
             private Ability pop;
             private Game game;
 
-            public SportsHopperActivation(ICard card)
+            public SportsHopperActivation(Card card)
             {
                 this.card = card;
             }
@@ -47,7 +39,7 @@ namespace model.cards.runner
                 game.runner.zones.rig.ObserveUninstallations(this);
             }
 
-            void IUninstallationObserver.NotifyUninstalled(ICard card)
+            void IUninstallationObserver.NotifyUninstalled(Card card)
             {
                 if (card == this.card)
                 {

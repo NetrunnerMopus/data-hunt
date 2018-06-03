@@ -5,23 +5,15 @@ using model.timing.runner;
 
 namespace model.cards.runner
 {
-    public class Wyldside : ICard
+    public class Wyldside : Card
     {
-        string ICard.FaceupArt => "wyldside";
-
-        string ICard.Name => "Wyldside";
-
-        bool ICard.Faceup => false;
-
-        Faction ICard.Faction => Factions.ANARCH;
-
-        int ICard.InfluenceCost => 3;
-
-        ICost ICard.PlayCost => new RunnerCreditCost(3);
-
-        IEffect ICard.Activation => new WyldsideActivation();
-
-        IType ICard.Type => new Resource();
+        override public string FaceupArt => "wyldside";
+        override public string Name => "Wyldside";
+        override public Faction Faction => Factions.ANARCH;
+        override public int InfluenceCost => 3;
+        override public ICost PlayCost => new RunnerCreditCost(3);
+        override public IEffect Activation => new WyldsideActivation();
+        override public IType Type => new Resource();
 
         private class WyldsideActivation : IEffect
         {

@@ -113,33 +113,33 @@ namespace model.timing.runner
             }
         }
 
-        internal void ObserveSteps(IStepObserver observer)
+        public void ObserveSteps(IStepObserver observer)
         {
             steps.Add(observer);
         }
 
-        internal void ObserveStart(IRunnerTurnStartObserver observer)
+        public void ObserveStart(IRunnerTurnStartObserver observer)
         {
             starts.Add(observer);
         }
 
-        internal void UnobserveStart(IRunnerTurnStartObserver observer)
+        public void UnobserveStart(IRunnerTurnStartObserver observer)
         {
             starts.Remove(observer);
         }
 
-        internal void ObserveActions(IRunnerActionObserver observer)
+        public void ObserveActions(IRunnerActionObserver observer)
         {
             actions.Add(observer);
         }
     }
 
-    internal interface IRunnerTurnStartObserver
+    public interface IRunnerTurnStartObserver
     {
         void NotifyTurnStarted(Game game);
     }
 
-    internal interface IRunnerActionObserver
+    public interface IRunnerActionObserver
     {
         void NotifyActionTaking();
     }

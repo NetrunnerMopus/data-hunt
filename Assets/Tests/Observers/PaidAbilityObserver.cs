@@ -8,7 +8,7 @@ namespace tests.observers
     {
         public Ability NewestPaidAbility { get; private set; }
 
-        void IPaidAbilityObserver.NotifyPaidAbilityAvailable(Ability ability, ICard source)
+        void IPaidAbilityObserver.NotifyPaidAbilityAvailable(Ability ability, Card source)
         {
             NewestPaidAbility = ability;
         }

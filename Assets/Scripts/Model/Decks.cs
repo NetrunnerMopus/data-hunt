@@ -9,7 +9,7 @@ namespace model
     {
         public Deck DemoRunner()
         {
-            var cards = new List<ICard>();
+            var cards = new List<Card>();
             for (int i = 0; i < 3; i++)
             {
                 cards.Add(new Diesel());
@@ -27,7 +27,7 @@ namespace model
 
         public Deck DemoCorp()
         {
-            var cards = new List<ICard>();
+            var cards = new List<Card>();
             for (int i = 0; i < 20; i++)
             {
                 cards.Add(new HedgeFund());

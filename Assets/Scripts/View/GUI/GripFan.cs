@@ -13,10 +13,10 @@ namespace view.gui
         private DropZone playZone;
         private DropZone rigZone;
         private DropZone heapZone;
-        private Dictionary<ICard, GameObject> visuals = new Dictionary<ICard, GameObject>();
+        private Dictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
         private CardPrinter printer;
 
-        internal void Contstruct(Game game, DropZone playZone, DropZone rigZone, DropZone heapZone)
+        public void Contstruct(Game game, DropZone playZone, DropZone rigZone, DropZone heapZone)
         {
             this.game = game;
             this.playZone = playZone;
@@ -29,7 +29,7 @@ namespace view.gui
             printer = gameObject.AddComponent<CardPrinter>();
         }
 
-        void IGripAdditionObserver.NotifyCardAdded(ICard card)
+        void IGripAdditionObserver.NotifyCardAdded(Card card)
         {
             var visual = printer.Print(card);
             visuals[card] = visual;
@@ -64,7 +64,7 @@ namespace view.gui
                 );
         }
 
-        void IGripRemovalObserver.NotifyCardRemoved(ICard card)
+        void IGripRemovalObserver.NotifyCardRemoved(Card card)
         {
             Destroy(visuals[card]);
             visuals.Remove(card);

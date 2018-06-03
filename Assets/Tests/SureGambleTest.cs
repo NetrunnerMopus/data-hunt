@@ -14,7 +14,7 @@ namespace tests
         [Test]
         public void ShouldPlay()
         {
-            var runnerCards = new List<ICard>();
+            var runnerCards = new List<Card>();
             for (int i = 0; i < 5; i++)
             {
                 runnerCards.Add(new SureGamble());
