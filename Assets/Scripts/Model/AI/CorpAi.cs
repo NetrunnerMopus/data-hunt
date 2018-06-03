@@ -29,10 +29,15 @@ namespace model.ai
         {
             await Task.Delay(600);
             var pad = zones.hq.Find<PadCampaign>();
+            var hedge = zones.hq.Find<HedgeFund>();
             if (pad != null)
             {
                 var remote = zones.CreateRemote();
                 actionCard.InstallInServer(pad, remote).Trigger(game);
+            }
+            else if (hedge != null)
+            {
+                actionCard.Play(hedge).Trigger(game);
             }
             else
             {
