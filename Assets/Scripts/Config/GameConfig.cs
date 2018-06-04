@@ -6,6 +6,7 @@ using view.log;
 
 public class GameConfig : MonoBehaviour
 {
+    public GameObject board;
     public RunnerView runnerView;
     public CorpView corpView;
     private Game game;
@@ -17,7 +18,9 @@ public class GameConfig : MonoBehaviour
 
     void Start()
     {
+        var flowView = new GameFlowView();
         var flowLog = new GameFlowLog();
+        flowView.Display(board, game);
         flowLog.Display(game);
         runnerView.Display(game);
         corpView.Display(game);

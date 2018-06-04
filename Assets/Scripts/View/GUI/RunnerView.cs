@@ -25,12 +25,7 @@ namespace view.gui
                     game,
                     GameObject.Find("Runner/Left panel/Credits").AddComponent<DropZone>()
                 );
-            GameObject.Find("Paid window")
-                .AddComponent<PaidWindowControl>()
-                .Represent(
-                    game.flow.paidWindow
-                );
-            game.runner.clicks.Observe(FindObjectOfType<ClickPoolRow>());
+           
             game.runner.credits.Observe(GameObject.Find("Runner/Left panel/Credits/Credits text").AddComponent<CreditPoolText>());
             var zones = game.runner.zones;
             zones.stack.ObserveCount(stackPile);

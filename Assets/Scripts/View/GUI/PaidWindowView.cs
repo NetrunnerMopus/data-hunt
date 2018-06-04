@@ -1,11 +1,12 @@
-﻿using model.timing;
+﻿using controller;
+using model.timing;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace controller
+namespace view.gui
 {
-    public class PaidWindowControl : MonoBehaviour, IPaidWindowObserver
+    public class PaidWindowView : MonoBehaviour, IPaidWindowObserver
     {
         private PaidWindow window;
 
@@ -22,7 +23,7 @@ namespace controller
         private GameObject CreateFlag(GameObject parent)
         {
             var flag = new GameObject("Flag");
-            flag.transform.SetParent(parent.transform, false);
+            flag.AttachTo(parent);
             var image = flag.AddComponent<Image>();
             image.sprite = Resources.Load<Sprite>("Images/UI/paid");
             image.preserveAspect = true;
@@ -37,7 +38,7 @@ namespace controller
         private GameObject CreatePass(GameObject parent)
         {
             var pass = new GameObject("Pass");
-            pass.transform.SetParent(parent.transform, false);
+            pass.AttachTo(parent);
             var image = pass.AddComponent<Image>();
             image.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Background.psd");
             image.type = Image.Type.Sliced;
@@ -57,7 +58,7 @@ namespace controller
         private GameObject CreatePassLabel(GameObject parent)
         {
             var label = new GameObject("Label");
-            label.transform.SetParent(parent.transform, false);
+            label.AttachTo(parent);
             var text = label.AddComponent<Text>();
             text.text = "PASS";
             text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");

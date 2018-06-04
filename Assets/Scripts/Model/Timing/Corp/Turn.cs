@@ -108,7 +108,7 @@ namespace model.timing.corp
             await OpenPaidWindow();
             OpenRezWindow();
             Step(3, 3);
-            LoseUnspentClicks();
+            game.corp.clicks.Reset();
             Step(3, 4);
             TriggerTurnEnding();
         }
@@ -120,10 +120,6 @@ namespace model.timing.corp
             {
                 await hq.Discard();
             }
-        }
-
-        private void LoseUnspentClicks()
-        {
         }
 
         private void TriggerTurnEnding()
