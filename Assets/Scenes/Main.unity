@@ -239,6 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2779b23bfeb3c7f4a8183e0a7460fa6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  board: {fileID: 711624502}
   runnerView: {fileID: 392453617}
   corpView: {fileID: 2109041467}
 --- !u!1 &147038269
