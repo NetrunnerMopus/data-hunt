@@ -7,7 +7,7 @@ namespace model.timing.corp
     public class Turn
     {
         private Game game;
-
+        public readonly RezWindow rezWindow = new RezWindow();
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
         private HashSet<ICorpActionObserver> actions = new HashSet<ICorpActionObserver>();
 
@@ -28,8 +28,10 @@ namespace model.timing.corp
             Step(1, 1);
             game.corp.clicks.Gain(3);
             Step(1, 2);
-            await OpenPaidWindow();
-            OpenRezWindow();
+            Task paid = OpenPaidWindow();
+            Task rez = OpenRezWindow();
+            await paid;
+            await rez;
             OpenScoreWindow();
             Step(1, 3);
             RefillRecurringCredits();
@@ -44,8 +46,9 @@ namespace model.timing.corp
             await game.flow.paidWindow.Open();
         }
 
-        private void OpenRezWindow()
+        async private Task OpenRezWindow()
         {
+            await rezWindow.Open();
         }
 
         private void OpenScoreWindow()
@@ -77,8 +80,10 @@ namespace model.timing.corp
         async private Task ActionPhase()
         {
             Step(2, 1);
-            await OpenPaidWindow();
-            OpenRezWindow();
+            Task paid = OpenPaidWindow();
+            Task rez = OpenRezWindow();
+            await paid;
+            await rez;
             OpenScoreWindow();
             Step(2, 2);
             await TakeActions();
@@ -94,8 +99,10 @@ namespace model.timing.corp
                     observer.NotifyActionTaking();
                 }
                 await actionTaking;
-                await OpenPaidWindow();
-                OpenRezWindow();
+                Task paid = OpenPaidWindow();
+                Task rez = OpenRezWindow();
+                await paid;
+                await rez;
                 OpenScoreWindow();
             }
         }
@@ -105,8 +112,10 @@ namespace model.timing.corp
             Step(3, 1);
             await Discard();
             Step(3, 2);
-            await OpenPaidWindow();
-            OpenRezWindow();
+            Task paid = OpenPaidWindow();
+            Task rez = OpenRezWindow();
+            await paid;
+            await rez;
             Step(3, 3);
             game.corp.clicks.Reset();
             Step(3, 4);

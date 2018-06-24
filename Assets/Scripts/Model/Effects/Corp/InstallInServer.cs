@@ -17,6 +17,7 @@ namespace model.effects.corp
         void IEffect.Resolve(Game game)
         {
             remote.InstallWithin(card);
+            game.flow.corpTurn.rezWindow.Add(card);
             game.corp.zones.hq.Remove(card);
         }
 

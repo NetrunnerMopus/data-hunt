@@ -12,6 +12,7 @@ namespace view.log
         IStepObserver,
         IPaidWindowObserver,
         ICorpActionObserver,
+        IRezWindowObserver,
         IHqDiscardObserver,
         IRunnerTurnStartObserver,
         IRunnerActionObserver,
@@ -26,6 +27,7 @@ namespace view.log
             var corpTurn = game.flow.corpTurn;
             corpTurn.ObserveSteps(this);
             corpTurn.ObserveActions(this);
+            corpTurn.rezWindow.ObserveWindow(this);
             game.corp.zones.hq.ObserveDiscarding(this);
             runnerTurn.ObserveSteps(this);
             runnerTurn.ObserveStart(this);
@@ -82,6 +84,16 @@ namespace view.log
             {
                 Log("discarding");
             }
+        }
+
+        void IRezWindowObserver.NotifyRezWindowOpened()
+        {
+            Log("rez window opened");
+        }
+
+        void IRezWindowObserver.NotifyRezWindowClosed()
+        {
+            Log("rez window closed");
         }
     }
 }

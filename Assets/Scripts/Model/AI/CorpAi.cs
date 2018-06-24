@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace model.ai
 {
-    public class CorpAi : ICorpActionObserver, IHqDiscardObserver
+    public class CorpAi : ICorpActionObserver, IHqDiscardObserver, IRezWindowObserver
     {
         private Game game;
         private Zones zones;
@@ -22,6 +22,7 @@ namespace model.ai
         public void Play()
         {
             game.flow.corpTurn.ObserveActions(this);
+            game.flow.corpTurn.rezWindow.ObserveWindow(this);
             zones.hq.ObserveDiscarding(this);
         }
 
@@ -51,6 +52,15 @@ namespace model.ai
             {
                 zones.hq.Discard(zones.hq.Random(), zones.archives);
             }
+        }
+
+        void IRezWindowObserver.NotifyRezWindowClosed()
+        {
+        }
+
+        void IRezWindowObserver.NotifyRezWindowOpened()
+        {
+            game.flow.corpTurn.rezWindow.Pass();
         }
     }
 }

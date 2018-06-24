@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class GameFlowView : MonoBehaviour
+    public class GameFlowView
     {
         private readonly float clickRowHeightRatio = 0.35f;
 
