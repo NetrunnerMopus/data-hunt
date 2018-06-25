@@ -1,6 +1,5 @@
 ﻿using controller;
 using model.timing;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,7 +39,6 @@ namespace view.gui
             var pass = new GameObject("Pass");
             pass.AttachTo(parent);
             var image = pass.AddComponent<Image>();
-            image.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Background.psd");
             image.type = Image.Type.Sliced;
             image.fillCenter = true;
             var rectangle = image.rectTransform;

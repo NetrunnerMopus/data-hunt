@@ -1,6 +1,5 @@
 ﻿using model.cards;
 using model.zones.corp;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +12,7 @@ namespace view.gui
         void Awake()
         {
             var image = gameObject.AddComponent<Image>();
-            image.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Background.psd");
+            image.sprite = Resources.Load<Sprite>("Images/UI/9slice-solid-white");
             image.type = Image.Type.Sliced;
             image.fillCenter = false;
             Printer = gameObject.AddComponent<CardPrinter>();
