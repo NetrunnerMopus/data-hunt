@@ -2,8 +2,8 @@
 {
     public class Operation : IType
     {
-        bool IType.Playable { get { return true; } }
-
-        bool IType.Installable { get { return false; } }
+        bool IType.Playable => true;
+        bool IType.Installable => false;
+        bool IType.Rezzable => false;
     }
 }

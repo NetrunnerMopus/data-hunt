@@ -20,7 +20,10 @@ namespace view.gui
 
         void IServerContentObserver.NotifyCardInstalled(Card card)
         {
-            Printer.PrintCorpFacedown(card.Name);
+            var printedCard = Printer.PrintCorpFacedown(card.Name);
+            var image = printedCard.GetComponent<Image>();
+            var inServer = printedCard.AddComponent<CardInServer>();
+            inServer.Represent(card, image);
         }
     }
 }

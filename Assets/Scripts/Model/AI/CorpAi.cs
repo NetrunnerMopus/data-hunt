@@ -2,15 +2,17 @@
 using model.play.corp;
 using model.timing.corp;
 using model.zones.corp;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace model.ai
 {
-    public class CorpAi : ICorpActionObserver, IHqDiscardObserver, IRezWindowObserver
+    public class CorpAi : ICorpActionObserver, IHqDiscardObserver, IRezWindowObserver, IRezzableObserver
     {
         private Game game;
         private Zones zones;
         private ActionCard actionCard;
+        private Task Thinking() => Task.Delay(600);
 
         public CorpAi(Game game)
         {
@@ -28,7 +30,7 @@ namespace model.ai
 
         async void ICorpActionObserver.NotifyActionTaking()
         {
-            await Task.Delay(600);
+            await Thinking();
             var pad = zones.hq.Find<PadCampaign>();
             var hedge = zones.hq.Find<HedgeFund>();
             if (pad != null)
@@ -54,13 +56,29 @@ namespace model.ai
             }
         }
 
-        void IRezWindowObserver.NotifyRezWindowClosed()
+        void IRezWindowObserver.NotifyRezWindowOpened(List<Rezzable> rezzables)
         {
+            foreach (var rezzable in rezzables)
+            {
+                rezzable.ObserveRezzable(this);
+            }
+            game.flow.corpTurn.rezWindow.Pass();
         }
 
-        void IRezWindowObserver.NotifyRezWindowOpened()
+
+        async Task IRezzableObserver.NotifyRezzable(Rezzable rezzable)
         {
-            game.flow.corpTurn.rezWindow.Pass();
+            await Thinking();
+            rezzable.Rez();
+        }
+
+        async Task IRezzableObserver.NotifyNotRezzable()
+        {
+            await Task.CompletedTask;
+        }
+
+        void IRezWindowObserver.NotifyRezWindowClosed()
+        {
         }
     }
 }

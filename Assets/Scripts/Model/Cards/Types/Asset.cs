@@ -2,8 +2,8 @@
 {
     public class Asset : IType
     {
-        bool IType.Playable { get { return false; } }
-
-        bool IType.Installable { get { return true; } }
+        bool IType.Playable => false;
+        bool IType.Installable => true;
+        bool IType.Rezzable => true;
     }
 }

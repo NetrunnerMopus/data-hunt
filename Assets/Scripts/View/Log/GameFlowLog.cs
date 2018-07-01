@@ -5,6 +5,8 @@ using model.zones.corp;
 using model.timing.runner;
 using model.zones.runner;
 using model.timing;
+using System.Collections.Generic;
+using model.play.corp;
 
 namespace view.log
 {
@@ -86,9 +88,9 @@ namespace view.log
             }
         }
 
-        void IRezWindowObserver.NotifyRezWindowOpened()
+        void IRezWindowObserver.NotifyRezWindowOpened(List<Rezzable> rezzables)
         {
-            Log("rez window opened");
+            Log("rez window opened, up to " + rezzables.Count + " could be rezzed");
         }
 
         void IRezWindowObserver.NotifyRezWindowClosed()

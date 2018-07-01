@@ -1,4 +1,5 @@
 ﻿using model.cards;
+using model.play.corp;
 using model.zones.corp;
 
 namespace model.effects.corp
@@ -17,7 +18,11 @@ namespace model.effects.corp
         void IEffect.Resolve(Game game)
         {
             remote.InstallWithin(card);
-            game.flow.corpTurn.rezWindow.Add(card);
+            if (card.Type.Rezzable)
+            {
+                var rezzable = new Rezzable(card, game);
+                game.flow.corpTurn.rezWindow.Add(rezzable);
+            }
             game.corp.zones.hq.Remove(card);
         }
 

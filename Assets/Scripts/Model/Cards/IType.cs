@@ -4,5 +4,6 @@
     {
         bool Playable { get; }
         bool Installable { get; }
+        bool Rezzable { get; }
     }
 }

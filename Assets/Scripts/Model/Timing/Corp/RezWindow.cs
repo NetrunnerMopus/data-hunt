@@ -1,4 +1,6 @@
-﻿using model.cards;
+﻿using model.costs;
+using model.play;
+using model.play.corp;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,8 +11,8 @@ namespace model.timing.corp
         private RezWindowPermission permission = new RezWindowPermission();
         private TaskCompletionSource<bool> windowClosing;
         private bool used = false;
+        private List<Rezzable> rezzables = new List<Rezzable>();
         private HashSet<IRezWindowObserver> windowObservers = new HashSet<IRezWindowObserver>();
-        private List<Card> rezzables = new List<Card>();
 
         public ICost Permission() => permission;
 
@@ -25,7 +27,7 @@ namespace model.timing.corp
             permission.Grant();
             foreach (var observer in windowObservers)
             {
-                observer.NotifyRezWindowOpened();
+                observer.NotifyRezWindowOpened(rezzables);
             }
             var result = await windowClosing.Task;
             permission.Revoke();
@@ -46,14 +48,9 @@ namespace model.timing.corp
             windowClosing.SetResult(used);
         }
 
-        public void Add(Card rezzable)
+        public void Add(Rezzable rezzable)
         {
             rezzables.Add(rezzable);
-        }
-
-        public void Remove(Card rezzable)
-        {
-            rezzables.Remove(rezzable);
         }
 
         public void ObserveWindow(IRezWindowObserver observer)
@@ -109,7 +106,7 @@ namespace model.timing.corp
 
     public interface IRezWindowObserver
     {
-        void NotifyRezWindowOpened();
+        void NotifyRezWindowOpened(List<Rezzable> rezzables);
         void NotifyRezWindowClosed();
     }
 }

@@ -2,8 +2,8 @@
 {
     public class Identity : IType
     {
-        bool IType.Playable { get { return false; } }
-
-        bool IType.Installable { get { return false; } }
+        bool IType.Playable => false;
+        bool IType.Installable => false;
+        bool IType.Rezzable => false;
     }
 }
