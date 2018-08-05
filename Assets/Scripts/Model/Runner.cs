@@ -25,6 +25,7 @@ namespace model
             credits.Gain(5);
             zones.stack.Shuffle();
             zones.stack.Draw(5, zones.grip);
+            zones.grip.ObserveAdditions(actionCard);
         }
     }
 }

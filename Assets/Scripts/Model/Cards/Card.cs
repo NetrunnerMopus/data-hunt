@@ -13,7 +13,7 @@ namespace model.cards
         public abstract Faction Faction { get; }
         public abstract int InfluenceCost { get; }
         public abstract string FaceupArt { get; }
-        public bool Faceup { get; private set; }
+        public bool Faceup { get; private set; } = false;
 
         public void FlipFaceUp()
         {
@@ -52,6 +52,11 @@ namespace model.cards
         public void ObserveFlips(IFlipObserver observer)
         {
             flipObservers.Add(observer);
+        }
+
+        public override string ToString()
+        {
+            return Name + " [" + GetHashCode() + "]";
         }
     }
 

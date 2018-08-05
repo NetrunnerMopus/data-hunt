@@ -1,4 +1,5 @@
 ﻿using model.cards;
+using System.Collections.Generic;
 
 namespace model.effects.corp
 {
@@ -23,5 +24,19 @@ namespace model.effects.corp
         {
             card.Activation.Observe(observer, game);
         }
+
+        public override bool Equals(object obj)
+        {
+            var play = obj as Play;
+            return play != null &&
+                   EqualityComparer<Card>.Default.Equals(card, play.card);
+        }
+
+        public override int GetHashCode()
+        {
+            return -964371657 + EqualityComparer<Card>.Default.GetHashCode(card);
+        }
+
+        public override string ToString() => "Play(card=" + card + ")";
     }
 }

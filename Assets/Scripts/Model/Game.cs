@@ -19,12 +19,12 @@ namespace model
 
         private Corp CreateCorp(Deck corpDeck)
         {
-            var actionCard = new play.corp.ActionCard();
             var zones = new zones.corp.Zones(
                 new zones.corp.Headquarters(),
                 new zones.corp.ResearchAndDevelopment(corpDeck),
                 new zones.corp.Archives()
             );
+            var actionCard = new play.corp.ActionCard(zones);
             var clicks = new ClickPool();
             var credits = new CreditPool();
             return new Corp(actionCard, zones, clicks, credits);

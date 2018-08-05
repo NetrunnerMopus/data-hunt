@@ -9,7 +9,9 @@ namespace model.zones.corp
     public class Headquarters
     {
         public int Count => cards.Count;
-        private List<Card> cards = new List<Card>();
+        public List<Card> cards = new List<Card>();
+        private HashSet<IHqAdditionObserver> additions = new HashSet<IHqAdditionObserver>();
+        private HashSet<IHqRemovalObserver> removals = new HashSet<IHqRemovalObserver>();
         private HashSet<IHqCountObserver> counts = new HashSet<IHqCountObserver>();
         private HashSet<IHqDiscardObserver> discards = new HashSet<IHqDiscardObserver>();
         private TaskCompletionSource<bool> discarding;
@@ -29,12 +31,21 @@ namespace model.zones.corp
         {
             cards.Add(card);
             NotifyCount();
+
+            foreach (var observer in (new HashSet<IHqAdditionObserver>(additions)))
+            {
+                observer.NotifyCardAdded(card);
+            }
         }
 
         public void Remove(Card card)
         {
             cards.Remove(card);
             NotifyCount();
+            foreach (var observer in removals)
+            {
+                observer.NotifyCardRemoved(card);
+            }
         }
         
         private void NotifyCount()
@@ -70,6 +81,16 @@ namespace model.zones.corp
 
         public Card Random() => cards[random.Next(0, Count)];
 
+        public void ObserveAdditions(IHqAdditionObserver observer)
+        {
+            additions.Add(observer);
+        }
+
+        public void ObserveRemovals(IHqRemovalObserver observer)
+        {
+            removals.Add(observer);
+        }
+
         public void ObserveCount(IHqCountObserver observer)
         {
             counts.Add(observer);
@@ -79,6 +100,16 @@ namespace model.zones.corp
         {
             discards.Add(observer);
         }
+    }
+
+    public interface IHqAdditionObserver
+    {
+        void NotifyCardAdded(Card card);
+    }
+
+    public interface IHqRemovalObserver
+    {
+        void NotifyCardRemoved(Card card);
     }
 
     public interface IHqCountObserver

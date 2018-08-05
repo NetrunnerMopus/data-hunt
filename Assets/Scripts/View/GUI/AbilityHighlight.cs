@@ -13,7 +13,7 @@ namespace view
             this.highlights = highlights;
         }
 
-        void IUsabilityObserver.NotifyUsable(bool usable)
+        void IUsabilityObserver.NotifyUsable(bool usable, Ability ability)
         {
             if (usable)
             {

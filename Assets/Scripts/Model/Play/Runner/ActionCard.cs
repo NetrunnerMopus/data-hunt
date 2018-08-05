@@ -2,15 +2,18 @@
 using model.effects.runner;
 using model.cards;
 using System.Threading.Tasks;
+using model.zones.runner;
+using System.Collections.Generic;
 
 namespace model.play.runner
 {
-    public class ActionCard : IResolutionObserver
+    public class ActionCard : IResolutionObserver, IGripAdditionObserver
     {
         public readonly Ability draw;
         public readonly Ability credit;
         private TaskCompletionSource<bool> actionTaking;
         private ActionPermission permission = new ActionPermission();
+        public List<Ability> potentialActions = new List<Ability>();
 
         public ActionCard()
         {
@@ -18,6 +21,8 @@ namespace model.play.runner
             draw.ObserveResolution(this);
             credit = new Ability(new Conjunction(new RunnerClickCost(1), permission), new Gain(1));
             credit.ObserveResolution(this);
+            potentialActions.Add(draw);
+            potentialActions.Add(credit);
         }
 
         public Ability Play(Card card)
@@ -45,6 +50,18 @@ namespace model.play.runner
         void IResolutionObserver.NotifyResolved()
         {
             actionTaking.SetResult(true);
+        }
+
+        void IGripAdditionObserver.NotifyCardAdded(Card card)
+        {
+            if (card.Type.Playable)
+            {
+                potentialActions.Add(Play(card));
+            }
+            if (card.Type.Installable)
+            {
+                potentialActions.Add(Install(card));
+            }
         }
     }
 }

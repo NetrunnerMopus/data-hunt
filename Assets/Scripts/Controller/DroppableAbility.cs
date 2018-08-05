@@ -32,7 +32,7 @@ namespace controller
             ability.ObserveUsability(highlight, game);
         }
 
-        void IUsabilityObserver.NotifyUsable(bool usable)
+        void IUsabilityObserver.NotifyUsable(bool usable, Ability ability)
         {
             this.usable = usable;
         }

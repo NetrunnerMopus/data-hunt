@@ -61,14 +61,32 @@ namespace model.play
         {
             foreach (var observer in usabilities)
             {
-                observer.NotifyUsable(Usable);
+                observer.NotifyUsable(Usable, this);
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            var ability = obj as Ability;
+            return ability != null &&
+                   EqualityComparer<ICost>.Default.Equals(cost, ability.cost) &&
+                   EqualityComparer<IEffect>.Default.Equals(effect, ability.effect);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1540118860;
+            hashCode = hashCode * -1521134295 + EqualityComparer<ICost>.Default.GetHashCode(cost);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IEffect>.Default.GetHashCode(effect);
+            return hashCode;
+        }
+
+        public override string ToString() => "Ability(cost=" + cost + ", effect=" + effect + ")";
     }
 
     public interface IUsabilityObserver
     {
-        void NotifyUsable(bool usable);
+        void NotifyUsable(bool usable, Ability ability);
     }
 
     public interface IResolutionObserver

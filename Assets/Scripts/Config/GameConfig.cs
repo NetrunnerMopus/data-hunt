@@ -24,7 +24,7 @@ public class GameConfig : MonoBehaviour
         flowLog.Display(game);
         runnerView.Display(game);
         corpView.Display(game);
-        var ai = new CorpAi(game);
+        var ai = new CorpAi(game, new System.Random(1234));
         ai.Play();
         game.Start();
     }

@@ -41,5 +41,7 @@ namespace model.costs
                 cost.Pay(game);
             }
         }
+
+        public override string ToString() => "Conjunction(costs=" + String.Join(", ", costs.ToList()) + ")";
     }
 }
