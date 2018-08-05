@@ -1,4 +1,5 @@
 ﻿using model.cards;
+using model.choices;
 using model.costs;
 using model.effects.corp;
 using model.zones.corp;
@@ -42,7 +43,7 @@ namespace model.play.corp
             return play;
         }
 
-        public Ability InstallInServer(Card card, Remote remote)
+        public Ability InstallInRemote(Card card, IRemoteInstallationChoice remoteChoice)
         {
             Ability install = new Ability(
                 new Conjunction(
@@ -50,7 +51,7 @@ namespace model.play.corp
                     permission,
                     new InHq(card)
                 ),
-                new InstallInServer(card, remote)
+                new InstallInRemote(card, remoteChoice)
             );
             install.ObserveResolution(this);
             return install;
@@ -103,7 +104,12 @@ namespace model.play.corp
             }
             if (card.Type.Installable)
             {
-                return zones.remotes.Select(server => InstallInServer(card, server)).ToList();
+                var existingRemoteChoices = zones.remotes.Select(remote => new ExistingRemoteInstallationChoice(remote));
+                var newRemoteChoices = new List<IRemoteInstallationChoice> { new NewRemoteInstallationChoice(zones) };
+                return existingRemoteChoices
+                    .Concat(newRemoteChoices)
+                    .Select(remoteChoice => InstallInRemote(card, remoteChoice))
+                    .ToList();
             }
             return new List<Ability>();
         }
@@ -114,7 +120,7 @@ namespace model.play.corp
                   .hq
                   .cards
                   .Where(card => card.Type.Installable)
-                  .Select(card => InstallInServer(card, remote))
+                  .Select(card => InstallInRemote(card, new ExistingRemoteInstallationChoice(remote)))
                   .ToList()
                   .ForEach(action => MarkPotential(action));
         }

@@ -1,22 +1,24 @@
 ﻿using model.cards;
+using model.choices;
 using model.play.corp;
 using model.zones.corp;
 
 namespace model.effects.corp
 {
-    public class InstallInServer : IEffect
+    public class InstallInRemote : IEffect
     {
         private readonly Card card;
-        private Remote remote;
+        private IRemoteInstallationChoice remoteChoice;
 
-        public InstallInServer(Card card, Remote remote)
+        public InstallInRemote(Card card, IRemoteInstallationChoice remoteChoice)
         {
             this.card = card;
-            this.remote = remote;
+            this.remoteChoice = remoteChoice;
         }
 
         void IEffect.Resolve(Game game)
         {
+            var remote = remoteChoice.Choose();
             remote.InstallWithin(card);
             if (card.Type.Rezzable)
             {
