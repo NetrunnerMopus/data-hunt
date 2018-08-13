@@ -1,6 +1,6 @@
-﻿using model.cards.corp;
-using model.play;
+﻿using model.play;
 using model.play.corp;
+using model.player;
 using model.timing.corp;
 using model.zones.corp;
 using System;
@@ -10,27 +10,33 @@ using System.Threading.Tasks;
 
 namespace model.ai
 {
-    public class CorpAi : ICorpActionObserver, IHqDiscardObserver, IRezWindowObserver, IRezzableObserver, IActionPotentialObserver, IUsabilityObserver
+    public class CorpAi : IPilot, ICorpActionObserver, IHqDiscardObserver, IRezWindowObserver, IRezzableObserver, IActionPotentialObserver, IUsabilityObserver
     {
         private Game game;
         private Zones zones;
-        private Task Thinking() => Task.Delay(600);
+        private Task Thinking() => Task.Delay(4000);
         private HashSet<Ability> legalActions = new HashSet<Ability>();
         private Random random;
 
-        public CorpAi(Game game, Random random)
+        public CorpAi(Random random)
         {
-            this.game = game;
             this.random = random;
-            zones = game.corp.zones;
         }
 
-        public void Play()
+        void IPilot.Play(Game game)
         {
+            this.game = game;
+            zones = game.corp.zones;
             game.corp.actionCard.ObservePotentialActions(this);
             game.flow.corpTurn.ObserveActions(this);
             game.flow.corpTurn.rezWindow.ObserveWindow(this);
             zones.hq.ObserveDiscarding(this);
+        }
+
+        async Task<IEffect> IPilot.TriggerFromSimultaneous(List<IEffect> effects)
+        {
+            await Thinking();
+            return effects.First();
         }
 
         async void ICorpActionObserver.NotifyActionTaking()

@@ -18,7 +18,7 @@ namespace tests
             {
                 runnerCards.Add(new Diesel());
             }
-            var game = new Game(new Decks().DemoCorp(), new Deck(runnerCards));
+            var game = new MockGames().WithRunnerCards(runnerCards);
             game.Start();
             var passiveCorp = new PassiveCorp(game);
             passiveCorp.SkipTurn();

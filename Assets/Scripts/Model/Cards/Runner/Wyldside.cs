@@ -17,7 +17,7 @@ namespace model.cards.runner
 
         private class WyldsideActivation : IEffect
         {
-            private WyldsideTrigger trigger = new WyldsideTrigger();
+            private readonly WyldsideTrigger trigger = new WyldsideTrigger();
 
             void IEffect.Resolve(Game game) => game.flow.runnerTurn.ObserveStart(trigger);
             void IEffect.Observe(IImpactObserver observer, Game game) { }

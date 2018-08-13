@@ -3,6 +3,7 @@ using model;
 using view.gui;
 using model.ai;
 using view.log;
+using model.player;
 
 public class GameConfig : MonoBehaviour
 {
@@ -13,7 +14,15 @@ public class GameConfig : MonoBehaviour
 
     void Awake()
     {
-        game = new Game(new Decks().DemoCorp(), new Decks().DemoRunner());
+        var corpPlayer = new Player(
+            deck: new Decks().DemoCorp(),
+            pilot: new CorpAi(new System.Random(1234))
+        );
+        var runnerPlayer = new Player(
+            deck: new Decks().DemoRunner(),
+            pilot: new NoPilot()
+        );
+        game = new Game(corpPlayer, runnerPlayer);
     }
 
     void Start()
@@ -24,8 +33,6 @@ public class GameConfig : MonoBehaviour
         flowLog.Display(game);
         runnerView.Display(game);
         corpView.Display(game);
-        var ai = new CorpAi(game, new System.Random(1234));
-        ai.Play();
         game.Start();
     }
 }

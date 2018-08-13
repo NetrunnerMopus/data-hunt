@@ -3,6 +3,7 @@ using model;
 using model.cards;
 using System.Collections.Generic;
 using tests.observers;
+using tests.mocks;
 
 namespace tests
 {
@@ -11,7 +12,7 @@ namespace tests
         [Test]
         public void ShouldClickForCredit()
         {
-            var game = new Game(new Decks().DemoCorp(), new Deck(new List<Card>()));
+            var game = new MockGames().WithRunnerCards(new List<Card>());
             game.Start();
             var balance = new LastBalanceObserver();
             var clicks = new SpentClicksObserver();

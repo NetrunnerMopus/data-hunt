@@ -40,6 +40,7 @@ namespace view.log
         void IStepObserver.NotifyStep(string structure, int phase, int step)
         {
             currentStep = $"{structure}, step {phase}.{step}: ";
+            Debug.Log(currentStep);
         }
 
         private void Log(string message)

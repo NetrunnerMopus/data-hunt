@@ -1,4 +1,5 @@
-﻿using model.timing;
+﻿using model.player;
+using model.timing;
 
 namespace model
 {
@@ -8,41 +9,40 @@ namespace model
         public readonly Runner runner;
         public readonly GameFlow flow;
 
-        public Game(Deck corpDeck, Deck runnerDeck)
+        public Game(Player corpPlayer, Player runnerPlayer)
         {
-            corp = CreateCorp(corpDeck);
-            runner = CreateRunner(runnerDeck);
+            corp = CreateCorp(corpPlayer);
+            runner = CreateRunner(runnerPlayer);
             var corpTurn = new timing.corp.Turn(this);
             var runnerTurn = new timing.runner.Turn(this);
             flow = new GameFlow(corpTurn, runnerTurn);
         }
 
-        private Corp CreateCorp(Deck corpDeck)
+        private Corp CreateCorp(Player player)
         {
             var zones = new zones.corp.Zones(
                 new zones.corp.Headquarters(),
-                new zones.corp.ResearchAndDevelopment(corpDeck),
+                new zones.corp.ResearchAndDevelopment(player.deck),
                 new zones.corp.Archives()
             );
             var actionCard = new play.corp.ActionCard(zones);
             var clicks = new ClickPool();
             var credits = new CreditPool();
-            return new Corp(actionCard, zones, clicks, credits);
+            return new Corp(player.pilot, actionCard, zones, clicks, credits);
         }
 
-        private Runner CreateRunner(Deck runnerDeck)
+        private Runner CreateRunner(Player player)
         {
-
             var actionCard = new play.runner.ActionCard();
             var zones = new zones.runner.Zones(
                 new zones.runner.Grip(),
-                new zones.runner.Stack(runnerDeck),
+                new zones.runner.Stack(player.deck),
                 new zones.runner.Heap(),
                 new zones.runner.Rig()
             );
             var clicks = new ClickPool();
             var credits = new CreditPool();
-            return new Runner(actionCard, 0, zones, clicks, credits);
+            return new Runner(player.pilot, actionCard, 0, zones, clicks, credits);
         }
 
         async public void Start()

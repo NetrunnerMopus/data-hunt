@@ -20,7 +20,7 @@ namespace tests
                 runnerCards.Add(new SureGamble());
             }
             var sureGamble = runnerCards.First();
-            var game = new Game(new Decks().DemoCorp(), new Deck(runnerCards));
+            var game = new MockGames().WithRunnerCards(runnerCards);
             game.Start();
             new PassiveCorp(game).SkipTurn();
             var balance = new LastBalanceObserver();

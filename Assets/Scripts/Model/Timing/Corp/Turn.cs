@@ -1,4 +1,5 @@
 ﻿using model.effects.corp;
+using model.play;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace model.timing.corp
     {
         private Game game;
         public readonly RezWindow rezWindow = new RezWindow();
+        public List<IEffect> turnBeginningTriggers = new List<IEffect>();
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
         private HashSet<ICorpActionObserver> actions = new HashSet<ICorpActionObserver>();
 
@@ -36,7 +38,7 @@ namespace model.timing.corp
             Step(1, 3);
             RefillRecurringCredits();
             Step(1, 4);
-            TriggerTurnBeginning();
+            await TriggerTurnBeginning();
             Step(1, 5);
             MandatoryDraw();
         }
@@ -59,8 +61,12 @@ namespace model.timing.corp
         {
         }
 
-        private void TriggerTurnBeginning()
+        async private Task TriggerTurnBeginning()
         {
+            if (turnBeginningTriggers.Count > 0)
+            {
+                await new SimultaneousTriggers(turnBeginningTriggers).AllTriggered(game.corp.pilot, game);
+            }
         }
 
         private void MandatoryDraw()
