@@ -10,7 +10,7 @@ namespace model.cards.runner
     {
         override public string FaceupArt => "sports-hopper";
         override public string Name => "Sports Hopper";
-        override public Faction Faction => Factions.MASK;
+        override public Faction Faction => Factions.MASQUE;
         override public int InfluenceCost => 0;
         override public ICost PlayCost => new RunnerCreditCost(3);
         override public IEffect Activation => new SportsHopperActivation(this);

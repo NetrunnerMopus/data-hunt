@@ -2,11 +2,11 @@
 
 namespace model.cards.corp
 {
-    public class CustomBiotics : Card
+    public class TheShadow : Card
     {
-        override public string FaceupArt => "custom-biotics";
-        override public string Name => "Custom Biotics";
-        override public Faction Faction => Factions.HAAS_BIOROID;
+        override public string FaceupArt => "the-shadow";
+        override public string Name => "The Shadow";
+        override public Faction Faction => Factions.SHADOW;
         override public int InfluenceCost { get { throw new System.Exception("Identities don't have an influence cost"); } }
         override public ICost PlayCost { get { throw new System.Exception("Identities don't have a play cost"); } }
         override public IEffect Activation => new effects.Nothing();

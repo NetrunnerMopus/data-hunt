@@ -1,5 +1,6 @@
 ﻿using model;
 using model.cards;
+using model.cards.runner;
 using model.player;
 using System.Collections.Generic;
 
@@ -15,7 +16,7 @@ namespace tests.mocks
                     pilot: new NoPilot()
                 ),
                 runnerPlayer: new Player(
-                    deck: new Deck(cards),
+                    deck: new Deck(cards, new TheMasque()),
                     pilot: new NoPilot()
                 )
             );

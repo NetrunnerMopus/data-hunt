@@ -28,7 +28,7 @@ namespace model
             var actionCard = new play.corp.ActionCard(zones);
             var clicks = new ClickPool();
             var credits = new CreditPool();
-            return new Corp(player.pilot, actionCard, zones, clicks, credits);
+            return new Corp(player.pilot, actionCard, zones, clicks, credits, player.deck.identity);
         }
 
         private Runner CreateRunner(Player player)
@@ -42,7 +42,7 @@ namespace model
             );
             var clicks = new ClickPool();
             var credits = new CreditPool();
-            return new Runner(player.pilot, actionCard, 0, zones, clicks, credits);
+            return new Runner(player.pilot, actionCard, 0, zones, clicks, credits, player.deck.identity);
         }
 
         async public void Start()

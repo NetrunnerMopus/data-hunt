@@ -9,7 +9,7 @@ namespace model.cards.runner
     {
         override public string FaceupArt { get { return "process-automation"; } }
         override public string Name { get { return "Process Automation"; } }
-        override public Faction Faction { get { return Factions.MASK; } }
+        override public Faction Faction { get { return Factions.MASQUE; } }
         override public int InfluenceCost { get { return 1; } }
         override public ICost PlayCost { get { return new RunnerCreditCost(0); } }
         override public IEffect Activation => new Sequence(new Gain(2), new Draw(1));

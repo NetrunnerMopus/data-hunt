@@ -1,5 +1,4 @@
 ﻿using model;
-using model.cards.corp;
 using UnityEngine;
 
 namespace view.gui
@@ -13,7 +12,7 @@ namespace view.gui
             var servers = GameObject.Find("Servers").AddComponent<ServerRow>();
             servers.Represent(zones);
             var archives = servers.CreateServer("Archives").gameObject;
-            var hq = servers.CreateServer("HQ").Printer.Print(new CustomBiotics());
+            var hq = servers.CreateServer("HQ").Printer.Print(game.corp.identity);
             servers.CreateServer("R&D");
             zones.hq.ObserveCount(hq.AddComponent<HqCount>());
             zones.archives.Observe(archives.AddComponent<ArchivesPile>());

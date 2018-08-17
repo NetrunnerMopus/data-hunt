@@ -1,4 +1,5 @@
-﻿using model.play.runner;
+﻿using model.cards;
+using model.play.runner;
 using model.player;
 using model.zones.runner;
 
@@ -12,8 +13,17 @@ namespace model
         public readonly Zones zones;
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
+        public readonly Card identity;
 
-        public Runner(IPilot pilot, ActionCard actionCard, int tags, Zones zones, ClickPool clicks, CreditPool credits)
+        public Runner(
+            IPilot pilot,
+            ActionCard actionCard,
+            int tags,
+            Zones zones,
+            ClickPool clicks,
+            CreditPool credits,
+            Card identity
+        )
         {
             this.pilot = pilot;
             this.actionCard = actionCard;
@@ -21,6 +31,7 @@ namespace model
             this.zones = zones;
             this.clicks = clicks;
             this.credits = credits;
+            this.identity = identity;
         }
 
         public void Start(Game game)

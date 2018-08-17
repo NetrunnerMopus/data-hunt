@@ -8,7 +8,7 @@
         static public Faction ADAM = new Faction(Side.RUNNER);
         static public Faction APEX = new Faction(Side.RUNNER);
         static public Faction SUNNY_LEBEAU = new Faction(Side.RUNNER);
-        static public Faction MASK = new Faction(Side.RUNNER);
+        static public Faction MASQUE = new Faction(Side.RUNNER);
         static public Faction HAAS_BIOROID = new Faction(Side.CORP);
         static public Faction JINTEKI = new Faction(Side.CORP);
         static public Faction NBN = new Faction(Side.CORP);

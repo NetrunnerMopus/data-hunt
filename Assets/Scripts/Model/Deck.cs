@@ -5,15 +5,16 @@ namespace model
 {
     public class Deck
     {
+        private List<Card> cards;
+        public readonly Card identity;
         private System.Random rng;
 
-        private List<Card> cards;
+        public Deck(List<Card> cards, Card identity) : this(cards, identity, new System.Random().Next()) { }
 
-        public Deck(List<Card> cards) : this(cards, new System.Random().Next()) { }
-
-        public Deck(List<Card> cards, int seed)
+        public Deck(List<Card> cards, Card identity, int seed)
         {
             this.cards = cards;
+            this.identity = identity;
             rng = new System.Random(seed);
         }
 
