@@ -7,7 +7,7 @@ namespace view.gui
 {
     public class GameFlowView
     {
-        private readonly float clickRowHeightRatio = 0.35f;
+        private readonly float clickRowHeightRatio = 0.40f;
 
         public void Display(GameObject board, Game game)
         {
@@ -25,8 +25,8 @@ namespace view.gui
         {
             var view = new GameObject("Game flow");
             var rectangle = view.AddComponent<RectTransform>();
-            rectangle.anchorMin = new Vector2(0.30f, 0.35f);
-            rectangle.anchorMax = new Vector2(0.70f, 0.65f);
+            rectangle.anchorMin = new Vector2(0.30f, 0.45f);
+            rectangle.anchorMax = new Vector2(0.70f, 0.55f);
             rectangle.offsetMin = Vector2.zero;
             rectangle.offsetMax = Vector2.zero;
             return view;

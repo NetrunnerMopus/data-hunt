@@ -46,9 +46,6 @@ namespace view.gui
             rectangle.anchorMax = Vector2.one;
             rectangle.offsetMin = Vector2.zero;
             rectangle.offsetMax = Vector2.zero;
-            var aspect = pass.AddComponent<AspectRatioFitter>();
-            aspect.aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
-            aspect.aspectRatio = 1f;
             CreatePassLabel(pass);
             return pass;
         }

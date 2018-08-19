@@ -16,7 +16,7 @@ namespace view.gui
         private Dictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
         private CardPrinter printer;
 
-        public void Contstruct(Game game, DropZone playZone, DropZone rigZone, DropZone heapZone)
+        public void Construct(Game game, DropZone playZone, DropZone rigZone, DropZone heapZone)
         {
             this.game = game;
             this.playZone = playZone;

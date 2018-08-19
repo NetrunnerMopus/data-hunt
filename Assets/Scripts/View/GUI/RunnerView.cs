@@ -15,7 +15,7 @@ namespace view.gui
             var rigZone = GameObject.Find("Rig").AddComponent<DropZone>();
             var heapZone = GameObject.Find("Heap").AddComponent<DropZone>();
             var gripZone = GameObject.Find("Grip").AddComponent<DropZone>();
-            grip.Contstruct(game, playZone, rigZone, heapZone);
+            grip.Construct(game, playZone, rigZone, heapZone);
             stackPile.Construct(game, gripZone);
             rig.Construct(game, playZone);
             GameObject.Find("Bank/Credit")
@@ -23,10 +23,10 @@ namespace view.gui
                 .Represent(
                     game.runner.actionCard.credit,
                     game,
-                    GameObject.Find("Runner/Left panel/Credits").AddComponent<DropZone>()
+                    GameObject.Find("Runner/Right hand/Credits").AddComponent<DropZone>()
                 );
            
-            game.runner.credits.Observe(GameObject.Find("Runner/Left panel/Credits/Credits text").AddComponent<CreditPoolText>());
+            game.runner.credits.Observe(GameObject.Find("Runner/Right hand/Credits/Credits text").AddComponent<CreditPoolText>());
             var zones = game.runner.zones;
             zones.stack.ObserveCount(stackPile);
             zones.stack.ObservePopping(stackPile);
