@@ -18,6 +18,7 @@ namespace view.gui
             grip.Construct(game, playZone, rigZone, heapZone);
             stackPile.Construct(game, gripZone);
             rig.Construct(game, playZone);
+            GameObject.Find("Runner/Right hand/Core/Identity").AddComponent<CardPrinter>().Print(game.runner.identity);
             GameObject.Find("Bank/Credit")
                 .AddComponent<DroppableAbility>()
                 .Represent(
