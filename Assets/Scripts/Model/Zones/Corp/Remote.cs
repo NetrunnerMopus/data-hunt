@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace model.zones.corp
 {
-    public class Remote
+    public class Remote : IServer
     {
+        string IServer.Name => "Remote";
         private List<Card> cards = new List<Card>();
         private HashSet<IServerContentObserver> observers = new HashSet<IServerContentObserver>();
 

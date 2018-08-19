@@ -16,11 +16,19 @@ namespace controller
         private DropZone zone;
         private bool usable = false;
         private AbilityHighlight highlight;
-
         private Vector3 originalPosition;
         private int originalIndex;
+        private CanvasGroup canvasGroup;
 
-        private CanvasGroup CanvasGroup { get { return GetComponent<CanvasGroup>(); } }
+        void Awake()
+        {
+            canvasGroup = gameObject.GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+            canvasGroup.blocksRaycasts = true;
+        }
 
         public void Represent(Ability ability, Game game, DropZone zone)
         {
@@ -42,7 +50,7 @@ namespace controller
             eventData.selectedObject = gameObject;
             originalPosition = transform.position;
             BringToFront();
-            CanvasGroup.blocksRaycasts = false;
+            canvasGroup.blocksRaycasts = false;
             if (usable)
             {
                 zone.StartDragging();
@@ -66,7 +74,7 @@ namespace controller
         void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
             eventData.selectedObject = null;
-            CanvasGroup.blocksRaycasts = true;
+            canvasGroup.blocksRaycasts = true;
             var raycast = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, raycast);
             var onDrop = raycast.Where(r => r.gameObject == zone.gameObject).Any();

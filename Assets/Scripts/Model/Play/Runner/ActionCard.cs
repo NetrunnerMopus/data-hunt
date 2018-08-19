@@ -4,6 +4,7 @@ using model.cards;
 using System.Threading.Tasks;
 using model.zones.runner;
 using System.Collections.Generic;
+using model.zones.corp;
 
 namespace model.play.runner
 {
@@ -37,6 +38,13 @@ namespace model.play.runner
             Ability install = new Ability(new Conjunction(new RunnerClickCost(1), card.PlayCost, permission), new Install(card));
             install.ObserveResolution(this);
             return install;
+        }
+
+        public Ability Run(IServer server)
+        {
+            Ability run = new Ability(new Conjunction(new RunnerClickCost(1), permission), new Run(server));
+            run.ObserveResolution(this);
+            return run;
         }
 
         async public Task TakeAction()

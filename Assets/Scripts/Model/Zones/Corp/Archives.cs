@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace model.zones.corp
 {
-    public class Archives
+    public class Archives: IServer
     {
+        string IServer.Name => "Archives";
         private List<Card> cards = new List<Card>();
         private HashSet<IArchivesObserver> observers = new HashSet<IArchivesObserver>();
 

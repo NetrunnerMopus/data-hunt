@@ -2,8 +2,9 @@
 
 namespace model.zones.corp
 {
-    public class ResearchAndDevelopment
+    public class ResearchAndDevelopment : IServer
     {
+        string IServer.Name => "R&D";
         private Deck deck;
 
         public ResearchAndDevelopment(Deck deck)

@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace view.gui
 {
-    public class RunnerView : MonoBehaviour
+    public class RunnerViewConfig
     {
-        public void Display(Game game)
+        public void Display(Game game, CorpView corpView)
         {
-            GripFan grip = FindObjectOfType<GripFan>();
-            StackPile stackPile = FindObjectOfType<StackPile>();
-            RigGrid rig = FindObjectOfType<RigGrid>();
-            var playZone = GameObject.Find("Play").AddComponent<DropZone>();
+            GripFan grip = Object.FindObjectOfType<GripFan>();
+            StackPile stackPile = Object.FindObjectOfType<StackPile>();
+            RigGrid rig = Object.FindObjectOfType<RigGrid>();
+            var playZone = GameObject.Find("Trigger").AddComponent<DropZone>();
             var rigZone = GameObject.Find("Rig").AddComponent<DropZone>();
             var heapZone = GameObject.Find("Heap").AddComponent<DropZone>();
             var gripZone = GameObject.Find("Grip").AddComponent<DropZone>();
@@ -19,6 +19,9 @@ namespace view.gui
             stackPile.Construct(game, gripZone);
             rig.Construct(game, playZone);
             GameObject.Find("Runner/Right hand/Core/Identity").AddComponent<CardPrinter>().Print(game.runner.identity);
+            GameObject.Find("Runner/Activation/Run")
+                .AddComponent<RunInitiation>()
+                .Represent(game, corpView.serverRow);
             GameObject.Find("Bank/Credit")
                 .AddComponent<DroppableAbility>()
                 .Represent(
@@ -33,7 +36,7 @@ namespace view.gui
             zones.stack.ObservePopping(stackPile);
             zones.grip.ObserveAdditions(grip);
             zones.grip.ObserveRemovals(grip);
-            zones.heap.Observe(FindObjectOfType<HeapPile>());
+            zones.heap.Observe(Object.FindObjectOfType<HeapPile>());
         }
     }
 }

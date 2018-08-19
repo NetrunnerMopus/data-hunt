@@ -1,4 +1,5 @@
 ﻿using model.zones.corp;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ namespace view.gui
     public class ServerRow : MonoBehaviour, IServerCreationObserver
     {
         private HorizontalLayoutGroup layout;
+        public readonly IDictionary<IServer, ServerBox> boxes = new Dictionary<IServer, ServerBox>();
 
         public void Represent(Zones zones)
         {
@@ -24,20 +26,21 @@ namespace view.gui
             layout.spacing = 4;
         }
 
-        public Server CreateServer(string serverName)
+        public ServerBox Box(IServer server)
         {
-            var gameObject = new GameObject(serverName);
-            Server server = gameObject.AddComponent<Server>();
+            var gameObject = new GameObject(server.Name);
+            ServerBox box = gameObject.AddComponent<ServerBox>();
             gameObject.transform.SetParent(transform, false);
-            server.transform.SetAsFirstSibling();
+            box.transform.SetAsFirstSibling();
             LayoutRebuilder.ForceRebuildLayoutImmediate(layout.GetComponent<RectTransform>());
-            return server;
+            boxes[server] = box;
+            return box;
         }
 
         void IServerCreationObserver.NotifyRemoteCreated(Remote remote)
         {
-            var server = CreateServer("Remote");
-            remote.ObserveInstallations(server);
+            var box = Box(remote);
+            remote.ObserveInstallations(box);
         }
     }
 }

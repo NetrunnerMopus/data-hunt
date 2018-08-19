@@ -30,8 +30,6 @@ namespace view
             var image = gameObject.AddComponent<Image>();
             image.sprite = Resources.Load<Sprite>(asset);
             image.preserveAspect = true;
-            var canvasGroup = gameObject.AddComponent<CanvasGroup>();
-            canvasGroup.blocksRaycasts = true;
             gameObject.transform.SetParent(transform);
             var rectangle = image.rectTransform;
             rectangle.anchorMin = new Vector2(0.1f, 0.1f);

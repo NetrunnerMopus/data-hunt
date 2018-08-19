@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class Server : MonoBehaviour, IServerContentObserver
+    public class ServerBox : MonoBehaviour, IServerContentObserver
     {
         public CardPrinter Printer { get; private set; }
 

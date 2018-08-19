@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace model.zones.corp
 {
-    public class Headquarters
+    public class Headquarters : IServer
     {
+        string IServer.Name => "HQ";
         public int Count => cards.Count;
         public List<Card> cards = new List<Card>();
         private HashSet<IHqAdditionObserver> additions = new HashSet<IHqAdditionObserver>();
@@ -47,7 +48,7 @@ namespace model.zones.corp
                 observer.NotifyCardRemoved(card);
             }
         }
-        
+
         private void NotifyCount()
         {
             foreach (var observer in counts)

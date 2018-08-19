@@ -8,8 +8,6 @@ using model.player;
 public class GameConfig : MonoBehaviour
 {
     public GameObject board;
-    public RunnerView runnerView;
-    public CorpView corpView;
     private Game game;
 
     void Awake()
@@ -31,8 +29,8 @@ public class GameConfig : MonoBehaviour
         var flowLog = new GameFlowLog();
         flowView.Display(board, game);
         flowLog.Display(game);
-        runnerView.Display(game);
-        corpView.Display(game);
+        var corpView = new CorpViewConfig().Display(game);
+        new RunnerViewConfig().Display(game, corpView);
         game.Start();
     }
 }
