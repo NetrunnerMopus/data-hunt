@@ -37,7 +37,7 @@ namespace view.gui
             boxes.Add(box);
             foreach (var observer in observers)
             {
-                observer.NotifyServerBoxCreated(box);
+                observer.NotifyServerBox(box);
             }
             return box;
         }
@@ -45,6 +45,10 @@ namespace view.gui
         public void Observe(IServerBoxObserver observer)
         {
             observers.Add(observer);
+            foreach (var box in boxes)
+            {
+                observer.NotifyServerBox(box);
+            }
         }
 
         void IServerCreationObserver.NotifyRemoteCreated(Remote remote)
@@ -56,6 +60,6 @@ namespace view.gui
 
     public interface IServerBoxObserver
     {
-        void NotifyServerBoxCreated(ServerBox box);
+        void NotifyServerBox(ServerBox box);
     }
 }

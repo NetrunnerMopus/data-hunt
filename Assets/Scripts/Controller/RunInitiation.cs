@@ -16,7 +16,7 @@ namespace controller
             serverRow.Observe(this);
         }
 
-        void IServerBoxObserver.NotifyServerBoxCreated(ServerBox box)
+        void IServerBoxObserver.NotifyServerBox(ServerBox box)
         {
             var boxZone = box.gameObject.AddComponent<DropZone>();
             var initiation = gameObject.AddComponent<DroppableAbility>();
