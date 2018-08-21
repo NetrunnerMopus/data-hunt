@@ -19,9 +19,11 @@ namespace view.gui
             stackPile.Construct(game, gripZone);
             rig.Construct(game, playZone);
             GameObject.Find("Runner/Right hand/Core/Identity").AddComponent<CardPrinter>().Print(game.runner.identity);
-            GameObject.Find("Runner/Activation/Run")
-                .AddComponent<RunInitiation>()
-                .Represent(game, corpView.serverRow);
+            new RunInitiation(
+                gameObject: GameObject.Find("Runner/Activation/Run"),
+                serverRow: corpView.serverRow,
+                game: game
+            );
             GameObject.Find("Bank/Credit")
                 .AddComponent<DroppableAbility>()
                 .Represent(
@@ -29,7 +31,7 @@ namespace view.gui
                     game,
                     GameObject.Find("Runner/Right hand/Credits").AddComponent<DropZone>()
                 );
-           
+
             game.runner.credits.Observe(GameObject.Find("Runner/Right hand/Credits/Credits text").AddComponent<CreditPoolText>());
             var zones = game.runner.zones;
             zones.stack.ObserveCount(stackPile);

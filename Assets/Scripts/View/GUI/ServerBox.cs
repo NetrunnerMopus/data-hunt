@@ -5,12 +5,16 @@ using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class ServerBox : MonoBehaviour, IServerContentObserver
+    public class ServerBox : IServerContentObserver
     {
+        public readonly GameObject gameObject;
+        public readonly IServer server;
         public CardPrinter Printer { get; private set; }
 
-        void Awake()
+        public ServerBox(GameObject gameObject, IServer server)
         {
+            this.gameObject = gameObject;
+            this.server = server;
             var image = gameObject.AddComponent<Image>();
             image.sprite = Resources.Load<Sprite>("Images/UI/9slice-solid-white");
             image.type = Image.Type.Sliced;

@@ -8,7 +8,8 @@ namespace view.gui
     public class ServerRow : MonoBehaviour, IServerCreationObserver
     {
         private HorizontalLayoutGroup layout;
-        public readonly IDictionary<IServer, ServerBox> boxes = new Dictionary<IServer, ServerBox>();
+        private readonly List<ServerBox> boxes = new List<ServerBox>();
+        private HashSet<IServerBoxObserver> observers = new HashSet<IServerBoxObserver>();
 
         public void Represent(Zones zones)
         {
@@ -29,12 +30,21 @@ namespace view.gui
         public ServerBox Box(IServer server)
         {
             var gameObject = new GameObject(server.Name);
-            ServerBox box = gameObject.AddComponent<ServerBox>();
+            var box = new ServerBox(gameObject, server);
             gameObject.transform.SetParent(transform, false);
-            box.transform.SetAsFirstSibling();
+            gameObject.transform.SetAsFirstSibling();
             LayoutRebuilder.ForceRebuildLayoutImmediate(layout.GetComponent<RectTransform>());
-            boxes[server] = box;
+            boxes.Add(box);
+            foreach (var observer in observers)
+            {
+                observer.NotifyServerBoxCreated(box);
+            }
             return box;
+        }
+
+        public void Observe(IServerBoxObserver observer)
+        {
+            observers.Add(observer);
         }
 
         void IServerCreationObserver.NotifyRemoteCreated(Remote remote)
@@ -42,5 +52,10 @@ namespace view.gui
             var box = Box(remote);
             remote.ObserveInstallations(box);
         }
+    }
+
+    public interface IServerBoxObserver
+    {
+        void NotifyServerBoxCreated(ServerBox box);
     }
 }

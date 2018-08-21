@@ -1,28 +1,27 @@
 ﻿using UnityEngine;
 using view.gui;
-using model.zones.corp;
 using model;
 
 namespace controller
 {
-    public class RunInitiation : MonoBehaviour, IServerCreationObserver
+    public class RunInitiation : IServerBoxObserver
     {
+        private GameObject gameObject;
         private Game game;
-        private ServerRow serverRow;
 
-        public void Represent(Game game, ServerRow serverRow)
+        public RunInitiation(GameObject gameObject, Game game, ServerRow serverRow)
         {
+            this.gameObject = gameObject;
             this.game = game;
-            this.serverRow = serverRow;
-            game.corp.zones.ObserveServerCreation(this);
+            serverRow.Observe(this);
         }
 
-        void IServerCreationObserver.NotifyRemoteCreated(Remote remote)
+        void IServerBoxObserver.NotifyServerBoxCreated(ServerBox box)
         {
+            var boxZone = box.gameObject.AddComponent<DropZone>();
             var initiation = gameObject.AddComponent<DroppableAbility>();
-            var box = serverRow.boxes[remote].gameObject.AddComponent<DropZone>();
-            var runOnServer = game.runner.actionCard.Run(remote);
-            initiation.Represent(runOnServer, game, box);
+            var runOnServer = game.runner.actionCard.Run(box.server);
+            initiation.Represent(runOnServer, game, boxZone);
         }
     }
 }
