@@ -6,27 +6,25 @@ using model.zones.runner;
 
 namespace view.gui
 {
-    public class StackPile : MonoBehaviour, IStackPopObserver, IStackCountObserver
+    public class StackPile : IStackPopObserver, IStackCountObserver
     {
+        private GameObject gameObject;
         private Game game;
         private DropZone gripZone;
         private GameObject top;
         private CardPrinter printer;
 
-        public void Construct(Game game, DropZone gripZone)
+        public StackPile(GameObject gameObject, Game game, DropZone gripZone)
         {
+            printer = gameObject.AddComponent<CardPrinter>();
+            this.gameObject = gameObject;
             this.game = game;
             this.gripZone = gripZone;
         }
 
-        void Awake()
-        {
-            printer = gameObject.AddComponent<CardPrinter>();
-        }
-
         void IStackPopObserver.NotifyCardPopped(bool empty)
         {
-            Destroy(top);
+            Object.Destroy(top);
             if (!empty)
             {
                 top = printer.PrintRunnerFacedown("Top of stack");
@@ -45,7 +43,7 @@ namespace view.gui
 
         void IStackCountObserver.NotifyCardCount(int cards)
         {
-            var text = GetComponentInChildren<Text>();
+            var text = gameObject.GetComponentInChildren<Text>();
             text.text = cards + " cards";
         }
     }

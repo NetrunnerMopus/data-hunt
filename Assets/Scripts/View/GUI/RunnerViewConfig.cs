@@ -8,16 +8,16 @@ namespace view.gui
     {
         public void Display(Game game, CorpView corpView)
         {
-            GripFan grip = Object.FindObjectOfType<GripFan>();
-            StackPile stackPile = Object.FindObjectOfType<StackPile>();
-            RigGrid rig = Object.FindObjectOfType<RigGrid>();
+            var grip = GameObject.Find("Grip");
+            var stack = GameObject.Find("Stack");
+            var rig = GameObject.Find("Rig");
             var playZone = GameObject.Find("Trigger").AddComponent<DropZone>();
-            var rigZone = GameObject.Find("Rig").AddComponent<DropZone>();
+            var rigZone = rig.AddComponent<DropZone>();
             var heapZone = GameObject.Find("Heap").AddComponent<DropZone>();
-            var gripZone = GameObject.Find("Grip").AddComponent<DropZone>();
-            grip.Construct(game, playZone, rigZone, heapZone);
-            stackPile.Construct(game, gripZone);
-            rig.Construct(game, playZone);
+            var gripZone = grip.AddComponent<DropZone>();
+            var gripFan = new GripFan(grip, game, playZone, rigZone, heapZone);
+            var stackPile = new StackPile(stack, game, gripZone);
+            new RigGrid(rig, game, playZone);
             GameObject.Find("Runner/Right hand/Core/Identity").AddComponent<CardPrinter>().Print(game.runner.identity);
             new RunInitiation(
                 gameObject: GameObject.Find("Runner/Activation/Run"),
@@ -36,8 +36,8 @@ namespace view.gui
             var zones = game.runner.zones;
             zones.stack.ObserveCount(stackPile);
             zones.stack.ObservePopping(stackPile);
-            zones.grip.ObserveAdditions(grip);
-            zones.grip.ObserveRemovals(grip);
+            zones.grip.ObserveAdditions(gripFan);
+            zones.grip.ObserveRemovals(gripFan);
             zones.heap.Observe(Object.FindObjectOfType<HeapPile>());
         }
     }

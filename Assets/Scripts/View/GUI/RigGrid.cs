@@ -9,25 +9,21 @@ using model.timing;
 
 namespace view.gui
 {
-    public class RigGrid : MonoBehaviour, IInstallationObserver, IUninstallationObserver, IPaidAbilityObserver
+    public class RigGrid : IInstallationObserver, IUninstallationObserver, IPaidAbilityObserver
     {
-        private Game game;
-        private DropZone playZone;
-        private Dictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
+        private readonly Game game;
+        private readonly DropZone playZone;
+        private readonly Dictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
         private CardPrinter printer;
 
-        public void Construct(Game game, DropZone playZone)
+        public RigGrid(GameObject gameObject, Game game, DropZone playZone)
         {
+            printer = gameObject.AddComponent<CardPrinter>();
             this.game = game;
             this.playZone = playZone;
             game.flow.paidWindow.ObserveAbility(this);
             game.runner.zones.rig.ObserveInstallations(this);
             game.runner.zones.rig.ObserveUninstallations(this);
-        }
-
-        void Awake()
-        {
-            printer = gameObject.AddComponent<CardPrinter>();
         }
 
         void IInstallationObserver.NotifyInstalled(Card card)
@@ -38,7 +34,7 @@ namespace view.gui
 
         void IUninstallationObserver.NotifyUninstalled(Card card)
         {
-            Destroy(visuals[card]);
+            Object.Destroy(visuals[card]);
         }
 
         void IPaidAbilityObserver.NotifyPaidAbilityAvailable(Ability ability, Card source)

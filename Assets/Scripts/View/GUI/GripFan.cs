@@ -7,26 +7,22 @@ using model.zones.runner;
 
 namespace view.gui
 {
-    public class GripFan : MonoBehaviour, IGripAdditionObserver, IGripRemovalObserver
+    public class GripFan : IGripAdditionObserver, IGripRemovalObserver
     {
         private Game game;
-        private DropZone playZone;
-        private DropZone rigZone;
-        private DropZone heapZone;
+        private readonly DropZone playZone;
+        private readonly DropZone rigZone;
+        private readonly DropZone heapZone;
         private Dictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
         private CardPrinter printer;
 
-        public void Construct(Game game, DropZone playZone, DropZone rigZone, DropZone heapZone)
+        public GripFan(GameObject gameObject, Game game, DropZone playZone, DropZone rigZone, DropZone heapZone)
         {
+            printer = gameObject.AddComponent<CardPrinter>();
             this.game = game;
             this.playZone = playZone;
             this.rigZone = rigZone;
             this.heapZone = heapZone;
-        }
-
-        void Awake()
-        {
-            printer = gameObject.AddComponent<CardPrinter>();
         }
 
         void IGripAdditionObserver.NotifyCardAdded(Card card)
@@ -66,7 +62,7 @@ namespace view.gui
 
         void IGripRemovalObserver.NotifyCardRemoved(Card card)
         {
-            Destroy(visuals[card]);
+            Object.Destroy(visuals[card]);
             visuals.Remove(card);
         }
     }
