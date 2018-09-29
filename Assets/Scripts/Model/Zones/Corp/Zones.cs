@@ -8,7 +8,7 @@ namespace model.zones.corp
         public readonly ResearchAndDevelopment rd;
         public readonly Archives archives;
         public readonly List<Remote> remotes = new List<Remote>();
-        private HashSet<IServerCreationObserver> creationObservers = new HashSet<IServerCreationObserver>();
+        private HashSet<IRemoteObserver> remoteObservers = new HashSet<IRemoteObserver>();
 
         public Zones(Headquarters hq, ResearchAndDevelopment rd, Archives archives)
         {
@@ -17,25 +17,37 @@ namespace model.zones.corp
             this.archives = archives;
         }
 
+        public List<IInstallDestination> RemoteInstalls()
+        {
+            return new List<IInstallDestination>(remotes)
+            {
+                new NewRemote(this)
+            };
+        }
+
         public Remote CreateRemote()
         {
             var remote = new Remote();
             remotes.Add(remote);
-            foreach (var observer in creationObservers)
+            foreach (var observer in remoteObservers)
             {
-                observer.NotifyRemoteCreated(remote);
+                observer.NotifyRemoteExists(remote);
             }
             return remote;
         }
 
-        public void ObserveServerCreation(IServerCreationObserver observer)
+        public void ObserveRemotes(IRemoteObserver observer)
         {
-            creationObservers.Add(observer);
+            remoteObservers.Add(observer);
+            foreach (var remote in remotes)
+            {
+                observer.NotifyRemoteExists(remote);
+            }
         }
     }
 
-    public interface IServerCreationObserver
+    public interface IRemoteObserver
     {
-        void NotifyRemoteCreated(Remote remote);
+        void NotifyRemoteExists(Remote remote);
     }
 }

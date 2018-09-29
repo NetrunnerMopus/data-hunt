@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class ServerRow : MonoBehaviour, IServerCreationObserver
+    public class ServerRow : MonoBehaviour, IRemoteObserver
     {
         private HorizontalLayoutGroup layout;
         private readonly List<ServerBox> boxes = new List<ServerBox>();
@@ -13,7 +13,7 @@ namespace view.gui
 
         public void Represent(Zones zones)
         {
-            zones.ObserveServerCreation(this);
+            zones.ObserveRemotes(this);
         }
 
         void Awake()
@@ -51,7 +51,7 @@ namespace view.gui
             }
         }
 
-        void IServerCreationObserver.NotifyRemoteCreated(Remote remote)
+        void IRemoteObserver.NotifyRemoteExists(Remote remote)
         {
             var box = Box(remote);
             remote.ObserveInstallations(box);

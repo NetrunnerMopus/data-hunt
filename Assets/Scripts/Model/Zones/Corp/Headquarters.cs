@@ -9,11 +9,13 @@ namespace model.zones.corp
     public class Headquarters : IServer
     {
         string IServer.Name => "HQ";
+        IceColumn IServer.Ice => new IceColumn();
         public int Count => cards.Count;
         public List<Card> cards = new List<Card>();
         private HashSet<IHqAdditionObserver> additions = new HashSet<IHqAdditionObserver>();
         private HashSet<IHqRemovalObserver> removals = new HashSet<IHqRemovalObserver>();
         private HashSet<IZoneCountObserver> counts = new HashSet<IZoneCountObserver>();
+        private HashSet<ICardsObserver> pools = new HashSet<ICardsObserver>();
         private HashSet<IHqDiscardObserver> discards = new HashSet<IHqDiscardObserver>();
         private TaskCompletionSource<bool> discarding;
         private Random random;
@@ -31,7 +33,7 @@ namespace model.zones.corp
         public void Add(Card card)
         {
             cards.Add(card);
-            NotifyCount();
+            NotifyChanges();
 
             foreach (var observer in (new HashSet<IHqAdditionObserver>(additions)))
             {
@@ -42,18 +44,22 @@ namespace model.zones.corp
         public void Remove(Card card)
         {
             cards.Remove(card);
-            NotifyCount();
+            NotifyChanges();
             foreach (var observer in removals)
             {
                 observer.NotifyCardRemoved(card);
             }
         }
 
-        private void NotifyCount()
+        private void NotifyChanges()
         {
             foreach (var observer in counts)
             {
                 observer.NotifyCount(cards.Count);
+            }
+            foreach (var observer in pools)
+            {
+                observer.NotifyCards(cards);
             }
         }
 
@@ -81,6 +87,12 @@ namespace model.zones.corp
         public Card Find<T>() where T : Card => cards.OfType<T>().FirstOrDefault();
 
         public Card Random() => cards[random.Next(0, Count)];
+
+        public void ObserveCards(ICardsObserver observer)
+        {
+            pools.Add(observer);
+            NotifyChanges();
+        }
 
         public void ObserveAdditions(IHqAdditionObserver observer)
         {

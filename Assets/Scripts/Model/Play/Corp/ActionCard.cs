@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace model.play.corp
 {
-    public class ActionCard : IResolutionObserver, IHqAdditionObserver, IServerCreationObserver
+    public class ActionCard : IResolutionObserver, IHqAdditionObserver, IRemoteObserver
     {
         private Zones zones;
         public readonly Ability credit;
@@ -22,7 +22,7 @@ namespace model.play.corp
         {
             this.zones = zones;
             zones.hq.ObserveAdditions(this);
-            zones.ObserveServerCreation(this);
+            zones.ObserveRemotes(this);
             credit = new Ability(new Conjunction(new CorpClickCost(1), permission), new Gain(1));
             credit.ObserveResolution(this);
             MarkPotential(credit);
@@ -114,7 +114,7 @@ namespace model.play.corp
             return new List<Ability>();
         }
 
-        void IServerCreationObserver.NotifyRemoteCreated(Remote remote)
+        void IRemoteObserver.NotifyRemoteExists(Remote remote)
         {
             zones
                   .hq
