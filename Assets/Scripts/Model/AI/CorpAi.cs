@@ -1,7 +1,9 @@
-﻿using model.play;
+﻿using model.cards;
+using model.play;
 using model.play.corp;
 using model.player;
 using model.timing.corp;
+using model.zones;
 using model.zones.corp;
 using System;
 using System.Collections.Generic;
@@ -95,6 +97,19 @@ namespace model.ai
             {
                 legalActions.Remove(ability);
             }
+        }
+
+        IChoice<Card> IPilot.ChooseACard() => new CardChoice();
+        IChoice<IInstallDestination> IPilot.ChooseAnInstallDestination() => new InstallDestinationChoice();
+
+        private class CardChoice : IChoice<Card>
+        {
+            Card IChoice<Card>.Declare(IEnumerable<Card> items) => items.First();
+        }
+
+        private class InstallDestinationChoice : IChoice<IInstallDestination>
+        {
+            IInstallDestination IChoice<IInstallDestination>.Declare(IEnumerable<IInstallDestination> items) => items.First();
         }
     }
 }

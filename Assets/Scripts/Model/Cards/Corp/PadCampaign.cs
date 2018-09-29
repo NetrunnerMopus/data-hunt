@@ -1,11 +1,12 @@
-﻿using model.costs;
-using model.cards.types;
+﻿using model.cards.types;
+using model.costs;
 using model.effects.corp;
 
 namespace model.cards.corp
 {
     public class PadCampaign : Card
     {
+
         override public string FaceupArt => "pad-campaign";
         override public string Name => "PAD Campaign";
         override public Faction Faction => Factions.SHADOW;

@@ -6,6 +6,7 @@ namespace model.zones.corp
     public class ResearchAndDevelopment : IServer
     {
         string IServer.Name => "R&D";
+        IceColumn IServer.Ice => new IceColumn();
         private Deck deck;
 		private HashSet<IZoneCountObserver> counts = new HashSet<IZoneCountObserver>();
 

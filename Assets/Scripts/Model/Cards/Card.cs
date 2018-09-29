@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using model.zones;
+using System.Collections.Generic;
 
 namespace model.cards
 {
@@ -14,6 +15,11 @@ namespace model.cards
         public abstract int InfluenceCost { get; }
         public abstract string FaceupArt { get; }
         public bool Faceup { get; private set; } = false;
+
+        public List<IInstallDestination> FindInstallDestinations(Game game)
+        {
+            return Type.FindInstallDestinations(game);
+        }
 
         public void FlipFaceUp()
         {

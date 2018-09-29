@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace model.zones.runner
 {
-    public class Rig
+    public class Rig : IInstallDestination
     {
         private List<Card> cards = new List<Card>();
         private HashSet<IInstallationObserver> installations = new HashSet<IInstallationObserver>();
@@ -35,6 +35,11 @@ namespace model.zones.runner
         public void ObserveUninstallations(IUninstallationObserver observer)
         {
             uninstallations.Add(observer);
+        }
+
+        void IInstallDestination.Host(Card card)
+        {
+            Install(card);
         }
     }
 

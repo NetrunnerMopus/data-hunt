@@ -1,24 +1,23 @@
 ﻿using model.cards;
-using model.choices;
 using model.play.corp;
+using model.zones;
 
 namespace model.effects.corp
 {
-    public class InstallInRemote : IEffect
+    public class Install : IEffect
     {
         private readonly Card card;
-        private IRemoteInstallationChoice remoteChoice;
+        private IInstallDestination destination;
 
-        public InstallInRemote(Card card, IRemoteInstallationChoice remoteChoice)
+        public Install(Card card, IInstallDestination destination)
         {
             this.card = card;
-            this.remoteChoice = remoteChoice;
+            this.destination = destination;
         }
 
-        void IEffect.Resolve(Game game)
+        public void Resolve(Game game)
         {
-            var remote = remoteChoice.Choose();
-            remote.InstallWithin(card);
+            destination.Host(card);
             if (card.Type.Rezzable)
             {
                 var rezzable = new Rezzable(card, game);
@@ -27,7 +26,7 @@ namespace model.effects.corp
             game.corp.zones.hq.Remove(card);
         }
 
-        void IEffect.Observe(IImpactObserver observer, Game game)
+        public void Observe(IImpactObserver observer, Game game)
         {
             observer.NotifyImpact(true, this);
         }

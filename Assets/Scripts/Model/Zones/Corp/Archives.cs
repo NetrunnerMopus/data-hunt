@@ -6,6 +6,7 @@ namespace model.zones.corp
     public class Archives: IServer
     {
         string IServer.Name => "Archives";
+        IceColumn IServer.Ice => new IceColumn();
         private List<Card> cards = new List<Card>();
         private HashSet<IArchivesObserver> observers = new HashSet<IArchivesObserver>();
 
