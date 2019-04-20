@@ -15,10 +15,12 @@ namespace view.gui
             var corpPool = CreateCorpClicks(game);
             var runnerPool = CreateRunnerClicks(game);
             var window = CreatePaidWindow(game.flow.paidWindow);
+            var gameFinish = CreateGameFinish(game.flow);
             corpPool.AttachTo(flow);
             runnerPool.AttachTo(flow);
             window.AttachTo(flow);
             flow.AttachTo(board);
+            gameFinish.AttachTo(board);
         }
 
         private GameObject CreateFlow()
@@ -78,6 +80,18 @@ namespace view.gui
             rectangle.offsetMax = Vector2.zero;
             view.AddComponent<PaidWindowView>().Represent(window);
             return view;
+        }
+
+        private GameObject CreateGameFinish(GameFlow flow)
+        {
+			var view = new GameObject("Game finish");
+			var rectangle = view.AddComponent<RectTransform>();
+			rectangle.anchorMin = new Vector2(0.30f, 0.30f);
+			rectangle.anchorMax = new Vector2(0.70f, 0.70f);
+			rectangle.offsetMin = Vector2.zero;
+			rectangle.offsetMax = Vector2.zero;
+			flow.ObserveFinish(view.AddComponent<GameFinishPanel>());
+			return view;
         }
     }
 }
