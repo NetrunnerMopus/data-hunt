@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using controller;
-using UnityEngine.UI;
 using model;
 using model.zones.runner;
 
@@ -12,7 +11,7 @@ namespace view.gui
         private DropZone gripZone;
         private GameObject top;
         private CardPrinter printer;
-
+		private PileCountObserver countObserver;
         public void Construct(Game game, DropZone gripZone)
         {
             this.game = game;
@@ -22,6 +21,9 @@ namespace view.gui
         void Awake()
         {
             printer = gameObject.AddComponent<CardPrinter>();
+			var embed = new GameObject("Stack card count");
+			embed.transform.parent = transform;
+			countObserver = new PileCount().Count(embed);
         }
 
         void IStackPopObserver.NotifyCardPopped(bool empty)
@@ -30,6 +32,7 @@ namespace view.gui
             if (!empty)
             {
                 top = printer.PrintRunnerFacedown("Top of stack");
+				top.transform.SetAsFirstSibling();
                 top.transform.rotation *= Quaternion.Euler(0.0f, 0.0f, 90.0f);
                 var rect = top.GetComponent<RectTransform>();
                 rect.anchoredPosition = new Vector3(0.0f, 0.0f, 0.0f);
@@ -45,8 +48,7 @@ namespace view.gui
 
         void IStackCountObserver.NotifyCardCount(int cards)
         {
-            var text = GetComponentInChildren<Text>();
-            text.text = cards + " cards";
+			countObserver.UpdateCount(cards);
         }
     }
 }

@@ -23,20 +23,20 @@ namespace view
 
         public GameObject Print(string name, string asset)
         {
-            var gameObject = new GameObject(name)
+            var card = new GameObject(name)
             {
                 layer = 5
             };
-            var image = gameObject.AddComponent<Image>();
+            var image = card.AddComponent<Image>();
             image.sprite = Resources.Load<Sprite>(asset);
             image.preserveAspect = true;
-            gameObject.transform.SetParent(transform);
+            card.transform.SetParent(transform);
             var rectangle = image.rectTransform;
             rectangle.anchorMin = new Vector2(0.1f, 0.1f);
             rectangle.anchorMax = new Vector2(0.9f, 0.9f);
             rectangle.offsetMin = Vector2.zero;
             rectangle.offsetMax = Vector2.zero;
-            return gameObject;
+            return card;
         }
     }
 }
