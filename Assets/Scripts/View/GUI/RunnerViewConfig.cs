@@ -15,8 +15,6 @@ namespace view.gui
             var rigZone = GameObject.Find("Rig").AddComponent<DropZone>();
             var heapZone = GameObject.Find("Heap").AddComponent<DropZone>();
             var gripZone = GameObject.Find("Grip").AddComponent<DropZone>();
-			var stackCount = new GameObject("Stack card count");
-			stackCount.AttachTo(stackPile.gameObject);
             grip.Construct(game, playZone, rigZone, heapZone);
             stackPile.Construct(game, gripZone);
             rig.Construct(game, playZone);
@@ -36,7 +34,7 @@ namespace view.gui
 
             game.runner.credits.Observe(GameObject.Find("Runner/Right hand/Credits/Credits text").AddComponent<CreditPoolText>());
             var zones = game.runner.zones;
-            zones.stack.ObserveCount(stackCount.AddComponent<PileCount>());
+            zones.stack.ObserveCount(stackPile.gameObject.AddComponent<PileCount>());
             zones.stack.ObservePopping(stackPile);
             zones.grip.ObserveAdditions(grip);
             zones.grip.ObserveRemovals(grip);

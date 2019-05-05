@@ -1,13 +1,15 @@
 ﻿using model.zones;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace view.gui {
-	public class PileCount : MonoBehaviour, IZoneCountObserver {
+	public class PileCount : MonoBehaviour, IZoneCountObserver, IPointerEnterHandler, IPointerExitHandler {
 		private Text text;
 
 		void Awake() {
-			text = gameObject.AddComponent<Text>();
+			var count = new GameObject("Pile Count");
+			text = count.AddComponent<Text>();
 			text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 			var rectangle = text.rectTransform;
 			rectangle.anchorMin = new Vector2(0.2f, 0.2f);
@@ -19,12 +21,22 @@ namespace view.gui {
 			text.resizeTextMinSize = 1;
 			text.resizeTextMaxSize = 100;
 			text.alignment = TextAnchor.MiddleCenter;
-			var outline = gameObject.AddComponent<Outline>();
+			text.enabled = false;
+			var outline = count.AddComponent<Outline>();
 			outline.effectDistance = new Vector2(2, 2);
+			count.AttachTo(gameObject);
 		}
 
 		void IZoneCountObserver.NotifyCount(int count) {
 			text.text = count.ToString();
+		}
+
+		void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData) {
+			text.enabled = true;
+		}
+
+		void IPointerExitHandler.OnPointerExit(PointerEventData eventData) {
+			text.enabled = false;
 		}
 	}
 }
