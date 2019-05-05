@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using System.Collections.Generic;
+using model.cards;
 
 namespace model.zones.corp
 {
@@ -6,8 +7,9 @@ namespace model.zones.corp
     {
         string IServer.Name => "R&D";
         private Deck deck;
+		private HashSet<IZoneCountObserver> counts = new HashSet<IZoneCountObserver>();
 
-        public ResearchAndDevelopment(Deck deck)
+		public ResearchAndDevelopment(Deck deck)
         {
             this.deck = deck;
         }
@@ -32,7 +34,19 @@ namespace model.zones.corp
 
         public Card RemoveTop()
         {
-            return deck.RemoveTop();
+            var top = deck.RemoveTop();
+			NotifyCount();
+			return top;
         }
-    }
+
+		private void NotifyCount() {
+			foreach (var observer in counts) {
+				observer.NotifyCount(deck.Size());
+			}
+		}
+
+		public void ObserveCount(IZoneCountObserver observer) {
+			counts.Add(observer);
+		}
+	}
 }

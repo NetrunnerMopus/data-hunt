@@ -12,11 +12,12 @@ namespace view.gui
             var servers = GameObject.Find("Servers").AddComponent<ServerRow>();
             servers.Represent(zones);
             var archives = servers.Box(zones.archives).gameObject;
-            var hq = servers.Box(zones.hq).Printer.Print(game.corp.identity);
-            servers.Box(zones.rd);
-            zones.hq.ObserveCount(hq.AddComponent<PileCount>());
+			var rd = servers.Box(zones.rd).Printer.PrintCorpFacedown("Top of R&D");
+			var hq = servers.Box(zones.hq).Printer.Print(game.corp.identity);
             zones.archives.Observe(archives.AddComponent<ArchivesPile>());
-            return new CorpView(servers);
+			zones.hq.ObserveCount(hq.AddComponent<PileCount>());
+			zones.rd.ObserveCount(rd.AddComponent<PileCount>());
+			return new CorpView(servers);
         }
     }
 }
