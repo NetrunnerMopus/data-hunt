@@ -1,4 +1,5 @@
 ﻿using model.cards;
+using model.zones.corp;
 using System.Collections.Generic;
 
 namespace model.zones.runner
@@ -6,7 +7,7 @@ namespace model.zones.runner
     public class Stack
     {
         private Deck deck;
-        private HashSet<IStackCountObserver> counts = new HashSet<IStackCountObserver>();
+        private HashSet<IZoneCountObserver> counts = new HashSet<IZoneCountObserver>();
         private HashSet<IStackPopObserver> pops = new HashSet<IStackPopObserver>();
 
         public Stack(Deck deck)
@@ -43,15 +44,15 @@ namespace model.zones.runner
             }
             foreach (var observer in counts)
             {
-                observer.NotifyCardCount(cards);
+                observer.NotifyCount(cards);
             }
             return card;
         }
 
-        public void ObserveCount(IStackCountObserver observer)
+        public void ObserveCount(IZoneCountObserver observer)
         {
             counts.Add(observer);
-            observer.NotifyCardCount(deck.Size());
+            observer.NotifyCount(deck.Size());
         }
 
         public void ObservePopping(IStackPopObserver observer)

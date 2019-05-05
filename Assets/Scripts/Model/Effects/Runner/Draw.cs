@@ -1,9 +1,9 @@
-﻿using model.zones.runner;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using model.zones;
 
 namespace model.effects.runner
 {
-    public class Draw : IEffect, IStackCountObserver
+    public class Draw : IEffect, IZoneCountObserver
     {
         private int cards;
         private HashSet<IImpactObserver> observers = new HashSet<IImpactObserver>();
@@ -26,9 +26,9 @@ namespace model.effects.runner
             game.runner.zones.stack.ObserveCount(this);
         }
 
-        void IStackCountObserver.NotifyCardCount(int cards)
+        void IZoneCountObserver.NotifyCount(int count)
         {
-            var impactful = cards > 0;
+            var impactful = count > 0;
             foreach (var observer in observers)
             {
                 observer.NotifyImpact(impactful, this);

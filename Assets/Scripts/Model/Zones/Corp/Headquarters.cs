@@ -13,7 +13,7 @@ namespace model.zones.corp
         public List<Card> cards = new List<Card>();
         private HashSet<IHqAdditionObserver> additions = new HashSet<IHqAdditionObserver>();
         private HashSet<IHqRemovalObserver> removals = new HashSet<IHqRemovalObserver>();
-        private HashSet<IHqCountObserver> counts = new HashSet<IHqCountObserver>();
+        private HashSet<IZoneCountObserver> counts = new HashSet<IZoneCountObserver>();
         private HashSet<IHqDiscardObserver> discards = new HashSet<IHqDiscardObserver>();
         private TaskCompletionSource<bool> discarding;
         private Random random;
@@ -53,7 +53,7 @@ namespace model.zones.corp
         {
             foreach (var observer in counts)
             {
-                observer.NotifyCardCount(cards.Count);
+                observer.NotifyCount(cards.Count);
             }
         }
 
@@ -92,7 +92,7 @@ namespace model.zones.corp
             removals.Add(observer);
         }
 
-        public void ObserveCount(IHqCountObserver observer)
+        public void ObserveCount(IZoneCountObserver observer)
         {
             counts.Add(observer);
         }
@@ -111,11 +111,6 @@ namespace model.zones.corp
     public interface IHqRemovalObserver
     {
         void NotifyCardRemoved(Card card);
-    }
-
-    public interface IHqCountObserver
-    {
-        void NotifyCardCount(int cards);
     }
 
     public interface IHqDiscardObserver
