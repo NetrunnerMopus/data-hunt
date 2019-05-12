@@ -19,7 +19,7 @@ namespace model.cards.runner
         {
             private readonly WyldsideTrigger trigger = new WyldsideTrigger();
 
-            void IEffect.Resolve(Game game) => game.flow.runnerTurn.ObserveStart(trigger);
+            void IEffect.Resolve(Game game) => game.runner.turn.ObserveStart(trigger);
             void IEffect.Observe(IImpactObserver observer, Game game) { }
         }
 

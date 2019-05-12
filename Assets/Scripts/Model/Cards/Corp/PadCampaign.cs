@@ -19,7 +19,7 @@ namespace model.cards.corp
         {
             void IEffect.Resolve(Game game)
             {
-                game.flow.corpTurn.turnBeginningTriggers.Add(new Gain(1));
+                game.corp.turn.turnBeginningTriggers.Add(new Gain(1));
             }
             void IEffect.Observe(IImpactObserver observer, Game game) { }
         }

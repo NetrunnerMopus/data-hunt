@@ -1,6 +1,8 @@
 ﻿using model.cards;
 using model.play.corp;
 using model.player;
+using model.timing;
+using model.timing.corp;
 using model.zones.corp;
 
 namespace model
@@ -8,6 +10,8 @@ namespace model
     public class Corp
     {
         public readonly IPilot pilot;
+        public readonly Turn turn;
+        public readonly PaidWindow paidWindow;
         public readonly ActionCard actionCard;
         public readonly Zones zones;
         public readonly ClickPool clicks;
@@ -16,6 +20,8 @@ namespace model
 
         public Corp(
             IPilot pilot,
+            Turn turn,
+            PaidWindow paidWindow,
             ActionCard actionCard,
             Zones zones,
             ClickPool clicks,
@@ -24,6 +30,8 @@ namespace model
         )
         {
             this.pilot = pilot;
+            this.turn = turn;
+            this.paidWindow = paidWindow;
             this.actionCard = actionCard;
             this.zones = zones;
             this.clicks = clicks;

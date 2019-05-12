@@ -1,10 +1,10 @@
-﻿using NUnit.Framework;
-using model;
+﻿using model;
 using model.cards;
-using System.Collections.Generic;
 using model.cards.runner;
-using tests.observers;
+using NUnit.Framework;
+using System.Collections.Generic;
 using tests.mocks;
+using tests.observers;
 using view.log;
 
 
@@ -14,6 +14,7 @@ namespace tests
     {
         private Game game;
         private PassiveCorp passiveCorp;
+        private FastForwardRunner ffRunner;
         private PaidAbilityObserver paidAbilityObserver;
         private SportsHopper hopper;
 
@@ -29,9 +30,10 @@ namespace tests
             var gameFlowLog = new GameFlowLog();
             gameFlowLog.Display(game);
             passiveCorp = new PassiveCorp(game);
+            ffRunner = new FastForwardRunner(game);
             paidAbilityObserver = new PaidAbilityObserver();
             hopper = new SportsHopper();
-            game.flow.paidWindow.ObserveAbility(paidAbilityObserver);
+            game.runner.paidWindow.ObserveAbility(paidAbilityObserver);
         }
 
         [Test, Timeout(1000)]
@@ -47,6 +49,7 @@ namespace tests
             zones.grip.ObserveAdditions(gripObserver);
             zones.rig.ObserveUninstallations(rigObserver);
             zones.heap.Observe(heapObserver);
+            ffRunner.FastForwardToActionPhase();
             game.runner.actionCard.Install(hopper).Trigger(game);
             var popHopper = paidAbilityObserver.NewestPaidAbility;
 
@@ -64,6 +67,7 @@ namespace tests
             passiveCorp.SkipTurn();
             game.runner.zones.grip.Add(hopper);
 
+            ffRunner.FastForwardToActionPhase();
             RunnerAction();
             RunnerAction();
             game.runner.actionCard.Install(hopper).Trigger(game);
@@ -126,6 +130,7 @@ namespace tests
         private void RunnerAction()
         {
             game.runner.actionCard.credit.Trigger(game);
+            ffRunner.SkipPaidWindow();
         }
 
         private void CorpAction()
@@ -135,7 +140,8 @@ namespace tests
 
         private void PassWindow()
         {
-            game.flow.paidWindow.Pass();
+            game.corp.paidWindow.Pass();
+            game.runner.paidWindow.Pass();
         }
     }
 }

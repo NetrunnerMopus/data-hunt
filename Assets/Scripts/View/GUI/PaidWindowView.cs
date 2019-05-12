@@ -71,12 +71,12 @@ namespace view.gui
             return label;
         }
 
-        void IPaidWindowObserver.NotifyPaidWindowClosed()
+        void IPaidWindowObserver.NotifyPaidWindowClosed(PaidWindow window)
         {
             gameObject.SetActive(false);
         }
 
-        void IPaidWindowObserver.NotifyPaidWindowOpened()
+        void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
         {
             gameObject.SetActive(true);
         }

@@ -13,12 +13,22 @@ namespace tests.mocks
 
         public void SkipTurn()
         {
+            SkipPaidWindow();
             var clickForCredit = game.corp.actionCard.credit;
+            SkipPaidWindow();
             for (int i = 0; i < 3; i++)
             {
                 clickForCredit.Trigger(game);
+                SkipPaidWindow();
             }
             DiscardRandomCards();
+            SkipPaidWindow();
+        }
+
+        private void SkipPaidWindow()
+        {
+            game.corp.paidWindow.Pass();
+            game.runner.paidWindow.Pass();
         }
 
         public void DiscardRandomCards()

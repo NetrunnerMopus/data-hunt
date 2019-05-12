@@ -24,9 +24,10 @@ namespace view.log
 
         public void Display(Game game)
         {
-            game.flow.paidWindow.ObserveWindow(this);
-            var runnerTurn = game.flow.runnerTurn;
-            var corpTurn = game.flow.corpTurn;
+            game.corp.paidWindow.ObserveWindow(this);
+            game.runner.paidWindow.ObserveWindow(this);
+            var runnerTurn = game.runner.turn;
+            var corpTurn = game.corp.turn;
             corpTurn.ObserveSteps(this);
             corpTurn.ObserveActions(this);
             corpTurn.rezWindow.ObserveWindow(this);
@@ -48,14 +49,14 @@ namespace view.log
             Debug.Log(currentStep + message);
         }
 
-        void IPaidWindowObserver.NotifyPaidWindowOpened()
+        void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
         {
-            Log("paid window opened");
+            Log(window + " opened");
         }
 
-        void IPaidWindowObserver.NotifyPaidWindowClosed()
+        void IPaidWindowObserver.NotifyPaidWindowClosed(PaidWindow window)
         {
-            Log("paid window closed");
+            Log(window + " closed");
         }
 
         void ICorpActionObserver.NotifyActionTaking()

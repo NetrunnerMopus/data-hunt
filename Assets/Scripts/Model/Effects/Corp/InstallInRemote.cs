@@ -22,7 +22,7 @@ namespace model.effects.corp
             if (card.Type.Rezzable)
             {
                 var rezzable = new Rezzable(card, game);
-                game.flow.corpTurn.rezWindow.Add(rezzable);
+                game.corp.turn.rezWindow.Add(rezzable);
             }
             game.corp.zones.hq.Remove(card);
         }

@@ -2,6 +2,7 @@
 using model.play;
 using model.play.corp;
 using model.player;
+using model.timing;
 using model.timing.corp;
 using model.zones;
 using model.zones.corp;
@@ -12,12 +13,24 @@ using System.Threading.Tasks;
 
 namespace model.ai
 {
-    public class CorpAi : IPilot, ICorpActionObserver, IHqDiscardObserver, IRezWindowObserver, IRezzableObserver, IActionPotentialObserver, IUsabilityObserver
+    public class CorpAi :
+        IPilot,
+        ICorpActionObserver,
+        IHqDiscardObserver,
+        IRezWindowObserver,
+        IRezzableObserver,
+        IActionPotentialObserver,
+        IUsabilityObserver,
+        IPaidWindowObserver,
+        IPaidAbilityObserver
     {
         private Game game;
         private Zones zones;
         private Task Thinking() => Task.Delay(700);
+        private HashSet<Ability> actions = new HashSet<Ability>();
         private HashSet<Ability> legalActions = new HashSet<Ability>();
+        private HashSet<Ability> paidAbilities = new HashSet<Ability>();
+
         private Random random;
 
         public CorpAi(Random random)
@@ -30,8 +43,10 @@ namespace model.ai
             this.game = game;
             zones = game.corp.zones;
             game.corp.actionCard.ObservePotentialActions(this);
-            game.flow.corpTurn.ObserveActions(this);
-            game.flow.corpTurn.rezWindow.ObserveWindow(this);
+            game.corp.turn.ObserveActions(this);
+            game.corp.turn.rezWindow.ObserveWindow(this);
+            game.corp.paidWindow.ObserveWindow(this);
+            game.corp.paidWindow.ObserveAbility(this);
             zones.hq.ObserveDiscarding(this);
         }
 
@@ -63,7 +78,7 @@ namespace model.ai
             {
                 rezzable.ObserveRezzable(this);
             }
-            game.flow.corpTurn.rezWindow.Pass();
+            game.corp.turn.rezWindow.Pass();
         }
 
 
@@ -84,23 +99,50 @@ namespace model.ai
 
         void IActionPotentialObserver.NotifyPotentialAction(Ability action)
         {
+            actions.Add(action);
             action.ObserveUsability(this, game);
+        }
+
+
+        public void NotifyPaidAbilityAvailable(Ability ability, Card source)
+        {
+            paidAbilities.Add(ability);
+            ability.ObserveUsability(this, game);
         }
 
         void IUsabilityObserver.NotifyUsable(bool usable, Ability ability)
         {
-            if (usable)
+            if (actions.Contains(ability))
             {
-                legalActions.Add(ability);
+                if (usable)
+                {
+                    legalActions.Add(ability);
+                }
+                else
+                {
+                    legalActions.Remove(ability);
+                }
             }
-            else
+            if (paidAbilities.Contains(ability))
             {
-                legalActions.Remove(ability);
+                if (usable)
+                {
+                    ability.Trigger(game);
+                }
             }
         }
 
         IChoice<Card> IPilot.ChooseACard() => new CardChoice();
         IChoice<IInstallDestination> IPilot.ChooseAnInstallDestination() => new InstallDestinationChoice();
+
+        void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
+        {
+            window.Pass();
+        }
+
+        void IPaidWindowObserver.NotifyPaidWindowClosed(PaidWindow window)
+        {
+        }
 
         private class CardChoice : IChoice<Card>
         {

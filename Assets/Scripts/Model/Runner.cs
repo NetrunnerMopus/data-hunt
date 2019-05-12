@@ -1,6 +1,8 @@
 ﻿using model.cards;
 using model.play.runner;
 using model.player;
+using model.timing;
+using model.timing.runner;
 using model.zones.runner;
 
 namespace model
@@ -8,6 +10,8 @@ namespace model
     public class Runner
     {
         public readonly IPilot pilot;
+        public readonly Turn turn;
+        public readonly PaidWindow paidWindow;
         public readonly ActionCard actionCard;
         public int tags = 0;
         public readonly Zones zones;
@@ -17,6 +21,8 @@ namespace model
 
         public Runner(
             IPilot pilot,
+            Turn turn,
+            PaidWindow paidWindow,
             ActionCard actionCard,
             int tags,
             Zones zones,
@@ -26,6 +32,8 @@ namespace model
         )
         {
             this.pilot = pilot;
+            this.turn = turn;
+            this.paidWindow = paidWindow;
             this.actionCard = actionCard;
             this.tags = tags;
             this.zones = zones;

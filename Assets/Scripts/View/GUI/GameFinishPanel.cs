@@ -1,4 +1,4 @@
-﻿using model.timing;
+﻿using model;
 using UnityEngine;
 using UnityEngine.UI;
 
