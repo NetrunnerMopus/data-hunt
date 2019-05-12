@@ -4,7 +4,7 @@ namespace model.costs
 {
     public class SelfTrash : ICost
     {
-        private Card card;
+        private readonly Card card;
 
         public SelfTrash(Card card)
         {

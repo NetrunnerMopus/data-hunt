@@ -1,4 +1,5 @@
 ﻿using model.cards;
+using System;
 using System.Collections.Generic;
 
 namespace model.zones.runner
@@ -20,6 +21,10 @@ namespace model.zones.runner
 
         public void Uninstall(Card card)
         {
+            if (!cards.Contains(card))
+            {
+                throw new Exception("Tried to uninstall a card, which is not in the Rig: " + card);
+            }
             cards.Remove(card);
             foreach (var observer in uninstallations)
             {

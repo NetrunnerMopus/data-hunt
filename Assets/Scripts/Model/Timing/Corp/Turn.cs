@@ -45,7 +45,10 @@ namespace model.timing.corp
 
         async private Task OpenPaidWindow()
         {
-            await game.flow.paidWindow.Open();
+            await game.OpenPaidWindow(
+                acting: game.corp.paidWindow,
+                reacting: game.runner.paidWindow
+            );
         }
 
         async private Task OpenRezWindow()
@@ -79,7 +82,7 @@ namespace model.timing.corp
             }
             else
             {
-                game.flow.DeckCorp();
+                game.DeckCorp();
             }
         }
 
@@ -99,18 +102,23 @@ namespace model.timing.corp
         {
             while (game.corp.clicks.Remaining() > 0)
             {
-                Task actionTaking = game.corp.actionCard.TakeAction();
-                foreach (var observer in actions)
-                {
-                    observer.NotifyActionTaking();
-                }
-                await actionTaking;
-                Task paid = OpenPaidWindow();
-                Task rez = OpenRezWindow();
-                await paid;
-                await rez;
-                OpenScoreWindow();
+                await TakeAction();
             }
+        }
+
+        async private Task TakeAction()
+        {
+            Task actionTaking = game.corp.actionCard.TakeAction();
+            foreach (var observer in actions)
+            {
+                observer.NotifyActionTaking();
+            }
+            await actionTaking;
+            Task paid = OpenPaidWindow();
+            Task rez = OpenRezWindow();
+            OpenScoreWindow();
+            await paid;
+            await rez;
         }
 
         async private Task DiscardPhase()

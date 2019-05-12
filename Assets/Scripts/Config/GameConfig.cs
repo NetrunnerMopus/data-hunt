@@ -4,6 +4,7 @@ using view.gui;
 using model.ai;
 using view.log;
 using model.player;
+using controller;
 
 public class GameConfig : MonoBehaviour
 {

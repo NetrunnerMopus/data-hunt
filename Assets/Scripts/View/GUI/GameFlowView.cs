@@ -14,8 +14,8 @@ namespace view.gui
             var flow = CreateFlow();
             var corpPool = CreateCorpClicks(game);
             var runnerPool = CreateRunnerClicks(game);
-            var window = CreatePaidWindow(game.flow.paidWindow);
-            var gameFinish = CreateGameFinish(game.flow);
+            var window = CreatePaidWindow(game.runner.paidWindow);
+            var gameFinish = CreateGameFinish(game);
             corpPool.AttachTo(flow);
             runnerPool.AttachTo(flow);
             window.AttachTo(flow);
@@ -82,7 +82,7 @@ namespace view.gui
             return view;
         }
 
-        private GameObject CreateGameFinish(GameFlow flow)
+        private GameObject CreateGameFinish(Game game)
         {
 			var view = new GameObject("Game finish");
 			var rectangle = view.AddComponent<RectTransform>();
@@ -90,7 +90,7 @@ namespace view.gui
 			rectangle.anchorMax = new Vector2(0.70f, 0.70f);
 			rectangle.offsetMin = Vector2.zero;
 			rectangle.offsetMax = Vector2.zero;
-			flow.ObserveFinish(view.AddComponent<GameFinishPanel>());
+			game.ObserveFinish(view.AddComponent<GameFinishPanel>());
 			return view;
         }
     }

@@ -2,6 +2,7 @@
 using model.costs;
 using model.effects.corp;
 using model.play;
+using model.timing;
 using model.zones;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,11 +32,12 @@ namespace model.cards.corp
             {
                 IEffect gain = new Gain(3);
                 gain.Resolve(game);
+                var paidWindow = game.corp.paidWindow;
                 var pop = new Ability(
-                    cost: new SelfTrash(card),
+                    cost: new Conjunction(paidWindow.Permission(), new SelfTrash(card)),
                     effect: new AdvancedAssemblyLinesInstall()
                 );
-                game.flow.paidWindow.Add(pop, card);
+                paidWindow.Add(pop, card);
             }
 
             void IEffect.Observe(IImpactObserver observer, Game game)

@@ -42,7 +42,10 @@ namespace model.timing.runner
 
         async private Task OpenPaidWindow()
         {
-            await game.flow.paidWindow.Open();
+            await game.OpenPaidWindow(
+                acting: game.runner.paidWindow,
+                reacting: game.corp.paidWindow
+            );
         }
 
         private void OpenRezWindow()

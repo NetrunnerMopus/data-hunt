@@ -20,7 +20,7 @@ namespace view.gui
         {
             this.game = game;
             this.playZone = playZone;
-            game.flow.paidWindow.ObserveAbility(this);
+            game.runner.paidWindow.ObserveAbility(this);
             game.runner.zones.rig.ObserveInstallations(this);
             game.runner.zones.rig.ObserveUninstallations(this);
         }

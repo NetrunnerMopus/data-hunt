@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using model.timing;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Linq;
 using view.gui;
-using model.timing;
 
 namespace controller
 {

@@ -7,45 +7,40 @@ namespace model.timing
 {
     public class PaidWindow
     {
+        private readonly string label;
         private PaidWindowPermission permission = new PaidWindowPermission();
-        private TaskCompletionSource<bool> windowClosing;
-        private bool used = false;
         private HashSet<IPaidWindowObserver> windowObservers = new HashSet<IPaidWindowObserver>();
         private HashSet<IPaidAbilityObserver> abilityObservers = new HashSet<IPaidAbilityObserver>();
         private List<Ability> abilities = new List<Ability>();
+        private TaskCompletionSource<bool> pass;
+
+        public PaidWindow(string label)
+        {
+            this.label = label;
+        }
 
         public ICost Permission() => permission;
 
-        async public Task<bool> Open()
+        async public Task<bool> AwaitPass()
         {
-            windowClosing = new TaskCompletionSource<bool>();
-            if (abilities.Count == 0)
-            {
-                return false;
-            }
-            used = false;
+            pass = new TaskCompletionSource<bool>();
             permission.Grant();
             foreach (var observer in windowObservers)
             {
-                observer.NotifyPaidWindowOpened();
+                observer.NotifyPaidWindowOpened(this);
             }
-            var result = await windowClosing.Task;
-            permission.Revoke();
+            await pass.Task;
             foreach (var observer in windowObservers)
             {
-                observer.NotifyPaidWindowClosed();
+                observer.NotifyPaidWindowClosed(this);
             }
-            return result;
-        }
-
-        public void Use()
-        {
-            used = true;
+            permission.Revoke();
+            return !permission.WasPaid();
         }
 
         public void Pass()
         {
-            windowClosing.SetResult(used);
+            pass.SetResult(true);
         }
 
         public void Add(Ability ability, Card source)
@@ -77,51 +72,16 @@ namespace model.timing
             abilityObservers.Add(observer);
         }
 
-        private class PaidWindowPermission : ICost
+        public override string ToString()
         {
-            private bool allowed = false;
-            private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
-
-            void ICost.Pay(Game game)
-            {
-                if (!allowed)
-                {
-                    throw new System.Exception("Tried to fire a paid ability while the window was closed");
-                }
-            }
-
-            void ICost.Observe(IPayabilityObserver observer, Game game)
-            {
-                observers.Add(observer);
-                observer.NotifyPayable(allowed, this);
-            }
-
-            public void Grant()
-            {
-                allowed = true;
-                Update();
-            }
-
-            public void Revoke()
-            {
-                allowed = false;
-                Update();
-            }
-
-            private void Update()
-            {
-                foreach (var observer in observers)
-                {
-                    observer.NotifyPayable(allowed, this);
-                }
-            }
+            return "PaidWindow(label=" + label + ")";
         }
     }
 
     public interface IPaidWindowObserver
     {
-        void NotifyPaidWindowOpened();
-        void NotifyPaidWindowClosed();
+        void NotifyPaidWindowOpened(PaidWindow window);
+        void NotifyPaidWindowClosed(PaidWindow window);
     }
 
     public interface IPaidAbilityObserver

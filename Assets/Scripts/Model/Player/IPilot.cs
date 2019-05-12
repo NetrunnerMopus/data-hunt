@@ -1,6 +1,5 @@
 ﻿using model.cards;
 using model.zones;
-using model.zones.corp;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
