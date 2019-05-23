@@ -18,7 +18,7 @@ namespace model.costs
 
         void ICost.Pay(Game game)
         {
-            game.runner.zones.rig.Uninstall(card);
+            card.Zone.Remove(card);
             game.runner.zones.heap.Add(card);
         }
     }

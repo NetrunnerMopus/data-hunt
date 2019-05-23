@@ -6,13 +6,12 @@ namespace model.zones.runner
 {
     public class Stack
     {
+        public readonly Zone Zone;
         private Deck deck;
-        private HashSet<IZoneCountObserver> counts = new HashSet<IZoneCountObserver>();
-        private HashSet<IStackPopObserver> pops = new HashSet<IStackPopObserver>();
-
         public Stack(Deck deck)
         {
             this.deck = deck;
+            Zone = new Zone("Stack", deck.cards);
         }
 
         public void Shuffle()
@@ -32,42 +31,12 @@ namespace model.zones.runner
                 }
             }
         }
-
-        public Card RemoveTop()
+            
+        private Card RemoveTop()
         {
-            var card = deck.RemoveTop();
-            var cards = deck.Size();
-            var empty = cards == 0;
-            foreach (var observer in pops)
-            {
-                observer.NotifyCardPopped(empty);
-            }
-            foreach (var observer in counts)
-            {
-                observer.NotifyCount(cards);
-            }
-            return card;
+            var top = Zone.Cards[0];
+            Zone.Remove(top);
+            return top;
         }
-
-        public void ObserveCount(IZoneCountObserver observer)
-        {
-            counts.Add(observer);
-            observer.NotifyCount(deck.Size());
-        }
-
-        public void ObservePopping(IStackPopObserver observer)
-        {
-            pops.Add(observer);
-        }
-    }
-
-    public interface IStackCountObserver
-    {
-        void NotifyCardCount(int cards);
-    }
-
-    public interface IStackPopObserver
-    {
-        void NotifyCardPopped(bool empty);
     }
 }

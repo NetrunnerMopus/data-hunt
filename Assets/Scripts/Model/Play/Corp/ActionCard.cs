@@ -2,6 +2,7 @@
 using model.choices;
 using model.costs;
 using model.effects.corp;
+using model.zones;
 using model.zones.corp;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace model.play.corp
 {
-    public class ActionCard : IResolutionObserver, IHqAdditionObserver, IRemoteObserver
+    public class ActionCard : IResolutionObserver, IZoneAdditionObserver, IRemoteObserver
     {
         private Zones zones;
         public readonly Ability credit;
@@ -21,7 +22,7 @@ namespace model.play.corp
         public ActionCard(Zones zones)
         {
             this.zones = zones;
-            zones.hq.ObserveAdditions(this);
+            zones.hq.Zone.ObserveAdditions(this);
             zones.ObserveRemotes(this);
             credit = new Ability(new Conjunction(new CorpClickCost(1), permission), new Gain(1));
             credit.ObserveResolution(this);
@@ -88,7 +89,7 @@ namespace model.play.corp
             }
         }
 
-        void IHqAdditionObserver.NotifyCardAdded(Card card)
+        void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
             foreach (var action in InferActions(card))
             {
@@ -118,7 +119,8 @@ namespace model.play.corp
         {
             zones
                   .hq
-                  .cards
+                  .Zone
+                  .Cards
                   .Where(card => card.Type.Installable)
                   .Select(card => InstallInRemote(card, new ExistingRemoteInstallationChoice(remote)))
                   .ToList()

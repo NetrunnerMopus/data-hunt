@@ -6,10 +6,11 @@ using model.play;
 using controller;
 using model;
 using model.timing;
+using model.zones;
 
 namespace view.gui
 {
-    public class RigGrid : MonoBehaviour, IInstallationObserver, IUninstallationObserver, IPaidAbilityObserver
+    public class RigGrid : MonoBehaviour, IZoneAdditionObserver, IZoneRemovalObserver, IPaidAbilityObserver
     {
         private Game game;
         private DropZone playZone;
@@ -21,8 +22,8 @@ namespace view.gui
             this.game = game;
             this.playZone = playZone;
             game.runner.paidWindow.ObserveAbility(this);
-            game.runner.zones.rig.ObserveInstallations(this);
-            game.runner.zones.rig.ObserveUninstallations(this);
+            game.runner.zones.rig.zone.ObserveAdditions(this);
+            game.runner.zones.rig.zone.ObserveRemovals(this);
         }
 
         void Awake()
@@ -30,13 +31,13 @@ namespace view.gui
             printer = gameObject.AddComponent<CardPrinter>();
         }
 
-        void IInstallationObserver.NotifyInstalled(Card card)
+        void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
             var visual = printer.Print(card);
             visuals[card] = visual;
         }
 
-        void IUninstallationObserver.NotifyUninstalled(Card card)
+        void IZoneRemovalObserver.NotifyCardRemoved(Card card)
         {
             Destroy(visuals[card]);
         }

@@ -23,7 +23,7 @@ namespace model.effects.runner
         void IEffect.Observe(IImpactObserver observer, Game game)
         {
             observers.Add(observer);
-            game.runner.zones.stack.ObserveCount(this);
+            game.runner.zones.stack.Zone.ObserveCount(this);
         }
 
         void IZoneCountObserver.NotifyCount(int count)

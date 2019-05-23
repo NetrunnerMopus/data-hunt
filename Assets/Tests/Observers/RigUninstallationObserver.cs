@@ -1,13 +1,14 @@
 ﻿using model.cards;
+using model.zones;
 using model.zones.runner;
 
 namespace tests.observers
 {
-    class RigObserver : IUninstallationObserver
+    class RigObserver : IZoneRemovalObserver
     {
         public Card LastUninstalled { get; private set; }
 
-        void IUninstallationObserver.NotifyUninstalled(Card card)
+        void IZoneRemovalObserver.NotifyCardRemoved(Card card)
         {
             LastUninstalled = card;
         }

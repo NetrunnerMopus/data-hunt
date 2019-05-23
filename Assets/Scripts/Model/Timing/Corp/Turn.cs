@@ -139,7 +139,7 @@ namespace model.timing.corp
         async private Task Discard()
         {
             var hq = game.corp.zones.hq;
-            while (hq.Count > 5)
+            while (hq.Zone.Count > 5)
             {
                 await hq.Discard();
             }

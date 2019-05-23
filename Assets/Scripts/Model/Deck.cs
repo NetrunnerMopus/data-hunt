@@ -5,7 +5,7 @@ namespace model
 {
     public class Deck
     {
-        private List<Card> cards;
+        public readonly List<Card> cards;
         public readonly Card identity;
         private System.Random rng;
 
@@ -21,25 +21,6 @@ namespace model
         public void Shuffle()
         {
             cards.Sort((card1, card2) => rng.Next().CompareTo(rng.Next()));
-        }
-
-        public Card RemoveTop()
-        {
-            if (HasCards())
-            {
-                Card drawn = cards[0];
-                cards.RemoveAt(0);
-                return drawn;
-            }
-            else
-            {
-                throw new System.Exception("Trying to draw from an empty deck");
-            }
-        }
-
-        public bool HasCards()
-        {
-            return cards.Count > 0;
         }
 
         public int Size()
