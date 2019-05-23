@@ -5,8 +5,8 @@ namespace model.zones.corp
 {
     public class Remote : IServer, IInstallDestination
     {
-        string IServer.Name => "Remote";
-        IceColumn IServer.Ice => new IceColumn();
+        public Zone Zone => new Zone("Remote");
+        public IceColumn Ice => new IceColumn();
         private List<Card> cards = new List<Card>();
         private HashSet<IServerContentObserver> observers = new HashSet<IServerContentObserver>();
 

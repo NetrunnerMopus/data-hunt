@@ -47,7 +47,7 @@ namespace tests
             var rigObserver = new RigObserver();
             var heapObserver = new HeapObserver();
             zones.grip.ObserveAdditions(gripObserver);
-            zones.rig.ObserveUninstallations(rigObserver);
+            zones.rig.zone.ObserveRemovals(rigObserver);
             zones.heap.Observe(heapObserver);
             ffRunner.FastForwardToActionPhase();
             game.runner.actionCard.Install(hopper).Trigger(game);

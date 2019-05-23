@@ -2,7 +2,7 @@
 {
     public interface IServer
     {
-        string Name { get; }
+        Zone Zone { get; }
         IceColumn Ice { get; }
     }
 }

@@ -9,6 +9,7 @@ namespace model.cards
 
         public abstract string Name { get; }
         public abstract IType Type { get; }
+        public Zone Zone { get; set; }
         public abstract ICost PlayCost { get; }
         public abstract IEffect Activation { get; }
         public abstract Faction Faction { get; }

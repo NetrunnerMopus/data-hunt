@@ -15,8 +15,8 @@ namespace view.gui
 			var rd = servers.Box(zones.rd).Printer.PrintCorpFacedown("Top of R&D");
 			var hq = servers.Box(zones.hq).Printer.Print(game.corp.identity);
             zones.archives.Observe(archives.AddComponent<ArchivesPile>());
-			zones.hq.ObserveCount(hq.AddComponent<PileCount>());
-			zones.rd.ObserveCount(rd.AddComponent<PileCount>());
+			zones.hq.Zone.ObserveCount(hq.AddComponent<PileCount>());
+			zones.rd.Zone.ObserveCount(rd.AddComponent<PileCount>());
 			return new CorpView(servers);
         }
     }

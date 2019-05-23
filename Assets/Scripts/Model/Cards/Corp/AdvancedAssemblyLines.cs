@@ -67,7 +67,7 @@ namespace model.cards.corp
             void IEffect.Observe(IImpactObserver observer, Game game)
             {
                 observers.Add(observer);
-                game.corp.zones.hq.ObserveCards(this);
+                game.corp.zones.hq.Zone.ObserveCards(this);
             }
 
             void ICardsObserver.NotifyCards(List<Card> cards)

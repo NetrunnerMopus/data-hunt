@@ -1,10 +1,10 @@
 ﻿using model.cards;
-using model.zones.corp;
+using model.zones;
 using System.Collections.Generic;
 
 namespace model.costs
 {
-    public class InHq : ICost, IHqAdditionObserver, IHqRemovalObserver
+    public class InHq : ICost, IZoneAdditionObserver, IZoneRemovalObserver
     {
         private Card card;
         private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
@@ -17,12 +17,12 @@ namespace model.costs
         void ICost.Observe(IPayabilityObserver observer, Game game)
         {
             observers.Add(observer);
-            var hq = game.corp.zones.hq;
+            var hq = game.corp.zones.hq.Zone;
             hq.ObserveAdditions(this);
             hq.ObserveRemovals(this);
         }
 
-        void IHqAdditionObserver.NotifyCardAdded(Card card)
+        void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
             if (card == this.card)
             {
@@ -38,7 +38,7 @@ namespace model.costs
             }
         }
 
-        void IHqRemovalObserver.NotifyCardRemoved(Card card)
+        void IZoneRemovalObserver.NotifyCardRemoved(Card card)
         {
             if (card == this.card)
             {

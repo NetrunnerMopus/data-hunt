@@ -8,59 +8,19 @@ namespace model.zones.corp
 {
     public class Headquarters : IServer
     {
-        string IServer.Name => "HQ";
-        IceColumn IServer.Ice => new IceColumn();
-        public int Count => cards.Count;
-        public List<Card> cards = new List<Card>();
-        private HashSet<IHqAdditionObserver> additions = new HashSet<IHqAdditionObserver>();
-        private HashSet<IHqRemovalObserver> removals = new HashSet<IHqRemovalObserver>();
-        private HashSet<IZoneCountObserver> counts = new HashSet<IZoneCountObserver>();
-        private HashSet<ICardsObserver> pools = new HashSet<ICardsObserver>();
+        public Zone Zone => new Zone("HQ");
+        public IceColumn Ice => new IceColumn();
         private HashSet<IHqDiscardObserver> discards = new HashSet<IHqDiscardObserver>();
         private TaskCompletionSource<bool> discarding;
         private Random random;
 
-        public Headquarters()
-        {
-            random = new Random();
-        }
+        public Headquarters() : this(new Random()) { }
 
-        public Headquarters(int seed)
-        {
-            random = new Random(seed);
-        }
+        public Headquarters(int seed) : this(new Random(seed)) { }
 
-        public void Add(Card card)
+        private Headquarters(Random random)
         {
-            cards.Add(card);
-            NotifyChanges();
-
-            foreach (var observer in (new HashSet<IHqAdditionObserver>(additions)))
-            {
-                observer.NotifyCardAdded(card);
-            }
-        }
-
-        public void Remove(Card card)
-        {
-            cards.Remove(card);
-            NotifyChanges();
-            foreach (var observer in removals)
-            {
-                observer.NotifyCardRemoved(card);
-            }
-        }
-
-        private void NotifyChanges()
-        {
-            foreach (var observer in counts)
-            {
-                observer.NotifyCount(cards.Count);
-            }
-            foreach (var observer in pools)
-            {
-                observer.NotifyCards(cards);
-            }
+            this.random = random;
         }
 
         async public Task Discard()
@@ -75,7 +35,7 @@ namespace model.zones.corp
 
         public void Discard(Card card, Archives heap)
         {
-            Remove(card);
+            Zone.Remove(card);
             heap.Add(card);
             foreach (var observer in discards)
             {
@@ -84,47 +44,15 @@ namespace model.zones.corp
             discarding.SetResult(true);
         }
 
-        public Card Find<T>() where T : Card => cards.OfType<T>().FirstOrDefault();
+        public Card Find<T>() where T : Card => Zone.Cards.OfType<T>().FirstOrDefault();
 
-        public Card Random() => cards[random.Next(0, Count)];
-
-        public void ObserveCards(ICardsObserver observer)
-        {
-            pools.Add(observer);
-            NotifyChanges();
-        }
-
-        public void ObserveAdditions(IHqAdditionObserver observer)
-        {
-            additions.Add(observer);
-        }
-
-        public void ObserveRemovals(IHqRemovalObserver observer)
-        {
-            removals.Add(observer);
-        }
-
-        public void ObserveCount(IZoneCountObserver observer)
-        {
-            counts.Add(observer);
-        }
+        public Card Random() => Zone.Cards[random.Next(0, Zone.Count)];
 
         public void ObserveDiscarding(IHqDiscardObserver observer)
         {
             discards.Add(observer);
         }
     }
-
-    public interface IHqAdditionObserver
-    {
-        void NotifyCardAdded(Card card);
-    }
-
-    public interface IHqRemovalObserver
-    {
-        void NotifyCardRemoved(Card card);
-    }
-
     public interface IHqDiscardObserver
     {
         void NotifyDiscarding(bool discarding);

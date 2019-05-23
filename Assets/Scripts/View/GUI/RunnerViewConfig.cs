@@ -34,8 +34,8 @@ namespace view.gui
 
             game.runner.credits.Observe(GameObject.Find("Runner/Right hand/Credits/Credits text").AddComponent<CreditPoolText>());
             var zones = game.runner.zones;
-            zones.stack.ObserveCount(stackPile.gameObject.AddComponent<PileCount>());
-            zones.stack.ObservePopping(stackPile);
+            zones.stack.Zone.ObserveCount(stackPile.gameObject.AddComponent<PileCount>());
+            zones.stack.Zone.ObserveCount(stackPile);
             zones.grip.ObserveAdditions(grip);
             zones.grip.ObserveRemovals(grip);
             zones.heap.Observe(Object.FindObjectOfType<HeapPile>());

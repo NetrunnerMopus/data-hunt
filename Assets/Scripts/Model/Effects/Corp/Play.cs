@@ -15,7 +15,7 @@ namespace model.effects.corp
         void IEffect.Resolve(Game game)
         {
             card.FlipFaceUp();
-            game.corp.zones.hq.Remove(card);
+            game.corp.zones.hq.Zone.Remove(card);
             card.Activation.Resolve(game);
             game.corp.zones.archives.Add(card);
         }

@@ -29,7 +29,7 @@ namespace view.gui
 
         public ServerBox Box(IServer server)
         {
-            var gameObject = new GameObject(server.Name);
+            var gameObject = new GameObject(server.Zone.Name);
             var box = new ServerBox(gameObject, server);
             gameObject.transform.SetParent(transform, false);
             gameObject.transform.SetAsFirstSibling();

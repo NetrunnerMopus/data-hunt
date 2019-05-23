@@ -5,14 +5,13 @@ namespace model.zones.corp
 {
     public class ResearchAndDevelopment : IServer
     {
-        string IServer.Name => "R&D";
-        IceColumn IServer.Ice => new IceColumn();
+        public Zone Zone { get; }
+        public IceColumn Ice => new IceColumn();
         private Deck deck;
-		private HashSet<IZoneCountObserver> counts = new HashSet<IZoneCountObserver>();
-
-		public ResearchAndDevelopment(Deck deck)
+        public ResearchAndDevelopment(Deck deck)
         {
             this.deck = deck;
+            Zone = new Zone("R&D", deck.cards);
         }
 
         public void Shuffle()
@@ -28,26 +27,16 @@ namespace model.zones.corp
             {
                 if (HasCards())
                 {
-                    hq.Add(RemoveTop());
+                    hq.Zone.Add(RemoveTop());
                 }
             }
         }
 
-        public Card RemoveTop()
+        private Card RemoveTop()
         {
-            var top = deck.RemoveTop();
-			NotifyCount();
-			return top;
+            var top = Zone.Cards[0];
+            Zone.Remove(top);
+            return top;
         }
-
-		private void NotifyCount() {
-			foreach (var observer in counts) {
-				observer.NotifyCount(deck.Size());
-			}
-		}
-
-		public void ObserveCount(IZoneCountObserver observer) {
-			counts.Add(observer);
-		}
-	}
+    }
 }
