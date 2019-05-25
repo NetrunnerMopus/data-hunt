@@ -20,7 +20,7 @@ public class GameConfig : MonoBehaviour
         );
         var runnerPlayer = new Player(
             deck: new Decks().DemoRunner(),
-            pilot: new NoPilot()
+            pilot: new AutoPaidWindowPilot(new NoPilot())
         );
         game = new Game(corpPlayer, runnerPlayer, new Shuffling(10006));
     }
