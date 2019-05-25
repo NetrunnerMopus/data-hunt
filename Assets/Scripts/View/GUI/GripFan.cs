@@ -4,10 +4,11 @@ using model.cards;
 using model;
 using System.Collections.Generic;
 using model.zones.runner;
+using model.zones;
 
 namespace view.gui
 {
-    public class GripFan : MonoBehaviour, IGripAdditionObserver, IGripRemovalObserver
+    public class GripFan : MonoBehaviour, IZoneAdditionObserver, IZoneRemovalObserver
     {
         private Game game;
         private DropZone playZone;
@@ -29,7 +30,7 @@ namespace view.gui
             printer = gameObject.AddComponent<CardPrinter>();
         }
 
-        void IGripAdditionObserver.NotifyCardAdded(Card card)
+        void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
             var visual = printer.Print(card);
             visuals[card] = visual;
@@ -64,7 +65,7 @@ namespace view.gui
                 );
         }
 
-        void IGripRemovalObserver.NotifyCardRemoved(Card card)
+        void IZoneRemovalObserver.NotifyCardRemoved(Card card)
         {
             Destroy(visuals[card]);
             visuals.Remove(card);

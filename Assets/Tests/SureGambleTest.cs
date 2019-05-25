@@ -29,8 +29,8 @@ namespace tests
             var heap = new HeapObserver();
             game.runner.credits.Observe(balance);
             game.runner.clicks.Observe(clicks);
-            game.runner.zones.grip.ObserveRemovals(grip);
-            game.runner.zones.heap.Observe(heap);
+            game.runner.zones.grip.zone.ObserveRemovals(grip);
+            game.runner.zones.heap.zone.ObserveAdditions(heap);
             var play = game.runner.actionCard.Play(sureGamble);
 
             play.Trigger(game);

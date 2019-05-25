@@ -12,14 +12,15 @@ namespace model.play.corp
 {
     public class ActionCard : IResolutionObserver, IZoneAdditionObserver, IRemoteObserver
     {
-        private Zones zones;
+        private zones.corp.Zones zones;
         public readonly Ability credit;
+        public readonly Ability draw;
         private TaskCompletionSource<bool> actionTaking;
         private ActionPermission permission = new ActionPermission();
         private List<Ability> potentialActions = new List<Ability>();
         private HashSet<IActionPotentialObserver> actionPotentialObservers = new HashSet<IActionPotentialObserver>();
 
-        public ActionCard(Zones zones)
+        public ActionCard(zones.corp.Zones zones)
         {
             this.zones = zones;
             zones.hq.Zone.ObserveAdditions(this);
@@ -27,6 +28,9 @@ namespace model.play.corp
             credit = new Ability(new Conjunction(new CorpClickCost(1), permission), new Gain(1));
             credit.ObserveResolution(this);
             MarkPotential(credit);
+            draw = new Ability(new Conjunction(new CorpClickCost(1), permission), new Draw(1));
+            draw.ObserveResolution(this);
+            MarkPotential(draw);
         }
 
         public Ability Play(Card card)

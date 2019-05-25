@@ -5,6 +5,7 @@ using model.ai;
 using view.log;
 using model.player;
 using controller;
+using model.zones;
 
 public class GameConfig : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class GameConfig : MonoBehaviour
             deck: new Decks().DemoRunner(),
             pilot: new NoPilot()
         );
-        game = new Game(corpPlayer, runnerPlayer);
+        game = new Game(corpPlayer, runnerPlayer, new Shuffling(10006));
     }
 
     void Start()

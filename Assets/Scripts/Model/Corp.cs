@@ -13,7 +13,7 @@ namespace model
         public readonly Turn turn;
         public readonly PaidWindow paidWindow;
         public readonly ActionCard actionCard;
-        public readonly Zones zones;
+        public readonly zones.corp.Zones zones;
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
         public readonly Card identity;
@@ -23,7 +23,7 @@ namespace model
             Turn turn,
             PaidWindow paidWindow,
             ActionCard actionCard,
-            Zones zones,
+            zones.corp.Zones zones,
             ClickPool clicks,
             CreditPool credits,
             Card identity

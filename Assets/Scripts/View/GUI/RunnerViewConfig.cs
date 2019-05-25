@@ -34,11 +34,11 @@ namespace view.gui
 
             game.runner.credits.Observe(GameObject.Find("Runner/Right hand/Credits/Credits text").AddComponent<CreditPoolText>());
             var zones = game.runner.zones;
-            zones.stack.Zone.ObserveCount(stackPile.gameObject.AddComponent<PileCount>());
-            zones.stack.Zone.ObserveCount(stackPile);
-            zones.grip.ObserveAdditions(grip);
-            zones.grip.ObserveRemovals(grip);
-            zones.heap.Observe(Object.FindObjectOfType<HeapPile>());
+            zones.stack.zone.ObserveCount(stackPile.gameObject.AddComponent<PileCount>());
+            zones.stack.zone.ObserveCount(stackPile);
+            zones.grip.zone.ObserveAdditions(grip);
+            zones.grip.zone.ObserveRemovals(grip);
+            zones.heap.zone.ObserveAdditions(Object.FindObjectOfType<HeapPile>());
         }
     }
 }

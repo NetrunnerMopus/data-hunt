@@ -1,11 +1,12 @@
 ﻿using model.cards;
+using model.zones;
 using model.zones.corp;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class ServerBox : IServerContentObserver
+    public class ServerBox : IZoneAdditionObserver
     {
         public readonly GameObject gameObject;
         public readonly IServer server;
@@ -22,7 +23,7 @@ namespace view.gui
             Printer = gameObject.AddComponent<CardPrinter>();
         }
 
-        void IServerContentObserver.NotifyCardInstalled(Card card)
+        void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
             var printedCard = Printer.PrintCorpFacedown(card.Name);
             var image = printedCard.GetComponent<Image>();

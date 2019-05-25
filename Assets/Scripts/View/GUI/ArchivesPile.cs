@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
 using model.zones.corp;
 using model.cards;
+using model.zones;
 
 namespace view.gui
 {
-    public class ArchivesPile : MonoBehaviour, IArchivesObserver
+    public class ArchivesPile : MonoBehaviour, IZoneAdditionObserver
     {
         void Start()
         {
             gameObject.AddComponent<CardPrinter>();
         }
 
-        void IArchivesObserver.NotifyCardAdded(Card card)
+        void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
             var printer = GetComponent<CardPrinter>();
             if (card.Faceup)

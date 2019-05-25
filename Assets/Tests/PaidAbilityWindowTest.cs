@@ -42,13 +42,13 @@ namespace tests
             game.Start();
             passiveCorp.SkipTurn();
             var zones = game.runner.zones;
-            zones.grip.Add(hopper);
+            hopper.MoveTo(zones.grip.zone);
             var gripObserver = new GripObserver();
             var rigObserver = new RigObserver();
             var heapObserver = new HeapObserver();
-            zones.grip.ObserveAdditions(gripObserver);
+            zones.grip.zone.ObserveAdditions(gripObserver);
             zones.rig.zone.ObserveRemovals(rigObserver);
-            zones.heap.Observe(heapObserver);
+            zones.heap.zone.ObserveAdditions(heapObserver);
             ffRunner.FastForwardToActionPhase();
             game.runner.actionCard.Install(hopper).Trigger(game);
             var popHopper = paidAbilityObserver.NewestPaidAbility;
@@ -65,7 +65,7 @@ namespace tests
         {
             game.Start();
             passiveCorp.SkipTurn();
-            game.runner.zones.grip.Add(hopper);
+            hopper.MoveTo(game.runner.zones.grip.zone);
 
             ffRunner.FastForwardToActionPhase();
             RunnerAction();
@@ -102,7 +102,7 @@ namespace tests
         {
             game.Start();
             passiveCorp.SkipTurn();
-            game.runner.zones.grip.Add(hopper);
+            hopper.MoveTo(game.runner.zones.grip.zone);
 
             RunnerAction();
             RunnerAction();

@@ -1,10 +1,12 @@
 ﻿using model.cards;
+using model.zones;
 
 namespace model.effects.runner
 {
     public class Play : IEffect
     {
         private Card card;
+        private Zone playZone = new Zone("Play");
 
         public Play(Card card)
         {
@@ -13,9 +15,9 @@ namespace model.effects.runner
 
         void IEffect.Resolve(Game game)
         {
-            game.runner.zones.grip.Remove(card);
+            card.MoveTo(playZone);
             card.Activation.Resolve(game);
-            game.runner.zones.heap.Add(card);
+            card.MoveTo(game.runner.zones.heap.zone);
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

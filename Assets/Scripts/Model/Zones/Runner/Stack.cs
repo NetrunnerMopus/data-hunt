@@ -6,20 +6,24 @@ namespace model.zones.runner
 {
     public class Stack
     {
-        public readonly Zone Zone;
-        private Deck deck;
-        public Stack(Deck deck)
+        public readonly Zone zone = new Zone("Stack");
+        private Shuffling shuffling;
+
+        public Stack(Deck deck, Shuffling shuffling)
         {
-            this.deck = deck;
-            Zone = new Zone("Stack", deck.cards);
+            this.shuffling = shuffling;
+            foreach (var card in deck.cards)
+            {
+                card.MoveTo(zone);
+            }
         }
 
         public void Shuffle()
         {
-            deck.Shuffle();
+            shuffling.Shuffle(zone.Cards);
         }
 
-        public bool HasCards() => deck.Size() > 0;
+        public bool HasCards() => zone.Cards.Count > 0;
 
         public void Draw(int cards, Grip grip)
         {
@@ -27,16 +31,9 @@ namespace model.zones.runner
             {
                 if (HasCards())
                 {
-                    grip.Add(RemoveTop());
+                    zone.Cards[0].MoveTo(grip.zone);
                 }
             }
-        }
-            
-        private Card RemoveTop()
-        {
-            var top = Zone.Cards[0];
-            Zone.Remove(top);
-            return top;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using model.cards;
+using model.zones;
 using System.Collections.Generic;
 
 namespace model.effects.corp
@@ -6,6 +7,7 @@ namespace model.effects.corp
     public class Play : IEffect
     {
         private Card card;
+        private Zone playZone = new Zone("Play");
 
         public Play(Card card)
         {
@@ -15,9 +17,9 @@ namespace model.effects.corp
         void IEffect.Resolve(Game game)
         {
             card.FlipFaceUp();
-            game.corp.zones.hq.Zone.Remove(card);
+            card.MoveTo(playZone);
             card.Activation.Resolve(game);
-            game.corp.zones.archives.Add(card);
+            card.MoveTo(game.corp.zones.archives.Zone);
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

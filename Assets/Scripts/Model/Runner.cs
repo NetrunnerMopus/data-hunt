@@ -18,6 +18,7 @@ namespace model
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
         public readonly Card identity;
+        public readonly Player player;
 
         public Runner(
             IPilot pilot,
@@ -48,7 +49,7 @@ namespace model
             credits.Gain(5);
             zones.stack.Shuffle();
             zones.stack.Draw(5, zones.grip);
-            zones.grip.ObserveAdditions(actionCard);
+            zones.grip.zone.ObserveAdditions(actionCard);
         }
     }
 }

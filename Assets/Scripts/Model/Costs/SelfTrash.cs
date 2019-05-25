@@ -18,8 +18,7 @@ namespace model.costs
 
         void ICost.Pay(Game game)
         {
-            card.Zone.Remove(card);
-            game.runner.zones.heap.Add(card);
+            card.MoveTo(game.runner.zones.heap.zone);
         }
     }
 }

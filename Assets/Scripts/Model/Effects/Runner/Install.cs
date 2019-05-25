@@ -13,8 +13,7 @@ namespace model.effects.runner
 
         void IEffect.Resolve(Game game)
         {
-            game.runner.zones.rig.zone.Add(card);
-            game.runner.zones.grip.Remove(card);
+            card.MoveTo(game.runner.zones.rig.zone);
             card.Activation.Resolve(game);
         }
 
