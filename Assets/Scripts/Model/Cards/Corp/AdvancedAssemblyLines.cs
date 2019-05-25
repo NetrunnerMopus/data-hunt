@@ -33,8 +33,9 @@ namespace model.cards.corp
                 IEffect gain = new Gain(3);
                 gain.Resolve(game);
                 var paidWindow = game.corp.paidWindow;
+                var archives = game.corp.zones.archives.Zone;
                 var pop = new Ability(
-                    cost: new Conjunction(paidWindow.Permission(), new SelfTrash(card)),
+                    cost: new Conjunction(paidWindow.Permission(), new Trash(card, archives)),
                     effect: new AdvancedAssemblyLinesInstall()
                 );
                 paidWindow.Add(pop, card);
