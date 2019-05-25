@@ -6,26 +6,22 @@ namespace model.zones
     public class Zone
     {
         public readonly string Name;
-        public List<Card> Cards;
+        public List<Card> Cards = new List<Card>();
         public int Count => Cards.Count;
         private HashSet<IZoneAdditionObserver> additions = new HashSet<IZoneAdditionObserver>();
         private HashSet<IZoneRemovalObserver> removals = new HashSet<IZoneRemovalObserver>();
         private HashSet<IZoneCountObserver> counts = new HashSet<IZoneCountObserver>();
         private HashSet<ICardsObserver> pools = new HashSet<ICardsObserver>();
 
-        public Zone(string name) : this(name, new List<Card>()) { }
-
-        public Zone(string name, List<Card> cards)
+        public Zone(string name)
         {
             this.Name = name;
-            this.Cards = cards;
         }
 
         public void Add(Card card)
         {
             Cards.Add(card);
             NotifyChanges();
-
             foreach (var observer in additions)
             {
                 observer.NotifyCardAdded(card);
@@ -51,10 +47,20 @@ namespace model.zones
 
         private void NotifyChanges()
         {
+            NotifyCounts();
+            NotifyCards();
+        }
+
+        private void NotifyCounts()
+        {
             foreach (var observer in counts)
             {
                 observer.NotifyCount(Cards.Count);
             }
+        }
+
+        private void NotifyCards()
+        {
             foreach (var observer in pools)
             {
                 observer.NotifyCards(Cards);
@@ -64,7 +70,7 @@ namespace model.zones
         public void ObserveCards(ICardsObserver observer)
         {
             pools.Add(observer);
-            NotifyChanges();
+            NotifyCards();
         }
 
         public void ObserveAdditions(IZoneAdditionObserver observer)
@@ -80,6 +86,7 @@ namespace model.zones
         public void ObserveCount(IZoneCountObserver observer)
         {
             counts.Add(observer);
+            NotifyCounts();
         }
     }
 

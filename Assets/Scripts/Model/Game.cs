@@ -1,5 +1,6 @@
 ﻿using model.player;
 using model.timing;
+using model.zones;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,9 +13,11 @@ namespace model
         public readonly Runner runner;
         private bool ended = false;
         private HashSet<IGameFinishObserver> finishObservers = new HashSet<IGameFinishObserver>();
+        private Shuffling shuffling;
 
-        public Game(Player corpPlayer, Player runnerPlayer)
+        public Game(Player corpPlayer, Player runnerPlayer, Shuffling shuffling)
         {
+            this.shuffling = shuffling;
             corp = CreateCorp(corpPlayer);
             runner = CreateRunner(runnerPlayer);
         }
@@ -25,7 +28,7 @@ namespace model
             var paidWindow = new PaidWindow("corp");
             var zones = new zones.corp.Zones(
                 new zones.corp.Headquarters(),
-                new zones.corp.ResearchAndDevelopment(player.deck),
+                new zones.corp.ResearchAndDevelopment(player.deck, shuffling),
                 new zones.corp.Archives()
             );
             var actionCard = new play.corp.ActionCard(zones);
@@ -41,7 +44,7 @@ namespace model
             var actionCard = new play.runner.ActionCard();
             var zones = new zones.runner.Zones(
                 new zones.runner.Grip(),
-                new zones.runner.Stack(player.deck),
+                new zones.runner.Stack(player.deck, shuffling),
                 new zones.runner.Heap(),
                 new zones.runner.Rig()
             );

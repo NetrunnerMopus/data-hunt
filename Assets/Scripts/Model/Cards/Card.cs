@@ -5,17 +5,36 @@ namespace model.cards
 {
     public abstract class Card
     {
+        private HashSet<IMoveObserver> moveObservers = new HashSet<IMoveObserver>();
         private HashSet<IFlipObserver> flipObservers = new HashSet<IFlipObserver>();
 
         public abstract string Name { get; }
         public abstract IType Type { get; }
-        public Zone Zone { get; set; }
+        public Zone Zone { get; private set; }
         public abstract ICost PlayCost { get; }
         public abstract IEffect Activation { get; }
         public abstract Faction Faction { get; }
         public abstract int InfluenceCost { get; }
         public abstract string FaceupArt { get; }
         public bool Faceup { get; private set; } = false;
+
+        public Card()
+        {
+            this.Zone = new Zone("Outside of the game");
+            this.Zone.Add(this);
+        }
+
+        public void MoveTo(Zone target)
+        {
+            var source = Zone;
+            source.Remove(this);
+            target.Add(this);
+            Zone = target;
+            foreach (var observer in moveObservers)
+            {
+                observer.NotifyMoved(this, source, target);
+            }
+        }
 
         public List<IInstallDestination> FindInstallDestinations(Game game)
         {
@@ -56,6 +75,11 @@ namespace model.cards
             }
         }
 
+        public void ObserveMoves(IMoveObserver observer)
+        {
+            moveObservers.Add(observer);
+        }
+
         public void ObserveFlips(IFlipObserver observer)
         {
             flipObservers.Add(observer);
@@ -70,5 +94,10 @@ namespace model.cards
     public interface IFlipObserver
     {
         void NotifyFlipped(bool faceup);
+    }
+
+    public interface IMoveObserver
+    {
+        void NotifyMoved(Card card, Zone source, Zone target);
     }
 }

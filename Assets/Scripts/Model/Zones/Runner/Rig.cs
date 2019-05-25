@@ -10,7 +10,7 @@ namespace model.zones.runner
 
         void IInstallDestination.Host(Card card)
         {
-            zone.Add(card);
+            card.MoveTo(zone);
         }
     }
 }

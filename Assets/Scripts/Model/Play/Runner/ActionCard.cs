@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using model.zones.runner;
 using System.Collections.Generic;
 using model.zones.corp;
+using model.zones;
 
 namespace model.play.runner
 {
-    public class ActionCard : IResolutionObserver, IGripAdditionObserver
+    public class ActionCard : IResolutionObserver, IZoneAdditionObserver
     {
         public readonly Ability draw;
         public readonly Ability credit;
@@ -60,7 +61,7 @@ namespace model.play.runner
             actionTaking.SetResult(true);
         }
 
-        void IGripAdditionObserver.NotifyCardAdded(Card card)
+        void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
             if (card.Type.Playable)
             {

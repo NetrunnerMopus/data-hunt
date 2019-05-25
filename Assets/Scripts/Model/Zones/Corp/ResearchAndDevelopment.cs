@@ -5,21 +5,25 @@ namespace model.zones.corp
 {
     public class ResearchAndDevelopment : IServer
     {
-        public Zone Zone { get; }
-        public IceColumn Ice => new IceColumn();
-        private Deck deck;
-        public ResearchAndDevelopment(Deck deck)
+        public Zone Zone { get; } = new Zone("R&D");
+        public IceColumn Ice { get; } = new IceColumn();
+        private Shuffling shuffling;
+
+        public ResearchAndDevelopment(Deck deck, Shuffling shuffling)
         {
-            this.deck = deck;
-            Zone = new Zone("R&D", deck.cards);
+            this.shuffling = shuffling;
+            foreach (var card in deck.cards)
+            {
+                card.MoveTo(Zone);
+            }
         }
 
         public void Shuffle()
         {
-            deck.Shuffle();
+            shuffling.Shuffle(Zone.Cards);
         }
 
-        public bool HasCards() => deck.Size() > 0;
+        public bool HasCards() => Zone.Cards.Count > 0;
 
         public void Draw(int cards, Headquarters hq)
         {
@@ -27,16 +31,9 @@ namespace model.zones.corp
             {
                 if (HasCards())
                 {
-                    hq.Zone.Add(RemoveTop());
+                    Zone.Cards[0].MoveTo(hq.Zone);
                 }
             }
-        }
-
-        private Card RemoveTop()
-        {
-            var top = Zone.Cards[0];
-            Zone.Remove(top);
-            return top;
         }
     }
 }

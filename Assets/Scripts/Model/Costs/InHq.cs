@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace model.costs
 {
-    public class InHq : ICost, IZoneAdditionObserver, IZoneRemovalObserver
+    public class InHq : ICost, IMoveObserver
     {
         private Card card;
         private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
@@ -18,15 +18,14 @@ namespace model.costs
         {
             observers.Add(observer);
             var hq = game.corp.zones.hq.Zone;
-            hq.ObserveAdditions(this);
-            hq.ObserveRemovals(this);
+            card.ObserveMoves(this);
         }
 
-        void IZoneAdditionObserver.NotifyCardAdded(Card card)
+        void IMoveObserver.NotifyMoved(Card card, Zone source, Zone target)
         {
-            if (card == this.card)
+             if (card == this.card)
             {
-                NotifyInHq(true);
+                NotifyInHq(target.Name == "HQ"); // TODO depend on identity not a string field
             }
         }
 
@@ -35,14 +34,6 @@ namespace model.costs
             foreach (var observer in observers)
             {
                 observer.NotifyPayable(inHq, this);
-            }
-        }
-
-        void IZoneRemovalObserver.NotifyCardRemoved(Card card)
-        {
-            if (card == this.card)
-            {
-                NotifyInHq(false);
             }
         }
 

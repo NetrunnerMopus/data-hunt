@@ -24,7 +24,6 @@ namespace model.effects.corp
                 var rezzable = new Rezzable(card, game);
                 game.corp.turn.rezWindow.Add(rezzable);
             }
-            game.corp.zones.hq.Zone.Remove(card);
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

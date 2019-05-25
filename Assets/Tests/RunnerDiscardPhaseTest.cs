@@ -28,8 +28,8 @@ namespace tests
             var gripObserver = new GripObserver();
             var heapObserver = new HeapObserver();
             var clicksObserver = new SpentClicksObserver();
-            grip.ObserveRemovals(gripObserver);
-            heap.Observe(heapObserver);
+            grip.zone.ObserveRemovals(gripObserver);
+            heap.zone.ObserveAdditions(heapObserver);
             game.runner.clicks.Observe(clicksObserver);
             for (int i = 0; i < 3; i++)
             {

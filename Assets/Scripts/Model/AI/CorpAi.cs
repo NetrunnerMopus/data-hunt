@@ -25,7 +25,7 @@ namespace model.ai
         IPaidAbilityObserver
     {
         private Game game;
-        private Zones zones;
+        private zones.corp.Zones zones;
         private Task Thinking() => Task.Delay(700);
         private HashSet<Ability> actions = new HashSet<Ability>();
         private HashSet<Ability> legalActions = new HashSet<Ability>();
@@ -102,7 +102,6 @@ namespace model.ai
             actions.Add(action);
             action.ObserveUsability(this, game);
         }
-
 
         public void NotifyPaidAbilityAvailable(Ability ability, Card source)
         {

@@ -4,9 +4,9 @@ namespace model.choices
 {
     public class NewRemoteInstallationChoice : IRemoteInstallationChoice
     {
-        private readonly Zones zones;
+        private readonly zones.corp.Zones zones;
 
-        public NewRemoteInstallationChoice(Zones zones)
+        public NewRemoteInstallationChoice(zones.corp.Zones zones)
         {
             this.zones = zones;
         }

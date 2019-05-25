@@ -8,8 +8,8 @@ namespace model.zones.corp
 {
     public class Headquarters : IServer
     {
-        public Zone Zone => new Zone("HQ");
-        public IceColumn Ice => new IceColumn();
+        public Zone Zone { get; } = new Zone("HQ");
+        public IceColumn Ice { get; } = new IceColumn();
         private HashSet<IHqDiscardObserver> discards = new HashSet<IHqDiscardObserver>();
         private TaskCompletionSource<bool> discarding;
         private Random random;
@@ -33,18 +33,15 @@ namespace model.zones.corp
             await discarding.Task;
         }
 
-        public void Discard(Card card, Archives heap)
+        public void Discard(Card card, Archives archives)
         {
-            Zone.Remove(card);
-            heap.Add(card);
+            card.MoveTo(archives.Zone);
             foreach (var observer in discards)
             {
                 observer.NotifyDiscarding(false);
             }
             discarding.SetResult(true);
         }
-
-        public Card Find<T>() where T : Card => Zone.Cards.OfType<T>().FirstOrDefault();
 
         public Card Random() => Zone.Cards[random.Next(0, Zone.Count)];
 

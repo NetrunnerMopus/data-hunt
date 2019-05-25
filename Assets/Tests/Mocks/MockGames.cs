@@ -2,6 +2,7 @@
 using model.cards;
 using model.cards.runner;
 using model.player;
+using model.zones;
 using System.Collections.Generic;
 
 namespace tests.mocks
@@ -18,7 +19,8 @@ namespace tests.mocks
                 runnerPlayer: new Player(
                     deck: new Deck(cards, new TheMasque()),
                     pilot: new NoPilot()
-                )
+                ),
+                shuffling: new Shuffling()
             );
         }
     }

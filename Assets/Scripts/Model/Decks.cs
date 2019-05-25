@@ -22,7 +22,7 @@ namespace model
                 cards.Add(new Wyldside());
                 cards.Add(new SportsHopper());
             }
-            return new Deck(cards, new OmarKeung(), 10006);
+            return new Deck(cards, new OmarKeung());
         }
 
         public Deck DemoCorp()
@@ -34,7 +34,7 @@ namespace model
                 cards.Add(new PadCampaign());
                 cards.Add(new AdvancedAssemblyLines());
             }
-            return new Deck(cards, new TheShadow(), 1234);
+            return new Deck(cards, new TheShadow());
         }
     }
 }

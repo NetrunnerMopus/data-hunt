@@ -54,7 +54,7 @@ namespace view.gui
         void IRemoteObserver.NotifyRemoteExists(Remote remote)
         {
             var box = Box(remote);
-            remote.ObserveInstallations(box);
+            remote.Zone.ObserveAdditions(box);
         }
     }
 
