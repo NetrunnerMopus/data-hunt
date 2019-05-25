@@ -19,6 +19,8 @@ namespace controller
         private Vector3 originalPosition;
         private int originalIndex;
         private CanvasGroup canvasGroup;
+        private Rigidbody2D body;
+        private TargetJoint2D joint;
 
         void Awake()
         {
@@ -28,6 +30,18 @@ namespace controller
                 canvasGroup = gameObject.AddComponent<CanvasGroup>();
             }
             canvasGroup.blocksRaycasts = true;
+            body = gameObject.GetComponent<Rigidbody2D>();
+            if (body == null)
+            {
+                body = gameObject.AddComponent<Rigidbody2D>();
+            }
+            body.gravityScale = 0;
+            joint = gameObject.GetComponent<TargetJoint2D>();
+            if (joint == null)
+            {
+                joint = gameObject.AddComponent<TargetJoint2D>();
+            }
+            joint.autoConfigureTarget = true;
         }
 
         public void Represent(Ability ability, Game game, DropZone zone)
@@ -49,6 +63,7 @@ namespace controller
         {
             eventData.selectedObject = gameObject;
             originalPosition = transform.position;
+            joint.autoConfigureTarget = false;
             BringToFront();
             canvasGroup.blocksRaycasts = false;
             if (usable)
@@ -68,7 +83,7 @@ namespace controller
 
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
-            transform.position = eventData.position;
+            joint.target = eventData.position;
         }
 
         void IEndDragHandler.OnEndDrag(PointerEventData eventData)
@@ -89,7 +104,7 @@ namespace controller
         private void PutBack()
         {
             transform.SetSiblingIndex(originalIndex);
-            transform.position = originalPosition;
+            joint.target = originalPosition;
         }
 
         void OnDestroy()

@@ -30,6 +30,7 @@ namespace controller
             this.zone = zone;
             grip.ObserveDiscarding(this);
             highlight = gameObject.AddComponent<Highlight>();
+            enabled = false;
         }
 
         void IGripDiscardObserver.NotifyDiscarding(bool discarding)
@@ -37,10 +38,12 @@ namespace controller
             usable = discarding;
             if (discarding)
             {
+                enabled = true;
                 highlight.TurnOn();
             }
             else
             {
+                enabled = false;
                 highlight.TurnOff();
             }
         }
@@ -68,7 +71,7 @@ namespace controller
 
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
-            transform.position = eventData.position;
+           transform.position = eventData.position;
         }
 
         void IEndDragHandler.OnEndDrag(PointerEventData eventData)
