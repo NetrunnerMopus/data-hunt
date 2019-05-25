@@ -19,6 +19,8 @@ namespace model.timing
             this.label = label;
         }
 
+        public List<Ability> ListAbilities()  => new List<Ability>(abilities);
+
         public ICost Permission() => permission;
 
         async public Task<bool> AwaitPass()

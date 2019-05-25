@@ -10,7 +10,7 @@ namespace model.play
         private HashSet<IResolutionObserver> resolutions = new HashSet<IResolutionObserver>();
         private bool payable = false;
         private bool impactful = false;
-        private bool Usable => payable && impactful;
+        public bool Usable => payable && impactful;
 
         public Ability(ICost cost, IEffect effect)
         {
