@@ -1,14 +1,17 @@
 ﻿using model.cards;
+using model.zones;
 
 namespace model.costs
 {
-    public class SelfTrash : ICost
+    public class Trash : ICost
     {
         private readonly Card card;
+        private readonly Zone bin;
 
-        public SelfTrash(Card card)
+        public Trash(Card card, Zone bin)
         {
             this.card = card;
+            this.bin = bin;
         }
 
         void ICost.Observe(IPayabilityObserver observer, Game game)
@@ -18,7 +21,7 @@ namespace model.costs
 
         void ICost.Pay(Game game)
         {
-            card.MoveTo(game.runner.zones.heap.zone);
+            card.MoveTo(bin);
         }
     }
 }

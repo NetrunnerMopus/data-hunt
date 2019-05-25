@@ -32,9 +32,10 @@ namespace model.cards.runner
             {
                 var paidWindow = game.runner.paidWindow;
                 this.game = game;
+                var heap = game.runner.zones.heap.zone;
                 if (pop == null)
                 {
-                    pop = new Ability(new Conjunction(paidWindow.Permission(), new SelfTrash(card)), new Draw(3));
+                    pop = new Ability(new Conjunction(paidWindow.Permission(), new Trash(card, heap)), new Draw(3));
                 }
                 paidWindow.Add(pop, card);
                 game.runner.zones.rig.zone.ObserveRemovals(this);
