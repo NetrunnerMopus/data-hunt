@@ -5,7 +5,7 @@ namespace model.cards
 {
     public abstract class Card
     {
-        private HashSet<IMoveObserver> moveObservers = new HashSet<IMoveObserver>();
+        private HashSet<NotifyMoved> moveObservers = new HashSet<NotifyMoved>();
         private HashSet<IFlipObserver> flipObservers = new HashSet<IFlipObserver>();
 
         public abstract string Name { get; }
@@ -32,7 +32,7 @@ namespace model.cards
             Zone = target;
             foreach (var observer in moveObservers)
             {
-                observer.NotifyMoved(this, source, target);
+                observer(this, source, target);
             }
         }
 
@@ -75,7 +75,7 @@ namespace model.cards
             }
         }
 
-        public void ObserveMoves(IMoveObserver observer)
+        public void ObserveMoves(NotifyMoved observer)
         {
             moveObservers.Add(observer);
         }
@@ -96,8 +96,5 @@ namespace model.cards
         void NotifyFlipped(bool faceup);
     }
 
-    public interface IMoveObserver
-    {
-        void NotifyMoved(Card card, Zone source, Zone target);
-    }
+    public delegate void NotifyMoved(Card card, Zone source, Zone target);
 }
