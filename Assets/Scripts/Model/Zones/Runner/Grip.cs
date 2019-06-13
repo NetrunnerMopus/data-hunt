@@ -8,8 +8,6 @@ namespace model.zones.runner
     public class Grip
     {
         public readonly Zone zone = new Zone("Grip");
-        public int Count => cards.Count;
-        private List<Card> cards = new List<Card>();
         private HashSet<IGripDiscardObserver> discards = new HashSet<IGripDiscardObserver>();
         private TaskCompletionSource<bool> discarded;
 
@@ -33,7 +31,7 @@ namespace model.zones.runner
             discarded.SetResult(true);
         }
 
-        public Card Find<T>() where T : Card => cards.OfType<T>().First();
+        public Card Find<T>() where T : Card => zone.Cards.OfType<T>().First();
 
         public void ObserveDiscarding(IGripDiscardObserver observer)
         {
