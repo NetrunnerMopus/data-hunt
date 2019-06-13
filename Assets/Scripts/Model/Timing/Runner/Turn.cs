@@ -97,7 +97,7 @@ namespace model.timing.runner
         async private Task Discard()
         {
             var grip = game.runner.zones.grip;
-            while (grip.Count > 5)
+            while (grip.zone.Count > 5)
             {
                 await grip.Discard();
             }
