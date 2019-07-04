@@ -30,7 +30,7 @@
 
 ## Development
 
-* Use Unity 2018.1.2f1.
+* Use Unity 2018.1.7f1.
 * Follow the MVC architecture to decouple the raw model from inputs (controller) and outputs (view) layers.
 * Run tests to quickly check if things are working.
 * Some assets cannot be distributed via this repo due to unfriendly licensing.
