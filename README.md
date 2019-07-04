@@ -1,5 +1,15 @@
 # Netrunner game client
 
+![Teaser screenshot](Releases/0.0.1/first-ui.png)
+
+Android: Netrunner is a beautiful, rich, satisfying game.
+
+It's biggest problem is a small playerbase.
+The paper card collection costs a lot and there's not enough supply.
+Current digital game clients are hard to get started on, especially if you never played Netrunner before.
+
+This project aims to bring the Netrunner awesomeness to everyone, who didn't get to experience it yet.
+
 ## Design goals
 
 * Enforce game rules. Do not rely on players manually fixing the game state.
@@ -28,11 +38,6 @@
   E.g. when the corp tries to play Hard-Hitting News, when the runner didn't run last turn, the card is revealed,
   the corp is explained why they cannot play it and is forced to take the card back. The card has no effect on the game state at all.
 
-## Development
+## Help build it
 
-* Use Unity 2018.1.7f1.
-* Follow the MVC architecture to decouple the raw model from inputs (controller) and outputs (view) layers.
-* Run tests to quickly check if things are working.
-* Some assets cannot be distributed via this repo due to unfriendly licensing.
-  You either have to accept the project is broken or buy your own assets and put them in the `Assets/Nonredist` 
-  directory. At least you can contribute to the model layer and use tests as a feedback loop.
+You can help build this project! Take a peek at the [contribution guidelines](Docs/CONTRIBUTING.md).
