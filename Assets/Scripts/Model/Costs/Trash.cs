@@ -21,6 +21,12 @@ namespace model.costs
 
         void ICost.Pay(Game game)
         {
+            TrashIt();
+        }
+
+        public void TrashIt()
+        {
+            card.Deactivate();
             card.MoveTo(bin);
         }
     }

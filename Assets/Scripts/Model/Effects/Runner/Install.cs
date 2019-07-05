@@ -14,7 +14,7 @@ namespace model.effects.runner
         void IEffect.Resolve(Game game)
         {
             card.MoveTo(game.runner.zones.rig.zone);
-            card.Activation.Resolve(game);
+            card.Activate(game);
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

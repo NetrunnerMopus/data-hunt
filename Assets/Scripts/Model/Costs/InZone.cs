@@ -4,36 +4,37 @@ using System.Collections.Generic;
 
 namespace model.costs
 {
-    public class InHq : ICost
+    public class InZone : ICost
     {
         private Card card;
+        private Zone zone;
         private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
 
-        public InHq(Card card)
+        public InZone(Card card, Zone zone)
         {
             this.card = card;
+            this.zone = zone;
         }
 
         void ICost.Observe(IPayabilityObserver observer, Game game)
         {
             observers.Add(observer);
-            var hq = game.corp.zones.hq.Zone;
             card.ObserveMoves(
                 delegate (Card card, Zone source, Zone target)
                 {
                     if (card == this.card)
                     {
-                        NotifyInHq(target == hq);
+                        NotifyInZone(target == zone);
                     }
                 }
             );
         }
 
-        private void NotifyInHq(bool inHq)
+        private void NotifyInZone(bool inZone)
         {
             foreach (var observer in observers)
             {
-                observer.NotifyPayable(inHq, this);
+                observer.NotifyPayable(inZone, this);
             }
         }
 

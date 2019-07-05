@@ -40,7 +40,7 @@ namespace model.play.corp
                     new CorpClickCost(1),
                     card.PlayCost,
                     permission,
-                    new InHq(card)
+                    new InZone(card, zones.hq.Zone)
                 ),
                 new Play(card)
             );
@@ -54,7 +54,7 @@ namespace model.play.corp
                 new Conjunction(
                     new CorpClickCost(1),
                     permission,
-                    new InHq(card)
+                    new InZone(card, zones.hq.Zone)
                 ),
                 new InstallInRemote(card, remoteChoice)
             );

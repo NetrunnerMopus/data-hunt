@@ -16,7 +16,8 @@ namespace model.effects.runner
         void IEffect.Resolve(Game game)
         {
             card.MoveTo(playZone);
-            card.Activation.Resolve(game);
+            card.Activate(game);
+            card.Deactivate();
             card.MoveTo(game.runner.zones.heap.zone);
         }
 

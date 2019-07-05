@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using System.Collections.Generic;
+using model.cards;
 using model.zones;
 using model.zones.corp;
 using UnityEngine;
@@ -6,11 +7,12 @@ using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class ServerBox : IZoneAdditionObserver
+    public class ServerBox : IZoneAdditionObserver, IZoneRemovalObserver
     {
         public readonly GameObject gameObject;
         public readonly IServer server;
         public CardPrinter Printer { get; private set; }
+        private IDictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
 
         public ServerBox(GameObject gameObject, IServer server)
         {
@@ -26,9 +28,17 @@ namespace view.gui
         void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
             var printedCard = Printer.PrintCorpFacedown(card.Name);
+            visuals[card] = printedCard;
             var image = printedCard.GetComponent<Image>();
             var inServer = printedCard.AddComponent<CardInServer>();
             inServer.Represent(card, image);
+        }
+
+        void IZoneRemovalObserver.NotifyCardRemoved(Card card)
+        {
+            var visual = visuals[card];
+            visuals.Remove(card);
+            Object.Destroy(visual);
         }
     }
 }

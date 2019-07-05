@@ -18,7 +18,8 @@ namespace model.effects.corp
         {
             card.FlipFaceUp();
             card.MoveTo(playZone);
-            card.Activation.Resolve(game);
+            card.Activate(game);
+            card.Deactivate();
             card.MoveTo(game.corp.zones.archives.Zone);
         }
 

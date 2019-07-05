@@ -35,10 +35,16 @@ namespace model.cards.corp
                 var paidWindow = game.corp.paidWindow;
                 var archives = game.corp.zones.archives.Zone;
                 var pop = new Ability(
-                    cost: new Conjunction(paidWindow.Permission(), new Trash(card, archives)),
+                    cost: new Conjunction(paidWindow.Permission(), new Trash(card, archives), new Active(card)),
                     effect: new AdvancedAssemblyLinesInstall()
                 );
                 paidWindow.Add(pop, card);
+                card.ObserveMoves(
+                    delegate (Card card, Zone source, Zone target)
+                    {
+                        paidWindow.Remove(pop);
+                    }
+                );
             }
 
             void IEffect.Observe(IImpactObserver observer, Game game)

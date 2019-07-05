@@ -21,7 +21,7 @@ namespace model.play.corp
             UnityEngine.Debug.Log("Rezzing " + card.Name);
             card.FlipFaceUp();
             card.PlayCost.Pay(game);
-            card.Activation.Resolve(game);
+            card.Activate(game);
             UnityEngine.Debug.Log("Rezzed " + card.Name);
         }
 
