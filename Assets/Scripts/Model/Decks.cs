@@ -28,11 +28,12 @@ namespace model
         public Deck DemoCorp()
         {
             var cards = new List<Card>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 7; i++)
             {
                 cards.Add(new HedgeFund());
                 cards.Add(new PadCampaign());
                 cards.Add(new AdvancedAssemblyLines());
+                cards.Add(new CorporateSalesTeam());
             }
             return new Deck(cards, new TheShadow());
         }
