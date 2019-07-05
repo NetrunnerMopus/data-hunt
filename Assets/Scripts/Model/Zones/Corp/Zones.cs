@@ -27,7 +27,7 @@ namespace model.zones.corp
 
         public Remote CreateRemote()
         {
-            var remote = new Remote();
+            var remote = new Remote(archives.Zone);
             remotes.Add(remote);
             foreach (var observer in remoteObservers)
             {

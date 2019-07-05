@@ -1,5 +1,6 @@
-﻿using model.cards;
-using System.Collections.Generic;
+﻿using System.Linq;
+using model.cards;
+using model.costs;
 
 namespace model.zones.corp
 {
@@ -7,9 +8,20 @@ namespace model.zones.corp
     {
         public Zone Zone { get; } = new Zone("Remote");
         public IceColumn Ice { get; } = new IceColumn();
+        private Zone archives;
+
+        public Remote(Zone archives)
+        {
+            this.archives = archives;
+        }
 
         public void InstallWithin(Card card)
         {
+            Zone
+                .Cards
+                .Select(it => new Trash(it, archives))
+                .ToList()
+                .ForEach(it => it.TrashIt());
             card.MoveTo(Zone);
         }
 

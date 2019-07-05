@@ -55,6 +55,7 @@ namespace view.gui
         {
             var box = Box(remote);
             remote.Zone.ObserveAdditions(box);
+            remote.Zone.ObserveRemovals(box);
         }
     }
 

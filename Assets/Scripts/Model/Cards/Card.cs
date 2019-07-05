@@ -5,9 +5,9 @@ namespace model.cards
 {
     public abstract class Card
     {
+        private HashSet<NotifyActivity> activityObservers = new HashSet<NotifyActivity>();
         private HashSet<NotifyMoved> moveObservers = new HashSet<NotifyMoved>();
         private HashSet<IFlipObserver> flipObservers = new HashSet<IFlipObserver>();
-
         public abstract string Name { get; }
         public abstract IType Type { get; }
         public Zone Zone { get; private set; }
@@ -17,6 +17,7 @@ namespace model.cards
         public abstract int InfluenceCost { get; }
         public abstract string FaceupArt { get; }
         public bool Faceup { get; private set; } = false;
+        public bool Active { get; private set; } = false;
 
         public Card()
         {
@@ -24,9 +25,39 @@ namespace model.cards
             this.Zone.Add(this);
         }
 
+        public void Activate(Game game)
+        {
+            Active = true;
+            Activation.Resolve(game); // TODO either keep this or `public Activation`, because it's risking double resolution
+            NotifyActivity();
+        }
+
+        public void Deactivate()
+        {
+            Active = false;
+            NotifyActivity();
+        }
+
+        private void NotifyActivity()
+        {
+            foreach (var observer in activityObservers)
+            {
+                observer();
+            }
+        }
+
+        public void ObserveActivity(NotifyActivity observer)
+        {
+            activityObservers.Add(observer);
+        }
+
         public void MoveTo(Zone target)
         {
             var source = Zone;
+            if (source == target)
+            {
+                throw new System.Exception("Tried to move " + Name + " from " + source.Name + " to " + target.Name);
+            }
             source.Remove(this);
             target.Add(this);
             Zone = target;
@@ -96,5 +127,6 @@ namespace model.cards
         void NotifyFlipped(bool faceup);
     }
 
+    public delegate void NotifyActivity();
     public delegate void NotifyMoved(Card card, Zone source, Zone target);
 }
