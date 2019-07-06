@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using model.cards;
+using model.player;
 
 namespace model.zones.corp
 {
@@ -34,6 +35,11 @@ namespace model.zones.corp
                     Zone.Cards[0].MoveTo(hq.Zone);
                 }
             }
+        }
+
+        IEnumerable<Card> IServer.Access(int accessCount, IPilot pilot)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

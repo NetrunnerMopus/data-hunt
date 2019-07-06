@@ -1,4 +1,5 @@
 ﻿using model.cards;
+using model.player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +49,11 @@ namespace model.zones.corp
         public void ObserveDiscarding(IHqDiscardObserver observer)
         {
             discards.Add(observer);
+        }
+
+        IEnumerable<Card> IServer.Access(int accessCount, IPilot pilot)
+        {
+            throw new NotImplementedException();
         }
     }
     public interface IHqDiscardObserver

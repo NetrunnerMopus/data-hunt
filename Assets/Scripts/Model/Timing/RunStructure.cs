@@ -42,9 +42,9 @@ namespace model.timing
             }
             await OpenPostCommitmentWindows(); // 6.9.5.d
             await MakeRunSuccessful(); // 6.9.5.e
-            await Checkpoint(); // 6.9.5.f
+            await game.Checkpoint(); // 6.9.5.f
             await Access(); // 6.9.5.g
-            await Checkpoint(); // 6.9.5.h
+            await game.Checkpoint(); // 6.9.5.h
         }
 
         async private Task TriggerServerApproached()
@@ -75,22 +75,16 @@ namespace model.timing
             await Task.CompletedTask; // TODO
         }
 
-        async private Task Checkpoint()
-        {
-            await Task.CompletedTask; // TODO
-        }
-
         async private Task Access()
         {
-            UnityEngine.Debug.Log("Accessing " + server);
-            await Task.CompletedTask; // TODO
+            await new AccessStructure(server, game).AwaitEnd();
         }
 
         async private Task End()
         {
             await LoseBadPublicity(); // 6.9.6.a
             // TODO 6.9.6.b
-            await Checkpoint(); // 6.9.6.c
+            await game.Checkpoint(); // 6.9.6.c
         }
 
         async private Task LoseBadPublicity()
