@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
-namespace model.player
+namespace model.choices
 {
     public class TheOnlyChoice<T> : IChoice<T>
     {
@@ -12,11 +13,11 @@ namespace model.player
             this.fallback = fallback;
         }
 
-        T IChoice<T>.Declare(IEnumerable<T> items)
+        Task<T> IChoice<T>.Declare(IEnumerable<T> items)
         {
             if (items.Count() == 1)
             {
-                return items.Single();
+                return Task.FromResult(items.Single());
             }
             else
             {

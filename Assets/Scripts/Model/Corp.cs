@@ -3,7 +3,6 @@ using model.play.corp;
 using model.player;
 using model.timing;
 using model.timing.corp;
-using model.zones.corp;
 
 namespace model
 {

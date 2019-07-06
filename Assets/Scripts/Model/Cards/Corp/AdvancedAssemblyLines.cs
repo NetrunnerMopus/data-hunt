@@ -58,11 +58,11 @@ namespace model.cards.corp
             private HashSet<IImpactObserver> observers = new HashSet<IImpactObserver>();
             private List<Card> installables = new List<Card>();
 
-            void IEffect.Resolve(Game game)
+           async void IEffect.Resolve(Game game)
             {
                 var pilot = game.corp.pilot;
-                var installable = pilot.ChooseACard().Declare(installables);
-                var destination = pilot.ChooseAnInstallDestination().Declare(installable.FindInstallDestinations(game));
+                var installable = await pilot.ChooseACard().Declare(installables);
+                var destination = await pilot.ChooseAnInstallDestination().Declare(installable.FindInstallDestinations(game));
                 var install = new Install(
                     card: installable,
                     destination: destination

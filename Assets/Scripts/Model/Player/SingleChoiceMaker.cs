@@ -1,4 +1,5 @@
 using model.cards;
+using model.choices;
 using model.play;
 using model.zones;
 using System.Collections.Generic;
@@ -7,23 +8,11 @@ using System.Threading.Tasks;
 
 namespace model.player
 {
-    public class SingleChoiceMaker : IPilot
+    public class SingleChoiceMaker : DelegatingPilot
     {
-        private IPilot basic;
-        private HashSet<Ability> paidAbilities = new HashSet<Ability>();
-        private Game game;
+        public SingleChoiceMaker(IPilot basic) : base(basic) { }
 
-        public SingleChoiceMaker(IPilot basic)
-        {
-            this.basic = basic;
-        }
-
-        void IPilot.Play(Game game)
-        {
-            basic.Play(game);
-        }
-
-        async Task<IEffect> IPilot.TriggerFromSimultaneous(List<IEffect> effects)
+        async override public Task<IEffect> TriggerFromSimultaneous(List<IEffect> effects)
         {
             if (effects.Count == 1)
             {
@@ -31,11 +20,11 @@ namespace model.player
             }
             else
             {
-                return await basic.TriggerFromSimultaneous(effects);
+                return await base.TriggerFromSimultaneous(effects);
             }
         }
 
-        IChoice<Card> IPilot.ChooseACard() => new TheOnlyChoice<Card>(basic.ChooseACard());
-        IChoice<IInstallDestination> IPilot.ChooseAnInstallDestination() => new TheOnlyChoice<IInstallDestination>(basic.ChooseAnInstallDestination());
+        override public IChoice<Card> ChooseACard() => new TheOnlyChoice<Card>(base.ChooseACard());
+        override public IChoice<IInstallDestination> ChooseAnInstallDestination() => new TheOnlyChoice<IInstallDestination>(base.ChooseAnInstallDestination());
     }
 }

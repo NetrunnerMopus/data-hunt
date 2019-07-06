@@ -32,7 +32,9 @@ namespace model.timing
 
         async private Task Trash()
         {
-            await Task.CompletedTask; // TODO
+            var options = card.TrashOptions(game);
+            var trashing = await game.runner.pilot.ChooseTrashing().Declare(options);
+            trashing.Perform(game);
         }
 
         async private Task Steal()

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using model.cards;
 using model.costs;
 using model.player;
@@ -33,14 +34,14 @@ namespace model.zones.corp
             InstallWithin(card);
         }
 
-        IEnumerable<Card> IServer.Access(int accessCount, IPilot pilot)
+        async Task IServer.Access(int accessCount, IPilot pilot, Game game)
         {
             var unaccessed = new List<Card>(Zone.Cards);
             for (var accessesLeft = accessCount; accessesLeft > 0; accessesLeft--)
             {
-                var card = pilot.ChooseACard().Declare(unaccessed);
+                var card = await pilot.ChooseACard().Declare(unaccessed);
                 unaccessed.Remove(card);
-                yield return card;
+                await new AccessCard(card, game).AwaitEnd();
             }
         }
     }
