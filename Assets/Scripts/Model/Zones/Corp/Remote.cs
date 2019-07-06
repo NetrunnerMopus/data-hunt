@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using model.cards;
 using model.costs;
+using model.player;
+using model.timing;
 
 namespace model.zones.corp
 {
@@ -28,6 +31,17 @@ namespace model.zones.corp
         void IInstallDestination.Host(Card card)
         {
             InstallWithin(card);
+        }
+
+        IEnumerable<Card> IServer.Access(int accessCount, IPilot pilot)
+        {
+            var unaccessed = new List<Card>(Zone.Cards);
+            for (var accessesLeft = accessCount; accessesLeft > 0; accessesLeft--)
+            {
+                var card = pilot.ChooseACard().Declare(unaccessed);
+                unaccessed.Remove(card);
+                yield return card;
+            }
         }
     }
 }

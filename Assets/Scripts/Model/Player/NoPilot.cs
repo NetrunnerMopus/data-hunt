@@ -15,14 +15,15 @@ namespace model.player
             return Task.FromResult(effects.First());
         }
 
-        IChoice<Card> IPilot.ChooseACard()
-        {
-            throw new System.NotImplementedException();
-        }
+        IChoice<Card> IPilot.ChooseACard() => new FailingChoice<Card>();
+        IChoice<IInstallDestination> IPilot.ChooseAnInstallDestination() => new FailingChoice<IInstallDestination>();
 
-        IChoice<IInstallDestination> IPilot.ChooseAnInstallDestination()
+        private class FailingChoice<T> : IChoice<T>
         {
-            throw new System.NotImplementedException();
+            T IChoice<T>.Declare(IEnumerable<T> items)
+            {
+                throw new System.Exception("Don't know how to choose from " + items);
+            }
         }
     }
 }

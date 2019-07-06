@@ -123,6 +123,11 @@ namespace model
             }
             throw new Exception("Game over, " + finish.reason);
         }
+
+        async public Task Checkpoint()
+        {
+            await Task.CompletedTask; // TODO
+        }
     }
 
     public interface IGameFinishObserver

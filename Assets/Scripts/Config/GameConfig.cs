@@ -4,7 +4,6 @@ using view.gui;
 using model.ai;
 using view.log;
 using model.player;
-using controller;
 using model.zones;
 
 public class GameConfig : MonoBehaviour
@@ -20,7 +19,11 @@ public class GameConfig : MonoBehaviour
         );
         var runnerPlayer = new Player(
             deck: new Decks().DemoRunner(),
-            pilot: new AutoPaidWindowPilot(new NoPilot())
+            pilot: new AutoPaidWindowPilot(
+                new SingleChoiceMaker(
+                    new NoPilot()
+                )
+            )
         );
         game = new Game(corpPlayer, runnerPlayer, new Shuffling(10006));
     }

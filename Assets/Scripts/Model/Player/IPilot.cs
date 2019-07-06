@@ -10,6 +10,7 @@ namespace model.player
         void Play(Game game);
         Task<IEffect> TriggerFromSimultaneous(List<IEffect> effects);
         IChoice<Card> ChooseACard();
+        // IChoice<Card> ChooseAZone(); TODO for central access
         IChoice<IInstallDestination> ChooseAnInstallDestination();
     }
 
