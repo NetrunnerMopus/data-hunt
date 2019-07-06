@@ -1,5 +1,4 @@
-﻿using model.cards;
-using model.zones.corp;
+﻿using model.zones.corp;
 using System.Threading.Tasks;
 
 namespace model.timing
@@ -43,14 +42,9 @@ namespace model.timing
             }
         }
 
-
         async private Task AccessCardSet(int accessCount)
         {
-            var accessCardSet = server.Access(accessCount, game.runner.pilot);
-            foreach (var card in accessCardSet)
-            {
-                await new AccessCard(card, game).AwaitEnd();
-            }
+            await server.Access(accessCount, game.runner.pilot, game);
         }
 
         public override string ToString()

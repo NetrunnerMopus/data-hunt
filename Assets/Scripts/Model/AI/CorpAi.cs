@@ -1,4 +1,6 @@
 ﻿using model.cards;
+using model.choices;
+using model.choices.trash;
 using model.play;
 using model.play.corp;
 using model.player;
@@ -143,14 +145,19 @@ namespace model.ai
         {
         }
 
+        IChoice<ITrashOption> IPilot.ChooseTrashing()
+        {
+            throw new NotImplementedException();
+        }
+
         private class CardChoice : IChoice<Card>
         {
-            Card IChoice<Card>.Declare(IEnumerable<Card> items) => items.First();
+            Task<Card> IChoice<Card>.Declare(IEnumerable<Card> items) => Task.FromResult(items.First());
         }
 
         private class InstallDestinationChoice : IChoice<IInstallDestination>
         {
-            IInstallDestination IChoice<IInstallDestination>.Declare(IEnumerable<IInstallDestination> items) => items.First();
+            Task<IInstallDestination> IChoice<IInstallDestination>.Declare(IEnumerable<IInstallDestination> items) => Task.FromResult(items.First());
         }
     }
 }

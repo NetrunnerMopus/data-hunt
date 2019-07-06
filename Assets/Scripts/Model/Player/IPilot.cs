@@ -1,4 +1,6 @@
 ﻿using model.cards;
+using model.choices;
+using model.choices.trash;
 using model.zones;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,10 +14,6 @@ namespace model.player
         IChoice<Card> ChooseACard();
         // IChoice<Card> ChooseAZone(); TODO for central access
         IChoice<IInstallDestination> ChooseAnInstallDestination();
-    }
-
-    public interface IChoice<T>
-    {
-        T Declare(IEnumerable<T> items);
+        IChoice<ITrashOption> ChooseTrashing();
     }
 }

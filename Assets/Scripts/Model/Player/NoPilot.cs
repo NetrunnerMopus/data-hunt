@@ -1,4 +1,6 @@
 ﻿using model.cards;
+using model.choices;
+using model.choices.trash;
 using model.zones;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +19,6 @@ namespace model.player
 
         IChoice<Card> IPilot.ChooseACard() => new FailingChoice<Card>();
         IChoice<IInstallDestination> IPilot.ChooseAnInstallDestination() => new FailingChoice<IInstallDestination>();
-
-        private class FailingChoice<T> : IChoice<T>
-        {
-            T IChoice<T>.Declare(IEnumerable<T> items)
-            {
-                throw new System.Exception("Don't know how to choose from " + items);
-            }
-        }
+        IChoice<ITrashOption> IPilot.ChooseTrashing() => new FailingChoice<ITrashOption>();
     }
 }

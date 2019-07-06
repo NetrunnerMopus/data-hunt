@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using model.cards;
+﻿using System.Threading.Tasks;
 using model.player;
 
 namespace model.zones.corp
@@ -37,7 +36,7 @@ namespace model.zones.corp
             }
         }
 
-        IEnumerable<Card> IServer.Access(int accessCount, IPilot pilot)
+        Task IServer.Access(int accessCount, IPilot pilot, Game game)
         {
             throw new System.NotImplementedException();
         }

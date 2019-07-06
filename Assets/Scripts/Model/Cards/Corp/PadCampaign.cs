@@ -1,4 +1,6 @@
-﻿using model.cards.types;
+﻿using System.Collections.Generic;
+using model.cards.types;
+using model.choices.trash;
 using model.costs;
 using model.effects.corp;
 
@@ -14,6 +16,10 @@ namespace model.cards.corp
         override public ICost PlayCost => new CorpCreditCost(2);
         override public IEffect Activation => new PadCampaignActivation();
         override public IType Type => new Asset();
+        override public IEnumerable<ITrashOption> TrashOptions(Game game) => new ITrashOption[] {
+            new Leave(),
+            new PayToTrash(new RunnerCreditCost(4))
+        };
 
         private class PadCampaignActivation : IEffect
         {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using model.cards;
 using model.player;
-using model.timing;
 
 namespace model.zones.corp
 {
@@ -9,6 +9,6 @@ namespace model.zones.corp
     {
         Zone Zone { get; }
         IceColumn Ice { get; }
-        IEnumerable<Card> Access(int accessCount, IPilot pilot);
+        Task Access(int accessCount, IPilot pilot, Game game);
     }
 }

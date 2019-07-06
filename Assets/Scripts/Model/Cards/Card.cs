@@ -1,4 +1,5 @@
-﻿using model.zones;
+﻿using model.choices.trash;
+using model.zones;
 using System.Collections.Generic;
 
 namespace model.cards
@@ -18,6 +19,8 @@ namespace model.cards
         public abstract string FaceupArt { get; }
         public bool Faceup { get; private set; } = false;
         public bool Active { get; private set; } = false;
+
+        public virtual IEnumerable<ITrashOption> TrashOptions(Game game) => new[] { new Leave() };
 
         public Card()
         {

@@ -51,7 +51,7 @@ namespace model.zones.corp
             discards.Add(observer);
         }
 
-        IEnumerable<Card> IServer.Access(int accessCount, IPilot pilot)
+        Task IServer.Access(int accessCount, IPilot pilot, Game game)
         {
             throw new NotImplementedException();
         }

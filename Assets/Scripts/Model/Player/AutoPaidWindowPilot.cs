@@ -1,28 +1,19 @@
-using model.cards;
 using model.play;
 using model.timing;
-using model.zones;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace model.player
 {
-    public class AutoPaidWindowPilot : IPilot, IPaidWindowObserver
+    public class AutoPaidWindowPilot : DelegatingPilot, IPaidWindowObserver
     {
-        private IPilot basic;
         private HashSet<Ability> paidAbilities = new HashSet<Ability>();
-        private Game game;
 
-        public AutoPaidWindowPilot(IPilot basic)
-        {
-            this.basic = basic;
-        }
+        public AutoPaidWindowPilot(IPilot basic) : base(basic) { }
 
-        void IPilot.Play(Game game)
+        override public void Play(Game game)
         {
-            basic.Play(game);
-            this.game = game;
+            base.Play(game);
             var window = game.runner.paidWindow;
             window.ObserveWindow(this);
         }
@@ -37,21 +28,6 @@ namespace model.player
 
         void IPaidWindowObserver.NotifyPaidWindowClosed(PaidWindow window)
         {
-        }
-
-        Task<IEffect> IPilot.TriggerFromSimultaneous(List<IEffect> effects)
-        {
-            return basic.TriggerFromSimultaneous(effects);
-        }
-
-        IChoice<Card> IPilot.ChooseACard()
-        {
-            return basic.ChooseACard();
-        }
-
-        IChoice<IInstallDestination> IPilot.ChooseAnInstallDestination()
-        {
-            return basic.ChooseAnInstallDestination();
         }
     }
 }

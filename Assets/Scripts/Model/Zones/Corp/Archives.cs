@@ -1,6 +1,5 @@
-﻿using model.cards;
-using model.player;
-using System.Collections.Generic;
+﻿using model.player;
+using System.Threading.Tasks;
 
 namespace model.zones.corp
 {
@@ -8,7 +7,7 @@ namespace model.zones.corp
     {
         public Zone Zone { get; } = new Zone("Archives");
         public IceColumn Ice { get; } = new IceColumn();
-        IEnumerable<Card> IServer.Access(int accessCount, IPilot pilot)
+        Task IServer.Access(int accessCount, IPilot pilot, Game game)
         {
             throw new System.NotImplementedException();
         }
