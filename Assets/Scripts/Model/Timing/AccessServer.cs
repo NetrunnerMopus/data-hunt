@@ -17,7 +17,7 @@ namespace model.timing
 
         async public Task AwaitEnd()
         {
-            await TriggerAccessing(); // 7.6.1
+            await TriggerAccessingCardSet(); // 7.6.1
             await game.Checkpoint(); // 7.6.2
             var accessCount = await DetermineNumberOfCardsToBeAccessed(); // 7.6.3
             await TurnArchivesFaceUp(); // 7.6.4
@@ -25,7 +25,7 @@ namespace model.timing
             await game.Checkpoint(); // 7.6.7
         }
 
-        async private Task TriggerAccessing()
+        async private Task TriggerAccessingCardSet()
         {
             await Task.CompletedTask; // TODO
         }
@@ -47,16 +47,10 @@ namespace model.timing
         async private Task AccessCardSet(int accessCount)
         {
             var accessCardSet = server.Access(accessCount, game.runner.pilot);
-            foreach (var cardAccess in accessCardSet)
+            foreach (var card in accessCardSet)
             {
-                await AccessCard(cardAccess);
+                await new AccessCard(card, game).AwaitEnd();
             }
-        }
-
-        async private Task AccessCard(Card card)
-        {
-            UnityEngine.Debug.Log("Accessing " + card);
-            await Task.CompletedTask; // TODO
         }
 
         public override string ToString()
