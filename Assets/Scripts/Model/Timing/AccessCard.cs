@@ -39,7 +39,8 @@ namespace model.timing
         {
             if (card is cards.corp.CorporateSalesTeam)
             {
-                card.MoveTo(game.runner.zones.score);
+                card.FlipFaceUp();
+                game.runner.zones.score.Add(card, 2);
                 UnityEngine.Debug.Log("Stole CST!");
 
                 /**

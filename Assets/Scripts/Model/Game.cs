@@ -46,7 +46,8 @@ namespace model
                 new zones.runner.Grip(),
                 new zones.runner.Stack(player.deck, shuffling),
                 new zones.runner.Heap(),
-                new zones.runner.Rig()
+                new zones.runner.Rig(),
+                new zones.runner.Score(this)
             );
             var clicks = new ClickPool();
             var credits = new CreditPool();
@@ -109,11 +110,21 @@ namespace model
         public void DeckCorp()
         {
             Finish(new GameFinish(
-                    "The Runner",
-                    "The Corp",
-                    "Corp R&D is empty"
+                winner: "The Runner",
+                loser: "The Corp",
+                reason: "Corp R&D is empty"
             ));
         }
+
+        public void StealEnough()
+        {
+            Finish(new GameFinish(
+                winner: "The Runner",
+                loser: "The Corp",
+                reason: "Runner has stolen enough"
+           ));
+        }
+
         private void Finish(GameFinish finish)
         {
             ended = true;
