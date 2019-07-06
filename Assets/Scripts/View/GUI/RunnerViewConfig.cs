@@ -15,6 +15,7 @@ namespace view.gui
             var rigZone = GameObject.Find("Rig").AddComponent<DropZone>();
             var heapZone = GameObject.Find("Heap").AddComponent<DropZone>();
             var gripZone = GameObject.Find("Grip").AddComponent<DropZone>();
+            new ZoneBox(GameObject.Find("Runner/Left hand/Score")).Represent(game.runner.zones.score.zone);
             grip.Construct(game, playZone, rigZone, heapZone);
             stackPile.Construct(game, gripZone);
             rig.Construct(game, playZone);
