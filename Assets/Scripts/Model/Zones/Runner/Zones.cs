@@ -6,6 +6,7 @@
         public readonly Stack stack;
         public readonly Heap heap;
         public readonly Rig rig;
+        public readonly Zone score = new Zone("Score");
 
         public Zones(Grip grip, Stack stack, Heap heap, Rig rig)
         {
