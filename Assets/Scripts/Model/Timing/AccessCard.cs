@@ -33,7 +33,7 @@ namespace model.timing
         async private Task Trash()
         {
             var options = card.TrashOptions(game);
-            var trashing = await game.runner.pilot.ChooseTrashing().Declare(options);
+            var trashing = await game.runner.pilot.ChooseTrashing().Declare(card, options);
             trashing.Perform(game);
         }
 

@@ -21,7 +21,10 @@ public class GameConfig : MonoBehaviour
             deck: new Decks().DemoRunner(),
             pilot: new AutoPaidWindowPilot(
                 new SingleChoiceMaker(
-                    new NoPilot()
+                    new TrashingPilot(
+                        new TrashChoiceScreen(board),
+                        new NoPilot()
+                    )
                 )
             )
         );

@@ -1,5 +1,6 @@
 using model.cards;
 using model.choices;
+using model.choices.trash;
 using model.play;
 using model.zones;
 using System.Collections.Generic;
@@ -24,7 +25,8 @@ namespace model.player
             }
         }
 
-        override public IChoice<Card> ChooseACard() => new TheOnlyChoice<Card>(base.ChooseACard());
-        override public IChoice<IInstallDestination> ChooseAnInstallDestination() => new TheOnlyChoice<IInstallDestination>(base.ChooseAnInstallDestination());
+        override public IChoice<string, Card> ChooseACard() => new TheOnlyChoice<string, Card>(base.ChooseACard());
+        override public IChoice<string, IInstallDestination> ChooseAnInstallDestination() => new TheOnlyChoice<string, IInstallDestination>(base.ChooseAnInstallDestination());
+        override public IChoice<Card, ITrashOption> ChooseTrashing() => new TheOnlyChoice<Card, ITrashOption>(base.ChooseTrashing());
     }
 }

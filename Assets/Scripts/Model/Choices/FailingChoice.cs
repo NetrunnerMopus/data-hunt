@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 
 namespace model.choices
 {
-    class FailingChoice<T> : IChoice<T>
+    class FailingChoice<SUBJECT, OPTION> : IChoice<SUBJECT, OPTION>
     {
-        Task<T> IChoice<T>.Declare(IEnumerable<T> items)
+        public Task<OPTION> Declare(SUBJECT subject, IEnumerable<OPTION> options)
         {
-           throw new System.Exception("Don't know how to choose from " + items);
+            throw new System.Exception("Don't know how to choose " + subject + " from " + options);
         }
     }
 }
