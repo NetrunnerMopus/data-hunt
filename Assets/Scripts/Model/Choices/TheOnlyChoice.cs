@@ -4,24 +4,24 @@ using System.Threading.Tasks;
 
 namespace model.choices
 {
-    public class TheOnlyChoice<T> : IChoice<T>
+    public class TheOnlyChoice<SUBJECT, OPTION> : IChoice<SUBJECT, OPTION>
     {
-        private IChoice<T> fallback;
+        private IChoice<SUBJECT, OPTION> fallback;
 
-        public TheOnlyChoice(IChoice<T> fallback)
+        public TheOnlyChoice(IChoice<SUBJECT, OPTION> fallback)
         {
             this.fallback = fallback;
         }
 
-        Task<T> IChoice<T>.Declare(IEnumerable<T> items)
+        public Task<OPTION> Declare(SUBJECT subject, IEnumerable<OPTION> options)
         {
-            if (items.Count() == 1)
+            if (options.Count() == 1)
             {
-                return Task.FromResult(items.Single());
+                return Task.FromResult(options.Single());
             }
             else
             {
-                return fallback.Declare(items);
+                return fallback.Declare(subject, options);
             }
         }
     }

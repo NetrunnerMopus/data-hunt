@@ -13,5 +13,7 @@
         {
             cost.Pay(game);
         }
+
+         public string Art => "Images/UI/trash-can";
     }
 }

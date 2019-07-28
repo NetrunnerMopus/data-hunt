@@ -61,8 +61,8 @@ namespace model.cards.corp
            async void IEffect.Resolve(Game game)
             {
                 var pilot = game.corp.pilot;
-                var installable = await pilot.ChooseACard().Declare(installables);
-                var destination = await pilot.ChooseAnInstallDestination().Declare(installable.FindInstallDestinations(game));
+                var installable = await pilot.ChooseACard().Declare("Which card to install?", installables);
+                var destination = await pilot.ChooseAnInstallDestination().Declare("Where to install?", installable.FindInstallDestinations(game));
                 var install = new Install(
                     card: installable,
                     destination: destination

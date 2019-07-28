@@ -5,5 +5,7 @@
         public void Perform(Game game)
         {
         }
+
+        public string Art => "Images/UI/thumb-up";
     }
 }
