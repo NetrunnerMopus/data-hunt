@@ -11,9 +11,9 @@ namespace model.player
     {
         void Play(Game game);
         Task<IEffect> TriggerFromSimultaneous(List<IEffect> effects);
-        IChoice<string, Card> ChooseACard();
-        // IChoice<Card> ChooseAZone(); TODO for central access
-        IChoice<string, IInstallDestination> ChooseAnInstallDestination();
-        IChoice<Card, ITrashOption> ChooseTrashing();
+        IDecision<string, Card> ChooseACard();
+        // IDecision<Card> ChooseAZone(); TODO for central access
+        IDecision<string, IInstallDestination> ChooseAnInstallDestination();
+        IDecision<Card, ITrashOption> ChooseTrashing();
     }
 }

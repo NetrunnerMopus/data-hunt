@@ -133,8 +133,8 @@ namespace model.ai
             }
         }
 
-        IChoice<string, Card> IPilot.ChooseACard() => new CardChoice();
-        IChoice<string, IInstallDestination> IPilot.ChooseAnInstallDestination() => new InstallDestinationChoice();
+        IDecision<string, Card> IPilot.ChooseACard() => new CardChoice();
+        IDecision<string, IInstallDestination> IPilot.ChooseAnInstallDestination() => new InstallDestinationChoice();
 
         void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
         {
@@ -145,19 +145,19 @@ namespace model.ai
         {
         }
 
-        IChoice<Card, ITrashOption> IPilot.ChooseTrashing()
+        IDecision<Card, ITrashOption> IPilot.ChooseTrashing()
         {
             throw new NotImplementedException();
         }
 
-        private class CardChoice : IChoice<string, Card>
+        private class CardChoice : IDecision<string, Card>
         {
-            Task<Card> IChoice<string, Card>.Declare(string subject, IEnumerable<Card> options) => Task.FromResult(options.First());
+            Task<Card> IDecision<string, Card>.Declare(string subject, IEnumerable<Card> options, Game game) => Task.FromResult(options.First());
         }
 
-        private class InstallDestinationChoice : IChoice<string, IInstallDestination>
+        private class InstallDestinationChoice : IDecision<string, IInstallDestination>
         {
-            Task<IInstallDestination> IChoice<string, IInstallDestination>.Declare(string subject, IEnumerable<IInstallDestination> options) => Task.FromResult(options.First());
+            Task<IInstallDestination> IDecision<string, IInstallDestination>.Declare(string subject, IEnumerable<IInstallDestination> options, Game game) => Task.FromResult(options.First());
         }
     }
 }
