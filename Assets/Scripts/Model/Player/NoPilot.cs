@@ -17,8 +17,8 @@ namespace model.player
             return Task.FromResult(effects.First());
         }
 
-        IChoice<string, Card> IPilot.ChooseACard() => new FailingChoice<string, Card>();
-        IChoice<string, IInstallDestination> IPilot.ChooseAnInstallDestination() => new FailingChoice<string, IInstallDestination>();
-        IChoice<Card, ITrashOption> IPilot.ChooseTrashing() => new FailingChoice<Card, ITrashOption>();
+        IDecision<string, Card> IPilot.ChooseACard() => new FailingChoice<string, Card>();
+        IDecision<string, IInstallDestination> IPilot.ChooseAnInstallDestination() => new FailingChoice<string, IInstallDestination>();
+        IDecision<Card, ITrashOption> IPilot.ChooseTrashing() => new FailingChoice<Card, ITrashOption>();
     }
 }

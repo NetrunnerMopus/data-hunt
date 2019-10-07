@@ -1,15 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using controller;
+using model;
 using model.cards;
 using model.choices;
 using model.choices.trash;
+using model.play;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.RectTransform;
 
 namespace view.gui
 {
-    public class TrashChoiceScreen : IChoice<Card, ITrashOption>
+    public class TrashChoiceScreen : IDecision<Card>
     {
         private GameObject blanket;
         private CardPrinter subjectRow;
@@ -41,7 +45,8 @@ namespace view.gui
             return blanket;
         }
 
-        private CardPrinter CreateSubjectRow(GameObject blanket) {
+        private CardPrinter CreateSubjectRow(GameObject blanket)
+        {
             var subjectRow = new GameObject("Subject row")
             {
                 layer = 5
@@ -55,8 +60,9 @@ namespace view.gui
             return subjectRow.AddComponent<CardPrinter>();
         }
 
-        
-        private GameObject CreateOptionsRow(GameObject blanket) {
+
+        private GameObject CreateOptionsRow(GameObject blanket)
+        {
             var optionsRow = new GameObject("Options row")
             {
                 layer = 5
@@ -72,21 +78,22 @@ namespace view.gui
             return optionsRow;
         }
 
-        public Task<ITrashOption> Declare(Card card, IEnumerable<ITrashOption> options)
+       override public Task<ITrashOption> Declare(Card card, IEnumerable<ITrashOption> options, Game game)
         {
-            subjectRow.Print(card);
+            var subject = subjectRow.Print(card);
             blanket.transform.SetAsLastSibling();
             blanket.SetActive(true);
-            foreach (var option in options)
-            {
-                DisplayOption(option);
-            }
-            // await option choice
-            //screen.SetActive(false);
-            throw new System.Exception("eek! " + card);
+            var optionsResolving = options
+                .Select(option =>
+                    DisplayOption(option, card, subject, game)
+                )
+                .ToArray();
+            var chosenIndex = Task.WaitAny(optionsResolving);
+            blanket.SetActive(false);
+            return optionsResolving[chosenIndex];
         }
 
-        private void DisplayOption(ITrashOption option)
+        async private Task<ITrashOption> DisplayOption(ITrashOption option, Card card, GameObject subject, Game game)
         {
             var optionCard = new GameObject("Trash option " + option);
             var image = optionCard.AddComponent<Image>();
@@ -96,6 +103,14 @@ namespace view.gui
             rectangle.SetSizeWithCurrentAnchors(Axis.Horizontal, 100);
             rectangle.SetSizeWithCurrentAnchors(Axis.Vertical, 100);
             optionCard.transform.SetParent(optionsRow.transform);
+            var ability = option.AsAbility(card);
+            var resolving = new AwaitingResolutionObserver();
+            ability.ObserveResolution(resolving);
+            var dropZone = optionCard.AddComponent<DropZone>();
+            subject
+                 .AddComponent<DroppableChoice>()
+                 .Represent(dropZone);
+            await resolving.AwaitResolution();
         }
     }
 }

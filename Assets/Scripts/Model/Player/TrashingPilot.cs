@@ -6,12 +6,12 @@ namespace model.player
 {
     public class TrashingPilot : DelegatingPilot
     {
-        private readonly IChoice<Card, ITrashOption> trashing;
+        private readonly IDecision<Card, ITrashOption> trashing;
 
-        public TrashingPilot(IChoice<Card, ITrashOption> trashing, IPilot basic) : base(basic)
+        public TrashingPilot(IDecision<Card, ITrashOption> trashing, IPilot basic) : base(basic)
         {
             this.trashing = trashing;
         }
-        override public IChoice<Card, ITrashOption> ChooseTrashing() => trashing;
+        override public IDecision<Card, ITrashOption> ChooseTrashing() => trashing;
     }
 }

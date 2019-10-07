@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace model.choices
 {
-    class FailingChoice<SUBJECT, OPTION> : IChoice<SUBJECT, OPTION>
+    class FailingChoice<SUBJECT, OPTION> : IDecision<SUBJECT, OPTION>
     {
-        public Task<OPTION> Declare(SUBJECT subject, IEnumerable<OPTION> options)
+        public Task<OPTION> Declare(SUBJECT subject, IEnumerable<OPTION> options, Game game)
         {
             throw new System.Exception("Don't know how to choose " + subject + " from " + options);
         }

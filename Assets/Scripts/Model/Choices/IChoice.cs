@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace model.choices
 {
-    public interface IChoice<SUBJECT, OPTION>
+    public interface IChoice
     {
-        Task<OPTION> Declare(SUBJECT subject, IEnumerable<OPTION> options);
+        bool IsLegal();
+        void Make();
     }
 }

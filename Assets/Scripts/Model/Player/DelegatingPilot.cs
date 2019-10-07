@@ -26,17 +26,17 @@ namespace model.player
             return basic.TriggerFromSimultaneous(effects);
         }
 
-        public virtual IChoice<string, Card> ChooseACard()
+        public virtual IDecision<string, Card> ChooseACard()
         {
             return basic.ChooseACard();
         }
 
-        public virtual IChoice<string, IInstallDestination> ChooseAnInstallDestination()
+        public virtual IDecision<string, IInstallDestination> ChooseAnInstallDestination()
         {
             return basic.ChooseAnInstallDestination();
         }
 
-        public virtual IChoice<Card, ITrashOption> ChooseTrashing()
+        public virtual IDecision<Card, ITrashOption> ChooseTrashing()
         {
             return basic.ChooseTrashing();
         }

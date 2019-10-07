@@ -39,7 +39,7 @@ namespace model.zones.corp
             var unaccessed = new List<Card>(Zone.Cards);
             for (var accessesLeft = accessCount; accessesLeft > 0; accessesLeft--)
             {
-                var card = await pilot.ChooseACard().Declare("Which card to access now?", unaccessed);
+                var card = await pilot.ChooseACard().Declare("Which card to access now?", unaccessed, game);
                 unaccessed.Remove(card);
                 await new AccessCard(card, game).AwaitEnd();
             }

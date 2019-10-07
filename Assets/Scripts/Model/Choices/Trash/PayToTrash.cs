@@ -1,4 +1,8 @@
-﻿namespace model.choices.trash
+﻿using model.cards;
+using model.effects.runner;
+using model.play;
+
+namespace model.choices.trash
 {
     public class PayToTrash : ITrashOption
     {
@@ -14,6 +18,11 @@
             cost.Pay(game);
         }
 
-         public string Art => "Images/UI/trash-can";
+        public Ability AsAbility(Card card)
+        {
+            return new Ability(cost, new TrashCorpCard(card));
+        }
+
+        public string Art => "Images/UI/trash-can";
     }
 }

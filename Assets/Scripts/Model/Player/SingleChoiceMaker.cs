@@ -25,8 +25,8 @@ namespace model.player
             }
         }
 
-        override public IChoice<string, Card> ChooseACard() => new TheOnlyChoice<string, Card>(base.ChooseACard());
-        override public IChoice<string, IInstallDestination> ChooseAnInstallDestination() => new TheOnlyChoice<string, IInstallDestination>(base.ChooseAnInstallDestination());
-        override public IChoice<Card, ITrashOption> ChooseTrashing() => new TheOnlyChoice<Card, ITrashOption>(base.ChooseTrashing());
+        override public IDecision<string, Card> ChooseACard() => new TheOnlyChoice<string, Card>(base.ChooseACard());
+        override public IDecision<string, IInstallDestination> ChooseAnInstallDestination() => new TheOnlyChoice<string, IInstallDestination>(base.ChooseAnInstallDestination());
+        override public IDecision<Card, ITrashOption> ChooseTrashing() => new TheOnlyChoice<Card, ITrashOption>(base.ChooseTrashing());
     }
 }

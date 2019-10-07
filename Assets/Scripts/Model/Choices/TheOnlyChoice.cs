@@ -4,16 +4,16 @@ using System.Threading.Tasks;
 
 namespace model.choices
 {
-    public class TheOnlyChoice<SUBJECT, OPTION> : IChoice<SUBJECT, OPTION>
+    public class TheOnlyChoice<SUBJECT, OPTION> : IDecision<SUBJECT, OPTION>
     {
-        private IChoice<SUBJECT, OPTION> fallback;
+        private IDecision<SUBJECT, OPTION> fallback;
 
-        public TheOnlyChoice(IChoice<SUBJECT, OPTION> fallback)
+        public TheOnlyChoice(IDecision<SUBJECT, OPTION> fallback)
         {
             this.fallback = fallback;
         }
 
-        public Task<OPTION> Declare(SUBJECT subject, IEnumerable<OPTION> options)
+        public Task<OPTION> Declare(SUBJECT subject, IEnumerable<OPTION> options, Game game)
         {
             if (options.Count() == 1)
             {
@@ -21,7 +21,7 @@ namespace model.choices
             }
             else
             {
-                return fallback.Declare(subject, options);
+                return fallback.Declare(subject, options, game);
             }
         }
     }
