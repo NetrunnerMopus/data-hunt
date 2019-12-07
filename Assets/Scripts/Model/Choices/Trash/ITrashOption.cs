@@ -1,12 +1,9 @@
-﻿using model.cards;
-using model.play;
-
-namespace model.choices.trash
+﻿namespace model.choices.trash
 {
     public interface ITrashOption
     {
+        bool IsLegal(Game game);
         void Perform(Game game);
-        Ability AsAbility(Card card);
         string Art { get; }
     }
 }

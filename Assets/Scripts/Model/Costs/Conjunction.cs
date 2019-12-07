@@ -34,6 +34,8 @@ namespace model.costs
             Array.ForEach(costs, (cost) => cost.Observe(this, game));
         }
 
+        bool ICost.Payable(Game game) => costs.All(it => it.Payable(game));
+
         void ICost.Pay(Game game)
         {
             foreach (var cost in costs)

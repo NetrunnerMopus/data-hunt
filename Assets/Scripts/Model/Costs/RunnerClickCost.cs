@@ -18,6 +18,11 @@ namespace model.costs
             game.runner.clicks.Observe(this);
         }
 
+        bool ICost.Payable(Game game)
+        {
+            return game.runner.clicks.Remaining() >= clicks;
+        }
+
         void ICost.Pay(Game game)
         {
             game.runner.clicks.Spend(clicks);

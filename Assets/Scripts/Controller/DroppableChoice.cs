@@ -2,15 +2,18 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
-using model.choices;
+using model;
+using System.Threading.Tasks;
 
 namespace controller
 {
     public class DroppableChoice : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private IDictionary<DropZone, IChoice> choiceZones;
+        private DropZone zone;
+        private Game game;
         private Vector3 originalPosition;
         private CanvasGroup canvasGroup;
+        private TaskCompletionSource<bool> chosen = new TaskCompletionSource<bool>();
 
         void Awake()
         {
@@ -22,9 +25,11 @@ namespace controller
             canvasGroup.blocksRaycasts = true;
         }
 
-        public void Represent(IDictionary<DropZone, IChoice> choiceZones)
+        public DroppableChoice Represent(DropZone zone, Game game)
         {
-            this.choiceZones = choiceZones;
+            this.zone = zone;
+            this.game = game;
+            return this;
         }
 
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
@@ -32,10 +37,7 @@ namespace controller
             eventData.selectedObject = gameObject;
             originalPosition = transform.position;
             canvasGroup.blocksRaycasts = false;
-            choiceZones
-                 .Keys
-                 .ToList()
-                 .ForEach(zone => zone.StartDragging());
+            zone.StartDragging();
         }
 
         void IDragHandler.OnDrag(PointerEventData eventData)
@@ -49,24 +51,18 @@ namespace controller
             canvasGroup.blocksRaycasts = true;
             var raycast = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, raycast);
-            var choices = choiceZones
-                .Keys
-                .Where(zone => raycast.Any(ray => ray.gameObject == zone.gameObject))
-                .Select(zone => choiceZones[zone])
-                .Where(choice => choice.IsLegal());
-            int choiceCount = choices.Count();
-            if (choiceCount == 1)
+            var onZone = raycast.Any(ray => ray.gameObject == zone.gameObject);
+            zone.StopDragging();
+            if (onZone)
             {
-                choices.Single().Make();
+                chosen.SetResult(true);
+                Destroy(this);
             }
-            if (choiceCount > 1)
-            {
-                throw new System.Exception("Player made " + choiceCount + " choices at once. Should all of them resolve or just one?");
-            }
-            choiceZones
-                .Keys
-                .ToList()
-                .ForEach(zone => zone.StopDragging());
+        }
+
+        public Task AwaitChoice()
+        {
+            return chosen.Task;
         }
     }
 }

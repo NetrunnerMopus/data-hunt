@@ -7,6 +7,8 @@ namespace model.costs
         private bool allowed = false;
         private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
 
+        bool ICost.Payable(Game game) => allowed;
+
         void ICost.Pay(Game game)
         {
             if (!allowed)

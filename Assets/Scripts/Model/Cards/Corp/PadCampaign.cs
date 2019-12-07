@@ -18,7 +18,7 @@ namespace model.cards.corp
         override public IType Type => new Asset();
         override public IEnumerable<ITrashOption> TrashOptions(Game game) => new ITrashOption[] {
             new Leave(),
-            new PayToTrash(new RunnerCreditCost(4))
+            new PayToTrash(new RunnerCreditCost(4), this)
         };
 
         private class PadCampaignActivation : IEffect

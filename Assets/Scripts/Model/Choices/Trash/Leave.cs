@@ -1,19 +1,11 @@
-﻿using model.cards;
-using model.play;
-
-namespace model.choices.trash
+﻿namespace model.choices.trash
 {
     public class Leave : ITrashOption
     {
-        public void Perform(Game game)
-        {
-        }
+        bool ITrashOption.IsLegal(Game game) => true;
 
-        public Ability AsAbility(Card card)
-        {
-            return new Ability(new model.costs.Nothing(), new model.effects.Pass());
-        }
+        void ITrashOption.Perform(Game game) { }
 
-        public string Art => "Images/UI/thumb-up";
+        string ITrashOption.Art => "Images/UI/thumb-up";
     }
 }

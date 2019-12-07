@@ -13,7 +13,7 @@ using static UnityEngine.RectTransform;
 
 namespace view.gui
 {
-    public class TrashChoiceScreen : IDecision<Card>
+    public class TrashChoiceScreen : IDecision<Card, ITrashOption>
     {
         private GameObject blanket;
         private CardPrinter subjectRow;
@@ -78,7 +78,7 @@ namespace view.gui
             return optionsRow;
         }
 
-       override public Task<ITrashOption> Declare(Card card, IEnumerable<ITrashOption> options, Game game)
+        async Task<ITrashOption> IDecision<Card, ITrashOption>.Declare(Card card, IEnumerable<ITrashOption> options, Game game)
         {
             var subject = subjectRow.Print(card);
             blanket.transform.SetAsLastSibling();
@@ -88,12 +88,12 @@ namespace view.gui
                     DisplayOption(option, card, subject, game)
                 )
                 .ToArray();
-            var chosenIndex = Task.WaitAny(optionsResolving);
+            var chosenIndex = await Task.WhenAny(optionsResolving);
             blanket.SetActive(false);
-            return optionsResolving[chosenIndex];
+            return chosenIndex.Result;
         }
 
-        async private Task<ITrashOption> DisplayOption(ITrashOption option, Card card, GameObject subject, Game game)
+        private Task<ITrashOption> DisplayOption(ITrashOption option, Card card, GameObject subject, Game game)
         {
             var optionCard = new GameObject("Trash option " + option);
             var image = optionCard.AddComponent<Image>();
@@ -103,14 +103,12 @@ namespace view.gui
             rectangle.SetSizeWithCurrentAnchors(Axis.Horizontal, 100);
             rectangle.SetSizeWithCurrentAnchors(Axis.Vertical, 100);
             optionCard.transform.SetParent(optionsRow.transform);
-            var ability = option.AsAbility(card);
-            var resolving = new AwaitingResolutionObserver();
-            ability.ObserveResolution(resolving);
             var dropZone = optionCard.AddComponent<DropZone>();
-            subject
+            return subject
                  .AddComponent<DroppableChoice>()
-                 .Represent(dropZone);
-            await resolving.AwaitResolution();
+                 .Represent(dropZone, game)
+                 .AwaitChoice()
+                 .ContinueWith(it => option);
         }
     }
 }

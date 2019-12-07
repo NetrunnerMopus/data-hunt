@@ -4,31 +4,31 @@ namespace model
 {
     public class CreditPool
     {
-        private int credits = 0;
+        public int Balance { get; private set; } = 0;
         private HashSet<IBalanceObserver> observers = new HashSet<IBalanceObserver>();
 
         public void Pay(int cost)
         {
-            if (credits >= cost)
+            if (Balance >= cost)
             {
-                credits -= cost;
-                UpdateBalance(credits);
+                Balance -= cost;
+                UpdateBalance(Balance);
             }
             else
             {
-                throw new System.Exception("Cannot pay " + cost + " credits while there's only " + credits + " in the pool");
+                throw new System.Exception("Cannot pay " + cost + " credits while there's only " + Balance + " in the pool");
             }
         }
 
         public void Gain(int income)
         {
-            credits += income;
-            UpdateBalance(credits);
+            Balance += income;
+            UpdateBalance(Balance);
         }
 
         private void UpdateBalance(int newBalance)
         {
-            credits = newBalance;
+            Balance = newBalance;
             foreach (IBalanceObserver observer in observers)
             {
                 observer.NotifyBalance(newBalance);
@@ -38,7 +38,7 @@ namespace model
         public void Observe(IBalanceObserver observer)
         {
             observers.Add(observer);
-            observer.NotifyBalance(credits);
+            observer.NotifyBalance(Balance);
         }
     }
 

@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace model.choices
 {
-    public interface IDecision<SUBJECT>
+    public interface IDecision<SUBJECT, OPTION>
     {
-        Task<IChoice> Declare(SUBJECT subject, IEnumerable<IChoice> options, Game game);
+        Task<OPTION> Declare(SUBJECT subject, IEnumerable<OPTION> options, Game game);
     }
 }
