@@ -19,6 +19,8 @@ namespace model.costs
             observer.NotifyPayable(true, this);
         }
 
+        bool ICost.Payable(Game game) => true;
+
         void ICost.Pay(Game game)
         {
             TrashIt();

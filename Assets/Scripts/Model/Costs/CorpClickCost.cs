@@ -18,6 +18,8 @@ namespace model.costs
             game.corp.clicks.Observe(this);
         }
 
+        bool ICost.Payable(Game game) => game.corp.clicks.Remaining() >= clicks;
+
         void ICost.Pay(Game game)
         {
             game.corp.clicks.Spend(clicks);

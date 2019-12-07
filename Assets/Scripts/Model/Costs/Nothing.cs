@@ -10,5 +10,7 @@
         void ICost.Pay(Game game)
         {
         }
+
+        bool ICost.Payable(Game game) => true;
     }
 }

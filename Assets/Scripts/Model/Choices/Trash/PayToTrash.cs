@@ -1,28 +1,29 @@
 ﻿using model.cards;
-using model.effects.runner;
-using model.play;
 
 namespace model.choices.trash
 {
     public class PayToTrash : ITrashOption
     {
         private ICost cost;
+        private Card card;
 
-        public PayToTrash(ICost cost)
+        public PayToTrash(ICost cost, Card card)
         {
             this.cost = cost;
+            this.card = card;
+        }
+
+        bool ITrashOption.IsLegal(Game game)
+        {
+            return cost.Payable(game);
         }
 
         void ITrashOption.Perform(Game game)
         {
             cost.Pay(game);
+            card.MoveTo(game.corp.zones.archives.Zone);
         }
 
-        public Ability AsAbility(Card card)
-        {
-            return new Ability(cost, new TrashCorpCard(card));
-        }
-
-        public string Art => "Images/UI/trash-can";
+        string ITrashOption.Art => "Images/UI/trash-can";
     }
 }

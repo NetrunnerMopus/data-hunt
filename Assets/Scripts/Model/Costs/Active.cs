@@ -29,6 +29,8 @@ namespace model.costs
             observer.NotifyPayable(card.Active, this);
         }
 
+        bool ICost.Payable(Game game) => card.Active;
+
         void ICost.Pay(Game game)
         {
         }

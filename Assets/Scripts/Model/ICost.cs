@@ -4,6 +4,7 @@
     {
         void Pay(Game game);
         void Observe(IPayabilityObserver observer, Game game);
+        bool Payable(Game game);
     }
 
     public interface IPayabilityObserver

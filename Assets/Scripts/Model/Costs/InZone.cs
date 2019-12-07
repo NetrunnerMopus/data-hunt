@@ -38,6 +38,8 @@ namespace model.costs
             }
         }
 
+        bool ICost.Payable(Game game) => true;
+
         void ICost.Pay(Game game)
         {
         }

@@ -18,6 +18,11 @@ namespace model.costs
             game.corp.credits.Observe(this);
         }
 
+        bool ICost.Payable(Game game)
+        {
+            return game.corp.credits.Balance >= credits;
+        }
+
         void ICost.Pay(Game game)
         {
             game.corp.credits.Pay(credits);

@@ -58,7 +58,7 @@ namespace model.cards.corp
             private HashSet<IImpactObserver> observers = new HashSet<IImpactObserver>();
             private List<Card> installables = new List<Card>();
 
-           async void IEffect.Resolve(Game game)
+            async void IEffect.Resolve(Game game)
             {
                 var pilot = game.corp.pilot;
                 var installable = await pilot.ChooseACard().Declare("Which card to install?", installables, game);
