@@ -4,12 +4,14 @@ using UnityEngine.EventSystems;
 using System.Linq;
 using model;
 using System.Threading.Tasks;
+using model.choices;
 
 namespace controller
 {
     public class DroppableChoice<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         private T value;
+        private bool legal;
         public DropZone zone { get; private set; }
         private Game game;
         private Vector3 originalPosition;
@@ -26,9 +28,10 @@ namespace controller
             canvasGroup.blocksRaycasts = true;
         }
 
-        public DroppableChoice<T> Represent(T value, DropZone zone, Game game)
+        public DroppableChoice<T> Represent(T value, bool legal, DropZone zone, Game game)
         {
             this.value = value;
+            this.legal = legal;
             this.zone = zone;
             this.game = game;
             return this;
@@ -39,7 +42,9 @@ namespace controller
             eventData.selectedObject = gameObject;
             originalPosition = transform.position;
             canvasGroup.blocksRaycasts = false;
-            zone.StartDragging();
+            if (legal) {
+                zone.StartDragging();
+            }
         }
 
         void IDragHandler.OnDrag(PointerEventData eventData)
@@ -55,10 +60,9 @@ namespace controller
             EventSystem.current.RaycastAll(eventData, raycast);
             var onZone = raycast.Any(ray => ray.gameObject == zone.gameObject);
             zone.StopDragging();
-            if (onZone)
+            if (onZone && legal)
             {
                 chosen.SetResult(value);
-                Destroy(this);
             }
         }
 
