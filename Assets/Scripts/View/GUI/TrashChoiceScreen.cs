@@ -108,8 +108,10 @@ namespace view.gui
             rectangle.SetSizeWithCurrentAnchors(Axis.Vertical, 100);
             optionCard.transform.SetParent(optionsRow.transform);
             var dropZone = optionCard.AddComponent<DropZone>();
-            var droppableChoice = subject.AddComponent<DroppableTrashChoice>();
-            return droppableChoice.Represent(option, dropZone, game);
+            bool legal = option.IsLegal(game);
+            return subject
+                .AddComponent<DroppableTrashChoice>()
+                .Represent(option, legal, dropZone, game);
         }
     }
 
