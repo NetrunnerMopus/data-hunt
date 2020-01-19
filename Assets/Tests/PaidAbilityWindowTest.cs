@@ -3,6 +3,7 @@ using model.cards;
 using model.cards.runner;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using tests.mocks;
 using tests.observers;
 using view.log;
@@ -37,10 +38,10 @@ namespace tests
         }
 
         [Test, Timeout(1000)]
-        public void ShouldPopHopper()
+        async public void ShouldPopHopper()
         {
             game.Start();
-            passiveCorp.SkipTurn();
+            await passiveCorp.SkipTurn();
             var zones = game.runner.zones;
             hopper.MoveTo(zones.grip.zone);
             var gripObserver = new GripObserver();
@@ -50,10 +51,10 @@ namespace tests
             zones.rig.zone.ObserveRemovals(rigObserver);
             zones.heap.zone.ObserveAdditions(heapObserver);
             ffRunner.FastForwardToActionPhase();
-            game.runner.actionCard.Install(hopper).Trigger(game);
+            await game.runner.actionCard.Install(hopper).Trigger(game);
             var popHopper = paidAbilityObserver.NewestPaidAbility;
 
-            popHopper.Trigger(game);
+            await popHopper.Trigger(game);
 
             Assert.AreEqual(3, gripObserver.TotalAdded);
             Assert.AreEqual(hopper, rigObserver.LastUninstalled);
@@ -61,81 +62,83 @@ namespace tests
         }
 
         [Test, Timeout(1000)]
-        public void ShouldUsePaidAbilityOnRunnerTurn()
+        async public void ShouldUsePaidAbilityOnRunnerTurn()
         {
             game.Start();
-            passiveCorp.SkipTurn();
+            await passiveCorp.SkipTurn();
             hopper.MoveTo(game.runner.zones.grip.zone);
 
             ffRunner.FastForwardToActionPhase();
-            RunnerAction();
-            RunnerAction();
-            game.runner.actionCard.Install(hopper).Trigger(game);
+            await RunnerAction();
+            await RunnerAction();
+            await game.runner.actionCard.Install(hopper).Trigger(game);
             var popHopper = paidAbilityObserver.NewestPaidAbility;
             PassWindow();
-            RunnerAction();
+            await RunnerAction();
             PassWindow();
             PassWindow();
             PassWindow();
             PassWindow();
-            CorpAction();
+            await CorpAction();
             PassWindow();
-            CorpAction();
+            await CorpAction();
             PassWindow();
-            CorpAction();
+            await CorpAction();
             PassWindow();
             passiveCorp.DiscardRandomCards();
             PassWindow();
             PassWindow();
             PassWindow();
-            RunnerAction();
+            await RunnerAction();
             PassWindow();
-            RunnerAction();
-            popHopper.Trigger(game);
+            await RunnerAction();
+            await popHopper.Trigger(game);
             PassWindow();
-            RunnerAction();
-            RunnerAction();
+            await RunnerAction();
+            await RunnerAction();
         }
 
         [Test, Timeout(1000)]
-        public void ShouldUsePaidAbilityOnCorpTurn()
+        async public void ShouldUsePaidAbilityOnCorpTurn()
         {
             game.Start();
-            passiveCorp.SkipTurn();
+            await passiveCorp.SkipTurn();
             hopper.MoveTo(game.runner.zones.grip.zone);
 
-            RunnerAction();
-            RunnerAction();
-            game.runner.actionCard.Install(hopper).Trigger(game);
+            await RunnerAction();
+            await RunnerAction();
+            await game.runner.actionCard.Install(hopper).Trigger(game);
             var popHopper = paidAbilityObserver.NewestPaidAbility;
             PassWindow();
-            RunnerAction();
+            await RunnerAction();
             PassWindow();
             PassWindow();
             PassWindow();
             PassWindow();
-            CorpAction();
+            await CorpAction();
             PassWindow();
-            CorpAction();
-            popHopper.Trigger(game);
+            await CorpAction();
+            await popHopper.Trigger(game);
             PassWindow();
-            CorpAction();
+            await CorpAction();
             passiveCorp.DiscardRandomCards();
-            RunnerAction();
-            RunnerAction();
-            RunnerAction();
-            RunnerAction();
+            await RunnerAction();
+            await RunnerAction();
+            await RunnerAction();
+            await RunnerAction();
         }
 
-        private void RunnerAction()
+        async private Task RunnerAction()
         {
-            game.runner.actionCard.credit.Trigger(game);
+            await game.runner.actionCard.TakeAction();
+            await game.runner.actionCard.credit.Trigger(game);
             ffRunner.SkipPaidWindow();
         }
 
-        private void CorpAction()
+        async private Task CorpAction()
         {
-            game.corp.actionCard.credit.Trigger(game);
+            await game.corp.actionCard.TakeAction();
+            await game.corp.actionCard.credit.Trigger(game);
         }
 
         private void PassWindow()

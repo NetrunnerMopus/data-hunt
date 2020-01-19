@@ -1,9 +1,10 @@
-﻿using model.zones.corp;
+﻿using System.Threading.Tasks;
+using model.zones.corp;
 
 namespace model.choices
 {
     public interface IRemoteInstallationChoice
     {
-        Remote Choose();
+        Task<Remote> Choose();
     }
 }

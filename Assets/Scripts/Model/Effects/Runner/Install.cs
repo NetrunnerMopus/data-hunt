@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using System.Threading.Tasks;
+using model.cards;
 
 namespace model.effects.runner
 {
@@ -11,10 +12,10 @@ namespace model.effects.runner
             this.card = card;
         }
 
-        void IEffect.Resolve(Game game)
+        async Task IEffect.Resolve(Game game)
         {
             card.MoveTo(game.runner.zones.rig.zone);
-            card.Activate(game);
+            await card.Activate(game);
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

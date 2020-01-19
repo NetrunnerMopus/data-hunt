@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.timing
 {
@@ -10,13 +11,14 @@ namespace model.timing
 
         bool ICost.Payable(Game game) => allowed;
         
-        void ICost.Pay(Game game)
+        async Task ICost.Pay(Game game)
         {
             if (!allowed)
             {
                 throw new System.Exception("Tried to fire a paid ability while the window was closed");
             }
             paid = true;
+            await Task.CompletedTask;
         }
 
         void ICost.Observe(IPayabilityObserver observer, Game game)

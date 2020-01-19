@@ -4,6 +4,7 @@ using model.play;
 using model.effects.runner;
 using model.zones.runner;
 using model.zones;
+using System.Threading.Tasks;
 
 namespace model.cards.runner
 {
@@ -28,7 +29,7 @@ namespace model.cards.runner
                 this.card = card;
             }
 
-            void IEffect.Resolve(Game game)
+            async Task IEffect.Resolve(Game game)
             {
                 var paidWindow = game.runner.paidWindow;
                 this.game = game;
@@ -39,6 +40,7 @@ namespace model.cards.runner
                 }
                 paidWindow.Add(pop, card);
                 game.runner.zones.rig.zone.ObserveRemovals(this);
+                await Task.CompletedTask;
             }
 
             void IZoneRemovalObserver.NotifyCardRemoved(Card card)

@@ -7,6 +7,7 @@ using model.zones.runner;
 using model.timing;
 using System.Collections.Generic;
 using model.play.corp;
+using System.Threading.Tasks;
 
 namespace view.log
 {
@@ -72,9 +73,10 @@ namespace view.log
             }
         }
 
-        void IRunnerTurnStartObserver.NotifyTurnStarted(Game game)
+        async Task IRunnerTurnStartObserver.NotifyTurnStarted(Game game)
         {
             Log("turn beginning");
+            await Task.CompletedTask;
         }
 
         void IRunnerActionObserver.NotifyActionTaking()

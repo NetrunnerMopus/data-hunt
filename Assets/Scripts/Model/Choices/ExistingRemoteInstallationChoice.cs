@@ -1,4 +1,5 @@
-﻿using model.zones.corp;
+﻿using System.Threading.Tasks;
+using model.zones.corp;
 
 namespace model.choices
 {
@@ -11,6 +12,6 @@ namespace model.choices
             this.remote = remote;
         }
 
-        Remote IRemoteInstallationChoice.Choose() => remote;
+        Task<Remote> IRemoteInstallationChoice.Choose() => Task.FromResult(remote);
     }
 }

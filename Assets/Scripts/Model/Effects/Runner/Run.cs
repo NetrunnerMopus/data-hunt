@@ -1,4 +1,5 @@
-﻿using model.timing;
+﻿using System.Threading.Tasks;
+using model.timing;
 using model.zones.corp;
 
 namespace model.effects.runner
@@ -12,9 +13,8 @@ namespace model.effects.runner
             this.server = server;
         }
 
-        async void IEffect.Resolve(Game game) // TODO make IEffect.Resolve async?
+        async Task IEffect.Resolve(Game game)
         {
-            UnityEngine.Debug.Log("Initiating run on " + server);
             var run = new RunStructure(server, game);
             await run.AwaitEnd();
         }

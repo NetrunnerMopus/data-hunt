@@ -70,12 +70,13 @@ namespace model.timing.corp
 
             bool ICost.Payable(Game game) => allowed;
 
-            void ICost.Pay(Game game)
+            async Task ICost.Pay(Game game)
             {
                 if (!allowed)
                 {
                     throw new System.Exception("Tried to rez a card outside of a rez window");
                 }
+                await Task.CompletedTask;
             }
 
             void ICost.Observe(IPayabilityObserver observer, Game game)

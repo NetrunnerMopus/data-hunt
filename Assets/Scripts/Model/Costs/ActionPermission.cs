@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.costs
 {
@@ -9,12 +10,14 @@ namespace model.costs
 
         bool ICost.Payable(Game game) => allowed;
 
-        void ICost.Pay(Game game)
+        async Task ICost.Pay(Game game)
         {
             if (!allowed)
             {
                 throw new System.Exception("Tried to fire an action while it was forbidden");
             }
+            Revoke();
+            await Task.CompletedTask;
         }
 
         void ICost.Observe(IPayabilityObserver observer, Game game)
@@ -29,7 +32,7 @@ namespace model.costs
             Update();
         }
 
-        public void Revoke()
+        private void Revoke()
         {
             allowed = false;
             Update();

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using model.zones;
 
 namespace model.effects.runner
@@ -13,11 +14,12 @@ namespace model.effects.runner
             this.cards = cards;
         }
 
-        void IEffect.Resolve(Game game)
+        async Task IEffect.Resolve(Game game)
         {
             var stack = game.runner.zones.stack;
             var grip = game.runner.zones.grip;
             stack.Draw(cards, grip);
+            await Task.CompletedTask;
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

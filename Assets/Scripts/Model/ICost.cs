@@ -1,8 +1,10 @@
-﻿namespace model
+﻿using System.Threading.Tasks;
+
+namespace model
 {
     public interface ICost
     {
-        void Pay(Game game);
+        Task Pay(Game game);
         void Observe(IPayabilityObserver observer, Game game);
         bool Payable(Game game);
     }

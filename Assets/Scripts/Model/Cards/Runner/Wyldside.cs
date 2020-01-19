@@ -2,6 +2,7 @@
 using model.costs;
 using model.cards.types;
 using model.timing.runner;
+using System.Threading.Tasks;
 
 namespace model.cards.runner
 {
@@ -19,16 +20,20 @@ namespace model.cards.runner
         {
             private readonly WyldsideTrigger trigger = new WyldsideTrigger();
 
-            void IEffect.Resolve(Game game) => game.runner.turn.ObserveStart(trigger);
+            async Task IEffect.Resolve(Game game)
+            {
+                game.runner.turn.ObserveStart(trigger);
+                await Task.CompletedTask;
+            }
             void IEffect.Observe(IImpactObserver observer, Game game) { }
         }
 
         private class WyldsideTrigger : IRunnerTurnStartObserver
         {
-            void IRunnerTurnStartObserver.NotifyTurnStarted(Game game)
+            async Task IRunnerTurnStartObserver.NotifyTurnStarted(Game game)
             {
                 IEffect draw = new Draw(2);
-                draw.Resolve(game);
+                await draw.Resolve(game);
                 game.runner.clicks.Lose(1);
             }
         }

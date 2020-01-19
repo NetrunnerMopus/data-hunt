@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace model.effects
 {
@@ -15,11 +16,11 @@ namespace model.effects
             this.effects = effects;
         }
 
-        void IEffect.Resolve(Game game)
+        async Task IEffect.Resolve(Game game)
         {
             foreach (var effect in effects)
             {
-                effect.Resolve(game);
+                await effect.Resolve(game);
             }
         }
 

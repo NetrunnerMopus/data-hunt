@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace model.costs
 {
@@ -36,11 +37,11 @@ namespace model.costs
 
         bool ICost.Payable(Game game) => costs.All(it => it.Payable(game));
 
-        void ICost.Pay(Game game)
+        async Task ICost.Pay(Game game)
         {
             foreach (var cost in costs)
             {
-                cost.Pay(game);
+                await cost.Pay(game);
             }
         }
 

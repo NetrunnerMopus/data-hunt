@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using System.Threading.Tasks;
+using model.cards;
 using model.zones;
 
 namespace model.costs
@@ -21,9 +22,10 @@ namespace model.costs
 
         bool ICost.Payable(Game game) => true;
 
-        void ICost.Pay(Game game)
+        async Task ICost.Pay(Game game)
         {
             TrashIt();
+            await Task.CompletedTask;
         }
 
         public void TrashIt()

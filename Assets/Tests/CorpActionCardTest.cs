@@ -11,7 +11,7 @@ namespace tests
     public class CorpActionCardTest
     {
         [Test]
-        public void ShouldClickForCredit()
+        async public void ShouldClickForCredit()
         {
             var game = new MockGames().WithRunnerCards(new List<Card>());
             var gameFlowLog = new GameFlowLog();
@@ -25,7 +25,8 @@ namespace tests
             SkipPaidWindow(game);
             SkipPaidWindow(game);
 
-            clickForCredit.Trigger(game);
+            await game.corp.actionCard.TakeAction();
+            await clickForCredit.Trigger(game);
 
             Assert.AreEqual(6, balance.LastBalance);
             Assert.AreEqual(1, clicks.Spent);

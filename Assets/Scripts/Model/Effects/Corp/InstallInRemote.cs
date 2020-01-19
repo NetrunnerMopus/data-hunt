@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using System.Threading.Tasks;
+using model.cards;
 using model.choices;
 using model.play.corp;
 
@@ -15,9 +16,9 @@ namespace model.effects.corp
             this.remoteChoice = remoteChoice;
         }
 
-        void IEffect.Resolve(Game game)
+        async Task IEffect.Resolve(Game game)
         {
-            var remote = remoteChoice.Choose();
+            var remote = await remoteChoice.Choose();
             remote.InstallWithin(card);
             if (card.Type.Rezzable)
             {

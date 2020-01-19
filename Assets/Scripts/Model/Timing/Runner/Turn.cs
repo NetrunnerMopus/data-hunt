@@ -139,7 +139,7 @@ namespace model.timing.runner
 
     public interface IRunnerTurnStartObserver
     {
-        void NotifyTurnStarted(Game game);
+        Task NotifyTurnStarted(Game game);
     }
 
     public interface IRunnerActionObserver

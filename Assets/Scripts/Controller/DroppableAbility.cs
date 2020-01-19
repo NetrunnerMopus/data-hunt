@@ -71,7 +71,7 @@ namespace controller
             transform.position = eventData.position;
         }
 
-        void IEndDragHandler.OnEndDrag(PointerEventData eventData)
+        async void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
             eventData.selectedObject = null;
             canvasGroup.blocksRaycasts = true;
@@ -80,7 +80,7 @@ namespace controller
             var onDrop = raycast.Where(r => r.gameObject == zone.gameObject).Any();
             if (onDrop && usable)
             {
-                ability.Trigger(game);
+                await ability.Trigger(game);
             }
             PutBack();
             zone.StopDragging();

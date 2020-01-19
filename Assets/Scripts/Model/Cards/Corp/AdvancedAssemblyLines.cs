@@ -6,6 +6,7 @@ using model.timing;
 using model.zones;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace model.cards.corp
 {
@@ -28,10 +29,10 @@ namespace model.cards.corp
                 this.card = card;
             }
 
-            void IEffect.Resolve(Game game)
+            async Task IEffect.Resolve(Game game)
             {
                 IEffect gain = new Gain(3);
-                gain.Resolve(game);
+                await gain.Resolve(game);
                 var paidWindow = game.corp.paidWindow;
                 var archives = game.corp.zones.archives.Zone;
                 var pop = new Ability(
@@ -58,7 +59,7 @@ namespace model.cards.corp
             private HashSet<IImpactObserver> observers = new HashSet<IImpactObserver>();
             private List<Card> installables = new List<Card>();
 
-            async void IEffect.Resolve(Game game)
+            async Task IEffect.Resolve(Game game)
             {
                 var pilot = game.corp.pilot;
                 var installable = await pilot.ChooseACard().Declare("Which card to install?", installables, game);
@@ -68,7 +69,7 @@ namespace model.cards.corp
                     destination: destination
                 );
                 UnityEngine.Debug.Log("Installing " + installable.Name + " in the " + destination);
-                install.Resolve(game);
+                await install.Resolve(game);
             }
 
             void IEffect.Observe(IImpactObserver observer, Game game)

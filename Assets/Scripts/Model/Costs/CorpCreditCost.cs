@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.costs
 {
@@ -23,9 +24,10 @@ namespace model.costs
             return game.corp.credits.Balance >= credits;
         }
 
-        void ICost.Pay(Game game)
+        async Task ICost.Pay(Game game)
         {
             game.corp.credits.Pay(credits);
+            await Task.CompletedTask;
         }
 
         public void NotifyBalance(int balance)

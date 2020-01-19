@@ -1,8 +1,10 @@
-﻿namespace model.effects
+﻿using System.Threading.Tasks;
+
+namespace model.effects
 {
     public class Pass : IEffect
     {
-        void IEffect.Resolve(Game game) { }
+        async Task IEffect.Resolve(Game game) => await Task.CompletedTask;
 
         void IEffect.Observe(IImpactObserver observer, Game game)
         {

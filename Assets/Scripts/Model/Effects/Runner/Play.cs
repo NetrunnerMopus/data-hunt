@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using System.Threading.Tasks;
+using model.cards;
 using model.zones;
 
 namespace model.effects.runner
@@ -13,10 +14,10 @@ namespace model.effects.runner
             this.card = card;
         }
 
-        void IEffect.Resolve(Game game)
+        async Task IEffect.Resolve(Game game)
         {
             card.MoveTo(playZone);
-            card.Activate(game);
+            await card.Activate(game);
             card.Deactivate();
             card.MoveTo(game.runner.zones.heap.zone);
         }

@@ -1,9 +1,11 @@
-﻿namespace model.choices.trash
+﻿using System.Threading.Tasks;
+
+namespace model.choices.trash
 {
     public interface ITrashOption
     {
         bool IsLegal(Game game);
-        void Perform(Game game);
+        Task Perform(Game game);
         string Art { get; }
     }
 }

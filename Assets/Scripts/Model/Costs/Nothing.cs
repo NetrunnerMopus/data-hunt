@@ -1,4 +1,6 @@
-﻿namespace model.costs
+﻿using System.Threading.Tasks;
+
+namespace model.costs
 {
     public class Nothing : ICost
     {
@@ -7,8 +9,9 @@
             observer.NotifyPayable(true, this);
         }
 
-        void ICost.Pay(Game game)
+        async Task ICost.Pay(Game game)
         {
+            await Task.CompletedTask;
         }
 
         bool ICost.Payable(Game game) => true;
