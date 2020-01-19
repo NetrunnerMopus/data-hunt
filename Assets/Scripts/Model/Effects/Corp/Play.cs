@@ -1,6 +1,7 @@
 ﻿using model.cards;
 using model.zones;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.effects.corp
 {
@@ -14,11 +15,11 @@ namespace model.effects.corp
             this.card = card;
         }
 
-        void IEffect.Resolve(Game game)
+        async Task IEffect.Resolve(Game game)
         {
             card.FlipFaceUp();
             card.MoveTo(playZone);
-            card.Activate(game);
+            await card.Activate(game);
             card.Deactivate();
             card.MoveTo(game.corp.zones.archives.Zone);
         }

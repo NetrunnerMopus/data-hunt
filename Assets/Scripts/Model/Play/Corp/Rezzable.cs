@@ -16,12 +16,12 @@ namespace model.play.corp
             this.game = game;
         }
 
-        public void Rez()
+        async public Task Rez()
         {
             UnityEngine.Debug.Log("Rezzing " + card.Name);
             card.FlipFaceUp();
-            card.PlayCost.Pay(game);
-            card.Activate(game);
+            await card.PlayCost.Pay(game);
+            await card.Activate(game);
             UnityEngine.Debug.Log("Rezzed " + card.Name);
         }
 

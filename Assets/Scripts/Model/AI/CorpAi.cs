@@ -63,7 +63,7 @@ namespace model.ai
             await Thinking();
             var randomLegalAction = legalActions.ElementAt(random.Next(0, legalActions.Count));
             UnityEngine.Debug.Log("Choosing to " + randomLegalAction);
-            randomLegalAction.Trigger(game);
+            await randomLegalAction.Trigger(game);
         }
 
         void IHqDiscardObserver.NotifyDiscarding(bool discarding)
@@ -87,7 +87,7 @@ namespace model.ai
         async Task IRezzableObserver.NotifyRezzable(Rezzable rezzable)
         {
             await Thinking();
-            rezzable.Rez();
+            await rezzable.Rez();
         }
 
         async Task IRezzableObserver.NotifyNotRezzable()
@@ -111,7 +111,7 @@ namespace model.ai
             ability.ObserveUsability(this, game);
         }
 
-        void IUsabilityObserver.NotifyUsable(bool usable, Ability ability)
+        async void IUsabilityObserver.NotifyUsable(bool usable, Ability ability)
         {
             if (actions.Contains(ability))
             {
@@ -128,7 +128,7 @@ namespace model.ai
             {
                 if (usable)
                 {
-                    ability.Trigger(game);
+                    await ability.Trigger(game);
                 }
             }
         }

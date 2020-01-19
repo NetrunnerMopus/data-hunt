@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.play
 {
@@ -18,10 +19,10 @@ namespace model.play
             this.effect = effect;
         }
 
-        public void Trigger(Game game)
+        async public Task Trigger(Game game)
         {
-            cost.Pay(game);
-            effect.Resolve(game);
+            await cost.Pay(game);
+            await effect.Resolve(game);
             foreach (var observer in resolutions)
             {
                 observer.NotifyResolved();

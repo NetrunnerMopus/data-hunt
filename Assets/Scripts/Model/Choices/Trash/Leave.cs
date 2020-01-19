@@ -1,10 +1,12 @@
-﻿namespace model.choices.trash
+﻿using System.Threading.Tasks;
+
+namespace model.choices.trash
 {
     public class Leave : ITrashOption
     {
         bool ITrashOption.IsLegal(Game game) => true;
 
-        void ITrashOption.Perform(Game game) { }
+        async Task ITrashOption.Perform(Game game) => await Task.CompletedTask;
 
         string ITrashOption.Art => "Images/UI/thumb-up";
     }

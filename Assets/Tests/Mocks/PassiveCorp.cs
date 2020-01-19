@@ -1,4 +1,5 @@
-﻿using model;
+﻿using System.Threading.Tasks;
+using model;
 
 namespace tests.mocks
 {
@@ -11,14 +12,14 @@ namespace tests.mocks
             this.game = game;
         }
 
-        public void SkipTurn()
+        async public Task SkipTurn()
         {
             SkipPaidWindow();
             var clickForCredit = game.corp.actionCard.credit;
             SkipPaidWindow();
             for (int i = 0; i < 3; i++)
             {
-                clickForCredit.Trigger(game);
+                await clickForCredit.Trigger(game);
                 SkipPaidWindow();
             }
             DiscardRandomCards();

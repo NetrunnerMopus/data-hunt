@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.costs
 {
@@ -23,9 +24,10 @@ namespace model.costs
             return game.runner.clicks.Remaining() >= clicks;
         }
 
-        void ICost.Pay(Game game)
+        async Task ICost.Pay(Game game)
         {
             game.runner.clicks.Spend(clicks);
+            await Task.CompletedTask;
         }
 
         public void NotifyClicks(int spent, int remaining)

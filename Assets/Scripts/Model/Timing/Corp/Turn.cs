@@ -40,7 +40,7 @@ namespace model.timing.corp
             Step(1, 4);
             await TriggerTurnBeginning();
             Step(1, 5);
-            MandatoryDraw();
+            await MandatoryDraw();
         }
 
         async private Task OpenPaidWindow()
@@ -72,13 +72,13 @@ namespace model.timing.corp
             }
         }
 
-        private void MandatoryDraw()
+        async private Task MandatoryDraw()
         {
             var rd = game.corp.zones.rd;
             if (rd.HasCards())
             {
                 IEffect draw = new Draw(1);
-                draw.Resolve(game);
+                await draw.Resolve(game);
             }
             else
             {

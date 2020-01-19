@@ -1,8 +1,10 @@
-﻿namespace model
+﻿using System.Threading.Tasks;
+
+namespace model
 {
     public interface IEffect
     {
-        void Resolve(Game game);
+        Task Resolve(Game game);
         void Observe(IImpactObserver observer, Game game);
     }
 

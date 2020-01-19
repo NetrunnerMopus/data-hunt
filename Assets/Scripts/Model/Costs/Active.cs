@@ -1,6 +1,6 @@
 ﻿using model.cards;
-using model.zones;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.costs
 {
@@ -31,8 +31,9 @@ namespace model.costs
 
         bool ICost.Payable(Game game) => card.Active;
 
-        void ICost.Pay(Game game)
+        async Task ICost.Pay(Game game)
         {
+            await Task.CompletedTask;
         }
     }
 }

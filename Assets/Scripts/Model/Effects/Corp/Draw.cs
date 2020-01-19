@@ -1,4 +1,6 @@
-﻿namespace model.effects.corp
+﻿using System.Threading.Tasks;
+
+namespace model.effects.corp
 {
     public class Draw : IEffect
     {
@@ -9,11 +11,12 @@
             this.cards = cards;
         }
 
-        void IEffect.Resolve(Game game)
+        async Task IEffect.Resolve(Game game)
         {
             var rd = game.corp.zones.rd;
             var hq = game.corp.zones.hq;
             rd.Draw(cards, hq);
+            await Task.CompletedTask;
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

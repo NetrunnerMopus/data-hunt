@@ -12,7 +12,7 @@ namespace tests
     public class SureGambleTest
     {
         [Test]
-        public void ShouldPlay()
+        async public void ShouldPlay()
         {
             var runnerCards = new List<Card>();
             for (int i = 0; i < 5; i++)
@@ -22,7 +22,7 @@ namespace tests
             var sureGamble = runnerCards.First();
             var game = new MockGames().WithRunnerCards(runnerCards);
             game.Start();
-            new PassiveCorp(game).SkipTurn();
+            await new PassiveCorp(game).SkipTurn();
             var balance = new LastBalanceObserver();
             var clicks = new SpentClicksObserver();
             var grip = new GripObserver();
@@ -31,9 +31,9 @@ namespace tests
             game.runner.clicks.Observe(clicks);
             game.runner.zones.grip.zone.ObserveRemovals(grip);
             game.runner.zones.heap.zone.ObserveAdditions(heap);
-            var play = game.runner.actionCard.Play(sureGamble);
-
-            play.Trigger(game);
+            
+            await game.runner.actionCard.TakeAction();
+            await game.runner.actionCard.Play(sureGamble).Trigger(game);
 
             Assert.AreEqual(9, balance.LastBalance);
             Assert.AreEqual(1, clicks.Spent);

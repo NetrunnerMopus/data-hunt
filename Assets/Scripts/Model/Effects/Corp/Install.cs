@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using System.Threading.Tasks;
+using model.cards;
 using model.play.corp;
 using model.zones;
 
@@ -15,7 +16,7 @@ namespace model.effects.corp
             this.destination = destination;
         }
 
-        public void Resolve(Game game)
+        async public Task Resolve(Game game)
         {
             destination.Host(card);
             if (card.Type.Rezzable)
@@ -23,6 +24,7 @@ namespace model.effects.corp
                 var rezzable = new Rezzable(card, game);
                 game.corp.turn.rezWindow.Add(rezzable);
             }
+            await Task.CompletedTask;
         }
 
         public void Observe(IImpactObserver observer, Game game)

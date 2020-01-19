@@ -35,7 +35,7 @@ namespace model.timing
             var options = card.TrashOptions(game);
             var decision = game.runner.pilot.ChooseTrashing();
             var trashing = await decision.Declare(card, options, game);
-            trashing.Perform(game);
+            await trashing.Perform(game);
         }
 
         async private Task Steal()

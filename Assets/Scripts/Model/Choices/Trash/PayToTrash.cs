@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using System.Threading.Tasks;
+using model.cards;
 
 namespace model.choices.trash
 {
@@ -18,9 +19,9 @@ namespace model.choices.trash
             return cost.Payable(game);
         }
 
-        void ITrashOption.Perform(Game game)
+        async Task ITrashOption.Perform(Game game)
         {
-            cost.Pay(game);
+            await cost.Pay(game);
             card.MoveTo(game.corp.zones.archives.Zone);
         }
 

@@ -1,6 +1,7 @@
 ﻿using model.choices.trash;
 using model.zones;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.cards
 {
@@ -28,10 +29,10 @@ namespace model.cards
             this.Zone.Add(this);
         }
 
-        public void Activate(Game game)
+        async public Task Activate(Game game)
         {
             Active = true;
-            Activation.Resolve(game); // TODO either keep this or `public Activation`, because it's risking double resolution
+            await Activation.Resolve(game); // TODO either keep this or `public Activation`, because it's risking double resolution
             NotifyActivity();
         }
 

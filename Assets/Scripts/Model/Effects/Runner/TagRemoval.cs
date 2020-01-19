@@ -1,4 +1,6 @@
-﻿namespace model.effects.runner
+﻿using System.Threading.Tasks;
+
+namespace model.effects.runner
 {
     public class TagRemoval : IEffect
     {
@@ -9,9 +11,10 @@
             this.tags = tags;
         }
 
-        void IEffect.Resolve(Game game)
+        async Task IEffect.Resolve(Game game)
         {
             game.runner.tags -= tags;
+            await Task.CompletedTask;
         }
 
         void IEffect.Observe(IImpactObserver observer, Game game)

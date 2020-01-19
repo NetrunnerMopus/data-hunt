@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using model.cards.types;
 using model.choices.trash;
 using model.costs;
@@ -23,9 +24,10 @@ namespace model.cards.corp
 
         private class PadCampaignActivation : IEffect
         {
-            void IEffect.Resolve(Game game)
+            async Task IEffect.Resolve(Game game)
             {
-                game.corp.turn.turnBeginningTriggers.Add(new Gain(1));
+               game.corp.turn.turnBeginningTriggers.Add(new Gain(1));
+               await Task.CompletedTask;
             }
             void IEffect.Observe(IImpactObserver observer, Game game) { }
         }

@@ -67,7 +67,6 @@ namespace model.play.corp
             permission.Grant();
             actionTaking = new TaskCompletionSource<bool>();
             await actionTaking.Task;
-            permission.Revoke();
         }
 
         void IResolutionObserver.NotifyResolved()
