@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace controller
 {
-    public class DroppableChoice : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class DroppableChoice<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private DropZone zone;
+        private T value;
+        public DropZone zone { get; private set; }
         private Game game;
         private Vector3 originalPosition;
         private CanvasGroup canvasGroup;
-        private TaskCompletionSource<bool> chosen = new TaskCompletionSource<bool>();
+        private TaskCompletionSource<T> chosen = new TaskCompletionSource<T>();
 
         void Awake()
         {
@@ -25,8 +26,9 @@ namespace controller
             canvasGroup.blocksRaycasts = true;
         }
 
-        public DroppableChoice Represent(DropZone zone, Game game)
+        public DroppableChoice<T> Represent(T value, DropZone zone, Game game)
         {
+            this.value = value;
             this.zone = zone;
             this.game = game;
             return this;
@@ -55,12 +57,12 @@ namespace controller
             zone.StopDragging();
             if (onZone)
             {
-                chosen.SetResult(true);
+                chosen.SetResult(value);
                 Destroy(this);
             }
         }
 
-        public Task AwaitChoice()
+        public Task<T> AwaitChoice()
         {
             return chosen.Task;
         }
