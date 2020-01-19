@@ -1,8 +1,8 @@
 ﻿using model.cards.types;
+using model.choices.trash;
 using model.costs;
 using model.effects.corp;
 using model.play;
-using model.timing;
 using model.zones;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +19,11 @@ namespace model.cards.corp
         override public ICost PlayCost => new CorpCreditCost(1);
         override public IEffect Activation => new AdvancedAssemblyLinesActivation(this);
         override public IType Type => new Asset();
+
+        override public IEnumerable<ITrashOption> TrashOptions(Game game) => new ITrashOption[] {
+            new Leave(),
+            new PayToTrash(new RunnerCreditCost(1), this)
+        };
 
         private class AdvancedAssemblyLinesActivation : IEffect
         {
