@@ -6,7 +6,6 @@ using model;
 using model.cards;
 using model.choices;
 using model.choices.trash;
-using model.play;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.RectTransform;
@@ -83,17 +82,22 @@ namespace view.gui
             var subject = subjectRow.Print(card);
             blanket.transform.SetAsLastSibling();
             blanket.SetActive(true);
-            var optionsResolving = options
-                .Select(option =>
-                    DisplayOption(option, card, subject, game)
-                )
-                .ToArray();
-            var chosenIndex = await Task.WhenAny(optionsResolving);
+            var droppableChoices = options.Select(it => DisplayOption(it, card, subject, game)).ToList();
+            var asyncChoices = droppableChoices.Select(it => it.AwaitChoice()).ToArray();
+            var choice = await Task.WhenAny(asyncChoices);
             blanket.SetActive(false);
-            return chosenIndex.Result;
+            Dispose(subject);
+            droppableChoices.ForEach(it => Dispose(it.zone.gameObject));
+            return choice.Result;
         }
 
-        private Task<ITrashOption> DisplayOption(ITrashOption option, Card card, GameObject subject, Game game)
+        private void Dispose(GameObject o)
+        {
+            o.transform.SetParent(null);
+            Object.Destroy(o);
+        }
+
+        private DroppableChoice<ITrashOption> DisplayOption(ITrashOption option, Card card, GameObject subject, Game game)
         {
             var optionCard = new GameObject("Trash option " + option);
             var image = optionCard.AddComponent<Image>();
@@ -104,11 +108,10 @@ namespace view.gui
             rectangle.SetSizeWithCurrentAnchors(Axis.Vertical, 100);
             optionCard.transform.SetParent(optionsRow.transform);
             var dropZone = optionCard.AddComponent<DropZone>();
-            return subject
-                 .AddComponent<DroppableChoice>()
-                 .Represent(dropZone, game)
-                 .AwaitChoice()
-                 .ContinueWith(it => option);
+            var droppableChoice = subject.AddComponent<DroppableTrashChoice>();
+            return droppableChoice.Represent(option, dropZone, game);
         }
     }
+
+    class DroppableTrashChoice : DroppableChoice<ITrashOption> { }
 }
