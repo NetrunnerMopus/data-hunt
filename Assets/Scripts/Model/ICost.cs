@@ -13,4 +13,6 @@ namespace model
     {
         void NotifyPayable(bool payable, ICost source);
     }
+
+    // TODO remake interfaces to delegates: public delegate void NotifyPayability(bool payable, ICost source);
 }

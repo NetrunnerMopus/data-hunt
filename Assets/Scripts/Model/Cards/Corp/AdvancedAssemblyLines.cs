@@ -1,6 +1,7 @@
 ﻿using model.cards.types;
 using model.choices.trash;
 using model.costs;
+using model.effects;
 using model.effects.corp;
 using model.play;
 using model.zones;
@@ -68,12 +69,7 @@ namespace model.cards.corp
             {
                 var pilot = game.corp.pilot;
                 var installable = await pilot.ChooseACard().Declare("Which card to install?", installables, game);
-                var destination = await pilot.ChooseAnInstallDestination().Declare("Where to install?", installable.FindInstallDestinations(game), game);
-                var install = new Install(
-                    card: installable,
-                    destination: destination
-                );
-                UnityEngine.Debug.Log("Installing " + installable.Name + " in the " + destination);
+                var install = new GenericInstall(installable, game.corp.pilot);
                 await install.Resolve(game);
             }
 

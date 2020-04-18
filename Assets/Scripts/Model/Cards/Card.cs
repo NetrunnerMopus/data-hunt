@@ -71,6 +71,15 @@ namespace model.cards
             }
         }
 
+        internal void FlipPreInstall()
+        {
+            switch (Faction.Side)
+            {
+                case Side.CORP: FlipFaceDown(); break;
+                case Side.RUNNER: FlipFaceUp(); break;
+            }
+        }
+
         public List<IInstallDestination> FindInstallDestinations(Game game)
         {
             return Type.FindInstallDestinations(game);
@@ -78,28 +87,14 @@ namespace model.cards
 
         public void FlipFaceUp()
         {
-            if (Faceup)
-            {
-                throw new System.Exception("Cannot flip " + Name + " face up, because it already is face up");
-            }
-            else
-            {
-                Faceup = true;
-                NotifyFlipObservers();
-            }
+            Faceup = true;
+            NotifyFlipObservers();
         }
 
         public void FlipFaceDown()
         {
-            if (!Faceup)
-            {
-                throw new System.Exception("Cannot flip " + Name + " face down, because it already is face down");
-            }
-            else
-            {
-                Faceup = false;
-                NotifyFlipObservers();
-            }
+            Faceup = false;
+            NotifyFlipObservers();
         }
 
         private void NotifyFlipObservers()
