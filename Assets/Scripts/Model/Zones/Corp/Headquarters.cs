@@ -2,7 +2,6 @@
 using model.player;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace model.zones.corp
@@ -10,18 +9,17 @@ namespace model.zones.corp
     public class Headquarters : IServer
     {
         public Zone Zone { get; } = new Zone("HQ");
-        public IceColumn Ice { get; } = new IceColumn();
+        public IceColumn Ice { get; }
         private HashSet<IHqDiscardObserver> discards = new HashSet<IHqDiscardObserver>();
         private TaskCompletionSource<bool> discarding;
         private Random random;
+        private Game game;
 
-        public Headquarters() : this(new Random()) { }
-
-        public Headquarters(int seed) : this(new Random(seed)) { }
-
-        private Headquarters(Random random)
+        public Headquarters(Game game, Random random)
         {
             this.random = random;
+            this.game = game;
+            Ice = new IceColumn(game);
         }
 
         async public Task Discard()

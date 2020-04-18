@@ -1,18 +1,19 @@
 ﻿using model.cards;
 using model.choices;
 using model.costs;
+using model.effects;
 using model.effects.corp;
+using model.player;
 using model.zones;
-using model.zones.corp;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace model.play.corp
 {
-    public class ActionCard : IResolutionObserver, IZoneAdditionObserver, IRemoteObserver
+    public class ActionCard : IResolutionObserver, IZoneAdditionObserver
     {
         private zones.corp.Zones zones;
+        private IPilot pilot;
         public readonly Ability credit;
         public readonly Ability draw;
         private TaskCompletionSource<bool> actionTaking;
@@ -20,11 +21,11 @@ namespace model.play.corp
         private List<Ability> potentialActions = new List<Ability>();
         private HashSet<IActionPotentialObserver> actionPotentialObservers = new HashSet<IActionPotentialObserver>();
 
-        public ActionCard(zones.corp.Zones zones)
+        public ActionCard(zones.corp.Zones zones, IPilot pilot)
         {
             this.zones = zones;
+            this.pilot = pilot;
             zones.hq.Zone.ObserveAdditions(this);
-            zones.ObserveRemotes(this);
             credit = new Ability(new Conjunction(new CorpClickCost(1), permission), new Gain(1));
             credit.ObserveResolution(this);
             MarkPotential(credit);
@@ -48,7 +49,7 @@ namespace model.play.corp
             return play;
         }
 
-        public Ability InstallInRemote(Card card, IRemoteInstallationChoice remoteChoice)
+        public Ability Install(Card card)
         {
             Ability install = new Ability(
                 new Conjunction(
@@ -56,7 +57,7 @@ namespace model.play.corp
                     permission,
                     new InZone(card, zones.hq.Zone)
                 ),
-                new InstallInRemote(card, remoteChoice)
+                new GenericInstall(card, pilot)
             );
             install.ObserveResolution(this);
             return install;
@@ -108,26 +109,9 @@ namespace model.play.corp
             }
             if (card.Type.Installable)
             {
-                var existingRemoteChoices = zones.remotes.Select(remote => new ExistingRemoteInstallationChoice(remote));
-                var newRemoteChoices = new List<IRemoteInstallationChoice> { new NewRemoteInstallationChoice(zones) };
-                return existingRemoteChoices
-                    .Concat(newRemoteChoices)
-                    .Select(remoteChoice => InstallInRemote(card, remoteChoice))
-                    .ToList();
+                return new List<Ability> { Install(card) };
             }
             return new List<Ability>();
-        }
-
-        void IRemoteObserver.NotifyRemoteExists(Remote remote)
-        {
-            zones
-                  .hq
-                  .Zone
-                  .Cards
-                  .Where(card => card.Type.Installable)
-                  .Select(card => InstallInRemote(card, new ExistingRemoteInstallationChoice(remote)))
-                  .ToList()
-                  .ForEach(action => MarkPotential(action));
         }
     }
 

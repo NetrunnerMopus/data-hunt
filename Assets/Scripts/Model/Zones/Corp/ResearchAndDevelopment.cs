@@ -6,12 +6,15 @@ namespace model.zones.corp
     public class ResearchAndDevelopment : IServer
     {
         public Zone Zone { get; } = new Zone("R&D");
-        public IceColumn Ice { get; } = new IceColumn();
+        public IceColumn Ice { get; }
         private Shuffling shuffling;
+        private Game game;
 
-        public ResearchAndDevelopment(Deck deck, Shuffling shuffling)
+        public ResearchAndDevelopment(Game game, Deck deck, Shuffling shuffling)
         {
+            this.game = game;
             this.shuffling = shuffling;
+            Ice = new IceColumn(game);
             foreach (var card in deck.cards)
             {
                 card.MoveTo(Zone);

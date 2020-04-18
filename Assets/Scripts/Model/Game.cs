@@ -11,6 +11,7 @@ namespace model
     {
         public readonly Corp corp;
         public readonly Runner runner;
+        public readonly Zone PlayArea;
         private bool ended = false;
         private HashSet<IGameFinishObserver> finishObservers = new HashSet<IGameFinishObserver>();
         private Shuffling shuffling;
@@ -20,6 +21,7 @@ namespace model
             this.shuffling = shuffling;
             corp = CreateCorp(corpPlayer);
             runner = CreateRunner(runnerPlayer);
+            PlayArea = new Zone("Play area");
         }
 
         private Corp CreateCorp(Player player)
@@ -27,11 +29,12 @@ namespace model
             var turn = new timing.corp.Turn(this);
             var paidWindow = new PaidWindow("corp");
             var zones = new zones.corp.Zones(
-                new zones.corp.Headquarters(),
-                new zones.corp.ResearchAndDevelopment(player.deck, shuffling),
-                new zones.corp.Archives()
+                new zones.corp.Headquarters(this, new Random()),
+                new zones.corp.ResearchAndDevelopment(this, player.deck, shuffling),
+                new zones.corp.Archives(this),
+                this
             );
-            var actionCard = new play.corp.ActionCard(zones);
+            var actionCard = new play.corp.ActionCard(zones, player.pilot);
             var clicks = new ClickPool();
             var credits = new CreditPool();
             return new Corp(player.pilot, turn, paidWindow, actionCard, zones, clicks, credits, player.deck.identity);
@@ -41,12 +44,12 @@ namespace model
         {
             var turn = new timing.runner.Turn(this);
             var paidWindow = new PaidWindow("runner");
-            var actionCard = new play.runner.ActionCard();
+            var actionCard = new play.runner.ActionCard(player.pilot);
             var zones = new zones.runner.Zones(
                 new zones.runner.Grip(),
                 new zones.runner.Stack(player.deck, shuffling),
                 new zones.runner.Heap(),
-                new zones.runner.Rig(),
+                new zones.runner.Rig(this, player.pilot),
                 new zones.runner.Score(this)
             );
             var clicks = new ClickPool();

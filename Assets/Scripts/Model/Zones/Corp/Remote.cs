@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using model.cards;
+using model.cards.types;
 using model.costs;
 using model.player;
 using model.timing;
@@ -11,19 +12,20 @@ namespace model.zones.corp
     public class Remote : IServer, IInstallDestination
     {
         public Zone Zone { get; } = new Zone("Remote");
-        public IceColumn Ice { get; } = new IceColumn();
-        private Zone archives;
+        public IceColumn Ice { get; }
+        private Game game;
 
-        public Remote(Zone archives)
+        public Remote(Game game)
         {
-            this.archives = archives;
+            this.game = game;
+            Ice = new IceColumn(game);
         }
 
         public void InstallWithin(Card card)
         {
             Zone
                 .Cards
-                .Select(it => new Trash(it, archives))
+                .Select(it => new Trash(it, game.corp.zones.archives.Zone))
                 .ToList()
                 .ForEach(it => it.TrashIt());
             card.MoveTo(Zone);
@@ -32,6 +34,21 @@ namespace model.zones.corp
         void IInstallDestination.Host(Card card)
         {
             InstallWithin(card);
+        }
+
+        // CR: 8.2.5.a
+        Task IInstallDestination.TrashAlike(Card card)
+        {
+            if (card.Type is Asset || card.Type is Agenda)
+            {
+               // TODO
+            }
+            return Task.CompletedTask;
+        }
+
+        Task IInstallDestination.PayInstallCost(Card card)
+        {
+            return Task.CompletedTask;
         }
 
         async Task IServer.Access(int accessCount, IPilot pilot, Game game)
@@ -44,5 +61,6 @@ namespace model.zones.corp
                 await new AccessCard(card, game).AwaitEnd();
             }
         }
+
     }
 }

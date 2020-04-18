@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using System.Threading.Tasks;
+using model.cards;
 
 namespace model.zones.corp
 {
@@ -15,6 +16,16 @@ namespace model.zones.corp
         {
             var newRemote = zones.CreateRemote() as IInstallDestination;
             newRemote.Host(card);
+        }
+
+        Task IInstallDestination.PayInstallCost(Card card)
+        {
+            return Task.CompletedTask;
+        }
+
+        Task IInstallDestination.TrashAlike(Card card)
+        {
+            return Task.CompletedTask;
         }
     }
 }

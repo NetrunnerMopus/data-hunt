@@ -4,17 +4,19 @@ namespace model.zones.corp
 {
     public class Zones
     {
+        private Game game;
         public readonly Headquarters hq;
         public readonly ResearchAndDevelopment rd;
         public readonly Archives archives;
         public readonly List<Remote> remotes = new List<Remote>();
         private HashSet<IRemoteObserver> remoteObservers = new HashSet<IRemoteObserver>();
 
-        public Zones(Headquarters hq, ResearchAndDevelopment rd, Archives archives)
+        public Zones(Headquarters hq, ResearchAndDevelopment rd, Archives archives, Game game)
         {
             this.hq = hq;
             this.rd = rd;
             this.archives = archives;
+            this.game = game;
         }
 
         public List<IInstallDestination> RemoteInstalls()
@@ -27,7 +29,7 @@ namespace model.zones.corp
 
         public Remote CreateRemote()
         {
-            var remote = new Remote(archives.Zone);
+            var remote = new Remote(game);
             remotes.Add(remote);
             foreach (var observer in remoteObservers)
             {

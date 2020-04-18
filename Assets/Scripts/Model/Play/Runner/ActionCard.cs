@@ -2,23 +2,26 @@
 using model.effects.runner;
 using model.cards;
 using System.Threading.Tasks;
-using model.zones.runner;
 using System.Collections.Generic;
 using model.zones.corp;
 using model.zones;
+using model.effects;
+using model.player;
 
 namespace model.play.runner
 {
     public class ActionCard : IResolutionObserver, IZoneAdditionObserver
     {
+        private IPilot pilot;
         public readonly Ability draw;
         public readonly Ability credit;
         private TaskCompletionSource<bool> actionTaking;
         private ActionPermission permission = new ActionPermission();
         public List<Ability> potentialActions = new List<Ability>();
 
-        public ActionCard()
+        public ActionCard(IPilot pilot)
         {
+            this.pilot = pilot;
             draw = new Ability(new Conjunction(new RunnerClickCost(1), permission), new Draw(1));
             draw.ObserveResolution(this);
             credit = new Ability(new Conjunction(new RunnerClickCost(1), permission), new Gain(1));
@@ -36,7 +39,7 @@ namespace model.play.runner
 
         public Ability Install(Card card)
         {
-            Ability install = new Ability(new Conjunction(new RunnerClickCost(1), card.PlayCost, permission), new Install(card));
+            Ability install = new Ability(new Conjunction(new RunnerClickCost(1), permission), new GenericInstall(card, pilot));
             install.ObserveResolution(this);
             return install;
         }

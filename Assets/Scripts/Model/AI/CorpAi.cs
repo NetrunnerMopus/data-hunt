@@ -87,7 +87,7 @@ namespace model.ai
         async Task IRezzableObserver.NotifyRezzable(Rezzable rezzable)
         {
             await Thinking();
-            await rezzable.Rez();
+            await rezzable.Rez(); // TODO debug this, Corp AI seems to never rez stuff anymore
         }
 
         async Task IRezzableObserver.NotifyNotRezzable()
@@ -133,8 +133,8 @@ namespace model.ai
             }
         }
 
-        IDecision<string, Card> IPilot.ChooseACard() => new CardChoice();
-        IDecision<string, IInstallDestination> IPilot.ChooseAnInstallDestination() => new InstallDestinationChoice();
+        IDecision<string, Card> IPilot.ChooseACard() => new CardChoice(random);
+        IDecision<string, IInstallDestination> IPilot.ChooseAnInstallDestination() => new InstallDestinationChoice(random);
 
         void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
         {
@@ -152,12 +152,36 @@ namespace model.ai
 
         private class CardChoice : IDecision<string, Card>
         {
-            Task<Card> IDecision<string, Card>.Declare(string subject, IEnumerable<Card> options, Game game) => Task.FromResult(options.First());
+            private Random random;
+
+            public CardChoice(Random random)
+            {
+                this.random = random;
+            }
+
+            Task<Card> IDecision<string, Card>.Declare(string subject, IEnumerable<Card> options, Game game) =>  Task.FromResult(options.PickRandom(random));
         }
 
         private class InstallDestinationChoice : IDecision<string, IInstallDestination>
         {
-            Task<IInstallDestination> IDecision<string, IInstallDestination>.Declare(string subject, IEnumerable<IInstallDestination> options, Game game) => Task.FromResult(options.First());
+            private Random random;
+
+            public InstallDestinationChoice(Random random)
+            {
+                this.random = random;
+            }
+
+            Task<IInstallDestination> IDecision<string, IInstallDestination>.Declare(string subject, IEnumerable<IInstallDestination> options, Game game) => Task.FromResult(options.PickRandom(random));
+        }
+    }
+
+    static class RandomEnumerables
+    {
+        public static T PickRandom<T>(this IEnumerable<T> items, Random random)
+        {
+            return items
+                .OrderBy(it => random.Next() % 2 == 0)
+                .First();
         }
     }
 }
