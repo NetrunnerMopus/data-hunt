@@ -12,6 +12,7 @@ namespace model
         public readonly Corp corp;
         public readonly Runner runner;
         public readonly Zone PlayArea;
+        public readonly Checkpoint checkpoint;
         private bool ended = false;
         private HashSet<IGameFinishObserver> finishObservers = new HashSet<IGameFinishObserver>();
         private Shuffling shuffling;
@@ -22,6 +23,7 @@ namespace model
             corp = CreateCorp(corpPlayer);
             runner = CreateRunner(runnerPlayer);
             PlayArea = new Zone("Play area");
+            this.checkpoint = new Checkpoint(this);
         }
 
         private Corp CreateCorp(Player player)
@@ -140,7 +142,7 @@ namespace model
 
         async public Task Checkpoint()
         {
-            await Task.CompletedTask; // TODO
+            await checkpoint.Check();
         }
     }
 
