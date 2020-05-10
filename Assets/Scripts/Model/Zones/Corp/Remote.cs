@@ -21,7 +21,7 @@ namespace model.zones.corp
             Ice = new IceColumn(game);
         }
 
-        public void InstallWithin(Card card)
+        void IInstallDestination.Host(Card card)
         {
             Zone
                 .Cards
@@ -31,17 +31,12 @@ namespace model.zones.corp
             card.MoveTo(Zone);
         }
 
-        void IInstallDestination.Host(Card card)
-        {
-            InstallWithin(card);
-        }
-
         // CR: 8.2.5.a
         Task IInstallDestination.TrashAlike(Card card)
         {
             if (card.Type is Asset || card.Type is Agenda)
             {
-               // TODO
+                // TODO
             }
             return Task.CompletedTask;
         }
