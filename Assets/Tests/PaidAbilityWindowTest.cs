@@ -51,7 +51,7 @@ namespace tests
             zones.rig.zone.ObserveRemovals(rigObserver);
             zones.heap.zone.ObserveAdditions(heapObserver);
             ffRunner.FastForwardToActionPhase();
-            await game.runner.actionCard.Install(hopper).Trigger(game);
+            await game.runner.actionCard.Install(hopper).Trigger(game); // TODO `GenericInstall` refactoring broke this
             var popHopper = paidAbilityObserver.NewestPaidAbility;
 
             await popHopper.Trigger(game);

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace model.timing
@@ -73,7 +74,12 @@ namespace model.timing
         // CR: 10.3.1.h
         private void PruneEmptyRemotes()
         {
-            // TODO impl
+            var zones = game.corp.zones;
+            zones
+                .remotes
+                .Where(it => it.IsEmpty())
+                .ToList()
+                .ForEach(it => zones.RemoveRemote(it));
         }
 
         // CR: 10.3.1.i

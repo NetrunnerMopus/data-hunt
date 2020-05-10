@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using view.gui;
 using model;
+using System.Collections.Generic;
 
 namespace controller
 {
@@ -8,6 +9,8 @@ namespace controller
     {
         private GameObject gameObject;
         private Game game;
+        private IDictionary<ServerBox, DropZone> dropZones = new Dictionary<ServerBox, DropZone>();
+        private  IDictionary<ServerBox, DroppableAbility> abilities = new Dictionary<ServerBox, DroppableAbility>();
 
         public RunInitiation(GameObject gameObject, Game game, ServerRow serverRow)
         {
@@ -19,9 +22,17 @@ namespace controller
         void IServerBoxObserver.NotifyServerBox(ServerBox box)
         {
             var boxZone = box.gameObject.AddComponent<DropZone>();
-            var initiation = gameObject.AddComponent<DroppableAbility>();
+            var ability = gameObject.AddComponent<DroppableAbility>();
+            dropZones[box] = boxZone;
+            abilities[box] = ability;
             var runOnServer = game.runner.actionCard.Run(box.server);
-            initiation.Represent(runOnServer, game, boxZone);
+            ability.Represent(runOnServer, game, boxZone);
+        }
+
+        void IServerBoxObserver.NotifyServerBoxDisappeared(ServerBox box)
+        {
+           Object.Destroy(dropZones[box]);
+           Object.Destroy(abilities[box]);
         }
     }
 }

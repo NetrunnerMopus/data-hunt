@@ -15,7 +15,8 @@ namespace controller
         private Game game;
         private DropZone zone;
         private bool usable = false;
-        private AbilityHighlight highlight;
+        private AbilityHighlight abilityHighlight;
+        private Highlight highlight;
         private Vector3 originalPosition;
         private int originalIndex;
         private CanvasGroup canvasGroup;
@@ -35,9 +36,10 @@ namespace controller
             this.ability = ability;
             this.game = game;
             this.zone = zone;
-            highlight = new AbilityHighlight(gameObject.AddComponent<Highlight>());
+            highlight = gameObject.AddComponent<Highlight>();
+            abilityHighlight = new AbilityHighlight(highlight);
             ability.ObserveUsability(this, game);
-            ability.ObserveUsability(highlight, game);
+            ability.ObserveUsability(abilityHighlight, game);
         }
 
         void IUsabilityObserver.NotifyUsable(bool usable, Ability ability)
@@ -95,7 +97,8 @@ namespace controller
         void OnDestroy()
         {
             ability.Unobserve(this);
-            ability.Unobserve(highlight);
+            ability.Unobserve(abilityHighlight);
+            Destroy(highlight);
         }
     }
 }

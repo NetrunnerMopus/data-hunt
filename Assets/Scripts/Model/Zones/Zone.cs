@@ -78,9 +78,19 @@ namespace model.zones
             additions.Add(observer);
         }
 
+        public void UnobserveAdditions(IZoneAdditionObserver observer)
+        {
+            additions.Remove(observer);
+        }
+
         public void ObserveRemovals(IZoneRemovalObserver observer)
         {
             removals.Add(observer);
+        }
+
+        public void UnobserveRemovals(IZoneRemovalObserver observer)
+        {
+            removals.Remove(observer);
         }
 
         public void ObserveCount(IZoneCountObserver observer)
