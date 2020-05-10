@@ -38,6 +38,14 @@ namespace model.zones.corp
             return remote;
         }
 
+        public void RemoveRemote(Remote remote) {
+            remotes.Remove(remote);
+            foreach (var observer in remoteObservers)
+            {
+                observer.NotifyRemoteDisappeared(remote);
+            }
+        }
+
         public void ObserveRemotes(IRemoteObserver observer)
         {
             remoteObservers.Add(observer);
@@ -51,5 +59,6 @@ namespace model.zones.corp
     public interface IRemoteObserver
     {
         void NotifyRemoteExists(Remote remote);
+        void NotifyRemoteDisappeared(Remote remote);
     }
 }

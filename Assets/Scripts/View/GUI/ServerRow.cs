@@ -8,7 +8,7 @@ namespace view.gui
     public class ServerRow : MonoBehaviour, IRemoteObserver
     {
         private HorizontalLayoutGroup layout;
-        private readonly List<ServerBox> boxes = new List<ServerBox>();
+        private readonly Dictionary<IServer, ServerBox> boxesPerServer = new Dictionary<IServer, ServerBox>();
         private HashSet<IServerBoxObserver> observers = new HashSet<IServerBoxObserver>();
 
         public void Represent(Zones zones)
@@ -34,18 +34,14 @@ namespace view.gui
             gameObject.transform.SetParent(transform, false);
             gameObject.transform.SetAsFirstSibling();
             LayoutRebuilder.ForceRebuildLayoutImmediate(layout.GetComponent<RectTransform>());
-            boxes.Add(box);
-            foreach (var observer in observers)
-            {
-                observer.NotifyServerBox(box);
-            }
+            boxesPerServer[server] = box;
             return box;
         }
 
         public void Observe(IServerBoxObserver observer)
         {
             observers.Add(observer);
-            foreach (var box in boxes)
+            foreach (var box in boxesPerServer.Values)
             {
                 observer.NotifyServerBox(box);
             }
@@ -54,13 +50,30 @@ namespace view.gui
         void IRemoteObserver.NotifyRemoteExists(Remote remote)
         {
             var box = Box(remote);
+            foreach (var observer in observers)
+            {
+                observer.NotifyServerBox(box);
+            }
             remote.Zone.ObserveAdditions(box);
             remote.Zone.ObserveRemovals(box);
+        }
+
+        void IRemoteObserver.NotifyRemoteDisappeared(Remote remote)
+        {
+            var box = boxesPerServer[remote];
+             foreach (var observer in observers)
+            {
+                observer.NotifyServerBoxDisappeared(box);
+            }
+            remote.Zone.UnobserveAdditions(box);
+            remote.Zone.UnobserveRemovals(box);
+            Destroy(box.gameObject);
         }
     }
 
     public interface IServerBoxObserver
     {
         void NotifyServerBox(ServerBox box);
+        void NotifyServerBoxDisappeared(ServerBox box);
     }
 }

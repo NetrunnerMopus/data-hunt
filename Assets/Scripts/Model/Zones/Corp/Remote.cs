@@ -21,6 +21,10 @@ namespace model.zones.corp
             Ice = new IceColumn(game);
         }
 
+        public bool IsEmpty() {
+            return (Ice.Height == 0) && (Zone.Count == 0);
+        }
+
         void IInstallDestination.Host(Card card)
         {
             Zone
