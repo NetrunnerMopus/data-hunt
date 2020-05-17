@@ -1,7 +1,9 @@
 ﻿using model.cards;
 using model.player;
+using model.timing;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace model.zones.corp
@@ -49,9 +51,22 @@ namespace model.zones.corp
             discards.Add(observer);
         }
 
-        Task IServer.Access(int accessCount, IPilot pilot, Game game)
+        async Task IServer.Access(int accessCount, IPilot pilot, Game game)
         {
-            throw new NotImplementedException();
+            if (Zone.Cards.Count == 0)
+            {
+                return;
+            }
+            var unaccessed = new List<Card>(Zone.Cards);
+            for (var accessesLeft = accessCount; accessesLeft > 0; accessesLeft--)
+            {
+                var randomCard = unaccessed
+                    .OrderBy(it => random.Next())
+                    .First();
+                var cardToAccess = await pilot.ChooseACard().Declare("Which card to access now?", new List<Card> { randomCard }, game);
+                unaccessed.Remove(cardToAccess);
+                await new AccessCard(cardToAccess, game).AwaitEnd();
+            }
         }
     }
     public interface IHqDiscardObserver

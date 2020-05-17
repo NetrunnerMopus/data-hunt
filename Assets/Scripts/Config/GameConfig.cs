@@ -19,11 +19,14 @@ public class GameConfig : MonoBehaviour
         );
         var runnerPlayer = new Player(
             deck: new Decks().DemoRunner(),
-            pilot: new AutoPaidWindowPilot(
-                new SingleChoiceMaker(
-                    new TrashingPilot(
-                        new TrashChoiceScreen(board),
-                        new NoPilot()
+            pilot: new CardPickingPilot(
+                new CardChoiceScreen(board),
+                new AutoPaidWindowPilot(
+                    new SingleChoiceMaker(
+                        new TrashingPilot(
+                            new TrashChoiceScreen(board),
+                            new NoPilot()
+                        )
                     )
                 )
             )
