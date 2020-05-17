@@ -27,11 +27,8 @@ namespace view.gui
 
         void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
-            var printedCard = Printer.PrintCorpFacedown(card.Name);
+            var printedCard = Printer.PrintFlippable(card);
             visuals[card] = printedCard;
-            var image = printedCard.GetComponent<Image>();
-            var inServer = printedCard.AddComponent<CardInServer>();
-            inServer.Represent(card, image);
         }
 
         void IZoneRemovalObserver.NotifyCardRemoved(Card card)
