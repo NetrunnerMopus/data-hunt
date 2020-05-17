@@ -180,7 +180,7 @@ namespace model.ai
         public static T PickRandom<T>(this IEnumerable<T> items, Random random)
         {
             return items
-                .OrderBy(it => random.Next() % 2 == 0)
+                .OrderBy(it => random.Next())
                 .First();
         }
     }
