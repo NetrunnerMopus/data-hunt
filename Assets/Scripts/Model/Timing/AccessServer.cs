@@ -19,7 +19,7 @@ namespace model.timing
             await TriggerAccessingCardSet(); // 7.6.1
             await game.Checkpoint(); // 7.6.2
             var accessCount = await DetermineNumberOfCardsToBeAccessed(); // 7.6.3
-            await TurnArchivesFaceUp(); // 7.6.4
+            TurnArchivesFaceUp(); // 7.6.4
             await AccessCardSet(accessCount);  // 7.6.5, 7.6.6
             await game.Checkpoint(); // 7.6.7
         }
@@ -34,11 +34,11 @@ namespace model.timing
             return await Task.FromResult(1); // TODO
         }
 
-        async private Task TurnArchivesFaceUp()
+        private void TurnArchivesFaceUp()
         {
             if (server == game.corp.zones.archives)
             {
-                await Task.CompletedTask; // TODO
+                game.corp.zones.archives.Zone.Cards.ForEach(card => card.FlipFaceUp());
             }
         }
 

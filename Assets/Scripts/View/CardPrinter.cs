@@ -23,7 +23,7 @@ namespace view
         {
             return Print(card.Name, FaceSprites.ChooseFace(card))
                 .AddComponent<PrintedCard>()
-                .Represent(card)
+                .Represent(card, Sideways)
                 .gameObject;
         }
 
@@ -52,27 +52,44 @@ namespace view
             rectangle.anchorMax = new Vector2(0.9f, 0.9f);
             rectangle.offsetMin = Vector2.zero;
             rectangle.offsetMax = Vector2.zero;
-            if (Sideways) // TODO faceups shouldnt be sideways in archives
-            {
-                rectangle.rotation *= Quaternion.Euler(0.0f, 0.0f, 90.0f);
-            }
             return card;
         }
 
         private class PrintedCard : MonoBehaviour, IFlipObserver
         {
             private Card card;
+            private bool archives;
 
-            public PrintedCard Represent(Card card)
+            public PrintedCard Represent(Card card, bool archives)
             {
                 this.card = card;
+                this.archives = archives;
                 card.ObserveFlips(this);
+                Rotate();
                 return this;
             }
 
             void IFlipObserver.NotifyFlipped(bool faceup)
             {
-                GetComponent<Image>().sprite = FaceSprites.ChooseFace(card);
+                var image = GetComponent<Image>();
+                image.sprite = FaceSprites.ChooseFace(card);
+                Rotate();
+            }
+
+            private void Rotate()
+            {
+                var image = GetComponent<Image>();
+                if (archives)
+                {
+                    if (card.Faceup)
+                    {
+                        image.rectTransform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                    }
+                    else
+                    {
+                        image.rectTransform.rotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
+                    }
+                }
             }
 
             void OnDestroy()
@@ -91,7 +108,7 @@ namespace view
         {
             if (card.Faceup)
             {
-                return Resources.Load<Sprite>("Images/Cards/" + card.Name);
+                return Resources.Load<Sprite>("Images/Cards/" + card.FaceupArt);
             }
             else if (card.Faction.Side == Side.CORP)
             {
