@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using model.cards;
 using model.player;
+using model.timing;
 
 namespace model.zones.corp
 {
@@ -9,6 +12,7 @@ namespace model.zones.corp
         public IceColumn Ice { get; }
         private Shuffling shuffling;
         private Game game;
+        private bool reshuffledDuringAccess = false;
 
         public ResearchAndDevelopment(Game game, Deck deck, Shuffling shuffling)
         {
@@ -24,6 +28,7 @@ namespace model.zones.corp
         public void Shuffle()
         {
             shuffling.Shuffle(Zone.Cards);
+            reshuffledDuringAccess = true;
         }
 
         public bool HasCards() => Zone.Cards.Count > 0;
@@ -39,9 +44,29 @@ namespace model.zones.corp
             }
         }
 
-        Task IServer.Access(int accessCount, IPilot pilot, Game game)
+        async Task IServer.Access(int accessCount, IPilot pilot, Game game)
         {
-            throw new System.NotImplementedException();
+            reshuffledDuringAccess = false;
+            var accessDepth = 0;
+            for (var accessesLeft = accessCount; accessesLeft > 0; accessesLeft--)
+            {
+                if (accessDepth > Zone.Cards.Count)
+                {
+                    break;
+                }
+                var nextCard = Zone.Cards[accessDepth];
+                // TODO show top of R&D and cards in root
+                // TODO2: should draw facedown
+                // TODO3: nice if we could display the pile, not just the top+root
+                var cardToAccess = await pilot.ChooseACard().Declare("Which card to access now?", new List<Card> { nextCard }, game);
+                accessDepth++;
+                await new AccessCard(cardToAccess, game).AwaitEnd(); // TODO show the already seen on the side, maintaining proper order CR: 7.2.1.b
+                if (reshuffledDuringAccess) // CR: 7.2.1.c
+                {
+                    accessDepth = 0;
+                    reshuffledDuringAccess = false;
+                }
+            }
         }
     }
 }
