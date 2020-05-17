@@ -4,10 +4,10 @@ using UnityEngine.EventSystems;
 using System.Linq;
 using model;
 using System.Threading.Tasks;
-using model.choices;
 
 namespace controller
 {
+    // Very similar to `DroppableAbility` - deduplicate?
     public class DroppableChoice<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         private T value;
@@ -15,6 +15,7 @@ namespace controller
         public DropZone zone { get; private set; }
         private Game game;
         private Vector3 originalPosition;
+        private int originalIndex;
         private CanvasGroup canvasGroup;
         private TaskCompletionSource<T> chosen = new TaskCompletionSource<T>();
 
@@ -41,9 +42,20 @@ namespace controller
         {
             eventData.selectedObject = gameObject;
             originalPosition = transform.position;
+            BringToFront();
             canvasGroup.blocksRaycasts = false;
-            if (legal) {
+            if (legal)
+            {
                 zone.StartDragging();
+            }
+        }
+
+        private void BringToFront()
+        {
+            originalIndex = transform.GetSiblingIndex();
+            for (Transform t = transform; t.parent != null; t = t.parent)
+            {
+                t.SetAsLastSibling();
             }
         }
 
@@ -64,6 +76,14 @@ namespace controller
             {
                 chosen.SetResult(value);
             }
+            PutBack();
+            zone.StopDragging();
+        }
+
+        private void PutBack()
+        {
+            transform.SetSiblingIndex(originalIndex);
+            transform.position = originalPosition;
         }
 
         public Task<T> AwaitChoice()
