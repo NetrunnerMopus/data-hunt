@@ -20,6 +20,7 @@ namespace controller
         private Vector3 originalPosition;
         private int originalIndex;
         private CanvasGroup canvasGroup;
+        private bool dragging = false;
 
         void Awake()
         {
@@ -49,6 +50,7 @@ namespace controller
 
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
         {
+            dragging = true;
             eventData.selectedObject = gameObject;
             originalPosition = transform.position;
             BringToFront();
@@ -70,11 +72,18 @@ namespace controller
 
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
-            transform.position = eventData.position;
+            if (dragging)
+            {
+                transform.position = eventData.position;
+            }
         }
 
         async void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
+            if (!dragging)
+            {
+                return;
+            }
             eventData.selectedObject = null;
             canvasGroup.blocksRaycasts = true;
             var raycast = new List<RaycastResult>();
@@ -86,6 +95,7 @@ namespace controller
             }
             PutBack();
             zone.StopDragging();
+            dragging = false;
         }
 
         private void PutBack()
