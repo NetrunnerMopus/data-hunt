@@ -115,6 +115,11 @@ namespace model.cards
             flipObservers.Add(observer);
         }
 
+        public void UnobserveFlips(IFlipObserver observer)
+        {
+            flipObservers.Remove(observer);
+        }
+
         public override string ToString()
         {
             return Name + " [" + GetHashCode() + "]";
