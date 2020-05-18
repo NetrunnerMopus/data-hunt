@@ -22,7 +22,7 @@ A pull request is a great place to discuss the change, exchange technical detail
 ### Unity
 
 The project is built upon [Unity](https://unity.com/). The [personal version](https://store.unity.com/download?ref=personal) is perfectly fine.
-When you get your Unity Hub downloaded and running, download the [2018.1.7f1](unityhub://2019.1.7f1/f3c4928e5742).
+When you get your Unity Hub downloaded and running, download the [2019.1.7f1](unityhub://2019.1.7f1/f3c4928e5742).
 The default's should suffice, no need for additional support packages.
 To open the project, just hit the big `Add` button, select the folder you cloned and click onto the project.
 
@@ -33,6 +33,16 @@ The first time you open the project, you'll have to select the main scene:
 ![main scene](unity-main-scene.png)
 
 To run it, press the big "play" button in the middle top.
+
+### Testing
+
+To run tests, go to the `Test Runner` tab and press the `Run All` button:
+
+![test runner tab](unity-test-runner-tab.png)
+
+If you cannot find the tab, you can spawn it from the menu:
+
+![test runner in menu](unity-test-runner-menu.png)
 
 ## Guidelines
 
