@@ -9,7 +9,7 @@ By playing the game, you can help:
 
 ## How to play it?
 
-Go to the [releases page](https://github.com/dagguh/netrunner/releases), find the latest release, expand the assets list:
+Go to the [releases page](https://github.com/dagguh/data-hunt/releases), find the latest release, expand the assets list:
 
 ![assets list](assets-list.png)
 
@@ -17,12 +17,12 @@ Download and unpack the zip for your operating system.
 
 ### Windows
 
-Run the `Netrunner.exe`.
+Run the `DataHunt.exe` or `Netrunner.exe`.
 To exit the game, press `Alt`+`F4`.
 
 ### Mac
 
-Open the `Netrunner-X.Y.Z.app`.
+Open the `DataHunt-X.Y.Z.app` or `Netrunner-X.Y.Z.app`.
 The first time you open it, you have to open it via contextual menu:
 
 ![Mac contextual open](mac-open.png)
