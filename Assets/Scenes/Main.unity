@@ -373,7 +373,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2779b23bfeb3c7f4a8183e0a7460fa6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  board: {fileID: 711624502}
 --- !u!1 &222865688
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,7 +676,6 @@ GameObject:
   - component: {fileID: 836102267}
   - component: {fileID: 836102269}
   - component: {fileID: 836102270}
-  - component: {fileID: 836102272}
   - component: {fileID: 836102268}
   m_Layer: 5
   m_Name: Heap
@@ -766,18 +764,6 @@ MonoBehaviour:
   m_Spacing: {x: -103, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
---- !u!114 &836102272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 836102266}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7111b790d22304a128afc7b728a1c2e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &847474006
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,7 +885,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1198803622}
   - component: {fileID: 1198803624}
-  - component: {fileID: 1198803625}
   m_Layer: 5
   m_Name: Stack
   m_TagString: Untagged
@@ -934,18 +919,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1198803621}
   m_CullTransparentMesh: 0
---- !u!114 &1198803625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1198803621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00128c1dbdc474e81a9df0547eaba73d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1261533424
 GameObject:
   m_ObjectHideFlags: 0
@@ -1343,7 +1316,6 @@ GameObject:
   - component: {fileID: 1940409407}
   - component: {fileID: 1940409406}
   - component: {fileID: 1940409408}
-  - component: {fileID: 1940409411}
   m_Layer: 5
   m_Name: Grip
   m_TagString: Untagged
@@ -1432,18 +1404,6 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
---- !u!114 &1940409411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1940409404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b7d49baef6c147ffbaecc1b20ae5144, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1942180166
 GameObject:
   m_ObjectHideFlags: 0
@@ -1726,7 +1686,6 @@ GameObject:
   - component: {fileID: 2117212074}
   - component: {fileID: 2117212075}
   - component: {fileID: 2117212076}
-  - component: {fileID: 2117212077}
   - component: {fileID: 2117212078}
   m_Layer: 5
   m_Name: Rig
@@ -1791,18 +1750,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2117212077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2117212073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 719fad782f42f394fbde013a198da790, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2117212078
 MonoBehaviour:
   m_ObjectHideFlags: 0

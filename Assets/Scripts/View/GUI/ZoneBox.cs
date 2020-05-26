@@ -12,10 +12,10 @@ namespace view.gui
         private CardPrinter Printer;
         private IDictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
 
-        public ZoneBox(GameObject gameObject)
+        public ZoneBox(GameObject gameObject, BoardParts parts)
         {
             this.gameObject = gameObject;
-            Printer = gameObject.AddComponent<CardPrinter>();
+            Printer = parts.Print(gameObject);
         }
 
         public void Represent(Zone zone)

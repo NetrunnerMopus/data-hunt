@@ -5,12 +5,11 @@ namespace view.gui
 {
     public class CorpViewConfig
     {
-        public CorpView Display(Game game)
+        public CorpView Display(Game game, BoardParts parts)
         {
             var zones = game.corp.zones;
             game.corp.credits.Observe(GameObject.Find("Corp/Credits/Credits text").AddComponent<CreditPoolText>());
-            var servers = GameObject.Find("Servers").AddComponent<ServerRow>();
-            servers.Represent(zones);
+            var servers = new ServerRow(GameObject.Find("Servers"), parts, zones);
             var archivesBox = servers.Box(zones.archives);
             archivesBox.Printer.Sideways = true;
             var rd = servers.Box(zones.rd).Printer.PrintCorpFacedown("Top of R&D");

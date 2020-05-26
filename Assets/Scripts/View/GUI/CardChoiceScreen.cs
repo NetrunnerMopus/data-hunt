@@ -17,11 +17,11 @@ namespace view.gui
         private CardPrinter optionsRow;
         private IDictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
 
-        public CardChoiceScreen(GameObject board)
+        public CardChoiceScreen(BoardParts parts)
         {
-            blanket = CreateBlanket(board);
-            subjectRow = CreateSubjectRow(blanket);
-            optionsRow = CreateOptionsRow(blanket);
+            blanket = CreateBlanket(parts.board);
+            subjectRow = CreateSubjectRow(blanket, parts);
+            optionsRow = CreateOptionsRow(blanket, parts);
         }
 
         private GameObject CreateBlanket(GameObject board)
@@ -42,7 +42,7 @@ namespace view.gui
             return blanket;
         }
 
-        private CardPrinter CreateSubjectRow(GameObject blanket)
+        private CardPrinter CreateSubjectRow(GameObject blanket, BoardParts parts)
         {
             var subjectRow = new GameObject("Subject row")
             {
@@ -54,11 +54,11 @@ namespace view.gui
             rectangle.anchorMax = new Vector2(0.9f, 1.0f);
             rectangle.offsetMin = Vector2.zero;
             rectangle.offsetMax = Vector2.zero;
-            return subjectRow.AddComponent<CardPrinter>();
+            return parts.Print(subjectRow);
         }
 
 
-        private CardPrinter CreateOptionsRow(GameObject blanket)
+        private CardPrinter CreateOptionsRow(GameObject blanket, BoardParts parts)
         {
             var optionsRow = new GameObject("Options row")
             {
@@ -72,7 +72,7 @@ namespace view.gui
             rectangle.offsetMax = Vector2.zero;
             var horizontalLayout = optionsRow.AddComponent<HorizontalLayoutGroup>();
             horizontalLayout.spacing = 200;
-            return optionsRow.AddComponent<CardPrinter>();
+            return parts.Print(optionsRow);
         }
 
         async Task<Card> IDecision<string, Card>.Declare(string q, IEnumerable<Card> options, Game game)
