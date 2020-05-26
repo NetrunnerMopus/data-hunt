@@ -2,12 +2,22 @@
 using UnityEngine.UI;
 using model.cards;
 using model;
+using controller;
+using view.gui;
 
 namespace view
 {
-    public class CardPrinter : MonoBehaviour
+    public class CardPrinter
     {
+        private RawCardPrinter raw;
+        private CardZoom zoom;
         public bool Sideways = false;
+
+        public CardPrinter(GameObject parent, CardZoom zoom)
+        {
+            this.raw = new RawCardPrinter(parent);
+            this.zoom = zoom;
+        }
 
         public GameObject PrintCorpFacedown(string name)
         {
@@ -21,15 +31,17 @@ namespace view
 
         public GameObject PrintFlippable(Card card)
         {
-            return Print(card.Name, FaceSprites.ChooseFace(card))
-                .AddComponent<PrintedCard>()
-                .Represent(card, Sideways)
-                .gameObject;
+            var gameObject = Print(card.Name, FaceSprites.ChooseFace(card));
+            gameObject.AddComponent<PrintedCard>().Represent(card, Sideways);
+            gameObject.AddComponent<CardInspection>().Represent(zoom, card);
+            return gameObject;
         }
 
         public GameObject Print(Card card)
         {
-            return Print(card.Name, "Images/Cards/" + card.FaceupArt);
+            var gameObject = Print(card.Name, "Images/Cards/" + card.FaceupArt);
+            gameObject.AddComponent<CardInspection>().Represent(zoom, card);
+            return gameObject;
         }
 
         public GameObject Print(string name, string asset)
@@ -39,20 +51,7 @@ namespace view
 
         private GameObject Print(string name, Sprite sprite)
         {
-            var card = new GameObject(name)
-            {
-                layer = 5
-            };
-            var image = card.AddComponent<Image>();
-            image.sprite = sprite;
-            image.preserveAspect = true;
-            card.transform.SetParent(transform);
-            var rectangle = image.rectTransform;
-            rectangle.anchorMin = new Vector2(0.1f, 0.1f);
-            rectangle.anchorMax = new Vector2(0.9f, 0.9f);
-            rectangle.offsetMin = Vector2.zero;
-            rectangle.offsetMax = Vector2.zero;
-            return card;
+            return raw.Print(name, sprite);
         }
 
         private class PrintedCard : MonoBehaviour, IFlipObserver
@@ -98,6 +97,35 @@ namespace view
             }
         }
     }
+
+    public class RawCardPrinter
+    {
+        private GameObject parent;
+
+        public RawCardPrinter(GameObject parent)
+        {
+            this.parent = parent;
+        }
+
+        public GameObject Print(string name, Sprite sprite)
+        {
+            var card = new GameObject(name)
+            {
+                layer = 5
+            };
+            var image = card.AddComponent<Image>();
+            image.sprite = sprite;
+            image.preserveAspect = true;
+            card.transform.SetParent(parent.transform);
+            var rectangle = image.rectTransform;
+            rectangle.anchorMin = new Vector2(0.1f, 0.1f);
+            rectangle.anchorMax = new Vector2(0.9f, 0.9f);
+            rectangle.offsetMin = Vector2.zero;
+            rectangle.offsetMax = Vector2.zero;
+            return card;
+        }
+    }
+
 
     class FaceSprites
     {

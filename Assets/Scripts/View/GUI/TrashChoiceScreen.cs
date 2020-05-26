@@ -19,10 +19,10 @@ namespace view.gui
         private GameObject optionsRow;
         private IDictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
 
-        public TrashChoiceScreen(GameObject board)
+        public TrashChoiceScreen(BoardParts parts)
         {
-            blanket = CreateBlanket(board);
-            subjectRow = CreateSubjectRow(blanket);
+            blanket = CreateBlanket(parts.board);
+            subjectRow = CreateSubjectRow(blanket, parts);
             optionsRow = CreateOptionsRow(blanket);
         }
 
@@ -44,7 +44,7 @@ namespace view.gui
             return blanket;
         }
 
-        private CardPrinter CreateSubjectRow(GameObject blanket)
+        private CardPrinter CreateSubjectRow(GameObject blanket, BoardParts parts)
         {
             var subjectRow = new GameObject("Subject row")
             {
@@ -56,7 +56,7 @@ namespace view.gui
             rectangle.anchorMax = new Vector2(0.9f, 1.0f);
             rectangle.offsetMin = Vector2.zero;
             rectangle.offsetMax = Vector2.zero;
-            return subjectRow.AddComponent<CardPrinter>();
+            return parts.Print(subjectRow);
         }
 
 

@@ -1,20 +1,28 @@
 ﻿using UnityEngine;
 using model.cards;
-using model.zones.runner;
 using model.zones;
+using controller;
+using model;
 
 namespace view.gui
 {
-    public class HeapPile : MonoBehaviour, IZoneAdditionObserver
+    public class HeapPile : IZoneAdditionObserver
     {
-        void Start()
+        private GameObject gameObject;
+        private CardPrinter printer;
+        public DropZone DropZone { get; private set; }
+
+        public HeapPile(GameObject gameObject, Game game, BoardParts parts)
         {
-            gameObject.AddComponent<CardPrinter>();
+            this.gameObject = gameObject;
+            this.printer = parts.Print(gameObject);
+            this.DropZone = gameObject.AddComponent<DropZone>();
+            game.runner.zones.heap.zone.ObserveAdditions(this);
         }
 
         void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
-            GetComponent<CardPrinter>().Print(card);
+            printer.Print(card);
         }
     }
 }

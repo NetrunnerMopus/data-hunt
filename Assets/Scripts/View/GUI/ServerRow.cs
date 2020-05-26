@@ -5,19 +5,18 @@ using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class ServerRow : MonoBehaviour, IRemoteObserver
+    public class ServerRow : IRemoteObserver
     {
+        private GameObject gameObject;
         private HorizontalLayoutGroup layout;
         private readonly Dictionary<IServer, ServerBox> boxesPerServer = new Dictionary<IServer, ServerBox>();
         private HashSet<IServerBoxObserver> observers = new HashSet<IServerBoxObserver>();
+        private BoardParts parts;
 
-        public void Represent(Zones zones)
+        public ServerRow(GameObject gameObject, BoardParts parts, Zones zones)
         {
-            zones.ObserveRemotes(this);
-        }
-
-        void Awake()
-        {
+            this.gameObject = gameObject;
+            this.parts = parts;
             layout = gameObject.AddComponent<HorizontalLayoutGroup>();
             layout.childControlWidth = true;
             layout.childControlHeight = true;
@@ -25,14 +24,15 @@ namespace view.gui
             layout.childForceExpandHeight = true;
             layout.childAlignment = TextAnchor.MiddleRight;
             layout.spacing = 4;
+            zones.ObserveRemotes(this);
         }
 
         public ServerBox Box(IServer server)
         {
-            var gameObject = new GameObject(server.Zone.Name);
-            var box = new ServerBox(gameObject, server);
-            gameObject.transform.SetParent(transform, false);
-            gameObject.transform.SetAsFirstSibling();
+            var serverObject = new GameObject(server.Zone.Name);
+            var box = new ServerBox(serverObject, server, parts);
+            serverObject.transform.SetParent(gameObject.transform, false);
+            serverObject.transform.SetAsFirstSibling();
             LayoutRebuilder.ForceRebuildLayoutImmediate(layout.GetComponent<RectTransform>());
             boxesPerServer[server] = box;
             return box;
@@ -61,13 +61,13 @@ namespace view.gui
         void IRemoteObserver.NotifyRemoteDisappeared(Remote remote)
         {
             var box = boxesPerServer[remote];
-             foreach (var observer in observers)
+            foreach (var observer in observers)
             {
                 observer.NotifyServerBoxDisappeared(box);
             }
             remote.Zone.UnobserveAdditions(box);
             remote.Zone.UnobserveRemovals(box);
-            Destroy(box.gameObject);
+            Object.Destroy(box.gameObject);
         }
     }
 

@@ -14,7 +14,7 @@ namespace view.gui
         public CardPrinter Printer { get; private set; }
         private IDictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
 
-        public ServerBox(GameObject gameObject, IServer server)
+        public ServerBox(GameObject gameObject, IServer server, BoardParts parts)
         {
             this.gameObject = gameObject;
             this.server = server;
@@ -22,7 +22,7 @@ namespace view.gui
             image.sprite = Resources.Load<Sprite>("Images/UI/9slice-solid-white");
             image.type = Image.Type.Sliced;
             image.fillCenter = false;
-            Printer = gameObject.AddComponent<CardPrinter>();
+            Printer = parts.Print(gameObject);
         }
 
         void IZoneAdditionObserver.NotifyCardAdded(Card card)

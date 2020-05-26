@@ -1,26 +1,21 @@
 ﻿using UnityEngine;
 using controller;
 using model;
-using model.zones.runner;
 using model.zones;
 
 namespace view.gui
 {
-    public class StackPile : MonoBehaviour, IZoneCountObserver
+    public class StackPile : IZoneCountObserver
     {
         private Game game;
         private DropZone gripZone;
         private GameObject top;
-        public void Construct(Game game, DropZone gripZone)
+
+        public StackPile(GameObject gameObject, Game game, DropZone gripZone, BoardParts parts)
         {
             this.game = game;
             this.gripZone = gripZone;
-        }
-
-        void Start()
-        {
-            var printer = gameObject.AddComponent<CardPrinter>();
-            top = printer.PrintRunnerFacedown("Top of stack");
+            top = parts.Print(gameObject).PrintRunnerFacedown("Top of stack");
             top.transform.SetAsFirstSibling();
             top.transform.rotation *= Quaternion.Euler(0.0f, 0.0f, 90.0f);
             var rect = top.GetComponent<RectTransform>();
@@ -32,6 +27,7 @@ namespace view.gui
                     game,
                     gripZone
                 );
+            game.runner.zones.stack.zone.ObserveCount(gameObject.AddComponent<PileCount>());
         }
 
         void IZoneCountObserver.NotifyCount(int count)

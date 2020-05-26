@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using model.cards;
-using model.zones.runner;
 using System.Collections.Generic;
 using model.play;
 using controller;
@@ -10,27 +9,25 @@ using model.zones;
 
 namespace view.gui
 {
-    public class RigGrid : MonoBehaviour, IZoneAdditionObserver, IZoneRemovalObserver, IPaidAbilityObserver
+    public class RigGrid : IZoneAdditionObserver, IZoneRemovalObserver, IPaidAbilityObserver
     {
         private Game game;
-        private DropZone playZone;
+
+        public DropZone playZone;
+        public DropZone DropZone { get; private set; }
         private Dictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
         private CardPrinter printer;
 
-        public void Construct(Game game, DropZone playZone)
+        public RigGrid(GameObject gameObject, Game game, DropZone playZone, BoardParts parts)
         {
             this.game = game;
             this.playZone = playZone;
+            this.printer = parts.Print(gameObject);
             game.runner.paidWindow.ObserveAbility(this);
             game.runner.zones.rig.zone.ObserveAdditions(this);
             game.runner.zones.rig.zone.ObserveRemovals(this);
+            this.DropZone = gameObject.AddComponent<DropZone>();
         }
-
-        void Awake()
-        {
-            printer = gameObject.AddComponent<CardPrinter>();
-        }
-
         void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
             var visual = printer.Print(card);
@@ -39,7 +36,7 @@ namespace view.gui
 
         void IZoneRemovalObserver.NotifyCardRemoved(Card card)
         {
-            Destroy(visuals[card]);
+            Object.Destroy(visuals[card]);
         }
 
         void IPaidAbilityObserver.NotifyPaidAbilityAvailable(Ability ability, Card source)
