@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using controller;
-using model;
-using model.cards;
-using model.choices;
+﻿using model.cards;
+using model.player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,9 +9,12 @@ namespace view.gui
     {
         private GameObject blanket;
         private RawCardPrinter rawCardPrinter;
+        private IPerception perception;
+        private GameObject zoomed;
 
-        public CardZoom(GameObject board)
+        public CardZoom(GameObject board, IPerception perception)
         {
+            this.perception = perception;
             blanket = CreateBlanket(board);
             rawCardPrinter = new RawCardPrinter(blanket);
         }
@@ -42,9 +39,12 @@ namespace view.gui
 
         internal void Show(Card card)
         {
+            if (zoomed != null) {
+                Object.Destroy(zoomed);
+            }
             blanket.SetActive(true);
             blanket.transform.SetAsLastSibling();
-            rawCardPrinter.Print("Zoomed in " + card.Name, Resources.Load<Sprite>("Images/Cards/" + card.FaceupArt));
+            zoomed = rawCardPrinter.Print("Zoomed in " + card.Name, FaceSprites.ChooseFace(card, perception));
         }
     }
 }

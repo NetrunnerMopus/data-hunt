@@ -45,6 +45,7 @@ namespace model
 
         public void Start(Game game)
         {
+            identity.FlipFaceUp();
             pilot.Play(game);
             credits.Gain(5);
             zones.stack.Shuffle();

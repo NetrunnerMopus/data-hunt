@@ -4,18 +4,21 @@ using model.cards;
 using model;
 using controller;
 using view.gui;
+using model.player;
 
 namespace view
 {
     public class CardPrinter
     {
         private RawCardPrinter raw;
+        private IPerception perception;
         private CardZoom zoom;
         public bool Sideways = false;
 
-        public CardPrinter(GameObject parent, CardZoom zoom)
+        public CardPrinter(GameObject parent, IPerception perception, CardZoom zoom)
         {
             this.raw = new RawCardPrinter(parent);
+            this.perception = perception;
             this.zoom = zoom;
         }
 
@@ -29,17 +32,10 @@ namespace view
             return Print(name, FaceSprites.RUNNER_BACK);
         }
 
-        public GameObject PrintFlippable(Card card)
-        {
-            var gameObject = Print(card.Name, FaceSprites.ChooseFace(card));
-            gameObject.AddComponent<PrintedCard>().Represent(card, Sideways);
-            gameObject.AddComponent<CardInspection>().Represent(zoom, card);
-            return gameObject;
-        }
-
         public GameObject Print(Card card)
         {
-            var gameObject = Print(card.Name, "Images/Cards/" + card.FaceupArt);
+            var gameObject = Print(card.Name, FaceSprites.ChooseFace(card, perception));
+            gameObject.AddComponent<PrintedCard>().Represent(card, perception, Sideways);
             gameObject.AddComponent<CardInspection>().Represent(zoom, card);
             return gameObject;
         }
@@ -54,46 +50,48 @@ namespace view
             return raw.Print(name, sprite);
         }
 
-        private class PrintedCard : MonoBehaviour, IFlipObserver
+        private class PrintedCard : MonoBehaviour
         {
             private Card card;
+            private IPerception perception;
             private bool archives;
 
-            public PrintedCard Represent(Card card, bool archives)
+            public PrintedCard Represent(Card card, IPerception perception, bool archives)
             {
                 this.card = card;
+                this.perception = perception;
                 this.archives = archives;
-                card.ObserveFlips(this);
+                card.ObserveInformation(UpdateFace);
                 Rotate();
                 return this;
             }
 
-            void IFlipObserver.NotifyFlipped(bool faceup)
+            private void UpdateFace(Information information)
             {
-                var image = GetComponent<Image>();
-                image.sprite = FaceSprites.ChooseFace(card);
+                var image = gameObject.GetComponent<Image>();
+                image.sprite = FaceSprites.ChooseFace(card, perception);
                 Rotate();
             }
 
             private void Rotate()
             {
-                var image = GetComponent<Image>();
                 if (archives)
                 {
-                    if (card.Faceup)
+                    var image = gameObject.GetComponent<Image>();
+                    if (card.Information == Information.HIDDEN_FROM_RUNNER)
                     {
-                        image.rectTransform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                        image.rectTransform.rotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
                     }
                     else
                     {
-                        image.rectTransform.rotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
+                        image.rectTransform.rotation = Quaternion.Euler(0.0f, 0.0f, 00.0f);
                     }
                 }
             }
 
             void OnDestroy()
             {
-                card.UnobserveFlips(this);
+                card.UnobserveInformation(UpdateFace);
             }
         }
     }
@@ -126,15 +124,14 @@ namespace view
         }
     }
 
-
     class FaceSprites
     {
         public static Sprite CORP_BACK = Resources.Load<Sprite>("Images/UI/corp-card-back");
         public static Sprite RUNNER_BACK = Resources.Load<Sprite>("Images/UI/runner-card-back");
 
-        public static Sprite ChooseFace(Card card)
+        public static Sprite ChooseFace(Card card, IPerception perception)
         {
-            if (card.Faceup)
+            if (perception.CanSee(card.Information))
             {
                 return Resources.Load<Sprite>("Images/Cards/" + card.FaceupArt);
             }

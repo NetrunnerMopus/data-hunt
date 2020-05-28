@@ -27,7 +27,7 @@ namespace view.gui
 
         void IZoneAdditionObserver.NotifyCardAdded(Card card)
         {
-            var printedCard = Printer.PrintFlippable(card);
+            var printedCard = Printer.Print(card);
             visuals[card] = printedCard;
         }
 

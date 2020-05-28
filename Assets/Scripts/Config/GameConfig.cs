@@ -12,8 +12,9 @@ public class GameConfig : MonoBehaviour
     void Start()
     {
         var board = GameObject.Find("/Board");
-        var zoom = new CardZoom(board);
-        var parts = new BoardParts(board, zoom);
+        var perception = new RunnerPerception();
+        var zoom = new CardZoom(board, perception);
+        var parts = new BoardParts(board, perception, zoom);
         var corpPlayer = new Player(
             deck: new Decks().DemoCorp(),
             pilot: new CorpAi(new System.Random(1234))
@@ -22,10 +23,10 @@ public class GameConfig : MonoBehaviour
             deck: new Decks().DemoRunner(),
             pilot: new CardPickingPilot(
                 new CardChoiceScreen(parts),
-                new AutoPaidWindowPilot(
-                    new SingleChoiceMaker(
-                        new TrashingPilot(
-                            new TrashChoiceScreen(parts),
+                new TrashingPilot(
+                    new TrashChoiceScreen(parts),
+                    new AutoPaidWindowPilot(
+                        new SingleChoiceMaker(
                             new NoPilot()
                         )
                     )

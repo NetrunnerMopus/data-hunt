@@ -1,15 +1,21 @@
 ﻿using model.cards;
+using model.player;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace model.zones.runner
 {
-    public class Grip
+    public class Grip : IZoneAdditionObserver
     {
         public readonly Zone zone = new Zone("Grip");
         private HashSet<IGripDiscardObserver> discards = new HashSet<IGripDiscardObserver>();
         private TaskCompletionSource<bool> discarded;
+
+        public Grip()
+        {
+            zone.ObserveAdditions(this);
+        }
 
         async public Task Discard()
         {
@@ -41,6 +47,11 @@ namespace model.zones.runner
         public void UnobserveDiscarding(IGripDiscardObserver observer)
         {
             discards.Remove(observer);
+        }
+
+        void IZoneAdditionObserver.NotifyCardAdded(Card card)
+        {
+            card.UpdateInfo(Information.HIDDEN_FROM_CORP);
         }
     }
 
