@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using controller;
+using model.cards;
 using model.player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,6 +46,7 @@ namespace view.gui
             blanket.SetActive(true);
             blanket.transform.SetAsLastSibling();
             zoomed = rawCardPrinter.Print("Zoomed in " + card.Name, FaceSprites.ChooseFace(card, perception));
+            zoomed.AddComponent<CardUnzoom>().Construct(blanket);
         }
     }
 }
