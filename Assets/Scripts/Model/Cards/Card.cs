@@ -1,5 +1,7 @@
 ﻿using model.choices.trash;
+using model.player;
 using model.zones;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,7 +11,7 @@ namespace model.cards
     {
         private HashSet<NotifyActivity> activityObservers = new HashSet<NotifyActivity>();
         private HashSet<NotifyMoved> moveObservers = new HashSet<NotifyMoved>();
-        private HashSet<IFlipObserver> flipObservers = new HashSet<IFlipObserver>();
+        private HashSet<NotifyInfo> infoObservers = new HashSet<NotifyInfo>();
         public abstract string Name { get; }
         public abstract IType Type { get; }
         public Zone Zone { get; private set; }
@@ -19,6 +21,7 @@ namespace model.cards
         public abstract int InfluenceCost { get; }
         public abstract string FaceupArt { get; }
         public bool Faceup { get; private set; } = false;
+        public Information Information { get; private set; } = Information.HIDDEN_FROM_ALL;
         public bool Active { get; private set; } = false;
 
         public virtual IEnumerable<ITrashOption> TrashOptions(Game game) => new[] { new Leave() };
@@ -88,20 +91,30 @@ namespace model.cards
         public void FlipFaceUp()
         {
             Faceup = true;
-            NotifyFlipObservers();
+            UpdateInfo(Information.OPEN);
         }
 
-        public void FlipFaceDown()
+        private void FlipFaceDown()
         {
             Faceup = false;
-            NotifyFlipObservers();
+            switch (Faction.Side)
+            {
+                case Side.CORP: UpdateInfo(Information.HIDDEN_FROM_RUNNER); break;
+                case Side.RUNNER: UpdateInfo(Information.HIDDEN_FROM_CORP); break;
+            }
         }
 
-        private void NotifyFlipObservers()
+        public void UpdateInfo(Information information)
         {
-            foreach (var observer in flipObservers)
+            Information = information;
+            NotifyInfoObservers();
+        }
+
+        private void NotifyInfoObservers()
+        {
+            foreach (var observer in infoObservers)
             {
-                observer.NotifyFlipped(Faceup);
+                observer(Information);
             }
         }
 
@@ -110,15 +123,16 @@ namespace model.cards
             moveObservers.Add(observer);
         }
 
-        public void ObserveFlips(IFlipObserver observer)
+        internal void ObserveInformation(NotifyInfo observer)
         {
-            flipObservers.Add(observer);
+            infoObservers.Add(observer);
         }
 
-        public void UnobserveFlips(IFlipObserver observer)
+        internal void UnobserveInformation(NotifyInfo observer)
         {
-            flipObservers.Remove(observer);
+            infoObservers.Remove(observer);
         }
+
 
         public override string ToString()
         {
@@ -126,11 +140,7 @@ namespace model.cards
         }
     }
 
-    public interface IFlipObserver
-    {
-        void NotifyFlipped(bool faceup);
-    }
-
     public delegate void NotifyActivity();
     public delegate void NotifyMoved(Card card, Zone source, Zone target);
+    public delegate void NotifyInfo(Information information);
 }
