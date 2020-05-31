@@ -12,6 +12,8 @@ namespace view.gui
         private IList<RectTransform> credits = new List<RectTransform>();
         private Spiral spiral = new Spiral();
         private RectTransform scaler;
+        // Allocated once to avoid reallocations during gameplay
+        private Vector3[] corners = new Vector3[4];
 
         void Awake()
         {
@@ -69,24 +71,8 @@ namespace view.gui
             {
                 return;
             }
-            var rect = GetComponent<RectTransform>();
-            var container = new Bounds(rect.position, Vector3.zero);
-            var corners = new Vector3[4];
-            rect.GetWorldCorners(corners);
-            foreach (var corner in corners)
-            {
-                container.Encapsulate(corner);
-            }
-            var preScaledContent = new Bounds(credits[0].position, Vector3.zero);
-            foreach (var credit in credits)
-            {
-                credit.GetWorldCorners(corners);
-                foreach (var corner in corners)
-                {
-                    preScaledContent.Encapsulate(corner);
-                }
-            }
-
+            var container = Encapsulate(GetComponent<RectTransform>());
+            var preScaledContent = Encapsulate(credits.ToArray());
             var xFactor = container.size.x / preScaledContent.size.x;
             var yFactor = container.size.y / preScaledContent.size.y;
             var fitFactor = Mathf.Min(xFactor, yFactor);
@@ -94,19 +80,23 @@ namespace view.gui
             {
                 return;
             }
-            var scale = new Vector3(fitFactor, fitFactor, fitFactor);
-            scale.Scale(scaler.localScale);
-            scaler.localScale = scale;
-            var postScaledContent = new Bounds(credits[0].position, Vector3.zero);
-            foreach (var credit in credits)
+            scaler.localScale = Vector3.Scale(scaler.localScale, new Vector3(fitFactor, fitFactor, fitFactor));
+            var postScaledContent = Encapsulate(credits.ToArray());
+            scaler.position += container.center - postScaledContent.center;
+        }
+
+        private Bounds Encapsulate(params RectTransform[] rects)
+        {
+            var bounds = new Bounds(rects[0].position, Vector3.zero);
+            foreach (var rect in rects)
             {
-                credit.GetWorldCorners(corners);
+                rect.GetWorldCorners(corners);
                 foreach (var corner in corners)
                 {
-                    postScaledContent.Encapsulate(corner);
+                    bounds.Encapsulate(corner);
                 }
             }
-            scaler.position += container.center - postScaledContent.center; // calc it from preScaledContent * minFactor
+            return bounds;
         }
 
         private void DropHex()
