@@ -27,8 +27,7 @@ namespace view.gui
                     game,
                     GameObject.Find("Runner/Right hand/Credits").AddComponent<DropZone>()
                 );
-
-            game.runner.credits.Observe(GameObject.Find("Runner/Right hand/Credits/Credits text").AddComponent<CreditPoolText>());
+            game.runner.credits.Observe(GameObject.Find("Runner/Right hand/Credits").AddComponent<CreditSpiral>());
         }
     }
 }

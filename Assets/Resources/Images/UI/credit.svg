@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+              "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -12 48 88">
+  <path id="credit-outline1" fill="none" stroke="orange" stroke-width="12" stroke-opacity="0.5" d="
+    M 16 0
+    L 32 16
+    L 32 48
+    L 16 64
+    L 0 48
+    L 0 16
+    Z" />
+  <path id="credit-outline2" fill="orange" fill-opacity="0.7" stroke="white" stroke-width="4" d="
+    M 16 0
+    L 32 16
+    L 32 48
+    L 16 64
+    L 0 48
+    L 0 16
+    Z" />
+  <path id="credit-notch" fill="white"  d="
+    M 0 16
+    L 16 32
+    L 16 48
+    L 0 32
+    Z" />
+</svg>
