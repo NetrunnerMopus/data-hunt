@@ -1,10 +1,11 @@
-﻿using model.zones;
+﻿using model;
+using model.zones;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace view.gui {
-	public class PileCount : MonoBehaviour, IZoneCountObserver, IPointerEnterHandler, IPointerExitHandler {
+	public class PileCount : MonoBehaviour, IZoneCountObserver, IBalanceObserver, IPointerEnterHandler, IPointerExitHandler {
 		private Text text;
 
 		void Awake() {
@@ -30,6 +31,11 @@ namespace view.gui {
 		void IZoneCountObserver.NotifyCount(int count) {
 			text.text = count.ToString();
 		}
+
+        void IBalanceObserver.NotifyBalance(int balance)
+        {
+            text.text = balance.ToString();
+        }
 
 		void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData) {
 			text.enabled = true;
