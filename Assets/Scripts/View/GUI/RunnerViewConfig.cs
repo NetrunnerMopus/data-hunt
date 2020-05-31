@@ -20,14 +20,16 @@ namespace view.gui
                 serverRow: corpView.serverRow,
                 game: game
             );
+            var credits = GameObject.Find("Runner/Right hand/Credits");
             GameObject.Find("Bank/Credit")
                 .AddComponent<DroppableAbility>()
                 .Represent(
                     game.runner.actionCard.credit,
                     game,
-                    GameObject.Find("Runner/Right hand/Credits").AddComponent<DropZone>()
+                    credits.AddComponent<DropZone>()
                 );
-            game.runner.credits.Observe(GameObject.Find("Runner/Right hand/Credits").AddComponent<CreditSpiral>());
+            game.runner.credits.Observe(credits.AddComponent<CreditSpiral>());
+            game.runner.credits.Observe(credits.AddComponent<PileCount>());
         }
     }
 }

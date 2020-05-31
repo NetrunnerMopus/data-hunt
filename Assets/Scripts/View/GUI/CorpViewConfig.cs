@@ -8,7 +8,9 @@ namespace view.gui
         public CorpView Display(Game game, BoardParts parts)
         {
             var zones = game.corp.zones;
-            game.corp.credits.Observe(GameObject.Find("Corp/Credits").AddComponent<CreditSpiral>());
+            var credits = GameObject.Find("Corp/Credits");
+            game.corp.credits.Observe(credits.AddComponent<CreditSpiral>());
+            game.corp.credits.Observe(credits.AddComponent<PileCount>());
             var servers = new ServerRow(GameObject.Find("Servers"), parts, zones);
             var archivesBox = servers.Box(zones.archives);
             archivesBox.Printer.Sideways = true;
