@@ -8,30 +8,17 @@ namespace view.gui
     public class PaidWindowView : MonoBehaviour, IPaidWindowObserver
     {
         private PaidWindow window;
+        public DropZone Sink { get; private set; }
 
-        public void Represent(PaidWindow window)
+        public PaidWindowView Represent(PaidWindow window)
         {
             this.window = window;
-            var flag = CreateFlag(gameObject).AddComponent<PaidWindowFlag>();
-            var pass = CreatePass(gameObject).AddComponent<DropZone>();
-            flag.Represent(window, pass);
+            var pass = CreatePass(gameObject).AddComponent<PaidWindowPass>();
+            Sink = CreateSink(gameObject).AddComponent<DropZone>();
+            pass.Represent(window, Sink);
             gameObject.SetActive(false);
             window.ObserveWindow(this);
-        }
-
-        private GameObject CreateFlag(GameObject parent)
-        {
-            var flag = new GameObject("Flag");
-            flag.AttachTo(parent);
-            var image = flag.AddComponent<Image>();
-            image.sprite = Resources.Load<Sprite>("Images/UI/paid");
-            image.preserveAspect = true;
-            var rectangle = image.rectTransform;
-            rectangle.anchorMin = Vector2.zero;
-            rectangle.anchorMax = new Vector2(0.3f, 1.0f);
-            rectangle.offsetMin = Vector2.zero;
-            rectangle.offsetMax = Vector2.zero;
-            return flag;
+            return this;
         }
 
         private GameObject CreatePass(GameObject parent)
@@ -39,36 +26,29 @@ namespace view.gui
             var pass = new GameObject("Pass");
             pass.AttachTo(parent);
             var image = pass.AddComponent<Image>();
-            image.type = Image.Type.Sliced;
-            image.fillCenter = true;
+            image.sprite = Resources.Load<Sprite>("Images/UI/hourglass");
+            image.preserveAspect = true;
+            var rectangle = image.rectTransform;
+            rectangle.anchorMin = Vector2.zero;
+            rectangle.anchorMax = new Vector2(0.3f, 1.0f);
+            rectangle.offsetMin = Vector2.zero;
+            rectangle.offsetMax = Vector2.zero;
+            return pass;
+        }
+
+        private GameObject CreateSink(GameObject parent)
+        {
+            var sink = new GameObject("Sink");
+            sink.AttachTo(parent);
+            var image = sink.AddComponent<Image>();
+            image.sprite = Resources.Load<Sprite>("Images/UI/paid");
+            image.preserveAspect = true;
             var rectangle = image.rectTransform;
             rectangle.anchorMin = new Vector2(0.7f, 0.0f);
             rectangle.anchorMax = Vector2.one;
             rectangle.offsetMin = Vector2.zero;
             rectangle.offsetMax = Vector2.zero;
-            CreatePassLabel(pass);
-            return pass;
-        }
-
-        private GameObject CreatePassLabel(GameObject parent)
-        {
-            var label = new GameObject("Label");
-            label.AttachTo(parent);
-            var text = label.AddComponent<Text>();
-            text.text = "PASS";
-            text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            text.color = Color.white;
-            text.alignment = TextAnchor.MiddleCenter;
-            text.resizeTextForBestFit = true;
-            text.resizeTextMinSize = 10;
-            text.resizeTextMaxSize = 42;
-            text.raycastTarget = false;
-            var rectangle = text.rectTransform;
-            rectangle.anchorMin = Vector2.zero;
-            rectangle.anchorMax = Vector2.one;
-            rectangle.offsetMin = Vector2.zero;
-            rectangle.offsetMax = Vector2.zero;
-            return label;
+            return sink;
         }
 
         void IPaidWindowObserver.NotifyPaidWindowClosed(PaidWindow window)

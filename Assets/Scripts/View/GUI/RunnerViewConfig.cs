@@ -6,10 +6,10 @@ namespace view.gui
 {
     public class RunnerViewConfig
     {
-        public void Display(Game game, CorpView corpView, BoardParts parts)
+        public void Display(Game game, GameFlowView flowView, CorpView corpView, BoardParts parts)
         {
             var playZone = GameObject.Find("Trigger").AddComponent<DropZone>();
-            RigGrid rigGrid = new RigGrid(GameObject.Find("Rig"), game, playZone, parts);
+            RigGrid rigGrid = new RigGrid(GameObject.Find("Rig"), game, flowView.PaidWindow.Sink, parts);
             HeapPile heapPile = new HeapPile(GameObject.Find("Heap"), game, parts);
             GripFan gripFan = new GripFan(GameObject.Find("Grip"), game, playZone, rigGrid.DropZone, heapPile.DropZone, parts);
             StackPile stackPile = new StackPile(GameObject.Find("Stack"), game, gripFan.DropZone, parts);
