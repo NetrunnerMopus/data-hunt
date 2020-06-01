@@ -39,7 +39,7 @@ public class GameConfig : MonoBehaviour
         flowView.Display(board, game);
         flowLog.Display(game);
         var corpView = new CorpViewConfig().Display(game, parts);
-        new RunnerViewConfig().Display(game, corpView, parts);
+        new RunnerViewConfig().Display(game, flowView, corpView, parts);
         game.Start();
     }
 }
