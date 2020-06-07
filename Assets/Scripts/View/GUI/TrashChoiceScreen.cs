@@ -87,7 +87,7 @@ namespace view.gui
             var choice = await Task.WhenAny(asyncChoices);
             blanket.SetActive(false);
             Dispose(subject);
-            droppableChoices.ForEach(it => Dispose(it.zone.gameObject));
+            droppableChoices.ForEach(it => Dispose(it.GameObject));
             return choice.Result;
         }
 
@@ -97,7 +97,7 @@ namespace view.gui
             Object.Destroy(o);
         }
 
-        private DroppableChoice<ITrashOption> DisplayOption(ITrashOption option, Card card, GameObject subject, Game game)
+        private InteractiveChoice<ITrashOption> DisplayOption(ITrashOption option, Card card, GameObject subject, Game game)
         {
             var optionCard = new GameObject("Trash option " + option);
             var image = optionCard.AddComponent<Image>();
@@ -109,11 +109,9 @@ namespace view.gui
             optionCard.transform.SetParent(optionsRow.transform);
             var dropZone = optionCard.AddComponent<DropZone>();
             bool legal = option.IsLegal(game);
-            return subject
-                .AddComponent<DroppableTrashChoice>()
-                .Represent(option, legal, dropZone, game);
+            var choice = new InteractiveChoice<ITrashOption>(option, legal, optionCard);
+            subject.AddComponent<Droppable>().Represent(choice, dropZone);
+            return choice;
         }
     }
-
-    class DroppableTrashChoice : DroppableChoice<ITrashOption> { }
 }

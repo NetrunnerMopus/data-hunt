@@ -10,7 +10,7 @@ namespace controller
         private GameObject gameObject;
         private Game game;
         private IDictionary<ServerBox, DropZone> dropZones = new Dictionary<ServerBox, DropZone>();
-        private  IDictionary<ServerBox, DroppableAbility> abilities = new Dictionary<ServerBox, DroppableAbility>();
+        private  IDictionary<ServerBox, Droppable> abilities = new Dictionary<ServerBox, Droppable>();
 
         public RunInitiation(GameObject gameObject, Game game, ServerRow serverRow)
         {
@@ -22,11 +22,11 @@ namespace controller
         void IServerBoxObserver.NotifyServerBox(ServerBox box)
         {
             var boxZone = box.gameObject.AddComponent<DropZone>();
-            var ability = gameObject.AddComponent<DroppableAbility>();
+            var ability = gameObject.AddComponent<Droppable>();
             dropZones[box] = boxZone;
             abilities[box] = ability;
             var runOnServer = game.runner.actionCard.Run(box.server);
-            ability.Represent(runOnServer, game, boxZone);
+            ability.Represent(new InteractiveAbility(runOnServer, game), boxZone);
         }
 
         void IServerBoxObserver.NotifyServerBoxDisappeared(ServerBox box)

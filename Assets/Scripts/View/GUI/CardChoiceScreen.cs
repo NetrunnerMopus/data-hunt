@@ -80,12 +80,12 @@ namespace view.gui
             var subject = subjectRow.Print("Which card to access?", "Images/UI/hand-click"); // TODO good for accessing, but `CardChoiceScreen` might be used in other contexts
             blanket.transform.SetAsLastSibling();
             blanket.SetActive(true);
-            var droppableChoices = options.Select(it => DisplayOption(it, q, subject, game)).ToList();
+            var droppableChoices = options.Select(it => DisplayOption(it, q, subject)).ToList();
             var asyncChoices = droppableChoices.Select(it => it.AwaitChoice()).ToArray();
             var choice = await Task.WhenAny(asyncChoices);
             blanket.SetActive(false);
             Dispose(subject);
-            droppableChoices.ForEach(it => Dispose(it.zone.gameObject));
+            droppableChoices.ForEach(it => Dispose(it.GameObject));
             return choice.Result;
         }
 
@@ -95,15 +95,13 @@ namespace view.gui
             Object.Destroy(o);
         }
 
-        private DroppableChoice<Card> DisplayOption(Card option, string q, GameObject subject, Game game)
+        private InteractiveChoice<Card> DisplayOption(Card option, string q, GameObject subject)
         {
             var optionCard = optionsRow.Print(option);
             var dropZone = optionCard.AddComponent<DropZone>();
-            return subject
-                .AddComponent<DroppableCardChoice>()
-                .Represent(option, true, dropZone, game);
+            var choice = new InteractiveChoice<Card>(option, true, optionCard);
+            subject.AddComponent<Droppable>().Represent(choice, dropZone);
+            return choice;
         }
     }
-
-    class DroppableCardChoice : DroppableChoice<Card> { }
 }

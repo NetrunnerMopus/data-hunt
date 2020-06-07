@@ -40,29 +40,25 @@ namespace view.gui
             if (type.Playable)
             {
                 visual
-                    .AddComponent<DroppableAbility>()
+                    .AddComponent<Droppable>()
                     .Represent(
-                        game.runner.actionCard.Play(card),
-                        game,
+                        new InteractiveAbility(game.runner.actionCard.Play(card), game),
                         playZone
                     );
             }
             if (type.Installable)
             {
                 visual
-                     .AddComponent<DroppableAbility>()
+                     .AddComponent<Droppable>()
                      .Represent(
-                         game.runner.actionCard.Install(card),
-                         game,
-                         rigZone
+                        new InteractiveAbility(game.runner.actionCard.Install(card), game),
+                        rigZone
                      );
             }
             visual
-                .AddComponent<Discardable>()
+                .AddComponent<Droppable>()
                 .Represent(
-                    card,
-                    game.runner.zones.grip,
-                    game.runner.zones.heap,
+                    new InteractiveDiscard(card, game),
                     heapZone
                 );
         }

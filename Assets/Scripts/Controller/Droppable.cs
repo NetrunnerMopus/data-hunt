@@ -2,25 +2,19 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
-using model.play;
-using model;
 using view.gui;
-using view;
 
 namespace controller
 {
-    public class DroppableAbility : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IUsabilityObserver
+    public class Droppable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private Ability ability;
-        private Game game;
+        private IInteractive interactive;
         private DropZone zone;
-        private bool usable = false;
-        private AbilityHighlight abilityHighlight;
+        private bool active = false;
         private Highlight highlight;
         private Vector3 originalPosition;
         private int originalIndex;
         private CanvasGroup canvasGroup;
-        private bool dragging = false;
 
         void Awake()
         {
@@ -32,37 +26,41 @@ namespace controller
             canvasGroup.blocksRaycasts = true;
         }
 
-        public void Represent(Ability ability, Game game, DropZone zone)
+        public void Represent(IInteractive interactive, DropZone zone)
         {
-            this.ability = ability;
-            this.game = game;
+            this.interactive = interactive;
             this.zone = zone;
             highlight = gameObject.AddComponent<Highlight>();
-            abilityHighlight = new AbilityHighlight(highlight);
-            ability.ObserveUsability(this, game);
-            ability.ObserveUsability(abilityHighlight, game);
+            interactive.Observe(Toggle);
         }
 
-        void IUsabilityObserver.NotifyUsable(bool usable, Ability ability)
+        private void Toggle(bool active)
         {
-            this.usable = usable;
+            this.active = active;
+            if (active)
+            {
+                highlight.TurnOn();
+            }
+            else
+            {
+                highlight.TurnOff();
+            }
         }
 
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
         {
-            dragging = true;
-            eventData.selectedObject = gameObject;
             originalPosition = transform.position;
-            BringToFront();
+            BringToFront(eventData);
             canvasGroup.blocksRaycasts = false;
-            if (usable)
+            if (active)
             {
                 zone.StartDragging();
             }
         }
 
-        private void BringToFront()
+        private void BringToFront(PointerEventData eventData)
         {
+            eventData.selectedObject = gameObject;
             originalIndex = transform.GetSiblingIndex();
             for (Transform t = transform; t.parent != null; t = t.parent)
             {
@@ -72,43 +70,40 @@ namespace controller
 
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
-            if (dragging)
-            {
-                transform.position = eventData.position;
-            }
+            transform.position = eventData.position;
         }
 
         async void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
-            if (!dragging)
+            canvasGroup.blocksRaycasts = true;
+            if (active)
+            {
+                var raycast = new List<RaycastResult>();
+                EventSystem.current.RaycastAll(eventData, raycast);
+                var onDrop = raycast.Where(r => r.gameObject == zone.gameObject).Any();
+                if (onDrop)
+                {
+                    await interactive.Interact();
+                }
+            }
+            PutBack(eventData);
+            zone.StopDragging();
+        }
+
+        private void PutBack(PointerEventData eventData)
+        {
+            if (eventData.selectedObject == null) // avoid multiple Droppables on the same GO resetting the index: https://github.com/dagguh/data-hunt/pull/184
             {
                 return;
             }
             eventData.selectedObject = null;
-            canvasGroup.blocksRaycasts = true;
-            var raycast = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventData, raycast);
-            var onDrop = raycast.Where(r => r.gameObject == zone.gameObject).Any();
-            if (onDrop && usable)
-            {
-                await ability.Trigger(game);
-            }
-            PutBack();
-            zone.StopDragging();
-            dragging = false;
-        }
-
-        private void PutBack()
-        {
             transform.SetSiblingIndex(originalIndex);
             transform.position = originalPosition;
         }
 
         void OnDestroy()
         {
-            ability.Unobserve(this);
-            ability.Unobserve(abilityHighlight);
-            Destroy(highlight);
+            interactive.UnobserveAll();
         }
     }
 }
