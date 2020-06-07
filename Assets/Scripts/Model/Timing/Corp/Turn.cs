@@ -74,16 +74,8 @@ namespace model.timing.corp
 
         async private Task MandatoryDraw()
         {
-            var rd = game.corp.zones.rd;
-            if (rd.HasCards())
-            {
-                IEffect draw = new Draw(1);
-                await draw.Resolve(game);
-            }
-            else
-            {
-                game.DeckCorp();
-            }
+            IEffect draw = new Draw(1);
+            await draw.Resolve(game);
         }
 
         async private Task ActionPhase()
