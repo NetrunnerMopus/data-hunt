@@ -21,10 +21,9 @@ namespace view.gui
             var rect = top.GetComponent<RectTransform>();
             rect.anchoredPosition = new Vector3(0.0f, 0.0f, 0.0f);
             top
-                .AddComponent<DroppableAbility>()
+                .AddComponent<Droppable>()
                 .Represent(
-                    game.runner.actionCard.draw,
-                    game,
+                    new InteractiveAbility(game.runner.actionCard.draw, game),
                     gripZone
                 );
             game.runner.zones.stack.zone.ObserveCount(gameObject.AddComponent<PileCount>());
