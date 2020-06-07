@@ -47,6 +47,10 @@ namespace controller
 
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
         {
+            if (!usable)
+            {
+                return;
+            }
             eventData.selectedObject = gameObject;
             originalPosition = transform.position;
             BringToFront();
@@ -68,11 +72,19 @@ namespace controller
 
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
+            if (!usable)
+            {
+                return;
+            }
             transform.position = eventData.position;
         }
 
         void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
+            if (!usable)
+            {
+                return;
+            }
             eventData.selectedObject = null;
             CanvasGroup.blocksRaycasts = true;
             var raycast = new List<RaycastResult>();
