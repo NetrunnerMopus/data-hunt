@@ -41,6 +41,10 @@ namespace model.zones.corp
                 {
                     Zone.Cards[0].MoveTo(hq.Zone);
                 }
+                else
+                {
+                    game.DeckCorp();
+                }
             }
         }
 
