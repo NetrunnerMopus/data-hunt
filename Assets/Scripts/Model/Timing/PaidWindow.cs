@@ -19,7 +19,7 @@ namespace model.timing
             this.label = label;
         }
 
-        public List<Ability> ListAbilities()  => new List<Ability>(abilities);
+        public List<Ability> ListAbilities() => new List<Ability>(abilities);
 
         public ICost Permission() => permission;
 
@@ -62,11 +62,6 @@ namespace model.timing
         public void ObserveWindow(IPaidWindowObserver observer)
         {
             windowObservers.Add(observer);
-        }
-
-        public void UnobserveWindow(IPaidWindowObserver observer)
-        {
-            windowObservers.Remove(observer);
         }
 
         public void ObserveAbility(IPaidAbilityObserver observer)

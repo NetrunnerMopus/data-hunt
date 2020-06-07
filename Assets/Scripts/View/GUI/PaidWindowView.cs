@@ -1,24 +1,28 @@
 ﻿using controller;
+using model;
 using model.timing;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class PaidWindowView : MonoBehaviour, IPaidWindowObserver
+    public class PaidWindowView : IPaidWindowObserver
     {
+        private GameObject gameObject;
+        private RectTransform rect;
         private PaidWindow window;
         public DropZone Sink { get; private set; }
 
-        public PaidWindowView Represent(PaidWindow window)
+        public PaidWindowView(GameObject gameObject, RectTransform rect, PaidWindow window)
         {
+            this.gameObject = gameObject;
+            this.rect = rect;
             this.window = window;
             var pass = CreatePass(gameObject).AddComponent<PaidWindowPass>();
             Sink = CreateSink(gameObject).AddComponent<DropZone>();
             pass.Represent(window, Sink);
             gameObject.SetActive(false);
             window.ObserveWindow(this);
-            return this;
         }
 
         private GameObject CreatePass(GameObject parent)
@@ -59,11 +63,6 @@ namespace view.gui
         void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
         {
             gameObject.SetActive(true);
-        }
-
-        void OnDestroy()
-        {
-            window.UnobserveWindow(this);
         }
     }
 }

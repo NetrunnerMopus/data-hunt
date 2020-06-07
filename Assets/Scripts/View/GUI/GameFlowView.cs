@@ -8,18 +8,18 @@ namespace view.gui
     public class GameFlowView
     {
         private readonly float clickRowHeightRatio = 0.30f;
+        private GameObject flow;
         public PaidWindowView PaidWindow { get; private set; }
 
         public void Display(GameObject board, Game game)
         {
-            var flow = CreateFlow();
+            flow = CreateFlow();
             var corpPool = CreateCorpClicks(game);
             var runnerPool = CreateRunnerClicks(game);
             PaidWindow = CreatePaidWindow(game.runner.paidWindow);
             var gameFinish = CreateGameFinish(game);
             corpPool.AttachTo(flow);
             runnerPool.AttachTo(flow);
-            PaidWindow.gameObject.AttachTo(flow);
             flow.AttachTo(board);
             gameFinish.AttachTo(board);
         }
@@ -79,7 +79,8 @@ namespace view.gui
             rectangle.anchorMax = new Vector2(1.0f, 1.0f - clickRowHeightRatio);
             rectangle.offsetMin = Vector2.zero;
             rectangle.offsetMax = Vector2.zero;
-            return view.AddComponent<PaidWindowView>().Represent(window);
+            view.AttachTo(flow);
+            return new PaidWindowView(view, rectangle, window);
         }
 
         private GameObject CreateGameFinish(Game game)
