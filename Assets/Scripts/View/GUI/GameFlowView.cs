@@ -7,7 +7,7 @@ namespace view.gui
 {
     public class GameFlowView
     {
-        private readonly float clickRowHeightRatio = 0.30f;
+        private readonly float clickRowHeightRatio = 0.20f;
         private GameObject flow;
         public PaidWindowView PaidWindow { get; private set; }
 
