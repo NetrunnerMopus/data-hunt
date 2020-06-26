@@ -8,7 +8,7 @@ namespace view.gui
     {
         public void Display(Game game, GameFlowView flowView, CorpView corpView, BoardParts parts)
         {
-            var playZone = GameObject.Find("Trigger").AddComponent<DropZone>();
+            var playZone = GameObject.Find("Choice").AddComponent<DropZone>();
             RigGrid rigGrid = new RigGrid(GameObject.Find("Rig"), game, flowView.PaidWindow.Sink, parts);
             HeapPile heapPile = new HeapPile(GameObject.Find("Heap"), game, parts);
             GripFan gripFan = new GripFan(GameObject.Find("Grip"), game, playZone, rigGrid.DropZone, heapPile.DropZone, parts);
@@ -16,7 +16,7 @@ namespace view.gui
             new ZoneBox(GameObject.Find("Runner/Left hand/Score"), parts).Represent(game.runner.zones.score.zone);
             parts.Print(GameObject.Find("Runner/Right hand/Core/Identity")).Print(game.runner.identity);
             new RunInitiation(
-                gameObject: GameObject.Find("Runner/Activation/Run"),
+                gameObject: GameObject.Find("Run"),
                 serverRow: corpView.serverRow,
                 game: game
             );

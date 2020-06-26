@@ -29,7 +29,7 @@ namespace view.gui
         {
             while (clicks.Count < total)
             {
-                Render();
+                clicks.Add(ClickBox.RenderClickBox(transform));
             }
         }
 
@@ -60,17 +60,6 @@ namespace view.gui
                     image.color = Color.yellow;
                 }
             }
-        }
-
-        private void Render()
-        {
-            var click = new GameObject("Click");
-            var image = click.AddComponent<Image>();
-            image.sprite = clickSprite;
-            image.preserveAspect = true;
-            click.layer = 5;
-            click.transform.SetParent(transform);
-            clicks.Add(click);
         }
     }
 }
