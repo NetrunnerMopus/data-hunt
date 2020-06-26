@@ -10,15 +10,15 @@ namespace view.gui
 
         public void TurnOn()
         {
-            var on = Color.cyan;
-            Color = on;
+            var off = Color.white;
+            off.a = 1.0f;
+            Color = off; 
         }
 
         public void TurnOff()
         {
-            var off = Color.white;
-            off.a = 1.0f;
-            Color = off;
+            var on = Color.grey;
+            Color = on;
         }
     }
 }
