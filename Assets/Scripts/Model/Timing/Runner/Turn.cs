@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using model.play;
 
 namespace model.timing.runner
 {
@@ -70,12 +71,16 @@ namespace model.timing.runner
         {
             while (game.runner.clicks.Remaining() > 0)
             {
-                Task actionTaking = game.runner.actionCard.TakeAction();
+                Task<Ability> actionTaking = game.runner.actionCard.TakeAction();
                 foreach (var observer in actions)
                 {
                     observer.NotifyActionTaking();
                 }
-                await actionTaking;
+                var action = await actionTaking;
+                foreach (var observer in actions)
+                {
+                    observer.NotifyActionTaken(action);
+                }
                 await OpenPaidWindow();
                 OpenRezWindow();
             }
@@ -145,5 +150,6 @@ namespace model.timing.runner
     public interface IRunnerActionObserver
     {
         void NotifyActionTaking();
+        void NotifyActionTaken(Ability ability);
     }
 }

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 14ded5a7c71921141b0312119ba4dce2
+guid: 441abcc020aa96f40a8fc1518efeac49
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -10,7 +10,7 @@ ScriptedImporter:
   script: {fileID: 11500000, guid: a57477913897c46af95d590f580878bd, type: 3}
   svgType: 1
   texturedSpriteMeshType: 0
-  svgPixelsPerUnit: 200
+  svgPixelsPerUnit: 100
   gradientResolution: 64
   alignment: 0
   customPivot: {x: 0, y: 0}
@@ -39,17 +39,17 @@ ScriptedImporter:
   spriteData:
     TessellationDetail: 0
     SpriteRect:
-      name: creditSprite
+      name: 
       originalName: 
-      pivot: {x: 0.5, y: 0.4998183}
+      pivot: {x: 0, y: 0}
       alignment: 0
       border: {x: 0, y: 0, z: 0, w: 0}
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 44
-        height: 81
-      spriteID: 76191d125811dc846b2a1e7a30110ab0
+        width: 0
+        height: 0
+      spriteID: 84497b0638ec4b14eb787179ac57c776
       internalID: 0
     PhysicsOutlines: []

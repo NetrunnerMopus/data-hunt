@@ -100,12 +100,16 @@ namespace model.timing.corp
 
         async private Task TakeAction()
         {
-            Task actionTaking = game.corp.actionCard.TakeAction();
+            Task<Ability> actionTaking = game.corp.actionCard.TakeAction();
             foreach (var observer in actions)
             {
                 observer.NotifyActionTaking();
             }
-            await actionTaking;
+            var action = await actionTaking;
+            foreach (var observer in actions)
+            {
+                observer.NotifyActionTaken(action);
+            }
             Task paid = OpenPaidWindow();
             Task rez = OpenRezWindow();
             OpenScoreWindow();
@@ -163,5 +167,6 @@ namespace model.timing.corp
     public interface ICorpActionObserver
     {
         void NotifyActionTaking();
+        void NotifyActionTaken(Ability ability);
     }
 }

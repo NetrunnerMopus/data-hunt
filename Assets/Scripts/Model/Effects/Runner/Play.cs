@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using model.cards;
 using model.zones;
 
@@ -8,6 +9,7 @@ namespace model.effects.runner
     {
         private Card card;
         private Zone playZone = new Zone("Play");
+        IEnumerable<string> IEffect.Graphics  => new string[] { "Images/Cards/" + card.FaceupArt };
 
         public Play(Card card)
         {

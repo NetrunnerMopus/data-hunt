@@ -1,5 +1,4 @@
 ﻿using model.cards;
-using model.choices;
 using model.costs;
 using model.effects;
 using model.effects.corp;
@@ -16,7 +15,7 @@ namespace model.play.corp
         private IPilot pilot;
         public readonly Ability credit;
         public readonly Ability draw;
-        private TaskCompletionSource<bool> actionTaking;
+        private TaskCompletionSource<Ability> actionTaking;
         private ActionPermission permission = new ActionPermission();
         private List<Ability> potentialActions = new List<Ability>();
         private HashSet<IActionPotentialObserver> actionPotentialObservers = new HashSet<IActionPotentialObserver>();
@@ -63,16 +62,16 @@ namespace model.play.corp
             return install;
         }
 
-        async public Task TakeAction()
+        async public Task<Ability> TakeAction()
         {
             permission.Grant();
-            actionTaking = new TaskCompletionSource<bool>();
-            await actionTaking.Task;
+            actionTaking = new TaskCompletionSource<Ability>();
+            return await actionTaking.Task;
         }
 
-        void IResolutionObserver.NotifyResolved()
+        void IResolutionObserver.NotifyResolved(Ability ability)
         {
-            actionTaking.SetResult(true);
+            actionTaking.SetResult(ability);
         }
 
         public void ObservePotentialActions(IActionPotentialObserver observer)

@@ -65,6 +65,7 @@ namespace model.ai
             UnityEngine.Debug.Log("Choosing to " + randomLegalAction);
             await randomLegalAction.Trigger(game);
         }
+        void ICorpActionObserver.NotifyActionTaken(Ability ability) {}
 
         void IHqDiscardObserver.NotifyDiscarding(bool discarding)
         {

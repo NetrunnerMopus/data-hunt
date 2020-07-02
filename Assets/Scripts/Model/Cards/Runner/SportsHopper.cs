@@ -5,6 +5,7 @@ using model.effects.runner;
 using model.zones.runner;
 using model.zones;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace model.cards.runner
 {
@@ -23,7 +24,7 @@ namespace model.cards.runner
             private Card card;
             private Ability pop;
             private Game game;
-
+            IEnumerable<string> IEffect.Graphics => new string[] {};
             public SportsHopperActivation(Card card)
             {
                 this.card = card;
