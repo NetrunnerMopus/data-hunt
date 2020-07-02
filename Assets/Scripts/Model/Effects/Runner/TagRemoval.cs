@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.effects.runner
 {
     public class TagRemoval : IEffect
     {
         private int tags;
+        IEnumerable<string> IEffect.Graphics => new string[] { };
 
         public TagRemoval(int tags)
         {

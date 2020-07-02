@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.effects.runner
 {
     public class Gain : IEffect
     {
         private int credits;
+        IEnumerable<string> IEffect.Graphics => new string[] { "Images/UI/credit" };
 
         public Gain(int credits)
         {

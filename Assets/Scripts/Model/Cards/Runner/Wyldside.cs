@@ -3,6 +3,7 @@ using model.costs;
 using model.cards.types;
 using model.timing.runner;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace model.cards.runner
 {
@@ -19,6 +20,8 @@ namespace model.cards.runner
         private class WyldsideActivation : IEffect
         {
             private readonly WyldsideTrigger trigger = new WyldsideTrigger();
+
+            IEnumerable<string> IEffect.Graphics => new string[] {};
 
             async Task IEffect.Resolve(Game game)
             {

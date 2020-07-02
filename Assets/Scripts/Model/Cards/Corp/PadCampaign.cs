@@ -24,6 +24,7 @@ namespace model.cards.corp
 
         private class PadCampaignActivation : IEffect
         {
+            IEnumerable<string> IEffect.Graphics => new string[] {};
             async Task IEffect.Resolve(Game game)
             {
                game.corp.turn.turnBeginningTriggers.Add(new Gain(1));

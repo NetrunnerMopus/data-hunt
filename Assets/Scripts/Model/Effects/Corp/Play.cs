@@ -10,6 +10,8 @@ namespace model.effects.corp
         private Card card;
         private Zone playZone = new Zone("Play");
 
+        IEnumerable<string> IEffect.Graphics  => new string[] { "Images/Cards/" + card.FaceupArt };
+
         public Play(Card card)
         {
             this.card = card;

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using model.cards;
 
 namespace model.effects.runner
@@ -6,6 +7,7 @@ namespace model.effects.runner
     public class TrashCorpCard : IEffect
     {
         private Card card;
+        IEnumerable<string> IEffect.Graphics => new string[] { "Images/UI/trash-can" };
 
         public TrashCorpCard(Card card)
         {

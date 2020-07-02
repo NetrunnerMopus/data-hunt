@@ -29,6 +29,7 @@ namespace model.cards.corp
         private class AdvancedAssemblyLinesActivation : IEffect
         {
             private readonly Card card;
+            IEnumerable<string> IEffect.Graphics => new string[] {};
 
             public AdvancedAssemblyLinesActivation(Card card)
             {
@@ -64,6 +65,8 @@ namespace model.cards.corp
         {
             private HashSet<IImpactObserver> observers = new HashSet<IImpactObserver>();
             private List<Card> installables = new List<Card>();
+
+            IEnumerable<string> IEffect.Graphics => new string[] {};
 
             async Task IEffect.Resolve(Game game)
             {

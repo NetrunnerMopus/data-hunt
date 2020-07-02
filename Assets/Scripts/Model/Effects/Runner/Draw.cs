@@ -8,6 +8,7 @@ namespace model.effects.runner
     {
         private int cards;
         private HashSet<IImpactObserver> observers = new HashSet<IImpactObserver>();
+        IEnumerable<string> IEffect.Graphics => new string[] { "Images/UI/card-draw" };
 
         public Draw(int cards)
         {

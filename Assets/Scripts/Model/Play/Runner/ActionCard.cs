@@ -15,7 +15,7 @@ namespace model.play.runner
         private IPilot pilot;
         public readonly Ability draw;
         public readonly Ability credit;
-        private TaskCompletionSource<bool> actionTaking;
+        private TaskCompletionSource<Ability> actionTaking;
         private ActionPermission permission = new ActionPermission();
         public List<Ability> potentialActions = new List<Ability>();
 
@@ -51,16 +51,16 @@ namespace model.play.runner
             return run;
         }
 
-        async public Task TakeAction()
+        async public Task<Ability> TakeAction()
         {
             permission.Grant();
-            actionTaking = new TaskCompletionSource<bool>();
-            await actionTaking.Task;
+            actionTaking = new TaskCompletionSource<Ability>();
+            return await actionTaking.Task;
         }
 
-        void IResolutionObserver.NotifyResolved()
+        void IResolutionObserver.NotifyResolved(Ability ability)
         {
-            actionTaking.SetResult(true);
+            actionTaking.SetResult(ability);
         }
 
         void IZoneAdditionObserver.NotifyCardAdded(Card card)
