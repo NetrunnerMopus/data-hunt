@@ -9,7 +9,8 @@ namespace model.timing.corp
     {
         private Game game;
         public readonly RezWindow rezWindow = new RezWindow();
-        public List<IEffect> turnBeginningTriggers = new List<IEffect>();
+        public bool Active { get; private set; } = false;
+        private List<IEffect> turnBeginningTriggers = new List<IEffect>();
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
         private HashSet<ICorpActionObserver> actions = new HashSet<ICorpActionObserver>();
 
@@ -20,15 +21,17 @@ namespace model.timing.corp
 
         async public Task Start()
         {
+            Active = true;
             await DrawPhase();
             await ActionPhase();
             await DiscardPhase();
+            Active = false;
         }
 
         async private Task DrawPhase()
         {
             Step(1, 1);
-            game.corp.clicks.Gain(3);
+            game.corp.clicks.Replenish();
             Step(1, 2);
             Task paid = OpenPaidWindow();
             Task rez = OpenRezWindow();
@@ -151,6 +154,11 @@ namespace model.timing.corp
             {
                 observer.NotifyStep("Corp turn", phase, step);
             }
+        }
+
+        public void WhenBegins(IEffect effect)
+        {
+            turnBeginningTriggers.Add(effect);
         }
 
         public void ObserveSteps(IStepObserver observer)

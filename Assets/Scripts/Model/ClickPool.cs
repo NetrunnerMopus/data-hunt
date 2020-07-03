@@ -5,9 +5,15 @@ namespace model
 {
     public class ClickPool
     {
+        public int NextReplenishment { get; private set; }
         private int allotted = 0;
         private int spent = 0;
         private HashSet<IClickObserver> observers = new HashSet<IClickObserver>();
+
+        public ClickPool(int defaultReplenishment)
+        {
+            NextReplenishment = defaultReplenishment;
+        }
 
         public void Spend(int clicks)
         {
@@ -22,7 +28,12 @@ namespace model
             }
         }
 
-        public void Gain(int clicks)
+        public void Replenish()
+        {
+            Gain(NextReplenishment);
+        }
+
+        private void Gain(int clicks)
         {
             allotted += clicks;
             Update();

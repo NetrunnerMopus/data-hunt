@@ -7,6 +7,7 @@ namespace model.timing.runner
     public class Turn
     {
         private Game game;
+        public bool Active { get; private set; } = false;
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
         private HashSet<IRunnerTurnStartObserver> starts = new HashSet<IRunnerTurnStartObserver>();
         private HashSet<IRunnerActionObserver> actions = new HashSet<IRunnerActionObserver>();
@@ -18,14 +19,16 @@ namespace model.timing.runner
 
         async public Task Start()
         {
+            Active = true;
             await ActionPhase();
             await DiscardPhase();
+            Active = false;
         }
 
         async private Task ActionPhase()
         {
             Step(1, 1);
-            game.runner.clicks.Gain(4);
+            game.runner.clicks.Replenish();
             Step(1, 2);
             await OpenPaidWindow();
             OpenRezWindow();

@@ -29,7 +29,7 @@ namespace view.gui
         {
             while (clicks.Count < total)
             {
-                clicks.Add(ClickBox.RenderClickBox(transform));
+                clicks.Add(ClickBox.RenderClickBox(gameObject));
             }
         }
 

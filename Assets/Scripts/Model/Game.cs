@@ -37,7 +37,7 @@ namespace model
                 this
             );
             var actionCard = new play.corp.ActionCard(zones, player.pilot);
-            var clicks = new ClickPool();
+            var clicks = new ClickPool(3);
             var credits = new CreditPool();
             return new Corp(player.pilot, turn, paidWindow, actionCard, zones, clicks, credits, player.deck.identity);
         }
@@ -54,7 +54,7 @@ namespace model
                 new zones.runner.Rig(this, player.pilot),
                 new zones.runner.Score(this)
             );
-            var clicks = new ClickPool();
+            var clicks = new ClickPool(4);
             var credits = new CreditPool();
             return new Runner(player.pilot, turn, paidWindow, actionCard, 0, zones, clicks, credits, player.deck.identity);
         }
