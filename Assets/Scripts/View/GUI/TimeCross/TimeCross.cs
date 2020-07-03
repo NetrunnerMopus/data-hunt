@@ -18,8 +18,7 @@ namespace view.gui.timecross
             // game.corp.clicks.Observe(pastTrack);
             // game.runner.clicks.Observe(pastTrack);
             futureTrack = GameObject.Find("Future").AddComponent<FutureTrack>();
-            game.corp.clicks.Observe(futureTrack);
-            game.runner.clicks.Observe(futureTrack);
+            futureTrack.Wire(game);
         }
 
         void IRunnerActionObserver.NotifyActionTaking()

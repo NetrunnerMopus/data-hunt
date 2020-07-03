@@ -57,7 +57,7 @@ namespace view.gui.timecross
 
         private void Render()
         {
-            var click = ClickBox.RenderClickBox(transform);
+            var click = ClickBox.RenderClickBox(gameObject);
             var aspect = click.AddComponent<AspectRatioFitter>();
             aspect.aspectRatio = 1;
             aspect.aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
