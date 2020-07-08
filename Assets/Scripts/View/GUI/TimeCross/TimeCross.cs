@@ -10,15 +10,16 @@ namespace view.gui.timecross
         private PastTrack pastTrack;
         private FutureTrack futureTrack;
 
-        public TimeCross(Game game)
+        public TimeCross(Game game, DayNightCycle dayNight)
         {
             pastTrack = GameObject.Find("Past").AddComponent<PastTrack>();
+            pastTrack.DayNight = dayNight;
             game.corp.turn.ObserveActions(pastTrack);
             game.runner.turn.ObserveActions(pastTrack);
             // game.corp.clicks.Observe(pastTrack);
             // game.runner.clicks.Observe(pastTrack);
             futureTrack = GameObject.Find("Future").AddComponent<FutureTrack>();
-            futureTrack.Wire(game);
+            futureTrack.Wire(game, dayNight);
         }
 
         void IRunnerActionObserver.NotifyActionTaking()
