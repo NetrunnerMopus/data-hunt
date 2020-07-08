@@ -16,8 +16,6 @@ namespace view.gui.timecross
             pastTrack.DayNight = dayNight;
             game.corp.turn.ObserveActions(pastTrack);
             game.runner.turn.ObserveActions(pastTrack);
-            // game.corp.clicks.Observe(pastTrack);
-            // game.runner.clicks.Observe(pastTrack);
             futureTrack = GameObject.Find("Future").AddComponent<FutureTrack>();
             futureTrack.Wire(game, dayNight);
         }
