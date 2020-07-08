@@ -9,28 +9,26 @@ namespace view.gui.timecross
 {
     public class FutureTrack : MonoBehaviour
     {
-        private HorizontalLayoutGroup horizontal;
-        private FutureTurn currentTurn;
-        private FutureTurn nextTurn;
-
         void Awake()
         {
-            horizontal = gameObject.AddComponent<HorizontalLayoutGroup>();
+            var horizontal = gameObject.AddComponent<HorizontalLayoutGroup>();
             horizontal.childAlignment = TextAnchor.MiddleLeft;
             horizontal.childControlWidth = true;
             horizontal.childControlHeight = true;
             horizontal.childForceExpandWidth = false;
             horizontal.childForceExpandHeight = false;
-            currentTurn = new GameObject("Current turn").AddComponent<FutureTurn>();
-            currentTurn.gameObject.AttachTo(gameObject);
-            nextTurn = new GameObject("Next turn").AddComponent<FutureTurn>();
-            nextTurn.gameObject.AttachTo(gameObject);
         }
 
-        public void Wire(Game game)
+        public void Wire(Game game, DayNightCycle dayNight)
         {
+            var currentTurn = new GameObject("Current turn").AddComponent<FutureTurn>();
+            currentTurn.gameObject.AttachTo(gameObject);
             game.CurrentTurn += currentTurn.DisplayCurrent;
+            currentTurn.dayNight = dayNight;
+            var nextTurn = new GameObject("Next turn").AddComponent<FutureTurn>();
+            nextTurn.gameObject.AttachTo(gameObject);
             game.NextTurn += nextTurn.DisplayNext;
+            nextTurn.dayNight = dayNight;
         }
     }
 
@@ -39,7 +37,7 @@ namespace view.gui.timecross
         private HorizontalLayoutGroup horizontal;
         private List<GameObject> renderedClicks = new List<GameObject>();
         private Image background;
-        private DayNightCycle dayNight = new DayNightCycle();
+        public DayNightCycle dayNight { private get; set; }
         private ClickPool monitoredClicks;
 
         void Awake()

@@ -14,7 +14,7 @@ namespace view.gui.timecross
         private Sprite clickSprite;
         private HorizontalLayoutGroup horizontal;
         private List<GameObject> renderedClicks = new List<GameObject>();
-        private DayNightCycle dayNight = new DayNightCycle();
+        public DayNightCycle DayNight { private get; set; }
 
         void Awake()
         {
@@ -81,7 +81,7 @@ namespace view.gui.timecross
         {
             var envelope = new GameObject("Corp envelope");
             var background = envelope.AddComponent<Image>();
-            dayNight.Paint(background, Side.CORP);
+            DayNight.Paint(background, Side.CORP);
             envelope.AttachTo(gameObject);
             RenderAction(ability, envelope);
             Expand(envelope);
@@ -113,7 +113,7 @@ namespace view.gui.timecross
         {
             var envelope = new GameObject("Runner envelope");
             var background = envelope.AddComponent<Image>();
-            dayNight.Paint(background, Side.RUNNER);
+            DayNight.Paint(background, Side.RUNNER);
             envelope.AttachTo(gameObject);
             RenderAction(ability, envelope);
             Expand(envelope);
