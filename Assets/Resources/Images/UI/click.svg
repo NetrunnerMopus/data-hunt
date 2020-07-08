@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+              "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" >
+  <g transform="skewX(-12)">
+    <circle id="outer-case" cx="50%" cy="50%" r="40" stroke="white" stroke-width="4%" fill="none" />
+    <circle id="inner-case" cx="50%" cy="50%" r="32" stroke="white" stroke-width="2.5%" fill="none" />
+    <polygon id="12-hand" points="48,43 50,43 52,43 50,10" fill="white" />
+    <polygon id="8-hand" points="44,53 46,57 20,80" fill="white" />
+    <circle id="outer-dial" cx="50%" cy="50%" r="7" stroke="white" stroke-width="2%" fill="none" />
+    <circle id="inner-dial" cx="50%" cy="50%" r="4" fill="white" />
+  </g>
+</svg>

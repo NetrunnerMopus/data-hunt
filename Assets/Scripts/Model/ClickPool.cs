@@ -7,8 +7,10 @@ namespace model
     {
         public int NextReplenishment { get; private set; }
         private int allotted = 0;
-        private int spent = 0;
+        public int Spent { get; private set; } = 0;
+        public int Remaining { get { return allotted - Spent; } }
         private HashSet<IClickObserver> observers = new HashSet<IClickObserver>();
+        public event EventHandler<ClickPool> Changed = delegate { };
 
         public ClickPool(int defaultReplenishment)
         {
@@ -17,9 +19,9 @@ namespace model
 
         public void Spend(int clicks)
         {
-            if (Remaining() >= clicks)
+            if (Remaining >= clicks)
             {
-                spent += clicks;
+                Spent += clicks;
                 Update();
             }
             else
@@ -55,27 +57,23 @@ namespace model
         public void Reset()
         {
             allotted = 0;
-            spent = 0;
+            Spent = 0;
             Update();
         }
 
         private void Update()
         {
+            Changed(this, this);
             foreach (var observer in observers)
             {
-                observer.NotifyClicks(spent, Remaining());
+                observer.NotifyClicks(Spent, Remaining);
             }
-        }
-
-        public int Remaining()
-        {
-            return allotted - spent;
         }
 
         public void Observe(IClickObserver observer)
         {
             observers.Add(observer);
-            observer.NotifyClicks(spent, Remaining());
+            observer.NotifyClicks(Spent, Remaining);
         }
     }
 

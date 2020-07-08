@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 
 namespace view.gui
 {
     public static class ClickBox
     {
-        private static Sprite CLICK_SPRITE = Resources.LoadAll<Sprite>("Images/UI/symbols").Where(r => r.name == "symbols_click").First();
+        private static Sprite CLICK_SPRITE = Resources.Load<Sprite>("Images/UI/click");
 
         public static GameObject RenderClickBox(GameObject parent)
         {
@@ -14,6 +13,7 @@ namespace view.gui
             var image = click.AddComponent<Image>();
             image.sprite = CLICK_SPRITE;
             image.preserveAspect = true;
+            image.color = Color.white;
             click.layer = 5;
             click.AttachTo(parent);
             return click;

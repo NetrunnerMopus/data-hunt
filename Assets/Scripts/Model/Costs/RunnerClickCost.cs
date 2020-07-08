@@ -21,7 +21,7 @@ namespace model.costs
 
         bool ICost.Payable(Game game)
         {
-            return game.runner.clicks.Remaining() >= clicks;
+            return game.runner.clicks.Remaining >= clicks;
         }
 
         async Task ICost.Pay(Game game)
