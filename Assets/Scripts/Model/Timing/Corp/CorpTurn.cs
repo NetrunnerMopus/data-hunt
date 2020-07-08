@@ -5,21 +5,23 @@ using System.Threading.Tasks;
 
 namespace model.timing.corp
 {
-    public class Turn
+    public class CorpTurn : ITurn
     {
         private Game game;
         public readonly RezWindow rezWindow = new RezWindow();
         public bool Active { get; private set; } = false;
+        ClickPool ITurn.Clicks => game.corp.clicks;
+        Side ITurn.Side => Side.CORP;
         private List<IEffect> turnBeginningTriggers = new List<IEffect>();
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
         private HashSet<ICorpActionObserver> actions = new HashSet<ICorpActionObserver>();
 
-        public Turn(Game game)
+        public CorpTurn(Game game)
         {
             this.game = game;
         }
 
-        async public Task Start()
+        async Task ITurn.Start()
         {
             Active = true;
             await DrawPhase();
@@ -95,7 +97,7 @@ namespace model.timing.corp
 
         async private Task TakeActions()
         {
-            while (game.corp.clicks.Remaining() > 0)
+            while (game.corp.clicks.Remaining > 0)
             {
                 await TakeAction();
             }

@@ -4,20 +4,22 @@ using model.play;
 
 namespace model.timing.runner
 {
-    public class Turn
+    public class RunnerTurn: ITurn
     {
         private Game game;
         public bool Active { get; private set; } = false;
+        ClickPool ITurn.Clicks => game.runner.clicks;
+        Side ITurn.Side => Side.RUNNER;
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
         private HashSet<IRunnerTurnStartObserver> starts = new HashSet<IRunnerTurnStartObserver>();
         private HashSet<IRunnerActionObserver> actions = new HashSet<IRunnerActionObserver>();
 
-        public Turn(Game game)
+        public RunnerTurn(Game game)
         {
             this.game = game;
         }
 
-        async public Task Start()
+        async Task ITurn.Start()
         {
             Active = true;
             await ActionPhase();
@@ -72,7 +74,7 @@ namespace model.timing.runner
 
         async private Task TakeActions()
         {
-            while (game.runner.clicks.Remaining() > 0)
+            while (game.runner.clicks.Remaining > 0)
             {
                 Task<Ability> actionTaking = game.runner.actionCard.TakeAction();
                 foreach (var observer in actions)

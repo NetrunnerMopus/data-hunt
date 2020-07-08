@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using model;
+using model.timing;
+using System;
 
 namespace view.gui.timecross
 {
@@ -15,49 +17,76 @@ namespace view.gui.timecross
         {
             horizontal = gameObject.AddComponent<HorizontalLayoutGroup>();
             horizontal.childAlignment = TextAnchor.MiddleLeft;
-            horizontal.childControlWidth = false;
+            horizontal.childControlWidth = true;
             horizontal.childControlHeight = true;
             horizontal.childForceExpandWidth = false;
-            horizontal.childForceExpandHeight = true;
+            horizontal.childForceExpandHeight = false;
             currentTurn = new GameObject("Current turn").AddComponent<FutureTurn>();
             currentTurn.gameObject.AttachTo(gameObject);
             nextTurn = new GameObject("Next turn").AddComponent<FutureTurn>();
             nextTurn.gameObject.AttachTo(gameObject);
         }
 
-        public void Wire(Game game) {
-            game.ObserveTurns(this);
-        }
-
-        void NotifyCurrentTurn(ITurn turn)
+        public void Wire(Game game)
         {
-            currentTurn.Display(turn);
-        }
-
-        void NotifyNextTurn(ITurn turn)
-        {
-            nextTurn.Display(turn);
+            game.CurrentTurn += currentTurn.DisplayCurrent;
+            game.NextTurn += nextTurn.DisplayNext;
         }
     }
 
-    class FutureTurn : MonoBehaviour, IClickObserver
+    class FutureTurn : MonoBehaviour
     {
         private HorizontalLayoutGroup horizontal;
+        private List<GameObject> renderedClicks = new List<GameObject>();
+        private Image background;
+        private DayNightCycle dayNight = new DayNightCycle();
+        private ClickPool monitoredClicks;
 
         void Awake()
         {
             horizontal = gameObject.AddComponent<HorizontalLayoutGroup>();
             horizontal.childAlignment = TextAnchor.MiddleLeft;
-            horizontal.childControlWidth = false;
+            horizontal.childControlWidth = true;
             horizontal.childControlHeight = true;
             horizontal.childForceExpandWidth = false;
             horizontal.childForceExpandHeight = true;
+            background = gameObject.AddComponent<Image>();
         }
-        private List<GameObject> renderedClicks = new List<GameObject>();
 
-        void IClickObserver.NotifyClicks(int spent, int remaining)
+        internal void DisplayCurrent(object sender, ITurn turn)
         {
-            var desired = remaining;
+            dayNight.Paint(background, turn.Side);
+            TrackClicks(turn, UpdateRemainingClicks);
+        }
+
+        internal void DisplayNext(object sender, ITurn turn)
+        {
+            dayNight.Paint(background, turn.Side);
+            TrackClicks(turn, UpdateNextClicks);
+        }
+
+        private void TrackClicks(ITurn turn, EventHandler<ClickPool> update)
+        {
+            if (monitoredClicks != null)
+            {
+                monitoredClicks.Changed -= update;
+            }
+            monitoredClicks = turn.Clicks;
+            monitoredClicks.Changed += update;
+            update.Invoke(monitoredClicks, monitoredClicks);
+        }
+
+        void UpdateRemainingClicks(object sender, ClickPool clicks)
+        {
+            var desired = clicks.Remaining;
+            AddMissing(desired);
+            RemoveExtra(desired);
+        }
+
+
+        void UpdateNextClicks(object sender, ClickPool clicks)
+        {
+            var desired = clicks.NextReplenishment;
             AddMissing(desired);
             RemoveExtra(desired);
         }
@@ -86,9 +115,9 @@ namespace view.gui.timecross
         private void Render()
         {
             var click = ClickBox.RenderClickBox(gameObject);
-            var aspect = click.AddComponent<AspectRatioFitter>();
-            aspect.aspectRatio = 1;
-            aspect.aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
+            // var aspect = click.AddComponent<AspectRatioFitter>();
+            // aspect.aspectRatio = 1;
+            // aspect.aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
             horizontal.CalculateLayoutInputHorizontal();
             horizontal.CalculateLayoutInputVertical();
             horizontal.SetLayoutHorizontal();
