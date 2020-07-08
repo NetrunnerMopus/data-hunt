@@ -35,8 +35,8 @@ public class GameConfig : MonoBehaviour
             )
         );
         var game = new Game(corpPlayer, runnerPlayer, new Shuffling(10006));
-        var flowView = new GameFlowView();
         var timeCross = new TimeCross(game);
+        var flowView = new GameFlowView();
         var flowLog = new GameFlowLog();
         flowView.Display(board, game);
         flowLog.Display(game);
