@@ -1,68 +1,38 @@
 ﻿using controller;
-using model;
 using model.timing;
-using UnityEngine;
-using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class PaidWindowView : IPaidWindowObserver
+    internal class PaidWindowView : IPaidWindowObserver
     {
-        private GameObject gameObject;
-        private RectTransform rect;
         private PaidWindow window;
-        public DropZone Sink { get; private set; }
+        private PaidWindowPass pass;
+        private DropZone paidChoice;
 
-        public PaidWindowView(GameObject gameObject, RectTransform rect, PaidWindow window)
+        public PaidWindowView(PaidWindow window, PaidWindowPass pass, DropZone paidChoice)
         {
-            this.gameObject = gameObject;
-            this.rect = rect;
             this.window = window;
-            var pass = CreatePass(gameObject).AddComponent<PaidWindowPass>();
-            Sink = CreateSink(gameObject).AddComponent<DropZone>();
-            pass.Represent(window, Sink);
-            gameObject.SetActive(false);
+            this.pass = pass;
+            this.paidChoice = paidChoice;
+            pass.Represent(window, paidChoice);
+            SetActive(false);
             window.ObserveWindow(this);
         }
 
-        private GameObject CreatePass(GameObject parent)
+        private void SetActive(bool active)
         {
-            var pass = new GameObject("Pass");
-            pass.AttachTo(parent);
-            var image = pass.AddComponent<Image>();
-            image.sprite = Resources.Load<Sprite>("Images/UI/hourglass");
-            image.preserveAspect = true;
-            var rectangle = image.rectTransform;
-            rectangle.anchorMin = Vector2.zero;
-            rectangle.anchorMax = new Vector2(0.3f, 1.0f);
-            rectangle.offsetMin = Vector2.zero;
-            rectangle.offsetMax = Vector2.zero;
-            return pass;
-        }
-
-        private GameObject CreateSink(GameObject parent)
-        {
-            var sink = new GameObject("Sink");
-            sink.AttachTo(parent);
-            var image = sink.AddComponent<Image>();
-            image.sprite = Resources.Load<Sprite>("Images/UI/paid");
-            image.preserveAspect = true;
-            var rectangle = image.rectTransform;
-            rectangle.anchorMin = new Vector2(0.7f, 0.0f);
-            rectangle.anchorMax = Vector2.one;
-            rectangle.offsetMin = Vector2.zero;
-            rectangle.offsetMax = Vector2.zero;
-            return sink;
+            pass.gameObject.SetActive(active);
+            paidChoice.gameObject.SetActive(active);
         }
 
         void IPaidWindowObserver.NotifyPaidWindowClosed(PaidWindow window)
         {
-            gameObject.SetActive(false);
+            SetActive(false);
         }
 
         void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
         {
-            gameObject.SetActive(true);
+            SetActive(true);
         }
     }
 }

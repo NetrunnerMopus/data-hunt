@@ -35,11 +35,8 @@ public class GameConfig : MonoBehaviour
             )
         );
         var game = new Game(corpPlayer, runnerPlayer, new Shuffling(10006));
-        var dayNight = new DayNightCycle();
-        var timeCross = new TimeCross(game, dayNight);
         var flowView = new GameFlowView();
         var flowLog = new GameFlowLog();
-        dayNight.Wire(game);
         flowView.Display(board, game);
         flowLog.Display(game);
         var corpView = new CorpViewConfig().Display(game, parts);

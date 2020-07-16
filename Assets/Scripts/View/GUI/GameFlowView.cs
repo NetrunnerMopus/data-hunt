@@ -1,45 +1,31 @@
 ﻿using UnityEngine;
 using model;
 using model.timing;
+using controller;
+using view.gui.timecross;
 
 namespace view.gui
 {
     public class GameFlowView
     {
-        private readonly float clickRowHeightRatio = 0.20f;
-        private GameObject flow;
-        public PaidWindowView PaidWindow { get; private set; }
+        public DropZone PaidChoice { get; private set; }
+        public TimeCross TimeCross { get; private set; }
 
         public void Display(GameObject board, Game game)
         {
-            flow = CreateFlow();
-            PaidWindow = CreatePaidWindow(game.runner.paidWindow);
+            var dayNight = new DayNightCycle();
+            dayNight.Wire(game);
+            TimeCross = new TimeCross(game, dayNight);
+            WirePaidWindow(game.runner.paidWindow);
             var gameFinish = CreateGameFinish(game);
-            flow.AttachTo(board);
             gameFinish.AttachTo(board);
         }
 
-        private GameObject CreateFlow()
+        private PaidWindowView WirePaidWindow(PaidWindow window)
         {
-            var view = new GameObject("Game flow");
-            var rectangle = view.AddComponent<RectTransform>();
-            rectangle.anchorMin = new Vector2(0.30f, 0.40f);
-            rectangle.anchorMax = new Vector2(0.70f, 0.60f);
-            rectangle.offsetMin = Vector2.zero;
-            rectangle.offsetMax = Vector2.zero;
-            return view;
-        }
-
-        private PaidWindowView CreatePaidWindow(PaidWindow window)
-        {
-            var view = new GameObject("Paid window");
-            var rectangle = view.AddComponent<RectTransform>();
-            rectangle.anchorMin = new Vector2(0.0f, clickRowHeightRatio);
-            rectangle.anchorMax = new Vector2(1.0f, 1.0f - clickRowHeightRatio);
-            rectangle.offsetMin = Vector2.zero;
-            rectangle.offsetMax = Vector2.zero;
-            view.AttachTo(flow);
-            return new PaidWindowView(view, rectangle, window);
+            var pass = GameObject.Find("Pass").AddComponent<PaidWindowPass>();
+            PaidChoice = GameObject.Find("Paid choice").AddComponent<DropZone>();
+            return new PaidWindowView(window, pass, PaidChoice);
         }
 
         private GameObject CreateGameFinish(Game game)

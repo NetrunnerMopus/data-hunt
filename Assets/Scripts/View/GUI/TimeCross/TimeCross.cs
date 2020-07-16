@@ -1,35 +1,22 @@
 ﻿using UnityEngine;
 using model;
-using model.timing.runner;
-using model.play;
 
 namespace view.gui.timecross
 {
-    public class TimeCross : IRunnerActionObserver
+    public class TimeCross
     {
-        private PastTrack pastTrack;
-        private FutureTrack futureTrack;
+        public PresentBox PresentBox { get; private set; }
 
         public TimeCross(Game game, DayNightCycle dayNight)
         {
-            pastTrack = GameObject.Find("Past").AddComponent<PastTrack>();
+            var pastTrack = GameObject.Find("Past").AddComponent<PastTrack>();
             pastTrack.DayNight = dayNight;
             game.corp.turn.ObserveActions(pastTrack);
             game.runner.turn.ObserveActions(pastTrack);
-            futureTrack = GameObject.Find("Future").AddComponent<FutureTrack>();
+            var futureTrack = GameObject.Find("Future").AddComponent<FutureTrack>();
             futureTrack.Wire(game, dayNight);
+            PresentBox = GameObject.Find("Present").AddComponent<PresentBox>();
+            PresentBox.Wire(game, dayNight, futureTrack);
         }
-
-        void IRunnerActionObserver.NotifyActionTaking()
-        {
-            throw new System.NotImplementedException();
-        }
-
-
-        void IRunnerActionObserver.NotifyActionTaken(Ability ability)
-        {
-            throw new System.NotImplementedException();
-        }
-
     }
 }
