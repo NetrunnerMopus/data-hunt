@@ -9,6 +9,8 @@ namespace view.gui.timecross
 {
     public class FutureTrack : MonoBehaviour
     {
+        public FutureTurn CurrentTurn { get; private set; }
+
         void Awake()
         {
             var horizontal = gameObject.AddComponent<HorizontalLayoutGroup>();
@@ -21,10 +23,10 @@ namespace view.gui.timecross
 
         public void Wire(Game game, DayNightCycle dayNight)
         {
-            var currentTurn = new GameObject("Current turn").AddComponent<FutureTurn>();
-            currentTurn.gameObject.AttachTo(gameObject);
-            game.CurrentTurn += currentTurn.DisplayCurrent;
-            currentTurn.dayNight = dayNight;
+            CurrentTurn = new GameObject("Current turn").AddComponent<FutureTurn>();
+            CurrentTurn.gameObject.AttachTo(gameObject);
+            game.CurrentTurn += CurrentTurn.DisplayCurrent;
+            CurrentTurn.dayNight = dayNight;
             var nextTurn = new GameObject("Next turn").AddComponent<FutureTurn>();
             nextTurn.gameObject.AttachTo(gameObject);
             game.NextTurn += nextTurn.DisplayNext;
@@ -32,7 +34,7 @@ namespace view.gui.timecross
         }
     }
 
-    class FutureTurn : MonoBehaviour
+    public class FutureTurn : MonoBehaviour
     {
         private HorizontalLayoutGroup horizontal;
         private List<GameObject> renderedClicks = new List<GameObject>();
@@ -76,17 +78,18 @@ namespace view.gui.timecross
 
         void UpdateRemainingClicks(object sender, ClickPool clicks)
         {
-            var desired = clicks.Remaining;
-            AddMissing(desired);
-            RemoveExtra(desired);
+            UpdateClicks(clicks.Remaining);
         }
-
 
         void UpdateNextClicks(object sender, ClickPool clicks)
         {
-            var desired = clicks.NextReplenishment;
-            AddMissing(desired);
-            RemoveExtra(desired);
+            UpdateClicks(clicks.NextReplenishment);
+        }
+
+        public void UpdateClicks(int desiredClicks)
+        {
+            AddMissing(desiredClicks);
+            RemoveExtra(desiredClicks);
         }
 
         private void AddMissing(int desired)
@@ -113,9 +116,6 @@ namespace view.gui.timecross
         private void Render()
         {
             var click = ClickBox.RenderClickBox(gameObject);
-            // var aspect = click.AddComponent<AspectRatioFitter>();
-            // aspect.aspectRatio = 1;
-            // aspect.aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
             horizontal.CalculateLayoutInputHorizontal();
             horizontal.CalculateLayoutInputVertical();
             horizontal.SetLayoutHorizontal();
