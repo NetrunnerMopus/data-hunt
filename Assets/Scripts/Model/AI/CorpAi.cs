@@ -28,7 +28,7 @@ namespace model.ai
     {
         private Game game;
         private zones.corp.Zones zones;
-        private Task Thinking() => Task.Delay(2500);
+        private Task Thinking() => Task.Delay(1700);
         private HashSet<Ability> actions = new HashSet<Ability>();
         private HashSet<Ability> legalActions = new HashSet<Ability>();
         private HashSet<Ability> paidAbilities = new HashSet<Ability>();
