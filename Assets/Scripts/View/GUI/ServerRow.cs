@@ -22,7 +22,7 @@ namespace view.gui
             layout.childControlHeight = true;
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = true;
-            layout.childAlignment = TextAnchor.MiddleRight;
+            layout.childAlignment = TextAnchor.UpperLeft;
             layout.spacing = 4;
             zones.ObserveRemotes(this);
         }
