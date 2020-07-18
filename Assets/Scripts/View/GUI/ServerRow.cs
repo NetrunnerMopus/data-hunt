@@ -32,7 +32,6 @@ namespace view.gui
             var serverObject = new GameObject(server.Zone.Name);
             var box = new ServerBox(serverObject, server, parts);
             serverObject.transform.SetParent(gameObject.transform, false);
-            serverObject.transform.SetAsFirstSibling();
             LayoutRebuilder.ForceRebuildLayoutImmediate(layout.GetComponent<RectTransform>());
             boxesPerServer[server] = box;
             return box;
