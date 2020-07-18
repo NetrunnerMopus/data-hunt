@@ -22,6 +22,7 @@ namespace view.gui
             image.sprite = Resources.Load<Sprite>("Images/UI/9slice-solid-white");
             image.type = Image.Type.Sliced;
             image.fillCenter = false;
+            image.color = new Color(1f, 1f, 1f, 0f);
             Printer = parts.Print(gameObject);
         }
 
