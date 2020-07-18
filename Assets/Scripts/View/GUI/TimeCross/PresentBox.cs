@@ -3,14 +3,19 @@ using UnityEngine.UI;
 using model;
 using model.play;
 using model.timing.runner;
-using controller;
+using model.zones.runner;
+using model.zones.corp;
+using model.timing.corp;
 
 namespace view.gui.timecross
 {
-    public class PresentBox : MonoBehaviour, IRunnerActionObserver
+    public class PresentBox : MonoBehaviour, IRunnerActionObserver, ICorpActionObserver, IGripDiscardObserver, IHqDiscardObserver
     {
-        public DropZone PresentClick { get; private set; }
+        public GameObject RunnerActionPhase { get; private set; }
+        private GameObject corpActionPhase;
         public GameObject BankCredit { get; private set; }
+        private GameObject discardPhase;
+        private Image discardBackground;
         private Game game;
         private DayNightCycle dayNight;
         private FutureTrack future;
@@ -20,30 +25,85 @@ namespace view.gui.timecross
             this.game = game;
             this.dayNight = dayNight;
             this.future = future;
-            var clickChoice = GameObject.Find("Click choice");
-            var background = clickChoice.GetComponent<Image>();
+            WireRunnerActionPhase(game);
+            WireCorpActionPhase(game);
+            WireDiscardPhase(game);
+        }
+
+        private void WireRunnerActionPhase(Game game)
+        {
+            RunnerActionPhase = GameObject.Find("Runner action phase");
+            var background = RunnerActionPhase.GetComponent<Image>();
             dayNight.Paint(background, Side.RUNNER);
-            PresentClick = clickChoice.AddComponent<DropZone>();
             BankCredit = GameObject.Find("Bank/Credit");
-            SetActions(false);
+            SetRunnerActions(false);
             game.runner.turn.ObserveActions(this);
         }
 
-        private void SetActions(bool takingAction)
+        private void SetRunnerActions(bool takingAction)
         {
-            PresentClick.gameObject.SetActive(takingAction);
+            RunnerActionPhase.gameObject.SetActive(takingAction);
             BankCredit.SetActive(takingAction);
+        }
+
+        private void WireCorpActionPhase(Game game)
+        {
+            corpActionPhase = GameObject.Find("Corp action phase");
+            var background = corpActionPhase.GetComponent<Image>();
+            dayNight.Paint(background, Side.CORP);
+            corpActionPhase.SetActive(false);
+            game.corp.turn.ObserveActions(this);
+        }
+
+        private void WireDiscardPhase(Game game)
+        {
+            discardPhase = GameObject.Find("Discard phase");
+            discardBackground = discardPhase.GetComponent<Image>();
+            discardPhase.SetActive(false);
+            game.runner.zones.grip.ObserveDiscarding(this);
+            game.corp.zones.hq.ObserveDiscarding(this);
         }
 
         void IRunnerActionObserver.NotifyActionTaking()
         {
-            SetActions(true);
+            SetRunnerActions(true);
             future.CurrentTurn.UpdateClicks(game.runner.clicks.Remaining - 1);
         }
 
         void IRunnerActionObserver.NotifyActionTaken(Ability ability)
         {
-            SetActions(false);
+            SetRunnerActions(false);
+        }
+
+
+        void ICorpActionObserver.NotifyActionTaking()
+        {
+            corpActionPhase.SetActive(true);
+            future.CurrentTurn.UpdateClicks(game.corp.clicks.Remaining - 1);
+        }
+
+        void ICorpActionObserver.NotifyActionTaken(Ability ability)
+        {
+            corpActionPhase.SetActive(false);
+        }
+
+
+        void IGripDiscardObserver.NotifyDiscarding(bool discarding)
+        {
+            discardPhase.SetActive(discarding);
+            if (discarding)
+            {
+                dayNight.Paint(discardBackground, Side.RUNNER);
+            }
+        }
+
+        void IHqDiscardObserver.NotifyDiscarding(bool discarding)
+        {
+            discardPhase.SetActive(discarding);
+            if (discarding)
+            {
+                dayNight.Paint(discardBackground, Side.CORP);
+            }
         }
     }
 }

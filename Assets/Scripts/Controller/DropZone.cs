@@ -19,6 +19,7 @@ namespace controller
 
         public void StartDragging()
         {
+            originalColor = Image.color;
             Image.raycastTarget = true;
             droppableDragged = true;
             UpdateHighlights();
