@@ -6,13 +6,17 @@ using view.log;
 using model.player;
 using model.zones;
 using view;
-using view.gui.timecross;
 
 public class GameConfig : MonoBehaviour
 {
+
+    private GameMenu gameMenu;
+
     void Start()
     {
         var board = GameObject.Find("/Board");
+        gameMenu = board.GetComponentInChildren<GameMenu>();
+        gameMenu.Resume();
         var perception = new RunnerPerception();
         var zoom = new CardZoom(board, perception);
         var parts = new BoardParts(board, perception, zoom);
@@ -42,5 +46,13 @@ public class GameConfig : MonoBehaviour
         var corpView = new CorpViewConfig().Display(game, parts);
         new RunnerViewConfig().Display(game, flowView, corpView, parts);
         game.Start();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            gameMenu.Open();
+        }
     }
 }

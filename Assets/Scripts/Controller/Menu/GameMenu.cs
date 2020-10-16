@@ -3,14 +3,28 @@ using UnityEngine.SceneManagement;
 
 public class GameMenu : MonoBehaviour
 {
-    public void PlaySoloRunner()
+    void Update()
     {
-        SceneManager.LoadScene("Main", LoadSceneMode.Single);
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            Resume();
+        }
     }
 
-    public void QuitGame()
+    public void Open()
     {
-        Application.Quit();
+        gameObject.SetActive(true);
+        gameObject.transform.SetAsLastSibling();
+    }
+
+    public void Resume()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void Concede()
+    {
+        SceneManager.LoadScene("App Menu", LoadSceneMode.Single);
     }
 }
 
