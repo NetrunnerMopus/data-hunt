@@ -33,6 +33,8 @@ namespace view.gui
         void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
         {
             SetActive(true);
+            pass.transform.SetAsLastSibling();
+            paidChoice.transform.SetAsLastSibling();
         }
     }
 }
