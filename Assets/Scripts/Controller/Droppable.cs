@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using System.Linq;
 using view.gui;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 namespace controller
 {
@@ -14,6 +15,8 @@ namespace controller
         private Vector3 originalPosition;
         private int originalIndex;
         private CanvasGroup canvasGroup;
+        private GameObject placeholder;
+        private LayoutElement layoutElement;
 
         void Awake()
         {
@@ -25,6 +28,45 @@ namespace controller
                 canvasGroup = gameObject.AddComponent<CanvasGroup>();
             }
             canvasGroup.blocksRaycasts = true;
+            CreatePlaceholder();
+            layoutElement = gameObject.AddComponent<LayoutElement>();
+        }
+
+        private void CreatePlaceholder()
+        {
+            placeholder = new GameObject("Placeholder");
+            DrawPlaceholder();
+            InsertPlaceholder();
+            SizePlaceholder();
+        }
+
+        private void DrawPlaceholder()
+        {
+            var original = GetComponent<Image>();
+            var image = placeholder.AddComponent<Image>();
+            image.sprite = original.sprite;
+            var faded = Color.white * new Color(1, 1, 1, 0.4f);
+            image.color = faded;
+            image.preserveAspect = original.preserveAspect;
+            image.raycastTarget = false;
+        }
+
+        private void SizePlaceholder()
+        {
+            var original = GetComponent<RectTransform>();
+            var rect = placeholder.GetComponent<RectTransform>();
+            rect.anchorMin = original.anchorMin;
+            rect.anchorMax = original.anchorMax;
+            rect.offsetMin = original.offsetMin;
+            rect.offsetMax = original.offsetMax;
+            rect.rotation = original.rotation;
+        }
+
+        private void InsertPlaceholder()
+        {
+            placeholder.AttachTo(transform.parent.gameObject);
+            placeholder.transform.SetSiblingIndex(transform.GetSiblingIndex() + 1);
+            placeholder.gameObject.SetActive(false);
         }
 
         public void Represent(IInteractive interactive)
@@ -64,6 +106,8 @@ namespace controller
         {
             originalPosition = transform.position;
             BringToFront(eventData);
+            placeholder.SetActive(true);
+            layoutElement.ignoreLayout = true;
             canvasGroup.blocksRaycasts = false;
             foreach (var interactive in interactives)
             {
@@ -109,6 +153,8 @@ namespace controller
         {
             transform.SetSiblingIndex(originalIndex);
             transform.position = originalPosition;
+            layoutElement.ignoreLayout = false;
+            placeholder.SetActive(false);
         }
 
         void OnDestroy()
