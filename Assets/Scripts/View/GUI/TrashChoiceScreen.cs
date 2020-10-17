@@ -109,8 +109,8 @@ namespace view.gui
             optionCard.transform.SetParent(optionsRow.transform);
             var dropZone = optionCard.AddComponent<DropZone>();
             bool legal = option.IsLegal(game);
-            var choice = new InteractiveChoice<ITrashOption>(option, legal, optionCard);
-            subject.AddComponent<Droppable>().Represent(choice, dropZone);
+            var choice = new InteractiveChoice<ITrashOption>(option, legal, dropZone, optionCard);
+            subject.AddComponent<Droppable>().Represent(choice);
             return choice;
         }
     }

@@ -11,19 +11,23 @@ namespace controller
         private Card card;
         private Grip grip;
         private Heap heap;
-        private IList<Toggle> toggles = new List<Toggle>();
+        private IList<Update> updates = new List<Update>();
+        public DropZone Activation { get; }
+        public bool Active { get; private set; }
 
-        public InteractiveDiscard(Card card, Game game)
+        public InteractiveDiscard(Card card, DropZone activation, Game game)
         {
             this.card = card;
+            this.Activation = activation;
+            this.Active = false;
             this.grip = game.runner.zones.grip;
             this.heap = game.runner.zones.heap;
             this.grip.ObserveDiscarding(this);
         }
 
-        void IInteractive.Observe(Toggle toggle)
+        void IInteractive.Observe(Update toggle)
         {
-            toggles.Add(toggle);
+            updates.Add(toggle);
         }
 
         async Task IInteractive.Interact()
@@ -39,9 +43,10 @@ namespace controller
 
         void IGripDiscardObserver.NotifyDiscarding(bool discarding)
         {
-            foreach (var toggle in toggles)
+            Active = discarding;
+            foreach (var update in updates)
             {
-                toggle(discarding);
+                update();
             }
         }
     }

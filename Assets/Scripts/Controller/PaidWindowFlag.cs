@@ -21,7 +21,7 @@ namespace controller
         {
             this.window = window;
             this.zone = zone;
-            gameObject.AddComponent<Highlight>().TurnOn();
+            gameObject.AddComponent<Highlight>();
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
         }
 

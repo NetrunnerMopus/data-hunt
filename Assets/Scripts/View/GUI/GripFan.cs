@@ -36,31 +36,17 @@ namespace view.gui
         {
             var visual = printer.Print(card);
             visuals[card] = visual;
+            var droppable = visual.AddComponent<Droppable>();
             var type = card.Type;
             if (type.Playable)
             {
-                visual
-                    .AddComponent<Droppable>()
-                    .Represent(
-                        new InteractiveAbility(game.runner.actionCard.Play(card), game),
-                        playZone
-                    );
+                droppable.Represent(new InteractiveAbility(game.runner.actionCard.Play(card), playZone, game));
             }
             if (type.Installable)
             {
-                visual
-                     .AddComponent<Droppable>()
-                     .Represent(
-                        new InteractiveAbility(game.runner.actionCard.Install(card), game),
-                        rigZone
-                     );
+                droppable.Represent(new InteractiveAbility(game.runner.actionCard.Install(card), rigZone, game));
             }
-            visual
-                .AddComponent<Droppable>()
-                .Represent(
-                    new InteractiveDiscard(card, game),
-                    heapZone
-                );
+            droppable.Represent(new InteractiveDiscard(card, heapZone, game));
         }
 
         void IZoneRemovalObserver.NotifyCardRemoved(Card card)

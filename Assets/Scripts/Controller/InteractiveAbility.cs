@@ -9,18 +9,22 @@ namespace controller
     {
         private Ability ability;
         private Game game;
-        private IList<Toggle> toggles = new List<Toggle>();
+        private IList<Update> updates = new List<Update>();
+        public DropZone Activation { get; }
+        public bool Active { get; private set; }
 
-        public InteractiveAbility(Ability ability, Game game)
+        public InteractiveAbility(Ability ability, DropZone activation, Game game)
         {
             this.ability = ability;
+            this.Activation = activation;
+            this.Active = ability.Usable;
             this.game = game;
             ability.ObserveUsability(this, game);
         }
 
-        void IInteractive.Observe(Toggle toggle)
+        void IInteractive.Observe(Update update)
         {
-            toggles.Add(toggle);
+            updates.Add(update);
         }
 
         async Task IInteractive.Interact()
@@ -35,9 +39,10 @@ namespace controller
 
         void IUsabilityObserver.NotifyUsable(bool usable, Ability ability)
         {
-            foreach (var toggle in toggles)
+            Active = usable;
+            foreach (var update in updates)
             {
-                toggle(usable);
+                update();
             }
         }
     }

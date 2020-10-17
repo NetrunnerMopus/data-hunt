@@ -23,8 +23,7 @@ namespace view.gui
             top
                 .AddComponent<Droppable>()
                 .Represent(
-                    new InteractiveAbility(game.runner.actionCard.draw, game),
-                    gripZone
+                    new InteractiveAbility(game.runner.actionCard.draw, gripZone, game)
                 );
             game.runner.zones.stack.zone.ObserveCount(gameObject.AddComponent<PileCount>());
         }

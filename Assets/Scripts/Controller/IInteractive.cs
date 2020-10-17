@@ -4,10 +4,12 @@ namespace controller
 {
     public interface IInteractive
     {
-        void Observe(Toggle toggle);
+        DropZone Activation { get; }
+        bool Active { get; }
+        void Observe(Update update);
         Task Interact();
         void UnobserveAll();
     }
 
-    public delegate void Toggle(bool active);
+    public delegate void Update();
 }

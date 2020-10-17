@@ -75,7 +75,6 @@ namespace view.gui.timecross
             SetRunnerActions(false);
         }
 
-
         void ICorpActionObserver.NotifyActionTaking()
         {
             corpActionPhase.SetActive(true);

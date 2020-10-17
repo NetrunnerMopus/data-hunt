@@ -99,8 +99,8 @@ namespace view.gui
         {
             var optionCard = optionsRow.Print(option);
             var dropZone = optionCard.AddComponent<DropZone>();
-            var choice = new InteractiveChoice<Card>(option, true, optionCard);
-            subject.AddComponent<Droppable>().Represent(choice, dropZone);
+            var choice = new InteractiveChoice<Card>(option, true, dropZone, optionCard);
+            subject.AddComponent<Droppable>().Represent(choice);
             return choice;
         }
     }

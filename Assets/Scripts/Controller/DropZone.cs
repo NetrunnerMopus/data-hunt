@@ -32,6 +32,10 @@ namespace controller
 
         public void StopDragging()
         {
+            if (Image == null)
+            {
+                return;
+            }
             Image.raycastTarget = false;
             droppableDragged = false;
             UpdateHighlights();
@@ -47,30 +51,16 @@ namespace controller
 
         void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
         {
+            highlight.Flash = Color.green;
             UpdateHighlights();
         }
 
         private void UpdateHighlights()
         {
-            if (droppableDragged)
+            if (highlight != null)
             {
-                HighlightAvailability();
+                highlight.enabled = droppableDragged;
             }
-            else
-            {
-                ResetHighlights();
-            }
-        }
-
-        private void HighlightAvailability()
-        {
-            highlight.TurnOn();
-        }
-
-        private void ResetHighlights()
-        {
-            highlight.TurnOff();
-            Color = originalColor;
         }
     }
 }
