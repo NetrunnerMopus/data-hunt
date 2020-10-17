@@ -41,7 +41,7 @@ namespace view.gui
         void IPaidAbilityObserver.NotifyPaidAbilityAvailable(Ability ability, Card source)
         {
             var droppable = visuals[source].AddComponent<Droppable>();
-            droppable.Represent(new InteractiveAbility(ability, game), paidWindowTrigger);
+            droppable.Represent(new InteractiveAbility(ability, paidWindowTrigger, game));
         }
     }
 }

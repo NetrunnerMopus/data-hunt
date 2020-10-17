@@ -9,30 +9,32 @@ namespace controller
     {
         private GameObject gameObject;
         private Game game;
+        private Droppable droppable;
         private IDictionary<ServerBox, DropZone> dropZones = new Dictionary<ServerBox, DropZone>();
-        private  IDictionary<ServerBox, Droppable> abilities = new Dictionary<ServerBox, Droppable>();
+        private IDictionary<ServerBox, IInteractive> abilities = new Dictionary<ServerBox, IInteractive>();
 
         public RunInitiation(GameObject gameObject, Game game, ServerRow serverRow)
         {
             this.gameObject = gameObject;
             this.game = game;
+            droppable = gameObject.AddComponent<Droppable>();
             serverRow.Observe(this);
         }
 
         void IServerBoxObserver.NotifyServerBox(ServerBox box)
         {
             var boxZone = box.gameObject.AddComponent<DropZone>();
-            var ability = gameObject.AddComponent<Droppable>();
             dropZones[box] = boxZone;
-            abilities[box] = ability;
             var runOnServer = game.runner.actionCard.Run(box.server);
-            ability.Represent(new InteractiveAbility(runOnServer, game), boxZone);
+            abilities[box] = new InteractiveAbility(runOnServer, boxZone, game);
+            droppable.Represent(abilities[box]);
         }
 
         void IServerBoxObserver.NotifyServerBoxDisappeared(ServerBox box)
         {
-           Object.Destroy(dropZones[box]);
-           Object.Destroy(abilities[box]);
+            Object.Destroy(dropZones[box]);
+            droppable.Unlink(abilities[box]);
+            abilities.Remove(box);
         }
     }
 }

@@ -3,14 +3,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
 using view.gui;
+using System.Threading.Tasks;
 
 namespace controller
 {
     public class Droppable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private IInteractive interactive;
-        private DropZone zone;
-        private bool active = false;
+        private IList<IInteractive> interactives = new List<IInteractive>();
         private Highlight highlight;
         private Vector3 originalPosition;
         private int originalIndex;
@@ -18,6 +17,8 @@ namespace controller
 
         void Awake()
         {
+            highlight = gameObject.AddComponent<Highlight>();
+            UpdateHighlights();
             canvasGroup = gameObject.GetComponent<CanvasGroup>();
             if (canvasGroup == null)
             {
@@ -26,25 +27,37 @@ namespace controller
             canvasGroup.blocksRaycasts = true;
         }
 
-        public void Represent(IInteractive interactive, DropZone zone)
+        public void Represent(IInteractive interactive)
         {
-            this.interactive = interactive;
-            this.zone = zone;
-            highlight = gameObject.AddComponent<Highlight>();
-            interactive.Observe(Toggle);
+            this.interactives.Add(interactive);
+            interactive.Observe(UpdateHighlights);
         }
 
-        private void Toggle(bool active)
+        internal void Unlink(IInteractive interactive)
         {
-            this.active = active;
-            if (active)
+            this.interactives.Remove(interactive);
+            interactive.UnobserveAll();
+        }
+
+        private void UpdateHighlights()
+        {
+            if (highlight == null)
             {
-                highlight.TurnOn();
+                return;
+            }
+            if (IsInteractive())
+            {
+                highlight.enabled = true;
             }
             else
             {
-                highlight.TurnOff();
+                highlight.enabled = false;
             }
+        }
+
+        private bool IsInteractive()
+        {
+            return interactives.Any(it => it.Active);
         }
 
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
@@ -52,15 +65,17 @@ namespace controller
             originalPosition = transform.position;
             BringToFront(eventData);
             canvasGroup.blocksRaycasts = false;
-            if (active)
+            foreach (var interactive in interactives)
             {
-                zone.StartDragging();
+                if (interactive.Active)
+                {
+                    interactive.Activation.StartDragging();
+                }
             }
         }
 
         private void BringToFront(PointerEventData eventData)
         {
-            eventData.selectedObject = gameObject;
             originalIndex = transform.GetSiblingIndex();
             for (Transform t = transform; t.parent != null; t = t.parent)
             {
@@ -76,34 +91,32 @@ namespace controller
         async void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
             canvasGroup.blocksRaycasts = true;
-            if (active)
+            var raycast = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, raycast);
+            var interactions = interactives
+                .Where(it => it.Active)
+                .Where(it => raycast.Where(r => r.gameObject == it.Activation.gameObject).Any())
+                .Select(it => it.Interact());
+            foreach (var interactive in interactives)
             {
-                var raycast = new List<RaycastResult>();
-                EventSystem.current.RaycastAll(eventData, raycast);
-                var onDrop = raycast.Where(r => r.gameObject == zone.gameObject).Any();
-                if (onDrop)
-                {
-                    await interactive.Interact();
-                }
+                interactive.Activation.StopDragging();
             }
-            PutBack(eventData);
-            zone.StopDragging();
+            await Task.WhenAll(interactions);
+            PutBack();
         }
 
-        private void PutBack(PointerEventData eventData)
+        private void PutBack()
         {
-            if (eventData.selectedObject == null) // avoid multiple Droppables on the same GO resetting the index: https://github.com/dagguh/data-hunt/pull/184
-            {
-                return;
-            }
-            eventData.selectedObject = null;
             transform.SetSiblingIndex(originalIndex);
             transform.position = originalPosition;
         }
 
         void OnDestroy()
         {
-            interactive.UnobserveAll();
+            foreach (var interactive in interactives)
+            {
+                interactive.UnobserveAll();
+            }
         }
     }
 }

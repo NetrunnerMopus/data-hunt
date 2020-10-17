@@ -25,8 +25,7 @@ namespace view.gui
                 .BankCredit
                 .AddComponent<Droppable>()
                 .Represent(
-                    new InteractiveAbility(game.runner.actionCard.credit, game),
-                    credits.AddComponent<DropZone>()
+                    new InteractiveAbility(game.runner.actionCard.credit, credits.AddComponent<DropZone>(), game)
                 );
             game.runner.credits.Observe(credits.AddComponent<CreditSpiral>());
             game.runner.credits.Observe(credits.AddComponent<PileCount>());
