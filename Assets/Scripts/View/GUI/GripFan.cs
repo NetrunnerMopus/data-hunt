@@ -37,6 +37,8 @@ namespace view.gui
             var visual = printer.Print(card);
             visuals[card] = visual;
             var droppable = visual.AddComponent<Droppable>();
+            var rect = gameObject.GetComponent<RectTransform>();
+            droppable.BoundPlaceholder(rect);
             var type = card.Type;
             if (type.Playable)
             {
