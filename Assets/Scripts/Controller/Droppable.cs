@@ -16,7 +16,9 @@ namespace controller
         private int originalIndex;
         private CanvasGroup canvasGroup;
         private GameObject placeholder;
+        private LayoutElement placeholderLayoutElement;
         private LayoutElement layoutElement;
+        private Bounds containerBounds = new Bounds();
 
         void Awake()
         {
@@ -66,6 +68,7 @@ namespace controller
         {
             placeholder.AttachTo(transform.parent.gameObject);
             placeholder.transform.SetSiblingIndex(transform.GetSiblingIndex() + 1);
+            placeholderLayoutElement = placeholder.AddComponent<LayoutElement>();
             placeholder.gameObject.SetActive(false);
         }
 
@@ -79,6 +82,17 @@ namespace controller
         {
             this.interactives.Remove(interactive);
             interactive.UnobserveAll();
+        }
+
+        internal void BoundPlaceholder(RectTransform container)
+        {
+            var corners = new Vector3[4];
+            container.GetWorldCorners(corners);
+            containerBounds = new Bounds(corners[0], Vector3.zero);
+            foreach (var corner in corners)
+            {
+                containerBounds.Encapsulate(corner);
+            }
         }
 
         private void UpdateHighlights()
@@ -108,6 +122,7 @@ namespace controller
             BringToFront(eventData);
             placeholder.SetActive(true);
             layoutElement.ignoreLayout = true;
+            placeholderLayoutElement.ignoreLayout = true;
             canvasGroup.blocksRaycasts = false;
             foreach (var interactive in interactives)
             {
@@ -130,6 +145,11 @@ namespace controller
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
             transform.position = eventData.position;
+            if (containerBounds != null)
+            {
+                var desiredPlaceholder = containerBounds.ClosestPoint(eventData.position);
+                placeholder.transform.position = desiredPlaceholder;
+            }
         }
 
         async void IEndDragHandler.OnEndDrag(PointerEventData eventData)
@@ -154,6 +174,7 @@ namespace controller
             transform.SetSiblingIndex(originalIndex);
             transform.position = originalPosition;
             layoutElement.ignoreLayout = false;
+            placeholderLayoutElement.ignoreLayout = false;
             placeholder.SetActive(false);
         }
 
