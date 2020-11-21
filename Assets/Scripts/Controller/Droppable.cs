@@ -13,7 +13,6 @@ namespace controller
         private IList<IInteractive> interactives = new List<IInteractive>();
         private Highlight highlight;
         private Vector3 originalPosition;
-        private int originalIndex;
         private CanvasGroup canvasGroup;
         private GameObject placeholder;
         private LayoutElement layoutElement;
@@ -121,7 +120,6 @@ namespace controller
 
         private void BringToFront(PointerEventData eventData)
         {
-            originalIndex = transform.GetSiblingIndex();
             for (Transform t = transform; t.parent != null; t = t.parent)
             {
                 t.SetAsLastSibling();
@@ -178,8 +176,8 @@ namespace controller
 
         private void PutBack()
         {
-            transform.SetSiblingIndex(originalIndex);
             transform.position = originalPosition;
+            transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
             layoutElement.ignoreLayout = false;
             placeholder.SetActive(false);
         }
