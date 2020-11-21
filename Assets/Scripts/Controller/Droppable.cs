@@ -17,7 +17,7 @@ namespace controller
         private CanvasGroup canvasGroup;
         private GameObject placeholder;
         private LayoutElement layoutElement;
-        private Bounds containerBounds = new Bounds();
+        public bool Reorderable = false;
 
         void Awake()
         {
@@ -82,17 +82,6 @@ namespace controller
             interactive.UnobserveAll();
         }
 
-        internal void BoundPlaceholder(RectTransform container)
-        {
-            var corners = new Vector3[4];
-            container.GetWorldCorners(corners);
-            containerBounds = new Bounds(corners[0], Vector3.zero);
-            foreach (var corner in corners)
-            {
-                containerBounds.Encapsulate(corner);
-            }
-        }
-
         private void UpdateHighlights()
         {
             if (highlight == null)
@@ -142,17 +131,12 @@ namespace controller
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
             transform.position = eventData.position;
-            if (IsReorderable())
+            if (Reorderable)
             {
                 var closestSibling = PickClosestSibling();
                 var index = closestSibling.GetSiblingIndex();
                 placeholder.transform.SetSiblingIndex(index);
             }
-        }
-
-        private bool IsReorderable()
-        {
-            return containerBounds != null;
         }
 
         private Transform PickClosestSibling()
