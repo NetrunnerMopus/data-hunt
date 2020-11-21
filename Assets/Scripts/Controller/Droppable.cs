@@ -16,7 +16,6 @@ namespace controller
         private int originalIndex;
         private CanvasGroup canvasGroup;
         private GameObject placeholder;
-        private LayoutElement placeholderLayoutElement;
         private LayoutElement layoutElement;
         private Bounds containerBounds = new Bounds();
 
@@ -68,7 +67,6 @@ namespace controller
         {
             placeholder.AttachTo(transform.parent.gameObject);
             placeholder.transform.SetSiblingIndex(transform.GetSiblingIndex() + 1);
-            placeholderLayoutElement = placeholder.AddComponent<LayoutElement>();
             placeholder.gameObject.SetActive(false);
         }
 
@@ -122,7 +120,6 @@ namespace controller
             BringToFront(eventData);
             placeholder.SetActive(true);
             layoutElement.ignoreLayout = true;
-            placeholderLayoutElement.ignoreLayout = true;
             canvasGroup.blocksRaycasts = false;
             foreach (var interactive in interactives)
             {
@@ -145,11 +142,37 @@ namespace controller
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
             transform.position = eventData.position;
-            if (containerBounds != null)
+            if (IsReorderable())
             {
-                var desiredPlaceholder = containerBounds.ClosestPoint(eventData.position);
-                placeholder.transform.position = desiredPlaceholder;
+                var closestSibling = PickClosestSibling();
+                var index = closestSibling.GetSiblingIndex();
+                placeholder.transform.SetSiblingIndex(index);
             }
+        }
+
+        private bool IsReorderable()
+        {
+            return containerBounds != null;
+        }
+
+        private Transform PickClosestSibling()
+        {
+            var siblings = new List<Transform>();
+            foreach (Transform sibling in transform.parent)
+            {
+                if (sibling != transform && sibling.gameObject.activeSelf)
+                {
+                    siblings.Add(sibling);
+                }
+            }
+            return siblings.Aggregate((a, b) => PickCloser(transform, a, b));
+        }
+
+        private Transform PickCloser(Transform reference, Transform a, Transform b)
+        {
+            var aDistance = Vector2.Distance(a.position, transform.position);
+            var bDistance = Vector2.Distance(b.position, transform.position);
+            return (aDistance < bDistance) ? a : b;
         }
 
         async void IEndDragHandler.OnEndDrag(PointerEventData eventData)
@@ -174,7 +197,6 @@ namespace controller
             transform.SetSiblingIndex(originalIndex);
             transform.position = originalPosition;
             layoutElement.ignoreLayout = false;
-            placeholderLayoutElement.ignoreLayout = false;
             placeholder.SetActive(false);
         }
 
