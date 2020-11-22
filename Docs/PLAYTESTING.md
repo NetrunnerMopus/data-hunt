@@ -34,3 +34,6 @@ There will be a popup warning the app is from an unidentified developer:
 Click `Open` to run the game.
 To exit the game, you can swipe between full-screen apps (three fingers sweep by default),
 and `Quit` the game from the dock.
+
+### Android
+Install the [test version](https://play.google.com/apps/testing/com.Dagguh.DataHunt). Open the app.
