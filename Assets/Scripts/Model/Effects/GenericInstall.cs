@@ -110,5 +110,7 @@ namespace model.effects
                 observer.NotifyImpact(payable, this);
             }
         }
+
+        public override string ToString() => "GenericInstall(" + card + ")";
     }
 }

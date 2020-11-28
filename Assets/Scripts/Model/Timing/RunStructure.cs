@@ -17,7 +17,7 @@ namespace model.timing
 
         async public Task AwaitEnd()
         {
-            var ice = server.Ice;
+            var ice = server.IceStack;
             position = ice.Height;
             // TODO
             if (position == 0)

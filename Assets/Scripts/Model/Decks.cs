@@ -30,6 +30,7 @@ namespace model
             var cards = new List<Card>();
             for (int i = 0; i < 7; i++)
             {
+                cards.Add(new IceWall());
                 cards.Add(new HedgeFund());
                 cards.Add(new PadCampaign());
                 cards.Add(new AdvancedAssemblyLines());

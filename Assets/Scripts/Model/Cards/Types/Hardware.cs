@@ -9,7 +9,7 @@ namespace model.cards.types
         bool IType.Installable => true;
         bool IType.Rezzable => false;
 
-        List<IInstallDestination> IType.FindInstallDestinations(Game game)
+        IEnumerable<IInstallDestination> IType.FindInstallDestinations(Game game)
         {
             return new List<IInstallDestination>()
             {

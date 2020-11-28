@@ -8,6 +8,6 @@ namespace model.cards
         bool Playable { get; }
         bool Installable { get; }
         bool Rezzable { get; }
-        List<IInstallDestination> FindInstallDestinations(Game game);
+        IEnumerable<IInstallDestination> FindInstallDestinations(Game game);
     }
 }

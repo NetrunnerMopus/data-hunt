@@ -15,6 +15,9 @@ namespace model.cards
         public abstract string Name { get; }
         public abstract IType Type { get; }
         public Zone Zone { get; private set; }
+        /// <summary>
+        /// Card-specific cost like play cost, rez cost, install cost
+        /// </summary>
         public abstract ICost PlayCost { get; }
         public abstract IEffect Activation { get; }
         public abstract Faction Faction { get; }
@@ -83,7 +86,7 @@ namespace model.cards
             }
         }
 
-        public List<IInstallDestination> FindInstallDestinations(Game game)
+        public IEnumerable<IInstallDestination> FindInstallDestinations(Game game)
         {
             return Type.FindInstallDestinations(game);
         }

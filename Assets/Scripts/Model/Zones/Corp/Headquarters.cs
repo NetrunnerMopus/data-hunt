@@ -11,7 +11,7 @@ namespace model.zones.corp
     public class Headquarters : IServer
     {
         public Zone Zone { get; } = new Zone("HQ");
-        public IceColumn Ice { get; }
+        public IceStack IceStack { get; }
         private HashSet<IHqDiscardObserver> discards = new HashSet<IHqDiscardObserver>();
         private TaskCompletionSource<bool> discarding;
         private Random random;
@@ -21,7 +21,7 @@ namespace model.zones.corp
         {
             this.random = random;
             this.game = game;
-            Ice = new IceColumn(game);
+            IceStack = new IceStack(game);
         }
 
         async public Task Discard()

@@ -12,17 +12,17 @@ namespace model.zones.corp
     public class Remote : IServer, IInstallDestination
     {
         public Zone Zone { get; } = new Zone("Remote");
-        public IceColumn Ice { get; }
+        public IceStack IceStack { get; }
         private Game game;
 
         public Remote(Game game)
         {
             this.game = game;
-            Ice = new IceColumn(game);
+            IceStack = new IceStack(game);
         }
 
         public bool IsEmpty() {
-            return (Ice.Height == 0) && (Zone.Count == 0);
+            return (IceStack.Height == 0) && (Zone.Count == 0);
         }
 
         void IInstallDestination.Host(Card card)

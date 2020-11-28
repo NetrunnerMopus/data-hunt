@@ -9,7 +9,7 @@ namespace model.zones.corp
     public class ResearchAndDevelopment : IServer
     {
         public Zone Zone { get; } = new Zone("R&D");
-        public IceColumn Ice { get; }
+        public IceStack IceStack { get; }
         private Shuffling shuffling;
         private Game game;
         private bool reshuffledDuringAccess = false;
@@ -18,7 +18,7 @@ namespace model.zones.corp
         {
             this.game = game;
             this.shuffling = shuffling;
-            Ice = new IceColumn(game);
+            IceStack = new IceStack(game);
             foreach (var card in deck.cards)
             {
                 card.MoveTo(Zone);

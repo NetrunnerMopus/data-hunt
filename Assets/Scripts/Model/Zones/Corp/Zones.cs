@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace model.zones.corp
 {
@@ -19,12 +21,22 @@ namespace model.zones.corp
             this.game = game;
         }
 
-        public List<IInstallDestination> RemoteInstalls()
+        public IEnumerable<IInstallDestination> ListRemoteInstalls()
         {
             return new List<IInstallDestination>(remotes)
             {
                 new NewRemote(this)
             };
+        }
+
+        internal IEnumerable<IInstallDestination> ListIceInstalls()
+        {
+            var servers = new List<IServer> { hq, rd, archives };
+            foreach (var remote in remotes)
+            {
+                servers.Add(remote);
+            }
+            return servers.Select(it => it.IceStack);
         }
 
         public Remote CreateRemote()
@@ -38,7 +50,8 @@ namespace model.zones.corp
             return remote;
         }
 
-        public void RemoveRemote(Remote remote) {
+        public void RemoveRemote(Remote remote)
+        {
             remotes.Remove(remote);
             foreach (var observer in remoteObservers)
             {
