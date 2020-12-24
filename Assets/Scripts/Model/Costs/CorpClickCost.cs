@@ -19,7 +19,7 @@ namespace model.costs
             game.corp.clicks.Observe(this);
         }
 
-        bool ICost.Payable(Game game) => game.corp.clicks.Remaining() >= clicks;
+        bool ICost.Payable(Game game) => game.corp.clicks.Remaining >= clicks;
 
         async Task ICost.Pay(Game game)
         {

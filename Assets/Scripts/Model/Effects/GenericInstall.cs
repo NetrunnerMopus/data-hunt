@@ -11,6 +11,20 @@ namespace model.effects
         private readonly Card card;
         private readonly IPilot pilot;
         private readonly HashSet<IImpactObserver> impactObservers = new HashSet<IImpactObserver>();
+        IEnumerable<string> IEffect.Graphics
+        {
+            get
+            {
+                if (card.Faction.Side == Side.CORP)
+                {
+                    return new string[] { "Images/UI/server-rack" };
+                }
+                else
+                {
+                    return new string[] { "Images/Cards/" + card.FaceupArt };
+                }
+            }
+        }
 
         public GenericInstall(Card card, IPilot pilot)
         {

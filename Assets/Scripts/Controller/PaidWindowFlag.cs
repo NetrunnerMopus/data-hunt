@@ -7,7 +7,7 @@ using view.gui;
 
 namespace controller
 {
-    public class PaidWindowFlag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class PaidWindowPass : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         private PaidWindow window;
         private DropZone zone;
@@ -21,7 +21,7 @@ namespace controller
         {
             this.window = window;
             this.zone = zone;
-            gameObject.AddComponent<Highlight>().TurnOn();
+            gameObject.AddComponent<Highlight>();
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
         }
 

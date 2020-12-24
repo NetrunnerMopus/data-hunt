@@ -39,7 +39,7 @@ ScriptedImporter:
   spriteData:
     TessellationDetail: 0
     SpriteRect:
-      name: credit-pathSprite
+      name: creditSprite
       originalName: 
       pivot: {x: 0.5, y: 0.4998183}
       alignment: 0

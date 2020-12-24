@@ -9,9 +9,14 @@ using view;
 
 public class GameConfig : MonoBehaviour
 {
+
+    private GameMenu gameMenu;
+
     void Start()
     {
         var board = GameObject.Find("/Board");
+        gameMenu = board.GetComponentInChildren<GameMenu>();
+        gameMenu.Resume();
         var perception = new RunnerPerception();
         var zoom = new CardZoom(board, perception);
         var parts = new BoardParts(board, perception, zoom);
@@ -39,7 +44,15 @@ public class GameConfig : MonoBehaviour
         flowView.Display(board, game);
         flowLog.Display(game);
         var corpView = new CorpViewConfig().Display(game, parts);
-        new RunnerViewConfig().Display(game, corpView, parts);
+        new RunnerViewConfig().Display(game, flowView, corpView, parts);
         game.Start();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            gameMenu.Open();
+        }
     }
 }

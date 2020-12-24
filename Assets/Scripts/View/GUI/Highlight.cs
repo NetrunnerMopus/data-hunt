@@ -7,18 +7,18 @@ namespace view.gui
     {
         private Image Image { get { return GetComponent<Image>(); } }
         private Color Color { set { Image.color = value; } }
+        public Color Flash = Color.yellow * 0.7f + Color.green * 0.8f;
+        public Color Rest = Color.white + new Color(0f, 0f, 0f, 1f);
 
-        public void TurnOn()
+        void Update()
         {
-            var on = Color.cyan;
-            Color = on;
+            var phase = Mathf.Sin(Time.time * 4);
+            Color = Color.Lerp(Flash, Rest, phase);
         }
 
-        public void TurnOff()
+        void OnDisable()
         {
-            var off = Color.white;
-            off.a = 1.0f;
-            Color = off;
+            Color = Rest;
         }
     }
 }

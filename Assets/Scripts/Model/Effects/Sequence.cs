@@ -10,6 +10,7 @@ namespace model.effects
         private IEffect[] effects;
         private IDictionary<IEffect, bool> impacts = new Dictionary<IEffect, bool>();
         private HashSet<IImpactObserver> observers = new HashSet<IImpactObserver>();
+        IEnumerable<string> IEffect.Graphics => effects.SelectMany(it => it.Graphics).ToList();
 
         public Sequence(params IEffect[] effects)
         {

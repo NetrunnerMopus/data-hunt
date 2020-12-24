@@ -5,30 +5,35 @@ using System.Threading.Tasks;
 
 namespace model.timing.corp
 {
-    public class Turn
+    public class CorpTurn : ITurn
     {
         private Game game;
         public readonly RezWindow rezWindow = new RezWindow();
-        public List<IEffect> turnBeginningTriggers = new List<IEffect>();
+        public bool Active { get; private set; } = false;
+        ClickPool ITurn.Clicks => game.corp.clicks;
+        Side ITurn.Side => Side.CORP;
+        private List<IEffect> turnBeginningTriggers = new List<IEffect>();
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
         private HashSet<ICorpActionObserver> actions = new HashSet<ICorpActionObserver>();
 
-        public Turn(Game game)
+        public CorpTurn(Game game)
         {
             this.game = game;
         }
 
-        async public Task Start()
+        async Task ITurn.Start()
         {
+            Active = true;
             await DrawPhase();
             await ActionPhase();
             await DiscardPhase();
+            Active = false;
         }
 
         async private Task DrawPhase()
         {
             Step(1, 1);
-            game.corp.clicks.Gain(3);
+            game.corp.clicks.Replenish();
             Step(1, 2);
             Task paid = OpenPaidWindow();
             Task rez = OpenRezWindow();
@@ -92,7 +97,7 @@ namespace model.timing.corp
 
         async private Task TakeActions()
         {
-            while (game.corp.clicks.Remaining() > 0)
+            while (game.corp.clicks.Remaining > 0)
             {
                 await TakeAction();
             }
@@ -100,12 +105,16 @@ namespace model.timing.corp
 
         async private Task TakeAction()
         {
-            Task actionTaking = game.corp.actionCard.TakeAction();
+            Task<Ability> actionTaking = game.corp.actionCard.TakeAction();
             foreach (var observer in actions)
             {
                 observer.NotifyActionTaking();
             }
-            await actionTaking;
+            var action = await actionTaking;
+            foreach (var observer in actions)
+            {
+                observer.NotifyActionTaken(action);
+            }
             Task paid = OpenPaidWindow();
             Task rez = OpenRezWindow();
             OpenScoreWindow();
@@ -149,6 +158,11 @@ namespace model.timing.corp
             }
         }
 
+        public void WhenBegins(IEffect effect)
+        {
+            turnBeginningTriggers.Add(effect);
+        }
+
         public void ObserveSteps(IStepObserver observer)
         {
             steps.Add(observer);
@@ -163,5 +177,6 @@ namespace model.timing.corp
     public interface ICorpActionObserver
     {
         void NotifyActionTaking();
+        void NotifyActionTaken(Ability ability);
     }
 }

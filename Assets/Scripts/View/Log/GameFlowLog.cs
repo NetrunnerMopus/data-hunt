@@ -8,6 +8,7 @@ using model.timing;
 using System.Collections.Generic;
 using model.play.corp;
 using System.Threading.Tasks;
+using model.play;
 
 namespace view.log
 {
@@ -65,6 +66,11 @@ namespace view.log
             Log("taking action");
         }
 
+        void ICorpActionObserver.NotifyActionTaken(Ability ability)
+        {
+            Log("corp action taken");
+        }
+
         void IHqDiscardObserver.NotifyDiscarding(bool discarding)
         {
             if (discarding)
@@ -82,6 +88,11 @@ namespace view.log
         void IRunnerActionObserver.NotifyActionTaking()
         {
             Log("taking action");
+        }
+
+        void IRunnerActionObserver.NotifyActionTaken(Ability ability)
+        {
+            Log("runner action taken");
         }
 
         void IGripDiscardObserver.NotifyDiscarding(bool discarding)

@@ -25,7 +25,7 @@ namespace model.play
             await effect.Resolve(game);
             foreach (var observer in resolutions)
             {
-                observer.NotifyResolved();
+                observer.NotifyResolved(this);
             }
         }
 
@@ -92,6 +92,6 @@ namespace model.play
 
     public interface IResolutionObserver
     {
-        void NotifyResolved();
+        void NotifyResolved(Ability ability);
     }
 }

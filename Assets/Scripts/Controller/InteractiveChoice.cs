@@ -5,21 +5,23 @@ namespace controller
 {
     public class InteractiveChoice<T> : IInteractive
     {
+        public bool Active { get; }
+        public DropZone Activation { get; }
+        public GameObject GameObject { get; }
         private T value;
-        private bool legal;
-        public GameObject GameObject { get; private set; }
         private TaskCompletionSource<T> chosen = new TaskCompletionSource<T>();
 
-        public InteractiveChoice(T value, bool legal, GameObject gameObject)
+        public InteractiveChoice(T value, bool legal, DropZone activation, GameObject gameObject)
         {
             this.value = value;
-            this.legal = legal;
+            this.Active = legal;
+            this.Activation = activation;
             this.GameObject = gameObject;
         }
 
-        void IInteractive.Observe(Toggle toggle)
+        void IInteractive.Observe(Update update)
         {
-            toggle(legal);
+            update();
         }
 
         async Task IInteractive.Interact()

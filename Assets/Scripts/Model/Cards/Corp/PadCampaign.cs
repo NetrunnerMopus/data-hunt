@@ -24,9 +24,10 @@ namespace model.cards.corp
 
         private class PadCampaignActivation : IEffect
         {
+            IEnumerable<string> IEffect.Graphics => new string[] {};
             async Task IEffect.Resolve(Game game)
             {
-               game.corp.turn.turnBeginningTriggers.Add(new Gain(1));
+               game.corp.turn.WhenBegins(new Gain(1));
                await Task.CompletedTask;
             }
             void IEffect.Observe(IImpactObserver observer, Game game) { }

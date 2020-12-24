@@ -9,7 +9,7 @@ namespace model
     public class Corp
     {
         public readonly IPilot pilot;
-        public readonly Turn turn;
+        public readonly CorpTurn turn;
         public readonly PaidWindow paidWindow;
         public readonly ActionCard actionCard;
         public readonly zones.corp.Zones zones;
@@ -19,7 +19,7 @@ namespace model
 
         public Corp(
             IPilot pilot,
-            Turn turn,
+            CorpTurn turn,
             PaidWindow paidWindow,
             ActionCard actionCard,
             zones.corp.Zones zones,

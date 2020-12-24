@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model.effects.corp
 {
     public class Draw : IEffect
     {
         private int cards;
+
+        IEnumerable<string> IEffect.Graphics => new string[] { "Images/UI/card-draw" };
 
         public Draw(int cards)
         {

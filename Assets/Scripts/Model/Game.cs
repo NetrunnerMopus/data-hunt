@@ -13,7 +13,10 @@ namespace model
         public readonly Runner runner;
         public readonly Zone PlayArea;
         public readonly Checkpoint checkpoint;
+        public event EventHandler<ITurn> CurrentTurn = delegate { };
+        public event EventHandler<ITurn> NextTurn = delegate { };
         private bool ended = false;
+        private Queue<ITurn> turns = new Queue<ITurn>();
         private HashSet<IGameFinishObserver> finishObservers = new HashSet<IGameFinishObserver>();
         private Shuffling shuffling;
 
@@ -28,7 +31,7 @@ namespace model
 
         private Corp CreateCorp(Player player)
         {
-            var turn = new timing.corp.Turn(this);
+            var turn = new timing.corp.CorpTurn(this);
             var paidWindow = new PaidWindow("corp");
             var zones = new zones.corp.Zones(
                 new zones.corp.Headquarters(this, new Random()),
@@ -37,14 +40,14 @@ namespace model
                 this
             );
             var actionCard = new play.corp.ActionCard(zones, player.pilot);
-            var clicks = new ClickPool();
+            var clicks = new ClickPool(3);
             var credits = new CreditPool();
             return new Corp(player.pilot, turn, paidWindow, actionCard, zones, clicks, credits, player.deck.identity);
         }
 
         private Runner CreateRunner(Player player)
         {
-            var turn = new timing.runner.Turn(this);
+            var turn = new timing.runner.RunnerTurn(this);
             var paidWindow = new PaidWindow("runner");
             var actionCard = new play.runner.ActionCard(player.pilot);
             var zones = new zones.runner.Zones(
@@ -54,7 +57,7 @@ namespace model
                 new zones.runner.Rig(this, player.pilot),
                 new zones.runner.Score(this)
             );
-            var clicks = new ClickPool();
+            var clicks = new ClickPool(4);
             var credits = new CreditPool();
             return new Runner(player.pilot, turn, paidWindow, actionCard, 0, zones, clicks, credits, player.deck.identity);
         }
@@ -68,12 +71,16 @@ namespace model
 
         async private Task StartTurns()
         {
+            turns.Enqueue(corp.turn);
+            turns.Enqueue(runner.turn);
             try
             {
                 while (!ended)
                 {
-                    await corp.turn.Start();
-                    await runner.turn.Start();
+                    turns.Enqueue(corp.turn);
+                    turns.Enqueue(runner.turn);
+                    await StartNextTurn();
+                    await StartNextTurn();
                 }
             }
             catch (Exception e)
@@ -87,6 +94,14 @@ namespace model
                     throw new Exception("Failed a turn", e);
                 }
             }
+        }
+
+        private async Task StartNextTurn()
+        {
+            var currentTurn = turns.Dequeue();
+            CurrentTurn(this, currentTurn);
+            NextTurn(this, turns.Peek());
+            await currentTurn.Start();
         }
 
         async public Task OpenPaidWindow(PaidWindow acting, PaidWindow reacting)
@@ -112,6 +127,7 @@ namespace model
         {
             finishObservers.Add(observer);
         }
+
         public void DeckCorp()
         {
             Finish(new GameFinish(

@@ -28,7 +28,7 @@ namespace model.ai
     {
         private Game game;
         private zones.corp.Zones zones;
-        private Task Thinking() => Task.Delay(700);
+        private Task Thinking() => Task.Delay(1700);
         private HashSet<Ability> actions = new HashSet<Ability>();
         private HashSet<Ability> legalActions = new HashSet<Ability>();
         private HashSet<Ability> paidAbilities = new HashSet<Ability>();
@@ -65,6 +65,7 @@ namespace model.ai
             UnityEngine.Debug.Log("Choosing to " + randomLegalAction);
             await randomLegalAction.Trigger(game);
         }
+        void ICorpActionObserver.NotifyActionTaken(Ability ability) {}
 
         void IHqDiscardObserver.NotifyDiscarding(bool discarding)
         {

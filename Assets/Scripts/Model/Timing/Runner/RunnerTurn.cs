@@ -1,30 +1,36 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using model.play;
 
 namespace model.timing.runner
 {
-    public class Turn
+    public class RunnerTurn: ITurn
     {
         private Game game;
+        public bool Active { get; private set; } = false;
+        ClickPool ITurn.Clicks => game.runner.clicks;
+        Side ITurn.Side => Side.RUNNER;
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
         private HashSet<IRunnerTurnStartObserver> starts = new HashSet<IRunnerTurnStartObserver>();
         private HashSet<IRunnerActionObserver> actions = new HashSet<IRunnerActionObserver>();
 
-        public Turn(Game game)
+        public RunnerTurn(Game game)
         {
             this.game = game;
         }
 
-        async public Task Start()
+        async Task ITurn.Start()
         {
+            Active = true;
             await ActionPhase();
             await DiscardPhase();
+            Active = false;
         }
 
         async private Task ActionPhase()
         {
             Step(1, 1);
-            game.runner.clicks.Gain(4);
+            game.runner.clicks.Replenish();
             Step(1, 2);
             await OpenPaidWindow();
             OpenRezWindow();
@@ -68,14 +74,18 @@ namespace model.timing.runner
 
         async private Task TakeActions()
         {
-            while (game.runner.clicks.Remaining() > 0)
+            while (game.runner.clicks.Remaining > 0)
             {
-                Task actionTaking = game.runner.actionCard.TakeAction();
+                Task<Ability> actionTaking = game.runner.actionCard.TakeAction();
                 foreach (var observer in actions)
                 {
                     observer.NotifyActionTaking();
                 }
-                await actionTaking;
+                var action = await actionTaking;
+                foreach (var observer in actions)
+                {
+                    observer.NotifyActionTaken(action);
+                }
                 await OpenPaidWindow();
                 OpenRezWindow();
             }
@@ -145,5 +155,6 @@ namespace model.timing.runner
     public interface IRunnerActionObserver
     {
         void NotifyActionTaking();
+        void NotifyActionTaken(Ability ability);
     }
 }

@@ -10,7 +10,7 @@ namespace model
     public class Runner
     {
         public readonly IPilot pilot;
-        public readonly Turn turn;
+        public readonly RunnerTurn turn;
         public readonly PaidWindow paidWindow;
         public readonly ActionCard actionCard;
         public int tags = 0;
@@ -22,7 +22,7 @@ namespace model
 
         public Runner(
             IPilot pilot,
-            Turn turn,
+            RunnerTurn turn,
             PaidWindow paidWindow,
             ActionCard actionCard,
             int tags,
