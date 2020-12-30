@@ -1,6 +1,6 @@
 # DataHunt - a digitization of the Netrunner game
 
-![Teaser screenshot](Releases/0.0.1/first-ui.png)
+![Teaser screenshot](Releases/0.0.4/runner-view.png)
 
 Android: Netrunner is a beautiful, rich, satisfying game.
 
