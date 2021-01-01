@@ -28,9 +28,9 @@ To open the project, just hit the big `Add` button, select the folder you cloned
 
 ### Running
 
-The first time you open the project, you'll have to select the main scene:
+The first time you open the project, you'll have to select the App menu scene:
 
-![main scene](unity-main-scene.png)
+![App menu](unity-app-menu-scene.png)
 
 To run it, press the big "play" button in the middle top.
 
