@@ -20,6 +20,7 @@ namespace model.cards.corp
         override public ICost PlayCost => new CorpCreditCost(1);
         override public IEffect Activation => new AdvancedAssemblyLinesActivation(this);
         override public IType Type => new Asset();
+        public override Stealable Stealable => Type.Stealable;
 
         override public IEnumerable<ITrashOption> TrashOptions(Game game) => new ITrashOption[] {
             new Leave(),

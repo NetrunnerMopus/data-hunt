@@ -23,7 +23,7 @@ namespace model.cards
         public bool Faceup { get; private set; } = false;
         public Information Information { get; private set; } = Information.HIDDEN_FROM_ALL;
         public bool Active { get; private set; } = false;
-        public Stealable Stealable { get; private set; } = Stealable.CANNOT_STEAL;
+        public abstract Stealable Stealable { get; }
 
         public virtual IEnumerable<ITrashOption> TrashOptions(Game game) => new[] { new Leave() };
 

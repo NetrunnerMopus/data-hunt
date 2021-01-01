@@ -11,5 +11,6 @@ namespace model.cards.runner
         override public ICost PlayCost { get { throw new System.Exception("Identities don't have a play cost"); } }
         override public IEffect Activation { get { throw new System.Exception("Omar not yet implemented"); } }
         override public IType Type => new Identity();
+        public override Stealable Stealable => Type.Stealable;
     }
 }

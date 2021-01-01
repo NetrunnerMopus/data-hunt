@@ -18,6 +18,7 @@ namespace model.cards.runner
         override public ICost PlayCost => new RunnerCreditCost(3);
         override public IEffect Activation => new SportsHopperActivation(this);
         override public IType Type => new Hardware();
+        public override Stealable Stealable => Type.Stealable;
 
         private class SportsHopperActivation : IEffect, IZoneRemovalObserver
         {

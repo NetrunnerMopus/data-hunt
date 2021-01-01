@@ -11,5 +11,6 @@ namespace model.cards.corp
         override public ICost PlayCost { get { throw new System.Exception("Identities don't have a play cost"); } }
         override public IEffect Activation => new effects.Nothing();
         override public IType Type => new Identity();
+        public override Stealable Stealable => Type.Stealable;
     }
 }

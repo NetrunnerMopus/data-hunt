@@ -13,5 +13,6 @@ namespace model.cards.corp
         override public ICost PlayCost => new CorpCreditCost(5);
         override public IEffect Activation => new Gain(9);
         override public IType Type => new Operation();
+        public override Stealable Stealable => Type.Stealable;
     }
 }
