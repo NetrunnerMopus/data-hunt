@@ -9,5 +9,6 @@ namespace model.cards
         bool Installable { get; }
         bool Rezzable { get; }
         List<IInstallDestination> FindInstallDestinations(Game game);
+        Stealable Stealable { get; }
     }
 }

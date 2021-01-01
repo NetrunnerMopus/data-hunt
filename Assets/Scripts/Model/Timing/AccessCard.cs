@@ -51,7 +51,7 @@ namespace model.timing
 
         async private Task Steal()
         {
-            if (card is cards.corp.CorporateSalesTeam)
+            if (card.Stealable != Stealable.CANNOT_STEAL)
             {
                 card.FlipFaceUp();
                 game.runner.zones.score.Add(card, 2);
