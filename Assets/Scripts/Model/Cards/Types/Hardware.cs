@@ -8,6 +8,7 @@ namespace model.cards.types
         bool IType.Playable => false;
         bool IType.Installable => true;
         bool IType.Rezzable => false;
+        Stealable IType.Stealable => Stealable.CANNOT_STEAL;
 
         List<IInstallDestination> IType.FindInstallDestinations(Game game)
         {
