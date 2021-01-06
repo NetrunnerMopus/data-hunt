@@ -10,9 +10,9 @@ namespace view.gui
     public class ServerBox : IZoneAdditionObserver, IZoneRemovalObserver
     {
         public readonly GameObject box;
+        public readonly GameObject contents;
         public readonly IServer server;
         public CardPrinter Printer { get; private set; }
-        private GameObject contents;
         private IDictionary<Card, GameObject> contentVisuals = new Dictionary<Card, GameObject>();
         private IceColumn ice;
 

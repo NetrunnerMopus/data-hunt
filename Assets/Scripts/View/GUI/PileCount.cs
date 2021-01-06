@@ -39,6 +39,7 @@ namespace view.gui {
 
 		void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData) {
 			text.enabled = true;
+			text.gameObject.transform.SetAsLastSibling();
 		}
 
 		void IPointerExitHandler.OnPointerExit(PointerEventData eventData) {
