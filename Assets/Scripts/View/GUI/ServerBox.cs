@@ -36,7 +36,7 @@ namespace view.gui
             var gameObject = new GameObject("Contents of " + server.Zone.Name);
             gameObject.AttachTo(box);
             var rect = gameObject.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0.0f, 0.67f);
+            rect.anchorMin = new Vector2(0.0f, 0.50f);
             rect.anchorMax = new Vector2(1.0f, 1.00f);
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
@@ -49,7 +49,7 @@ namespace view.gui
             gameObject.AttachTo(box);
             var rect = gameObject.AddComponent<RectTransform>();
             rect.anchorMin = new Vector2(0.0f, 0.00f);
-            rect.anchorMax = new Vector2(1.0f, 0.67f);
+            rect.anchorMax = new Vector2(1.0f, 0.50f);
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
             return new IceColumn(gameObject, server.IceStack, parts);
