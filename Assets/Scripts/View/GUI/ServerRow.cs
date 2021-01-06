@@ -66,7 +66,7 @@ namespace view.gui
             }
             remote.Zone.UnobserveAdditions(box);
             remote.Zone.UnobserveRemovals(box);
-            Object.Destroy(box.gameObject);
+            Object.Destroy(box.box);
         }
     }
 

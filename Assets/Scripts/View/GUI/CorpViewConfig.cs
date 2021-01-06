@@ -16,7 +16,7 @@ namespace view.gui
             archivesBox.Printer.Sideways = true;
             var rd = servers.Box(zones.rd).Printer.PrintCorpFacedown("Top of R&D");
             var hq = servers.Box(zones.hq).Printer.Print(game.corp.identity);
-            zones.archives.Zone.ObserveCount(archivesBox.gameObject.AddComponent<PileCount>()); // TODO renders under the pile due to children-order
+            zones.archives.Zone.ObserveCount(archivesBox.box.AddComponent<PileCount>()); // TODO renders under the pile due to children-order
             zones.archives.Zone.ObserveAdditions(archivesBox);
             zones.archives.Zone.ObserveRemovals(archivesBox);
             zones.hq.Zone.ObserveCount(hq.AddComponent<PileCount>());

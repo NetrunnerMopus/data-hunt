@@ -31,7 +31,7 @@ namespace model.zones.corp
                 .Cards
                 .Select(it => new Trash(it, game.corp.zones.archives.Zone))
                 .ToList()
-                .ForEach(it => it.TrashIt());
+                .ForEach(it => it.TrashIt()); // TODO but what about upgrades, you don't need to trash all cards in the remote in that case
             card.MoveTo(Zone);
         }
 

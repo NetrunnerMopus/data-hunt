@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using model.cards;
-// "Ability(cost=Conjunction(costs=model.costs.CorpClickCost, model.costs.ActionPermission, model.costs.InZone), effect=model.effects.GenericInstall)"
+
 namespace model.zones.corp
 {
     public class IceStack : IInstallDestination
     {
-        public int Height { get; private set; } = 0;
+        public Zone Zone { get; } = new Zone("ICE");
+        public int Height => Zone.Count;
         private Game game;
-        private IList<Card> ice = new List<Card>();
+
 
         public IceStack(Game game)
         {
@@ -17,7 +17,7 @@ namespace model.zones.corp
 
         void IInstallDestination.Host(Card card)
         {
-            ice.Add(card);
+            Zone.Add(card);
         }
 
         Task IInstallDestination.TrashAlike(Card card)

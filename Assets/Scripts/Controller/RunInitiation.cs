@@ -23,7 +23,7 @@ namespace controller
 
         void IServerBoxObserver.NotifyServerBox(ServerBox box)
         {
-            var boxZone = box.gameObject.AddComponent<DropZone>();
+            var boxZone = box.box.AddComponent<DropZone>();
             dropZones[box] = boxZone;
             var runOnServer = game.runner.actionCard.Run(box.server);
             abilities[box] = new InteractiveAbility(runOnServer, boxZone, game);
