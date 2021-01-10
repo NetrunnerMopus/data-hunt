@@ -11,7 +11,6 @@ namespace model.cards.runner
         override public int InfluenceCost { get { return 2; } }
         override public ICost PlayCost { get { return new RunnerCreditCost(3); } }
         override public IEffect Activation => new effects.Nothing();
-        override public IType Type { get { return new Program(); } }
-        public override Stealable Stealable => Type.Stealable;
+        override public IType Type { get { return new Program(); } } 
     }
 }

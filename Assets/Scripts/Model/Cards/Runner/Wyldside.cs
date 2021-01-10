@@ -15,8 +15,7 @@ namespace model.cards.runner
         override public int InfluenceCost => 3;
         override public ICost PlayCost => new RunnerCreditCost(3);
         override public IEffect Activation => new WyldsideActivation();
-        override public IType Type => new Resource();
-        public override Stealable Stealable => Type.Stealable;
+        override public IType Type => new Resource(); 
 
         private class WyldsideActivation : IEffect
         {

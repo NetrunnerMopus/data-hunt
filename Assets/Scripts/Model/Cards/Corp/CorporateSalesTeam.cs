@@ -11,8 +11,7 @@ namespace model.cards.corp
         override public int InfluenceCost => 0;
         override public ICost PlayCost { get { throw new System.Exception("Agendas don't have play costs"); } }
         override public IEffect Activation { get { throw new System.Exception("Agendas don't have activations"); } }
-        override public IType Type => new Agenda();
-        public override Stealable Stealable => Type.Stealable;
+        override public IType Type => new Agenda(); 
 
 
     }
