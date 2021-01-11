@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using model.choices.steal;
 using model.zones;
 
 namespace model.cards.types
@@ -9,6 +10,12 @@ namespace model.cards.types
         bool IType.Installable => true;
         bool IType.Rezzable => false;
         List<IInstallDestination> IType.FindInstallDestinations(Game game) => game.corp.zones.RemoteInstalls();
-        Stealable IType.Stealable => Stealable.CAN_STEAL;
+        IStealOption IType.DefaultStealing(Card card) => new MustSteal(card, printedAgendaPoints);
+        private int printedAgendaPoints;
+
+        public Agenda(int printedAgendaPoints)
+        {
+            this.printedAgendaPoints = printedAgendaPoints;
+        }
     }
 }

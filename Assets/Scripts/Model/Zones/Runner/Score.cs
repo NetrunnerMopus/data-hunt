@@ -15,6 +15,7 @@ namespace model.zones.runner
 
         public void Add(Card card, int agendaPoints)
         {
+            card.FlipFaceUp(); // CR: 1.16.4
             card.MoveTo(zone);
             score += agendaPoints;
             if (score >= 7) // TODO Harmony MedTech

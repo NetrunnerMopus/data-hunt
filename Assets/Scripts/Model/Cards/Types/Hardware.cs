@@ -1,4 +1,5 @@
-﻿using model.zones;
+﻿using model.choices.steal;
+using model.zones;
 using System.Collections.Generic;
 
 namespace model.cards.types
@@ -8,8 +9,7 @@ namespace model.cards.types
         bool IType.Playable => false;
         bool IType.Installable => true;
         bool IType.Rezzable => false;
-        Stealable IType.Stealable => Stealable.CANNOT_STEAL;
-
+        IStealOption IType.DefaultStealing(Card card) => new CannotSteal();
         List<IInstallDestination> IType.FindInstallDestinations(Game game)
         {
             return new List<IInstallDestination>()
