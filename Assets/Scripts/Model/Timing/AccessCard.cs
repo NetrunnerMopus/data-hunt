@@ -51,20 +51,7 @@ namespace model.timing
 
         async private Task Steal()
         {
-            if (card.Stealable != Stealable.CANNOT_STEAL)
-            {
-                card.FlipFaceUp();
-                game.runner.zones.score.Add(card, 2);
-                UnityEngine.Debug.Log("Stole CST!");
-
-                /**
-                    Maybe each card can respond to being stolen:
-                    - you must steal me (Project Atlas)
-                    - you can steal me if you pay me (Obokata Protocol)
-                    - you cannot steal me (asset, operation, Lakshmi Smartfabrics, Old Hollywood Grid, Haarpsichord, Trebuchet etc.)
-                 */
-            }
-            await Task.CompletedTask; // TODO
+            await card.Stealable().Perform(game);
         }
 
         async private Task TriggerAfterAccessingCard()

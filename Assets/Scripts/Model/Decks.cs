@@ -28,7 +28,7 @@ namespace model
         public Deck DemoCorp()
         {
             var cards = new List<Card>();
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 5; i++)
             {
                 cards.Add(new HedgeFund());
                 cards.Add(new PadCampaign());
@@ -38,6 +38,7 @@ namespace model
             for (int i = 0; i < 2; i++)
             {
                 cards.Add(new AnonymousTip());
+                cards.Add(new VanityProject());
             }
             return new Deck(cards, new TheShadow());
         }

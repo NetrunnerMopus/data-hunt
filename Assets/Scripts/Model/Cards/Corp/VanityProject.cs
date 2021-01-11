@@ -1,15 +1,16 @@
 ﻿using model.cards.types;
+using model.costs;
 
 namespace model.cards.corp
 {
-    public class CorporateSalesTeam : Card
+    public class VanityProject : Card
     {
-        override public string FaceupArt => "corporate-sales-team";
-        override public string Name => "Corporate Sales Team";
+        override public string FaceupArt => "vanity-project";
+        override public string Name => "Vanity Project";
         override public Faction Faction => Factions.SHADOW;
-        override public int InfluenceCost => 0;
+        override public int InfluenceCost => 1;
         override public ICost PlayCost { get { throw new System.Exception("Agendas don't have play costs"); } }
         override public IEffect Activation { get { throw new System.Exception("Agendas don't have activations"); } }
-        override public IType Type => new Agenda(printedAgendaPoints: 2);
+        override public IType Type => new Agenda(printedAgendaPoints: 4);
     }
 }
