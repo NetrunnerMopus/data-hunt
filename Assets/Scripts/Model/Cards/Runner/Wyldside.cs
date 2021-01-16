@@ -1,9 +1,9 @@
 ﻿using model.effects.runner;
 using model.costs;
 using model.cards.types;
-using model.timing.runner;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using model.effects;
 
 namespace model.cards.runner
 {
@@ -21,23 +21,30 @@ namespace model.cards.runner
         {
             private readonly WyldsideTrigger trigger = new WyldsideTrigger();
 
-            IEnumerable<string> IEffect.Graphics => new string[] {};
+            IEnumerable<string> IEffect.Graphics => new string[] { };
 
             async Task IEffect.Resolve(Game game)
             {
-                game.runner.turn.ObserveStart(trigger);
+                game.runner.turn.WhenBegins(trigger);
                 await Task.CompletedTask;
             }
             void IEffect.Observe(IImpactObserver observer, Game game) { }
         }
 
-        private class WyldsideTrigger : IRunnerTurnStartObserver
+        private class WyldsideTrigger : IEffect
         {
-            async Task IRunnerTurnStartObserver.NotifyTurnStarted(Game game)
+
+            private IEffect sequence = new Sequence(new Draw(2), new LoseClicks(1));
+            IEnumerable<string> IEffect.Graphics => new[] { "wyldside" };
+
+            void IEffect.Observe(IImpactObserver observer, Game game)
             {
-                IEffect draw = new Draw(2);
-                await draw.Resolve(game);
-                game.runner.clicks.Lose(1);
+                sequence.Observe(observer, game);
+            }
+
+            async Task IEffect.Resolve(Game game)
+            {
+                await sequence.Resolve(game);
             }
         }
     }

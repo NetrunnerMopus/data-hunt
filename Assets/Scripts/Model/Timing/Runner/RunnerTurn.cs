@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using model.play;
 using model;
+using System;
 
 namespace model.timing.runner
 {
@@ -13,7 +14,7 @@ namespace model.timing.runner
         Side ITurn.Side => Side.RUNNER;
         private List<IEffect> turnBeginningTriggers = new List<IEffect>();
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
-        private HashSet<IRunnerTurnStartObserver> starts = new HashSet<IRunnerTurnStartObserver>();
+        public event EventHandler<ITurn> Started = delegate { };
         private HashSet<IRunnerActionObserver> actions = new HashSet<IRunnerActionObserver>();
 
         public RunnerTurn(Game game)
@@ -24,6 +25,7 @@ namespace model.timing.runner
         async Task ITurn.Start()
         {
             Active = true;
+            Started(this, this);
             await ActionPhase();
             await DiscardPhase();
             Active = false;
@@ -71,10 +73,6 @@ namespace model.timing.runner
             if (turnBeginningTriggers.Count > 0)
             {
                 await new SimultaneousTriggers(turnBeginningTriggers.Copy()).AllTriggered(game.runner.pilot, game);
-            }
-            foreach (var observer in starts)
-            {
-                await observer.NotifyTurnStarted(game);
             }
         }
 
@@ -141,25 +139,10 @@ namespace model.timing.runner
             steps.Add(observer);
         }
 
-        public void ObserveStart(IRunnerTurnStartObserver observer)
-        {
-            starts.Add(observer);
-        }
-
-        public void UnobserveStart(IRunnerTurnStartObserver observer)
-        {
-            starts.Remove(observer);
-        }
-
         public void ObserveActions(IRunnerActionObserver observer)
         {
             actions.Add(observer);
         }
-    }
-
-    public interface IRunnerTurnStartObserver
-    {
-        Task NotifyTurnStarted(Game game);
     }
 
     public interface IRunnerActionObserver
