@@ -8,6 +8,6 @@ namespace model.choices.steal
 
         bool IStealOption.IsLegal(Game game) => true;
 
-        Task IStealOption.Perform(Game game) => Task.CompletedTask;
+        Task<bool> IStealOption.Perform(Game game) => Task.FromResult(false);
     }
 }

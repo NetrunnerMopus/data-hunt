@@ -16,10 +16,10 @@ namespace model.choices.steal
         }
 
         bool IStealOption.IsLegal(Game game) => true;
-        Task IStealOption.Perform(Game game)
+        Task<bool> IStealOption.Perform(Game game)
         {
             game.runner.zones.score.Add(card, agendaPoints); // CR: 1.16.3
-            return Task.CompletedTask;
+            return Task.FromResult(true);
         }
     }
 }

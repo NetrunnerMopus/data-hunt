@@ -35,12 +35,11 @@ namespace model.cards.corp
             {
                 return costToSteal.Payable(game);
             }
-
-            async Task IStealOption.Perform(Game game)
+            async Task<bool> IStealOption.Perform(Game game)
             {
                 await costToSteal.Pay(game);
                 IStealOption mustSteal = game.MustSteal(card, 3);
-                await mustSteal.Perform(game);
+                return await mustSteal.Perform(game);
             }
         }
     }
