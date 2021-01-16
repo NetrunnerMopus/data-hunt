@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.play;
+using model;
 
 namespace model.timing.runner
 {
-    public class RunnerTurn: ITurn
+    public class RunnerTurn : ITurn
     {
         private Game game;
         public bool Active { get; private set; } = false;
         ClickPool ITurn.Clicks => game.runner.clicks;
         Side ITurn.Side => Side.RUNNER;
+        private List<IEffect> turnBeginningTriggers = new List<IEffect>();
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
         private HashSet<IRunnerTurnStartObserver> starts = new HashSet<IRunnerTurnStartObserver>();
         private HashSet<IRunnerActionObserver> actions = new HashSet<IRunnerActionObserver>();
@@ -37,7 +39,7 @@ namespace model.timing.runner
             Step(1, 3);
             RefillRecurringCredits();
             Step(1, 4);
-            TriggerTurnBeginning();
+            await TriggerTurnBeginning();
             Step(1, 5);
             await OpenPaidWindow();
             OpenRezWindow();
@@ -64,11 +66,15 @@ namespace model.timing.runner
 
         }
 
-        private void TriggerTurnBeginning()
+        async private Task TriggerTurnBeginning()
         {
+            if (turnBeginningTriggers.Count > 0)
+            {
+                await new SimultaneousTriggers(turnBeginningTriggers.Copy()).AllTriggered(game.runner.pilot, game);
+            }
             foreach (var observer in starts)
             {
-                observer.NotifyTurnStarted(game);
+                await observer.NotifyTurnStarted(game);
             }
         }
 
@@ -124,6 +130,10 @@ namespace model.timing.runner
             {
                 observer.NotifyStep("Runner turn", phase, step);
             }
+        }
+        public void WhenBegins(IEffect effect)
+        {
+            turnBeginningTriggers.Add(effect);
         }
 
         public void ObserveSteps(IStepObserver observer)

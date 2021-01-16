@@ -7,5 +7,6 @@ namespace model.timing
         ClickPool Clicks { get; }
         Side Side { get; }
         Task Start();
+        void WhenBegins(IEffect effect);
     }
 }
