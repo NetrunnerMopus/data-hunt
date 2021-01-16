@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using System.Threading.Tasks;
+using model.cards;
 using model.play.corp;
 using model.player;
 using model.timing;
@@ -38,9 +39,10 @@ namespace model
             this.identity = identity;
         }
 
-        public void Start(Game game)
+        async public Task Start(Game game)
         {
             identity.FlipFaceUp();
+            await identity.Activate(game);
             pilot.Play(game);
             credits.Gain(5);
             zones.rd.Shuffle();

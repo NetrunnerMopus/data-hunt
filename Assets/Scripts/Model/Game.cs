@@ -67,8 +67,8 @@ namespace model
 
         async public void Start()
         {
-            corp.Start(this);
-            runner.Start(this);
+            await corp.Start(this);
+            await runner.Start(this);
             await StartTurns();
         }
 
