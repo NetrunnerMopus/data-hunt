@@ -53,7 +53,7 @@ namespace model.ai
             zones.hq.ObserveDiscarding(this);
         }
 
-        async Task<IEffect> IPilot.TriggerFromSimultaneous(List<IEffect> effects)
+        async Task<IEffect> IPilot.TriggerFromSimultaneous(IList<IEffect> effects)
         {
             await Thinking();
             return effects.First();

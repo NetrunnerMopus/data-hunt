@@ -73,7 +73,7 @@ namespace model.timing.corp
         {
             if (turnBeginningTriggers.Count > 0)
             {
-                await new SimultaneousTriggers(turnBeginningTriggers).AllTriggered(game.corp.pilot, game);
+                await new SimultaneousTriggers(turnBeginningTriggers.Copy()).AllTriggered(game.corp.pilot, game);
             }
         }
 
