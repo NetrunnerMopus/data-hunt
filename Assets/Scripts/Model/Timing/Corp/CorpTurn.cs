@@ -1,5 +1,6 @@
 ﻿using model.effects.corp;
 using model.play;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,6 +15,7 @@ namespace model.timing.corp
         Side ITurn.Side => Side.CORP;
         private List<IEffect> turnBeginningTriggers = new List<IEffect>();
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
+        public event EventHandler<ITurn> Started  = delegate { };
         private HashSet<ICorpActionObserver> actions = new HashSet<ICorpActionObserver>();
 
         public CorpTurn(Game game)
@@ -24,6 +26,7 @@ namespace model.timing.corp
         async Task ITurn.Start()
         {
             Active = true;
+            Started(this, this);
             await DrawPhase();
             await ActionPhase();
             await DiscardPhase();

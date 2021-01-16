@@ -18,7 +18,6 @@ namespace view.log
         ICorpActionObserver,
         IRezWindowObserver,
         IHqDiscardObserver,
-        IRunnerTurnStartObserver,
         IRunnerActionObserver,
         IGripDiscardObserver
     {
@@ -31,11 +30,12 @@ namespace view.log
             var runnerTurn = game.runner.turn;
             var corpTurn = game.corp.turn;
             corpTurn.ObserveSteps(this);
+            corpTurn.Started += TurnStarted;
             corpTurn.ObserveActions(this);
             corpTurn.rezWindow.ObserveWindow(this);
             game.corp.zones.hq.ObserveDiscarding(this);
             runnerTurn.ObserveSteps(this);
-            runnerTurn.ObserveStart(this);
+            runnerTurn.Started += TurnStarted;
             runnerTurn.ObserveActions(this);
             game.runner.zones.grip.ObserveDiscarding(this);
         }
@@ -79,10 +79,9 @@ namespace view.log
             }
         }
 
-        async Task IRunnerTurnStartObserver.NotifyTurnStarted(Game game)
+        private void TurnStarted(object sender, ITurn turn)
         {
-            Log("turn beginning");
-            await Task.CompletedTask;
+            Log("turn " + turn + " beginning");
         }
 
         void IRunnerActionObserver.NotifyActionTaking()
