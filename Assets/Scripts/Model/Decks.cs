@@ -41,7 +41,7 @@ namespace model
                 cards.Add(new AnonymousTip());
                 cards.Add(new VanityProject());
             }
-            return new Deck(cards, new TheShadow());
+            return new Deck(cards, new HaarpsichordStudios());
         }
     }
 }
