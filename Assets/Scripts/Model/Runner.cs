@@ -48,9 +48,10 @@ namespace model
             this.identity = identity;
         }
 
-        public void Start(Game game)
+        async public Task Start(Game game)
         {
             identity.FlipFaceUp();
+            await identity.Activate(game);
             pilot.Play(game);
             credits.Gain(5);
             zones.stack.Shuffle();
