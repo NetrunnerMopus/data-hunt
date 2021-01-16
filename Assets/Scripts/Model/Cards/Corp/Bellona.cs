@@ -17,7 +17,7 @@ namespace model.cards.corp
         override public IType Type => new Agenda(printedAgendaPoints: 3);
         override public IEnumerable<IStealOption> StealOptions(Game game)
         {
-            return new IStealOption[] { new BellonaStealing(this), new CannotSteal() };
+            return new IStealOption[] { new BellonaStealing(this), new DeclineSteal() };
         }
 
         private class BellonaStealing : IStealOption
