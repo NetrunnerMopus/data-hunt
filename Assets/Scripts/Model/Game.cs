@@ -1,8 +1,11 @@
-﻿using model.player;
+﻿using model.cards;
+using model.choices.steal;
+using model.player;
 using model.timing;
 using model.zones;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace model
@@ -159,6 +162,12 @@ namespace model
         async public Task Checkpoint()
         {
             await checkpoint.Check();
+        }
+
+        public IStealOption MustSteal(Card card, int agendaPoints)
+        {
+            IStealOption mustSteal = new MustSteal(card, agendaPoints);
+            return runner.stealMods.Aggregate(mustSteal, (option, mod) => mod.Modify(option));
         }
     }
 

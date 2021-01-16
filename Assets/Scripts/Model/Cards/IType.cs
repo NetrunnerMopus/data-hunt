@@ -10,6 +10,6 @@ namespace model.cards
         bool Installable { get; }
         bool Rezzable { get; }
         List<IInstallDestination> FindInstallDestinations(Game game);
-        IStealOption DefaultStealing(Card card);
+        IStealOption DefaultStealing(Card card, Game game);
     }
 }

@@ -10,7 +10,7 @@ namespace model.cards.types
         bool IType.Installable => true;
         bool IType.Rezzable => false;
         List<IInstallDestination> IType.FindInstallDestinations(Game game) => game.corp.zones.RemoteInstalls();
-        IStealOption IType.DefaultStealing(Card card) => new MustSteal(card, printedAgendaPoints);
+        IStealOption IType.DefaultStealing(Card card, Game game) => game.MustSteal(card, printedAgendaPoints);
         private int printedAgendaPoints;
 
         public Agenda(int printedAgendaPoints)

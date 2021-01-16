@@ -1,4 +1,8 @@
-﻿using model.cards;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using model.cards;
+using model.choices.steal;
 using model.play.runner;
 using model.player;
 using model.timing;
@@ -19,6 +23,7 @@ namespace model
         public readonly CreditPool credits;
         public readonly Card identity;
         public readonly Player player;
+        public readonly IList<IStealModifier> stealMods = new List<IStealModifier>();
 
         public Runner(
             IPilot pilot,
@@ -51,6 +56,11 @@ namespace model
             zones.stack.Shuffle();
             zones.stack.Draw(5, zones.grip);
             zones.grip.zone.ObserveAdditions(actionCard);
+        }
+
+        internal void ModifyStealing(IStealModifier mod)
+        {
+            stealMods.Add(mod);
         }
     }
 }
