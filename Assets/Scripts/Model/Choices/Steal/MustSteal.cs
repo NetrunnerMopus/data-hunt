@@ -7,6 +7,7 @@ namespace model.choices.steal
     {
         private Card card;
         private int agendaPoints;
+        string IStealOption.Art => "Images/UI/hand-click";
 
         public MustSteal(Card card, int agendaPoints)
         {
@@ -14,6 +15,7 @@ namespace model.choices.steal
             this.agendaPoints = agendaPoints;
         }
 
+        bool IStealOption.IsLegal(Game game) => true;
         Task IStealOption.Perform(Game game)
         {
             game.runner.zones.score.Add(card, agendaPoints); // CR: 1.16.3

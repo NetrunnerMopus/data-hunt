@@ -1,5 +1,6 @@
 ﻿using model.cards;
 using model.choices;
+using model.choices.steal;
 using model.choices.trash;
 using model.zones;
 using System.Collections.Generic;
@@ -20,5 +21,6 @@ namespace model.player
         IDecision<string, Card> IPilot.ChooseACard() => new FailingChoice<string, Card>();
         IDecision<string, IInstallDestination> IPilot.ChooseAnInstallDestination() => new FailingChoice<string, IInstallDestination>();
         IDecision<Card, ITrashOption> IPilot.ChooseTrashing() => new FailingChoice<Card, ITrashOption>();
+        IDecision<Card, IStealOption> IPilot.ChooseStealing() => new FailingChoice<Card, IStealOption>();
     }
 }

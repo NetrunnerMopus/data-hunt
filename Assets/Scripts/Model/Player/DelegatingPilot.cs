@@ -1,5 +1,6 @@
 ﻿using model.cards;
 using model.choices;
+using model.choices.steal;
 using model.choices.trash;
 using model.zones;
 using System.Collections.Generic;
@@ -39,6 +40,11 @@ namespace model.player
         public virtual IDecision<Card, ITrashOption> ChooseTrashing()
         {
             return basic.ChooseTrashing();
+        }
+
+        public virtual IDecision<Card, IStealOption> ChooseStealing()
+        {
+            return basic.ChooseStealing();
         }
     }
 }

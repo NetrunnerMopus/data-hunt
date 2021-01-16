@@ -1,5 +1,6 @@
 ﻿using model.cards;
 using model.choices;
+using model.choices.steal;
 using model.choices.trash;
 using model.play;
 using model.play.corp;
@@ -148,7 +149,12 @@ namespace model.ai
 
         IDecision<Card, ITrashOption> IPilot.ChooseTrashing()
         {
-            throw new NotImplementedException();
+            throw new Exception("Corps shouldn't have to know how to trash");
+        }
+
+        IDecision<Card, IStealOption> IPilot.ChooseStealing()
+        {
+            throw new Exception("Corps shouldn't have to know how to steal");
         }
 
         private class CardChoice : IDecision<string, Card>
