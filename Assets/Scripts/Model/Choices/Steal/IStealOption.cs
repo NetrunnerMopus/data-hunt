@@ -8,4 +8,9 @@ namespace model.choices.steal
         Task Perform(Game game);
         string Art { get; }
     }
+
+    public interface IStealModifier
+    {
+        IStealOption Modify(IStealOption option);
+    }
 }

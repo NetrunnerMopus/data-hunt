@@ -39,7 +39,7 @@ namespace model.cards.corp
             async Task IStealOption.Perform(Game game)
             {
                 await costToSteal.Pay(game);
-                IStealOption mustSteal = new MustSteal(card, 3);
+                IStealOption mustSteal = game.MustSteal(card, 3);
                 await mustSteal.Perform(game);
             }
         }
