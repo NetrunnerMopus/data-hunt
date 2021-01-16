@@ -1,5 +1,6 @@
 ﻿using model.cards;
 using model.choices;
+using model.choices.steal;
 using model.choices.trash;
 using model.zones;
 using System.Collections.Generic;
@@ -15,5 +16,6 @@ namespace model.player
         // IDecision<Card> ChooseAZone(); TODO for central access
         IDecision<string, IInstallDestination> ChooseAnInstallDestination();
         IDecision<Card, ITrashOption> ChooseTrashing();
+        IDecision<Card, IStealOption> ChooseStealing();
     }
 }

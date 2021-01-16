@@ -34,6 +34,7 @@ namespace model
                 cards.Add(new PadCampaign());
                 cards.Add(new AdvancedAssemblyLines());
                 cards.Add(new CorporateSalesTeam());
+                cards.Add(new Bellona());
             }
             for (int i = 0; i < 2; i++)
             {

@@ -1,5 +1,6 @@
 using model.cards;
 using model.choices;
+using model.choices.steal;
 using model.choices.trash;
 using model.play;
 using model.zones;
@@ -28,5 +29,6 @@ namespace model.player
         override public IDecision<string, Card> ChooseACard() => new TheOnlyChoice<string, Card>(base.ChooseACard());
         override public IDecision<string, IInstallDestination> ChooseAnInstallDestination() => new TheOnlyChoice<string, IInstallDestination>(base.ChooseAnInstallDestination());
         override public IDecision<Card, ITrashOption> ChooseTrashing() => new TheOnlyChoice<Card, ITrashOption>(base.ChooseTrashing());
+        override public IDecision<Card, IStealOption> ChooseStealing() => new TheOnlyChoice<Card, IStealOption>(base.ChooseStealing());
     }
 }

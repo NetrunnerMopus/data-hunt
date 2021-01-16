@@ -24,7 +24,7 @@ namespace model.cards
         public bool Faceup { get; private set; } = false;
         public Information Information { get; private set; } = Information.HIDDEN_FROM_ALL;
         public bool Active { get; private set; } = false;
-        public virtual IStealOption Stealing() => Type.DefaultStealing(this);
+        public virtual IEnumerable<IStealOption> StealOptions(Game game) => new[] { Type.DefaultStealing(this) };
         public virtual IEnumerable<ITrashOption> TrashOptions(Game game) => new[] { new Leave() };
 
         public Card()

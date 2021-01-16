@@ -30,9 +30,12 @@ public class GameConfig : MonoBehaviour
                 new CardChoiceScreen(parts),
                 new TrashingPilot(
                     new TrashChoiceScreen(parts),
-                    new AutoPaidWindowPilot(
-                        new SingleChoiceMaker(
-                            new NoPilot()
+                    new StealingPilot(
+                        new StealChoiceScreen(parts),
+                        new AutoPaidWindowPilot(
+                            new SingleChoiceMaker(
+                                new NoPilot()
+                            )
                         )
                     )
                 )

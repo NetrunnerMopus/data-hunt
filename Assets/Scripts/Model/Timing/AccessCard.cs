@@ -1,4 +1,4 @@
-﻿using model.cards;
+using model.cards;
 using model.player;
 using model.zones;
 using System.Threading.Tasks;
@@ -51,7 +51,10 @@ namespace model.timing
 
         async private Task Steal()
         {
-            await card.Stealable().Perform(game);
+            var options = card.StealOptions(game);
+            var decision = game.runner.pilot.ChooseStealing();
+            var stealing = await decision.Declare(card, options, game);
+            await stealing.Perform(game);
         }
 
         async private Task TriggerAfterAccessingCard()
