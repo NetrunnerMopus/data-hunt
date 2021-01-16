@@ -11,7 +11,7 @@ namespace model.player
     public interface IPilot
     {
         void Play(Game game);
-        Task<IEffect> TriggerFromSimultaneous(List<IEffect> effects);
+        Task<IEffect> TriggerFromSimultaneous(IList<IEffect> effects);
         IDecision<string, Card> ChooseACard();
         // IDecision<Card> ChooseAZone(); TODO for central access
         IDecision<string, IInstallDestination> ChooseAnInstallDestination();

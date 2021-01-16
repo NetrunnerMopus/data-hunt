@@ -14,7 +14,7 @@ namespace model.player
     {
         public SingleChoiceMaker(IPilot basic) : base(basic) { }
 
-        async override public Task<IEffect> TriggerFromSimultaneous(List<IEffect> effects)
+        async override public Task<IEffect> TriggerFromSimultaneous(IList<IEffect> effects)
         {
             if (effects.Count == 1)
             {

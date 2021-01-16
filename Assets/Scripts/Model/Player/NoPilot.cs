@@ -13,7 +13,7 @@ namespace model.player
     {
         void IPilot.Play(Game game) { }
 
-        Task<IEffect> IPilot.TriggerFromSimultaneous(List<IEffect> effects)
+        Task<IEffect> IPilot.TriggerFromSimultaneous(IList<IEffect> effects)
         {
             return Task.FromResult(effects.First());
         }

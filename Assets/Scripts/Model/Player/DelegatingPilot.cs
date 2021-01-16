@@ -22,7 +22,7 @@ namespace model.player
             basic.Play(game);
         }
 
-        public virtual Task<IEffect> TriggerFromSimultaneous(List<IEffect> effects)
+        public virtual Task<IEffect> TriggerFromSimultaneous(IList<IEffect> effects)
         {
             return basic.TriggerFromSimultaneous(effects);
         }
