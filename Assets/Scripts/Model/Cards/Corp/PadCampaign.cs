@@ -17,7 +17,7 @@ namespace model.cards.corp
         override public ICost PlayCost => new CorpCreditCost(2);
         override public IEffect Activation => new PadCampaignActivation();
         override public IType Type => new Asset();
-        override public IEnumerable<ITrashOption> TrashOptions(Game game) => new ITrashOption[] {
+        override public IList<ITrashOption> TrashOptions(Game game) => new List<ITrashOption> {
             new Leave(),
             new PayToTrash(new RunnerCreditCost(4), this)
         };

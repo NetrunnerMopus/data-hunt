@@ -44,17 +44,31 @@ namespace model.timing
         async private Task<bool> Trash()
         {
             var options = card.TrashOptions(game);
-            var decision = game.runner.pilot.ChooseTrashing();
-            var trashing = await decision.Declare(card, options, game);
-            return await trashing.Perform(game);
+            if (options.Count > 0)
+            {
+                var decision = game.runner.pilot.ChooseTrashing();
+                var trashing = await decision.Declare(card, options, game);
+                return await trashing.Perform(game);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         async private Task<bool> Steal()
         {
             var options = card.StealOptions(game);
-            var decision = game.runner.pilot.ChooseStealing();
-            var stealing = await decision.Declare(card, options, game);
-            return await stealing.Perform(game);
+            if (options.Count > 0)
+            {
+                var decision = game.runner.pilot.ChooseStealing();
+                var stealing = await decision.Declare(card, options, game);
+                return await stealing.Perform(game);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         async private Task TriggerAfterAccessingCard()
