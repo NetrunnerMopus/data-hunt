@@ -19,10 +19,11 @@ namespace model.choices.trash
             return cost.Payable(game);
         }
 
-        async Task ITrashOption.Perform(Game game)
+        async Task<bool> ITrashOption.Perform(Game game)
         {
             await cost.Pay(game);
             card.MoveTo(game.corp.zones.archives.Zone);
+            return true;
         }
 
         string ITrashOption.Art => "Images/UI/trash-can";

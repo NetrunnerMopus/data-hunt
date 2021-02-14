@@ -6,7 +6,7 @@ namespace model.choices.trash
     {
         bool ITrashOption.IsLegal(Game game) => true;
 
-        async Task ITrashOption.Perform(Game game) => await Task.CompletedTask;
+        async Task<bool> ITrashOption.Perform(Game game) => await Task.FromResult(false);
 
         string ITrashOption.Art => "Images/UI/thumb-up";
     }
