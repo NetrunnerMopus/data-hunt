@@ -23,15 +23,16 @@ namespace model.cards.corp
 
             async Task IEffect.Resolve(Game game)
             {
-                var mod = new HaarpsichordModifier();
-                game.corp.turn.Started += mod.Reset;
-                game.runner.turn.Started += mod.Reset;
+                var memory = new HaarpsichordMemory();
+                game.corp.turn.Started += memory.Reset;
+                game.runner.turn.Started += memory.Reset;
+                var mod = new HaarpsichordModifier(memory);
                 game.runner.ModifyStealing(mod);
                 await Task.CompletedTask;
             }
         }
 
-        private class HaarpsichordModifier : IStealModifier
+        private class HaarpsichordMemory
         {
             public bool AgendaStolenThisTurn = false;
 
@@ -39,43 +40,50 @@ namespace model.cards.corp
             {
                 AgendaStolenThisTurn = false;
             }
+        }
+
+        private class HaarpsichordModifier : IStealModifier
+        {
+            private HaarpsichordMemory memory;
+
+            public HaarpsichordModifier(HaarpsichordMemory memory)
+            {
+                this.memory = memory;
+            }
 
             IStealOption IStealModifier.Modify(IStealOption option)
             {
-                if (AgendaStolenThisTurn)
-                {
-                    return new CannotSteal();
-                }
-                else
-                {
-                    return new StealingWhileHaarpsichordWatches(option, this);
-                }
+                return new StealingWhileHaarpsichordWatches(memory, option);
             }
         }
 
         private class StealingWhileHaarpsichordWatches : IStealOption
         {
-            private HaarpsichordModifier modifier;
+            private HaarpsichordMemory memory;
             private IStealOption original;
             public string Art => original.Art;
 
-            public StealingWhileHaarpsichordWatches(IStealOption original, HaarpsichordModifier modifier)
+            public StealingWhileHaarpsichordWatches(HaarpsichordMemory memory, IStealOption original)
             {
+                this.memory = memory;
                 this.original = original;
-                this.modifier = modifier;
             }
 
             public bool IsLegal(Game game)
             {
-                return original.IsLegal(game);
+                return !memory.AgendaStolenThisTurn && original.IsLegal(game);
             }
 
             async public Task<bool> Perform(Game game)
             {
+                if (memory.AgendaStolenThisTurn)
+                {
+                    throw new System.Exception("Illegal steal from Haarpsichord");
+                }
                 var stolen = await original.Perform(game);
                 if (stolen)
                 {
-                    modifier.AgendaStolenThisTurn = true;
+                    memory.AgendaStolenThisTurn = true;
                 }
                 return stolen;
             }
