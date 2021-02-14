@@ -30,8 +30,9 @@ namespace model.cards.corp
 
             bool IStealOption.IsLegal(Game game)
             {
-                return costToSteal.Payable(game);
+                return costToSteal.Payable(game) && game.MustSteal(card, 3).IsLegal(game);
             }
+
             async Task<bool> IStealOption.Perform(Game game)
             {
                 await costToSteal.Pay(game);
