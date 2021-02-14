@@ -21,7 +21,7 @@ namespace model.cards.corp
         override public IEffect Activation => new AdvancedAssemblyLinesActivation(this);
         override public IType Type => new Asset();
 
-        override public IEnumerable<ITrashOption> TrashOptions(Game game) => new ITrashOption[] {
+        override public IList<ITrashOption> TrashOptions(Game game) => new List<ITrashOption> {
             new Leave(),
             new PayToTrash(new RunnerCreditCost(1), this)
         };

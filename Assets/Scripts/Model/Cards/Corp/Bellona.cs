@@ -15,10 +15,7 @@ namespace model.cards.corp
         override public ICost PlayCost { get { throw new System.Exception("Agendas don't have play costs"); } }
         override public IEffect Activation { get { throw new System.Exception("Agendas don't have activations"); } }
         override public IType Type => new Agenda(printedAgendaPoints: 3);
-        override public IEnumerable<IStealOption> StealOptions(Game game)
-        {
-            return new IStealOption[] { new BellonaStealing(this), new DeclineSteal() };
-        }
+        override public IList<IStealOption> StealOptions(Game game) => new List<IStealOption> { new BellonaStealing(this), new DeclineSteal() };
 
         private class BellonaStealing : IStealOption
         {

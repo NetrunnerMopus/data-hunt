@@ -9,7 +9,7 @@ namespace model.cards
         bool Playable { get; }
         bool Installable { get; }
         bool Rezzable { get; }
-        List<IInstallDestination> FindInstallDestinations(Game game);
-        IStealOption DefaultStealing(Card card, Game game);
+        IList<IInstallDestination> FindInstallDestinations(Game game);
+        IList<IStealOption> DefaultStealing(Card card, Game game);
     }
 }
