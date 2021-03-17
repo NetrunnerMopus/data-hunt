@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace model.play
@@ -7,8 +8,8 @@ namespace model.play
     {
         public readonly ICost cost;
         public readonly IEffect effect;
-        private HashSet<IUsabilityObserver> usabilities = new HashSet<IUsabilityObserver>();
-        private HashSet<IResolutionObserver> resolutions = new HashSet<IResolutionObserver>();
+        public event Action<Ability, bool> UsabilityChanged = delegate {};
+        public event Action<Ability> Resolved = delegate {};
         private bool payable = false;
         private bool impactful = false;
         public bool Usable => payable && impactful;
@@ -23,10 +24,7 @@ namespace model.play
         {
             await cost.Pay(game);
             await effect.Resolve(game);
-            foreach (var observer in resolutions)
-            {
-                observer.NotifyResolved(this);
-            }
+            Resolved(this);
         }
 
         public void ObserveUsability(IUsabilityObserver observer, Game game)
@@ -34,11 +32,6 @@ namespace model.play
             usabilities.Add(observer);
             cost.Observe(this, game);
             effect.Observe(this, game);
-        }
-
-        public void ObserveResolution(IResolutionObserver observer)
-        {
-            resolutions.Add(observer);
         }
 
         public void Unobserve(IUsabilityObserver observer)
@@ -60,10 +53,7 @@ namespace model.play
 
         private void Update()
         {
-            foreach (var observer in usabilities)
-            {
-                observer.NotifyUsable(Usable, this);
-            }
+            UsabilityChanged(this, Usable);
         }
 
         public override bool Equals(object obj)
@@ -88,10 +78,5 @@ namespace model.play
     public interface IUsabilityObserver
     {
         void NotifyUsable(bool usable, Ability ability);
-    }
-
-    public interface IResolutionObserver
-    {
-        void NotifyResolved(Ability ability);
     }
 }

@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace model.effects
 {
     public class Pass : IEffect
     {
+        public bool Impactful => true;
+        public event Action<IEffect, bool> ChangedImpact;
         async Task IEffect.Resolve(Game game) => await Task.CompletedTask;
-        IEnumerable<string> IEffect.Graphics => new string[] {};
-
-        void IEffect.Observe(IImpactObserver observer, Game game)
-        {
-            observer.NotifyImpact(true, this);
-        }
+        IEnumerable<string> IEffect.Graphics => new string[] { };
     }
 }

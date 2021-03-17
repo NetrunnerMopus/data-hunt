@@ -5,7 +5,7 @@ using model.play;
 
 namespace controller
 {
-    public class InteractiveAbility : IInteractive, IUsabilityObserver
+    public class InteractiveAbility : IInteractive
     {
         private Ability ability;
         private Game game;
@@ -19,7 +19,7 @@ namespace controller
             this.Activation = activation;
             this.Active = ability.Usable;
             this.game = game;
-            ability.ObserveUsability(this, game);
+            ability.UsabilityChanged += UpdateUsability;
         }
 
         void IInteractive.Observe(Update update)
@@ -34,10 +34,10 @@ namespace controller
 
         void IInteractive.UnobserveAll()
         {
-            ability.Unobserve(this);
+            ability.UsabilityChanged -= UpdateUsability;
         }
 
-        void IUsabilityObserver.NotifyUsable(bool usable, Ability ability)
+        private void UpdateUsability(Ability ability, bool usable)
         {
             Active = usable;
             foreach (var update in updates)

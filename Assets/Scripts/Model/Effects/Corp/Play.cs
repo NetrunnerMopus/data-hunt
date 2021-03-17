@@ -1,7 +1,8 @@
-﻿using model.cards;
-using model.zones;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using model.cards;
+using model.zones;
 
 namespace model.effects.corp
 {
@@ -9,12 +10,15 @@ namespace model.effects.corp
     {
         private Card card;
         private Zone playZone = new Zone("Play");
+        public bool Impactful => card.Activation.Impactful;
+        public event Action<IEffect, bool> ChangedImpact = delegate { };
 
-        IEnumerable<string> IEffect.Graphics  => new string[] { "Images/Cards/" + card.FaceupArt };
+        IEnumerable<string> IEffect.Graphics => new string[] { "Images/Cards/" + card.FaceupArt };
 
         public Play(Card card)
         {
             this.card = card;
+            card.Activation.ChangedImpact += ChangedImpact;
         }
 
         async Task IEffect.Resolve(Game game)
@@ -24,11 +28,6 @@ namespace model.effects.corp
             await card.Activate(game);
             card.Deactivate();
             card.MoveTo(game.corp.zones.archives.Zone);
-        }
-
-        void IEffect.Observe(IImpactObserver observer, Game game)
-        {
-            card.Activation.Observe(observer, game);
         }
 
         public override bool Equals(object obj)

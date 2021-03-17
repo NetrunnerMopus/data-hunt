@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.cards;
 using model.choices.steal;
@@ -48,15 +47,15 @@ namespace model
             this.identity = identity;
         }
 
-        async public Task Start(Game game)
+        async public Task Start(Game game, Deck deck)
         {
+            zones.stack.AddDeck(deck);
             identity.FlipFaceUp();
             await identity.Activate(game);
             pilot.Play(game);
             credits.Gain(5);
-            zones.stack.Shuffle();
             zones.stack.Draw(5, zones.grip);
-            zones.grip.zone.ObserveAdditions(actionCard);
+            zones.grip.zone.Added += actionCard.InferPotentialActions;
         }
 
         internal void ModifyStealing(IStealModifier mod)

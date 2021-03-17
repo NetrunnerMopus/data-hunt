@@ -1,30 +1,33 @@
-﻿using model.costs;
-using model.cards.types;
-using model.play;
-using model.effects.runner;
-using model.zones.runner;
-using model.zones;
-using System.Threading.Tasks;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using model.cards.types;
+using model.costs;
+using model.effects.runner;
+using model.play;
+using model.zones;
 
 namespace model.cards.runner
 {
     public class SportsHopper : Card
     {
+        public SportsHopper(Game game) : base(game) { }
         override public string FaceupArt => "sports-hopper";
         override public string Name => "Sports Hopper";
         override public Faction Faction => Factions.MASQUE;
         override public int InfluenceCost => 0;
-        override public ICost PlayCost => new RunnerCreditCost(3);
+        override public ICost PlayCost => game.Costs.InstallHardware(this, 3);
         override public IEffect Activation => new SportsHopperActivation(this);
         override public IType Type => new Hardware();
 
-        private class SportsHopperActivation : IEffect, IZoneRemovalObserver
+        private class SportsHopperActivation : IEffect
         {
             private Card card;
             private Ability pop;
             private Game game;
-            IEnumerable<string> IEffect.Graphics => new string[] {};
+            public bool Impactful => true;
+            public event Action<IEffect, bool> ChangedImpact = delegate { };
+            IEnumerable<string> IEffect.Graphics => new string[] { };
             public SportsHopperActivation(Card card)
             {
                 this.card = card;
@@ -37,23 +40,19 @@ namespace model.cards.runner
                 var heap = game.runner.zones.heap.zone;
                 if (pop == null)
                 {
-                    pop = new Ability(new Conjunction(paidWindow.Permission(), new Trash(card, heap)), new Draw(3));
+                    pop = new Ability(new Conjunction(paidWindow.Permission(), new Trash(card, heap)), game.runner.zones.Drawing(3));
                 }
                 paidWindow.Add(pop, card);
-                game.runner.zones.rig.zone.ObserveRemovals(this);
+                game.runner.zones.rig.zone.Removed += CheckIfUninstalled;
                 await Task.CompletedTask;
             }
 
-            void IZoneRemovalObserver.NotifyCardRemoved(Card card)
+            private void CheckIfUninstalled(Zone zone, Card card)
             {
                 if (card == this.card)
                 {
                     game.runner.paidWindow.Remove(pop);
                 }
-            }
-
-            void IEffect.Observe(IImpactObserver observer, Game game)
-            {
             }
         }
     }

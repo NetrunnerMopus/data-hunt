@@ -5,6 +5,7 @@ namespace model.cards.runner
 {
     public class OmarKeung : Card
     {
+        public OmarKeung(Game game) : base(game) { }
         override public string FaceupArt => "omar-keung";
         override public string Name => "Omar Keung";
         override public Faction Faction => Factions.ANARCH;

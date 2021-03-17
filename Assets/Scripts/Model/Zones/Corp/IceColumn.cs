@@ -1,16 +1,18 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using model.cards;
+using model.costs;
 
 namespace model.zones.corp
 {
     public class IceColumn : IInstallDestination
     {
         public int Height { get; private set; } = 0;
-        private Game game;
-
-        public IceColumn(Game game)
+        private IServer server;
+        private Costs costs;
+        public IceColumn(IServer server, Costs costs)
         {
-            this.game = game;
+            this.server = server;
+            this.costs = costs;
         }
 
         void IInstallDestination.Host(Card card)
@@ -27,7 +29,7 @@ namespace model.zones.corp
         Task IInstallDestination.PayInstallCost(Card card)
         {
             // CR: 8.2.11.a    
-            game.corp.credits.Pay(Height);
+            costs.InstallIce(this).Pay(Height);
             return Task.CompletedTask;
         }
     }

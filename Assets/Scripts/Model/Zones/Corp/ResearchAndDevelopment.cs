@@ -14,15 +14,20 @@ namespace model.zones.corp
         private Game game;
         private bool reshuffledDuringAccess = false;
 
-        public ResearchAndDevelopment(Game game, Deck deck, Shuffling shuffling)
+        public ResearchAndDevelopment(Game game, Shuffling shuffling)
         {
             this.game = game;
             this.shuffling = shuffling;
             Ice = new IceColumn(game);
+        }
+
+        public void AddDeck(Deck deck)
+        {
             foreach (var card in deck.cards)
             {
                 card.MoveTo(Zone);
             }
+            Shuffle();
         }
 
         public void Shuffle()

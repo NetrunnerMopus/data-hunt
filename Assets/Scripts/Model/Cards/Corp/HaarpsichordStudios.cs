@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.cards.types;
 using model.choices.steal;
@@ -8,6 +9,7 @@ namespace model.cards.corp
 {
     public class HaarpsichordStudios : Card
     {
+        public HaarpsichordStudios(Game game) : base(game) { }
         override public string FaceupArt => "haarpsichord-studios";
         override public string Name => "Haarpsichord Studios";
         override public Faction Faction => Factions.NBN;
@@ -18,8 +20,9 @@ namespace model.cards.corp
 
         private class HaarpsichordEffect : IEffect
         {
+            public bool Impactful => true;
+            public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { };
-            void IEffect.Observe(IImpactObserver observer, Game game) => observer.NotifyImpact(true, this);
 
             async Task IEffect.Resolve(Game game)
             {

@@ -4,6 +4,7 @@ namespace model.cards.corp
 {
     public class CustomBiotics : Card
     {
+        public CustomBiotics(Game game) : base(game) { }
         override public string FaceupArt => "custom-biotics";
         override public string Name => "Custom Biotics";
         override public Faction Faction => Factions.HAAS_BIOROID;

@@ -63,7 +63,7 @@ namespace model.play.runner
             actionTaking.SetResult(ability);
         }
 
-        void IZoneAdditionObserver.NotifyCardAdded(Card card)
+        public void InferPotentialActions(Zone zone, Card card)
         {
             if (card.Type.Playable)
             {

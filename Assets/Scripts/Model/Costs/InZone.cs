@@ -1,7 +1,7 @@
-﻿using model.cards;
-using model.zones;
-using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
+using model.cards;
+using model.zones;
 
 namespace model.costs
 {
@@ -9,37 +9,24 @@ namespace model.costs
     {
         private Card card;
         private Zone zone;
-        private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
+        public event Action<ICost, bool> PayabilityChanged = delegate { };
 
         public InZone(Card card, Zone zone)
         {
             this.card = card;
             this.zone = zone;
+            card.Moved += CheckIfStillInZone;
         }
 
-        void ICost.Observe(IPayabilityObserver observer, Game game)
+        private void CheckIfStillInZone(Card card, Zone source, Zone target)
         {
-            observers.Add(observer);
-            card.ObserveMoves(
-                delegate (Card card, Zone source, Zone target)
-                {
-                    if (card == this.card)
-                    {
-                        NotifyInZone(target == zone);
-                    }
-                }
-            );
-        }
-
-        private void NotifyInZone(bool inZone)
-        {
-            foreach (var observer in observers)
+            if (card == this.card)
             {
-                observer.NotifyPayable(inZone, this);
+                PayabilityChanged(this, target == zone);
             }
         }
 
-        bool ICost.Payable(Game game) => true;
+        bool ICost.Payable(Game game) => card.Zone == zone;
 
         async Task ICost.Pay(Game game)
         {

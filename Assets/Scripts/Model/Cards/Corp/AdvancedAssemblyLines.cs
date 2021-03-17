@@ -1,35 +1,39 @@
-﻿using model.cards.types;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using model.cards.types;
 using model.choices.trash;
 using model.costs;
 using model.effects;
 using model.effects.corp;
 using model.play;
 using model.zones;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using model.zones.corp;
 
 namespace model.cards.corp
 {
     public class AdvancedAssemblyLines : Card
     {
+        public AdvancedAssemblyLines(Game game) : base(game) { }
         override public string FaceupArt => "advanced-assembly-lines";
         override public string Name => "Advanced Assembly Lines";
         override public Faction Faction => Factions.HAAS_BIOROID;
         override public int InfluenceCost => 2;
-        override public ICost PlayCost => new CorpCreditCost(1);
+        override public ICost PlayCost => game.Costs.Rez(this, 1);
         override public IEffect Activation => new AdvancedAssemblyLinesActivation(this);
         override public IType Type => new Asset();
-
         override public IList<ITrashOption> TrashOptions(Game game) => new List<ITrashOption> {
             new Leave(),
-            new PayToTrash(new RunnerCreditCost(1), this)
+            new PayToTrash(game.Costs.Trash(this, 1), this)
         };
 
         private class AdvancedAssemblyLinesActivation : IEffect
         {
+            public bool Impactful => true;
+            public event Action<IEffect, bool> ChangedImpact = delegate { };
             private readonly Card card;
-            IEnumerable<string> IEffect.Graphics => new string[] {};
+            IEnumerable<string> IEffect.Graphics => new string[] { };
 
             public AdvancedAssemblyLinesActivation(Card card)
             {
@@ -44,29 +48,26 @@ namespace model.cards.corp
                 var archives = game.corp.zones.archives.Zone;
                 var pop = new Ability(
                     cost: new Conjunction(paidWindow.Permission(), new Trash(card, archives), new Active(card)),
-                    effect: new AdvancedAssemblyLinesInstall()
+                    effect: new AdvancedAssemblyLinesInstall(game.corp.zones.hq)
                 );
                 paidWindow.Add(pop, card);
-                card.ObserveMoves(
-                    delegate (Card card, Zone source, Zone target)
-                    {
-                        paidWindow.Remove(pop);
-                    }
-                );
-            }
-
-            void IEffect.Observe(IImpactObserver observer, Game game)
-            {
-                observer.NotifyImpact(true, this);
+                card.Moved += delegate (Card card, Zone source, Zone target) { paidWindow.Remove(pop); };
             }
         }
 
-        private class AdvancedAssemblyLinesInstall : IEffect, ICardsObserver
+        private class AdvancedAssemblyLinesInstall : IEffect
         {
-            private HashSet<IImpactObserver> observers = new HashSet<IImpactObserver>();
+            public bool Impactful => installables.Count > 0;
+            public event Action<IEffect, bool> ChangedImpact = delegate { };
+            IEnumerable<string> IEffect.Graphics => new string[] { };
             private List<Card> installables = new List<Card>();
+            private Headquarters hq;
 
-            IEnumerable<string> IEffect.Graphics => new string[] {};
+            public AdvancedAssemblyLinesInstall(Headquarters hq)
+            {
+                this.hq = hq;
+                hq.Zone.Changed += UpdateInstallables;
+            }
 
             async Task IEffect.Resolve(Game game)
             {
@@ -76,19 +77,10 @@ namespace model.cards.corp
                 await install.Resolve(game);
             }
 
-            void IEffect.Observe(IImpactObserver observer, Game game)
+            private void UpdateInstallables(Zone hqZone)
             {
-                observers.Add(observer);
-                game.corp.zones.hq.Zone.ObserveCards(this);
-            }
-
-            void ICardsObserver.NotifyCards(List<Card> cards)
-            {
-                installables = cards.Where(card => (card.Type.Installable && !(card.Type is Agenda))).ToList();
-                foreach (var observer in observers)
-                {
-                    observer.NotifyImpact(installables.Count > 0, this);
-                }
+                installables = hq.Zone.Cards.Where(card => (card.Type.Installable && !(card.Type is Agenda))).ToList();
+                ChangedImpact(this, Impactful);
             }
         }
     }

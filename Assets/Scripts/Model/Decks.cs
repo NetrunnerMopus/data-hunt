@@ -7,41 +7,41 @@ namespace model
 {
     public class Decks
     {
-        public Deck DemoRunner()
+        public Deck DemoRunner(Game game)
         {
             var cards = new List<Card>();
             for (int i = 0; i < 3; i++)
             {
-                cards.Add(new Diesel());
-                cards.Add(new QualityTime());
-                cards.Add(new SureGamble());
-                cards.Add(new BuildScript());
-                cards.Add(new ProcessAutomation());
-                cards.Add(new Mongoose());
-                cards.Add(new SpyCamera());
-                cards.Add(new Wyldside());
-                cards.Add(new SportsHopper());
+                cards.Add(new Diesel(game));
+                cards.Add(new QualityTime(game));
+                cards.Add(new SureGamble(game));
+                cards.Add(new BuildScript(game));
+                cards.Add(new ProcessAutomation(game));
+                cards.Add(new Mongoose(game));
+                cards.Add(new SpyCamera(game));
+                cards.Add(new Wyldside(game));
+                cards.Add(new SportsHopper(game));
             }
-            return new Deck(cards, new OmarKeung());
+            return new Deck(cards, new OmarKeung(game));
         }
 
-        public Deck DemoCorp()
+        public Deck DemoCorp(Game game)
         {
             var cards = new List<Card>();
             for (int i = 0; i < 5; i++)
             {
-                cards.Add(new HedgeFund());
-                cards.Add(new PadCampaign());
-                cards.Add(new AdvancedAssemblyLines());
-                cards.Add(new CorporateSalesTeam());
-                cards.Add(new Bellona());
+                cards.Add(new HedgeFund(game));
+                cards.Add(new PadCampaign(game));
+                cards.Add(new AdvancedAssemblyLines(game));
+                cards.Add(new CorporateSalesTeam(game));
+                cards.Add(new Bellona(game));
             }
             for (int i = 0; i < 2; i++)
             {
-                cards.Add(new AnonymousTip());
-                cards.Add(new VanityProject());
+                cards.Add(new AnonymousTip(game));
+                cards.Add(new VanityProject(game));
             }
-            return new Deck(cards, new HaarpsichordStudios());
+            return new Deck(cards, new HaarpsichordStudios(game));
         }
     }
 }
