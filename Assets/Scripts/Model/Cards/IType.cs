@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using model.stealing;
 using model.zones;
-using model.choices.steal;
 
 namespace model.cards
 {
@@ -9,7 +9,7 @@ namespace model.cards
         bool Playable { get; }
         bool Installable { get; }
         bool Rezzable { get; }
-        IList<IInstallDestination> FindInstallDestinations(Game game);
-        IList<IStealOption> DefaultStealing(Card card, Game game);
+        IList<IInstallDestination> FindInstallDestinations();
+        IList<IStealOption> DefaultStealing(Card card);
     }
 }

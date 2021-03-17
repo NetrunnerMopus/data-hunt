@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using model.choices.steal;
 using model.choices.trash;
 using model.player;
+using model.stealing;
 using model.zones;
 
 namespace model.cards
@@ -23,8 +23,8 @@ namespace model.cards
         public bool Faceup { get; private set; } = false;
         public Information Information { get; private set; } = Information.HIDDEN_FROM_ALL;
         public bool Active { get; private set; } = false;
-        public virtual IList<IStealOption> StealOptions(Game game) => Type.DefaultStealing(this, game);
-        public virtual IList<ITrashOption> TrashOptions(Game game) => new List<ITrashOption>();
+        public virtual IList<IStealOption> StealOptions() => Type.DefaultStealing(this);
+        public virtual IList<ITrashOption> TrashOptions() => new List<ITrashOption>();
         protected Game game;
 
         public Card(Game game)
@@ -34,10 +34,10 @@ namespace model.cards
             this.Zone.Add(this);
         }
 
-        async public Task Activate(Game game)
+        async public Task Activate()
         {
             Active = true;
-            await Activation.Resolve(game); // TODO either keep this or `public Activation`, because it's risking double resolution
+            await Activation.Resolve(); // TODO either keep this or `public Activation`, because it's risking double resolution
             Toggled(this, Active);
         }
 
@@ -69,9 +69,9 @@ namespace model.cards
             }
         }
 
-        public IList<IInstallDestination> FindInstallDestinations(Game game)
+        public IList<IInstallDestination> FindInstallDestinations()
         {
-            return Type.FindInstallDestinations(game);
+            return Type.FindInstallDestinations();
         }
 
         public void FlipFaceUp()

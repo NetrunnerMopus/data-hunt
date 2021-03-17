@@ -6,10 +6,8 @@ using model.cards.types;
 using model.choices.trash;
 using model.costs;
 using model.effects;
-using model.effects.corp;
 using model.play;
 using model.zones;
-using model.zones.corp;
 
 namespace model.cards.corp
 {
@@ -21,37 +19,38 @@ namespace model.cards.corp
         override public Faction Faction => Factions.HAAS_BIOROID;
         override public int InfluenceCost => 2;
         override public ICost PlayCost => game.Costs.Rez(this, 1);
-        override public IEffect Activation => new AdvancedAssemblyLinesActivation(this);
-        override public IType Type => new Asset();
-        override public IList<ITrashOption> TrashOptions(Game game) => new List<ITrashOption> {
+        override public IEffect Activation => new AdvancedAssemblyLinesActivation(this, game);
+        override public IType Type => new Asset(game);
+        override public IList<ITrashOption> TrashOptions() => new List<ITrashOption> {
             new Leave(),
-            new PayToTrash(game.Costs.Trash(this, 1), this)
+            new PayToTrash(1, this, game)
         };
 
         private class AdvancedAssemblyLinesActivation : IEffect
         {
             public bool Impactful => true;
             public event Action<IEffect, bool> ChangedImpact = delegate { };
-            private readonly Card card;
+            private readonly Card aal;
+            private readonly Game game;
             IEnumerable<string> IEffect.Graphics => new string[] { };
 
-            public AdvancedAssemblyLinesActivation(Card card)
+            public AdvancedAssemblyLinesActivation(Card aal, Game game)
             {
-                this.card = card;
+                this.aal = aal;
+                this.game = game;
             }
 
-            async Task IEffect.Resolve(Game game)
+            async Task IEffect.Resolve()
             {
-                IEffect gain = new Gain(3);
-                await gain.Resolve(game);
+                await game.corp.credits.Gaining(3).Resolve();
                 var paidWindow = game.corp.paidWindow;
                 var archives = game.corp.zones.archives.Zone;
                 var pop = new Ability(
-                    cost: new Conjunction(paidWindow.Permission(), new Trash(card, archives), new Active(card)),
-                    effect: new AdvancedAssemblyLinesInstall(game.corp.zones.hq)
+                    cost: new Conjunction(paidWindow.Permission(), new Trash(aal, archives), new Active(aal)),
+                    effect: new AdvancedAssemblyLinesInstall(game)
                 );
-                paidWindow.Add(pop, card);
-                card.Moved += delegate (Card card, Zone source, Zone target) { paidWindow.Remove(pop); };
+                paidWindow.Add(pop, aal);
+                aal.Moved += delegate (Card card, Zone source, Zone target) { paidWindow.Remove(pop); };
             }
         }
 
@@ -61,25 +60,25 @@ namespace model.cards.corp
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { };
             private List<Card> installables = new List<Card>();
-            private Headquarters hq;
+            private Game game;
 
-            public AdvancedAssemblyLinesInstall(Headquarters hq)
+            public AdvancedAssemblyLinesInstall(Game game)
             {
-                this.hq = hq;
-                hq.Zone.Changed += UpdateInstallables;
+                this.game = game;
+                game.corp.zones.hq.Zone.Changed += UpdateInstallables;
             }
 
-            async Task IEffect.Resolve(Game game)
+            async Task IEffect.Resolve()
             {
                 var pilot = game.corp.pilot;
-                var installable = await pilot.ChooseACard().Declare("Which card to install?", installables, game);
-                var install = new GenericInstall(installable, game.corp.pilot);
-                await install.Resolve(game);
+                var installable = await pilot.ChooseACard().Declare("Which card to install?", installables);
+                var install = new GenericInstall(installable, game.corp.pilot, game);
+                await install.Resolve();
             }
 
             private void UpdateInstallables(Zone hqZone)
             {
-                installables = hq.Zone.Cards.Where(card => (card.Type.Installable && !(card.Type is Agenda))).ToList();
+                installables = game.corp.zones.hq.Zone.Cards.Where(card => (card.Type.Installable && !(card.Type is Agenda))).ToList();
                 ChangedImpact(this, Impactful);
             }
         }

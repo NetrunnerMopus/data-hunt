@@ -29,10 +29,7 @@ namespace model
             Changed(this);
         }
 
-        public IEffect Gaining(int income)
-        {
-            return new Income(this, income);
-        }
+        public IEffect Gaining(int income) => new Income(this, income);
 
         private class Income : IEffect
         {
@@ -48,17 +45,15 @@ namespace model
                 this.credits = credits;
             }
 
-            async Task IEffect.Resolve(Game game)
+            async Task IEffect.Resolve()
             {
                 pool.Gain(credits);
                 await Task.CompletedTask;
             }
         }
-
-        public ICost PayingFor(Card card, int credits)
-        {
-            return new Price(this, credits);
-        }
+        public ICost Paying(int credits) => new Price(this, credits);
+        public ICost PayingForPlaying(Card card, int credits) => new Price(this, credits);
+        public ICost PayingForTrashing(Card card, int trashCost) => new Price(this, trashCost);
 
         private class Price : ICost
         {
@@ -78,12 +73,12 @@ namespace model
                 PayabilityChanged(this, payable);
             }
 
-            bool ICost.Payable(Game game)
+            bool ICost.Payable()
             {
                 return pool.Balance >= credits;
             }
 
-            async Task ICost.Pay(Game game)
+            async Task ICost.Pay()
             {
                 pool.Pay(credits);
                 await Task.CompletedTask;

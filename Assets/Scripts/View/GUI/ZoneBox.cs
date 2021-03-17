@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace view.gui
 {
-    public class ZoneBox : IZoneAdditionObserver, IZoneRemovalObserver
+    public class ZoneBox
     {
         private readonly GameObject gameObject;
         private CardPrinter Printer;
@@ -19,17 +19,17 @@ namespace view.gui
 
         public void Represent(Zone zone)
         {
-            zone.ObserveAdditions(this);
-            zone.ObserveRemovals(this);
+            zone.Added += PrintNewCard;
+            zone.Removed += DestroyRemovedCard;
         }
 
-        void IZoneAdditionObserver.NotifyCardAdded(Card card)
+        private void PrintNewCard(Zone zone, Card card)
         {
             var printedCard = Printer.Print(card);
             visuals[card] = printedCard;
         }
 
-        void IZoneRemovalObserver.NotifyCardRemoved(Card card)
+        private void DestroyRemovedCard(Zone zone, Card card)
         {
             var visual = visuals[card];
             visuals.Remove(card);

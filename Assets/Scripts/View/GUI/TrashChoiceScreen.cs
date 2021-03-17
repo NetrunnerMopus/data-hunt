@@ -77,12 +77,12 @@ namespace view.gui
             return optionsRow;
         }
 
-        async Task<ITrashOption> IDecision<Card, ITrashOption>.Declare(Card card, IEnumerable<ITrashOption> options, Game game)
+        async Task<ITrashOption> IDecision<Card, ITrashOption>.Declare(Card card, IEnumerable<ITrashOption> options)
         {
             var subject = subjectRow.Print(card);
             blanket.transform.SetAsLastSibling();
             blanket.SetActive(true);
-            var droppableChoices = options.Select(it => DisplayOption(it, card, subject, game)).ToList();
+            var droppableChoices = options.Select(it => DisplayOption(it, card, subject)).ToList();
             var asyncChoices = droppableChoices.Select(it => it.AwaitChoice()).ToArray();
             var choice = await Task.WhenAny(asyncChoices);
             blanket.SetActive(false);
@@ -97,7 +97,7 @@ namespace view.gui
             Object.Destroy(o);
         }
 
-        private InteractiveChoice<ITrashOption> DisplayOption(ITrashOption option, Card card, GameObject subject, Game game)
+        private InteractiveChoice<ITrashOption> DisplayOption(ITrashOption option, Card card, GameObject subject)
         {
             var optionCard = new GameObject("Trash option " + option);
             var image = optionCard.AddComponent<Image>();
@@ -108,7 +108,7 @@ namespace view.gui
             rectangle.SetSizeWithCurrentAnchors(Axis.Vertical, 100);
             optionCard.transform.SetParent(optionsRow.transform);
             var dropZone = optionCard.AddComponent<DropZone>();
-            bool legal = option.IsLegal(game);
+            bool legal = option.IsLegal();
             var choice = new InteractiveChoice<ITrashOption>(option, legal, dropZone, optionCard);
             subject.AddComponent<Droppable>().Represent(choice);
             return choice;

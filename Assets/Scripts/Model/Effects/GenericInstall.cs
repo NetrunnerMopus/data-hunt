@@ -11,6 +11,7 @@ namespace model.effects
     {
         private readonly Card card;
         private readonly IPilot pilot;
+        private readonly Game game;
         public bool Impactful { get; private set; }
         public event Action<IEffect, bool> ChangedImpact = delegate { };
 
@@ -29,10 +30,11 @@ namespace model.effects
             }
         }
 
-        public GenericInstall(Card card, IPilot pilot)
+        public GenericInstall(Card card, IPilot pilot, Game game)
         {
             this.card = card;
             this.pilot = pilot;
+            this.game = game;
             if (card.Faction.Side == Side.RUNNER)
             {
                 card.PlayCost.PayabilityChanged += CheckIfRunnerCanInstall;
@@ -51,28 +53,28 @@ namespace model.effects
         }
 
         // CR: 8.3
-        async public Task Resolve(Game game)
+        async public Task Resolve()
         {
-            PutOut(game);
-            var destination = await ChooseDestination(game);
+            PutOut();
+            var destination = await ChooseDestination();
             await TrashLikeCards(destination);
             await PayInstallCost(destination);
-            await Place(destination, game);
+            await Place(destination);
             await TriggerPostInstall();
         }
 
         // CR: 8.3.1
-        private void PutOut(Game game)
+        private void PutOut()
         {
             card.MoveTo(game.PlayArea);
             card.FlipPreInstall();
         }
 
         // CR: 8.3.2
-        async private Task<IInstallDestination> ChooseDestination(Game game)
+        async private Task<IInstallDestination> ChooseDestination()
         {
             var destinations = card.FindInstallDestinations(game);
-            return await pilot.ChooseAnInstallDestination().Declare("Choose installation destination", destinations, game);
+            return await pilot.ChooseAnInstallDestination().Declare("Choose installation destination", destinations);
         }
 
         // CR: 8.3.3
@@ -90,14 +92,14 @@ namespace model.effects
         }
 
         // CR: 8.3.5
-        async private Task Place(IInstallDestination destination, Game game)
+        async private Task Place(IInstallDestination destination)
         {
             destination.Host(card);
             if (card.Faction.Side == Side.RUNNER)
             {
                 // CR: 8.2.3
                 card.FlipFaceUp();
-                await card.Activate(game);
+                await card.Activate();
             }
         }
 

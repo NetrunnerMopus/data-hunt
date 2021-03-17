@@ -1,10 +1,10 @@
 ﻿using model.cards;
 using model.choices;
-using model.choices.steal;
 using model.choices.trash;
 using model.play;
 using model.play.corp;
 using model.player;
+using model.stealing;
 using model.timing;
 using model.timing.corp;
 using model.zones;
@@ -166,7 +166,7 @@ namespace model.ai
                 this.random = random;
             }
 
-            Task<Card> IDecision<string, Card>.Declare(string subject, IEnumerable<Card> options, Game game) =>  Task.FromResult(options.PickRandom(random));
+            Task<Card> IDecision<string, Card>.Declare(string subject, IEnumerable<Card> options) =>  Task.FromResult(options.PickRandom(random));
         }
 
         private class InstallDestinationChoice : IDecision<string, IInstallDestination>
@@ -178,7 +178,7 @@ namespace model.ai
                 this.random = random;
             }
 
-            Task<IInstallDestination> IDecision<string, IInstallDestination>.Declare(string subject, IEnumerable<IInstallDestination> options, Game game) => Task.FromResult(options.PickRandom(random));
+            Task<IInstallDestination> IDecision<string, IInstallDestination>.Declare(string subject, IEnumerable<IInstallDestination> options) => Task.FromResult(options.PickRandom(random));
         }
     }
 

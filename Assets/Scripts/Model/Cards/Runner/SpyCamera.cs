@@ -12,6 +12,6 @@ namespace model.cards.runner
         override public int InfluenceCost { get { return 1; } }
         override public ICost PlayCost => game.Costs.InstallHardware(this, 0);
         override public IEffect Activation => new effects.Nothing();
-        override public IType Type { get { return new Hardware(); } }
+        override public IType Type => new Hardware(game);
     }
 }

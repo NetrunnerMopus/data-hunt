@@ -166,12 +166,6 @@ namespace model
         {
             await checkpoint.Check();
         }
-
-        public IStealOption MustSteal(Card card, int agendaPoints)
-        {
-            IStealOption mustSteal = new MustSteal(card, agendaPoints);
-            return runner.stealMods.Aggregate(mustSteal, (option, mod) => mod.Modify(option));
-        }
     }
 
     public interface IGameFinishObserver

@@ -4,9 +4,9 @@ namespace model.choices.trash
 {
     public interface ITrashOption
     {
-        bool IsLegal(Game game);
+        bool IsLegal();
         /// <returns>true if card was trashed</returns>
-        Task<bool> Perform(Game game);
+        Task<bool> Perform();
         string Art { get; }
     }
 }

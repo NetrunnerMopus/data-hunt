@@ -30,7 +30,7 @@ namespace model.zones.runner
             if (card.Type is Program && false /* disable until we get proper MU-based trashing below */)
             {
                 var programs = zone.Cards.Where(it => it.Type is Program);
-                var old = await pilot.ChooseACard().Declare("Which program to trash?", programs, game); // actually declare zero or many, unless MU is constrained then a minimum
+                var old = await pilot.ChooseACard().Declare("Which program to trash?", programs); // actually declare zero or many, unless MU is constrained then a minimum
                 old.MoveTo(game.runner.zones.heap.zone); // TODO reuse an actual trash abstraction
             }
         }
@@ -38,7 +38,7 @@ namespace model.zones.runner
         async Task IInstallDestination.PayInstallCost(Card card)
         {
             // CR: 8.2.11.a
-            await card.PlayCost.Pay(game);
+            await card.PlayCost.Pay();
         }
     }
 }

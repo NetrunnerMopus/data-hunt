@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.cards.types;
-using model.costs;
 using model.effects;
-using model.effects.runner;
 
 namespace model.cards.runner
 {
@@ -16,24 +14,26 @@ namespace model.cards.runner
         override public Faction Faction => Factions.ANARCH;
         override public int InfluenceCost => 3;
         override public ICost PlayCost => game.Costs.InstallResource(this, 3);
-        override public IEffect Activation => new WyldsideActivation(game);
+        override public IEffect Activation => new WyldsideActivation(game.runner);
         override public IType Type => new Resource();
 
         private class WyldsideActivation : IEffect
         {
+            private Runner runner;
             private readonly WyldsideTrigger trigger;
             public bool Impactful => true;
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { };
 
-            public WyldsideActivation(Game game)
+            public WyldsideActivation(Runner runner)
             {
-                trigger = new WyldsideTrigger(game);
+                this.runner = runner;
+                trigger = new WyldsideTrigger(runner);
             }
 
-            async Task IEffect.Resolve(Game game)
+            async Task IEffect.Resolve()
             {
-                game.runner.turn.WhenBegins(trigger);
+                runner.turn.WhenBegins(trigger);
                 await Task.CompletedTask;
             }
         }
@@ -45,15 +45,15 @@ namespace model.cards.runner
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new[] { "wyldside" };
 
-            public WyldsideTrigger(Game game)
+            public WyldsideTrigger(Runner runner)
             {
-                sequence = new Sequence(game.runner.zones.Drawing(2), game.runner.clicks.Losing(1));
+                sequence = new Sequence(runner.zones.Drawing(2), runner.clicks.Losing(1));
                 sequence.ChangedImpact += ChangedImpact;
             }
 
-            async Task IEffect.Resolve(Game game)
+            async Task IEffect.Resolve()
             {
-                await sequence.Resolve(game);
+                await sequence.Resolve();
             }
         }
     }

@@ -65,7 +65,7 @@ namespace view.gui.timecross
             TrackClicks(turn, UpdateNextClicks);
         }
 
-        private void TrackClicks(ITurn turn, EventHandler<ClickPool> update)
+        private void TrackClicks(ITurn turn, Action<ClickPool> update)
         {
             if (monitoredClicks != null)
             {
@@ -73,15 +73,15 @@ namespace view.gui.timecross
             }
             monitoredClicks = turn.Clicks;
             monitoredClicks.Changed += update;
-            update.Invoke(monitoredClicks, monitoredClicks);
+            update(monitoredClicks);
         }
 
-        void UpdateRemainingClicks(object sender, ClickPool clicks)
+        void UpdateRemainingClicks(ClickPool clicks)
         {
             UpdateClicks(clicks.Remaining);
         }
 
-        void UpdateNextClicks(object sender, ClickPool clicks)
+        void UpdateNextClicks(ClickPool clicks)
         {
             UpdateClicks(clicks.NextReplenishment);
         }
