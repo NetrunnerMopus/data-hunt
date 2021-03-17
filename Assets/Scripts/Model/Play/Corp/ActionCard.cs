@@ -1,17 +1,18 @@
-﻿using model.cards;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using model.cards;
 using model.costs;
 using model.effects;
 using model.effects.corp;
 using model.player;
-using model.zones;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using model.zones.corp;
 
 namespace model.play.corp
 {
-    public class ActionCard : IResolutionObserver, IZoneAdditionObserver
+    public class ActionCard
     {
-        private zones.corp.Zones zones;
+        private ClickPool clicks;
+        private Zones zones;
         private IPilot pilot;
         public readonly Ability credit;
         public readonly Ability draw;
@@ -20,8 +21,10 @@ namespace model.play.corp
         private List<Ability> potentialActions = new List<Ability>();
         private HashSet<IActionPotentialObserver> actionPotentialObservers = new HashSet<IActionPotentialObserver>();
 
-        public ActionCard(zones.corp.Zones zones, IPilot pilot)
+
+        public ActionCard(ClickPool clicks, Zones zones, IPilot pilot)
         {
+            this.clicks = clicks;
             this.zones = zones;
             this.pilot = pilot;
             zones.hq.Zone.ObserveAdditions(this);

@@ -1,13 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace model.costs
 {
     public class Nothing : ICost
     {
-        void ICost.Observe(IPayabilityObserver observer, Game game)
-        {
-            observer.NotifyPayable(true, this);
-        }
+        public event Action<ICost, bool> PayabilityChanged;
 
         async Task ICost.Pay(Game game)
         {

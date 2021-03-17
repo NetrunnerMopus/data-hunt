@@ -1,18 +1,17 @@
-﻿using model.choices.steal;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using model.choices.steal;
 using model.choices.trash;
 using model.player;
 using model.zones;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace model.cards
 {
     public abstract class Card
     {
-        private HashSet<NotifyActivity> activityObservers = new HashSet<NotifyActivity>();
-        private HashSet<NotifyMoved> moveObservers = new HashSet<NotifyMoved>();
-        private HashSet<NotifyInfo> infoObservers = new HashSet<NotifyInfo>();
+        public event NotifyActivity Toggled = delegate { };
+        public event NotifyMoved Moved = delegate { };
+        public event NotifyInfo ChangedInfo = delegate { };
         public abstract string Name { get; }
         public abstract IType Type { get; }
         public Zone Zone { get; private set; }
@@ -26,9 +25,11 @@ namespace model.cards
         public bool Active { get; private set; } = false;
         public virtual IList<IStealOption> StealOptions(Game game) => Type.DefaultStealing(this, game);
         public virtual IList<ITrashOption> TrashOptions(Game game) => new List<ITrashOption>();
+        protected Game game;
 
-        public Card()
+        public Card(Game game)
         {
+            this.game = game;
             this.Zone = new Zone("Outside of the game");
             this.Zone.Add(this);
         }
@@ -37,26 +38,13 @@ namespace model.cards
         {
             Active = true;
             await Activation.Resolve(game); // TODO either keep this or `public Activation`, because it's risking double resolution
-            NotifyActivity();
+            Toggled(this, Active);
         }
 
         public void Deactivate()
         {
             Active = false;
-            NotifyActivity();
-        }
-
-        private void NotifyActivity()
-        {
-            foreach (var observer in activityObservers)
-            {
-                observer();
-            }
-        }
-
-        public void ObserveActivity(NotifyActivity observer)
-        {
-            activityObservers.Add(observer);
+            Toggled(this, Active);
         }
 
         public void MoveTo(Zone target)
@@ -69,10 +57,7 @@ namespace model.cards
             source.Remove(this);
             target.Add(this);
             Zone = target;
-            foreach (var observer in moveObservers)
-            {
-                observer(this, source, target);
-            }
+            Moved(this, source, target);
         }
 
         internal void FlipPreInstall()
@@ -108,32 +93,8 @@ namespace model.cards
         public void UpdateInfo(Information information)
         {
             Information = information;
-            NotifyInfoObservers();
+            ChangedInfo(this, Information);
         }
-
-        private void NotifyInfoObservers()
-        {
-            foreach (var observer in infoObservers)
-            {
-                observer(Information);
-            }
-        }
-
-        public void ObserveMoves(NotifyMoved observer)
-        {
-            moveObservers.Add(observer);
-        }
-
-        internal void ObserveInformation(NotifyInfo observer)
-        {
-            infoObservers.Add(observer);
-        }
-
-        internal void UnobserveInformation(NotifyInfo observer)
-        {
-            infoObservers.Remove(observer);
-        }
-
 
         public override string ToString()
         {
@@ -141,7 +102,7 @@ namespace model.cards
         }
     }
 
-    public delegate void NotifyActivity();
+    public delegate void NotifyActivity(Card card, bool active);
     public delegate void NotifyMoved(Card card, Zone source, Zone target);
-    public delegate void NotifyInfo(Information information);
+    public delegate void NotifyInfo(Card card, Information information);
 }

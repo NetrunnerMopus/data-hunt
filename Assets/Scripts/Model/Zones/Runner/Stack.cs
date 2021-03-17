@@ -1,21 +1,22 @@
-﻿using model.cards;
-using model.zones.corp;
-using System.Collections.Generic;
-
-namespace model.zones.runner
+﻿namespace model.zones.runner
 {
     public class Stack
     {
         public readonly Zone zone = new Zone("Stack");
         private Shuffling shuffling;
 
-        public Stack(Deck deck, Shuffling shuffling)
+        public Stack(Shuffling shuffling)
         {
             this.shuffling = shuffling;
+        }
+
+        public void AddDeck(Deck deck)
+        {
             foreach (var card in deck.cards)
             {
                 card.MoveTo(zone);
             }
+            Shuffle();
         }
 
         public void Shuffle()

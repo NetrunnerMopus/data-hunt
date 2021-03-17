@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace model
@@ -6,12 +7,8 @@ namespace model
     public interface IEffect
     {
         Task Resolve(Game game);
-        void Observe(IImpactObserver observer, Game game);
+        bool Impactful { get; }
+        event Action<IEffect, bool> ChangedImpact;
         IEnumerable<string> Graphics { get; }
-    }
-
-    public interface IImpactObserver
-    {
-        void NotifyImpact(bool impactful, IEffect source);
     }
 }

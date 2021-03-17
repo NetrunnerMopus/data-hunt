@@ -1,10 +1,10 @@
 ﻿using model.cards.types;
-using model.costs;
 
 namespace model.cards.corp
 {
     public class VanityProject : Card
     {
+        public VanityProject(Game game) : base(game) { }
         override public string FaceupArt => "vanity-project";
         override public string Name => "Vanity Project";
         override public Faction Faction => Factions.SHADOW;

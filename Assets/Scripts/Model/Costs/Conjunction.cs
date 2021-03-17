@@ -8,31 +8,26 @@ namespace model.costs
     /// <summary>
     /// A conjunction of <em>independent</em> costs.
     /// </summary>
-    public class Conjunction : ICost, IPayabilityObserver
+    public class Conjunction : ICost
     {
         private ICost[] costs;
         private IDictionary<ICost, bool> payabilities = new Dictionary<ICost, bool>();
-        private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
+        public event Action<ICost, bool> PayabilityChanged;
 
         public Conjunction(params ICost[] costs)
         {
             this.costs = costs;
-        }
-
-        void IPayabilityObserver.NotifyPayable(bool payable, ICost source)
-        {
-            payabilities[source] = payable;
-            var allPayable = payabilities.All(payability => payability.Value);
-            foreach (var observer in observers)
+            foreach (var cost in costs)
             {
-                observer.NotifyPayable(allPayable, this);
+                cost.PayabilityChanged += UpdatePayability;
             }
         }
 
-        void ICost.Observe(IPayabilityObserver observer, Game game)
+        private void UpdatePayability(ICost source, bool payable)
         {
-            observers.Add(observer);
-            Array.ForEach(costs, (cost) => cost.Observe(this, game));
+            payabilities[source] = payable;
+            var allPayable = payabilities.All(payability => payability.Value);
+            PayabilityChanged(this, allPayable);
         }
 
         bool ICost.Payable(Game game) => costs.All(it => it.Payable(game));

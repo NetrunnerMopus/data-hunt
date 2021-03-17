@@ -4,6 +4,7 @@ namespace model.cards.runner
 {
     public class TheMasque : Card
     {
+        public TheMasque(Game game) : base(game) { }
         override public string FaceupArt => "the-masque";
         override public string Name => "The Masque";
         override public Faction Faction => Factions.MASQUE;

@@ -1,12 +1,14 @@
-﻿using model.cards;
-using model.choices.steal;
-using model.player;
-using model.timing;
-using model.zones;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using model.cards;
+using model.choices.steal;
+using model.costs;
+using model.effects;
+using model.player;
+using model.timing;
+using model.zones;
 
 namespace model
 {
@@ -15,6 +17,7 @@ namespace model
         public readonly Corp corp;
         public readonly Runner runner;
         public readonly Zone PlayArea;
+        public Costs Costs { get; } // TODO split into features, not layers
         public readonly Checkpoint checkpoint;
         public event EventHandler<ITurn> CurrentTurn = delegate { };
         public event EventHandler<ITurn> NextTurn = delegate { };
@@ -23,7 +26,7 @@ namespace model
         private HashSet<IGameFinishObserver> finishObservers = new HashSet<IGameFinishObserver>();
         private Shuffling shuffling;
 
-        public Game(Player corpPlayer, Player runnerPlayer, Shuffling shuffling)
+        public Game(Shuffling shuffling)
         {
             this.shuffling = shuffling;
             corp = CreateCorp(corpPlayer);
@@ -38,12 +41,12 @@ namespace model
             var paidWindow = new PaidWindow("corp");
             var zones = new zones.corp.Zones(
                 new zones.corp.Headquarters(this, new Random()),
-                new zones.corp.ResearchAndDevelopment(this, player.deck, shuffling),
+                new zones.corp.ResearchAndDevelopment(this, shuffling),
                 new zones.corp.Archives(this),
                 this
             );
-            var actionCard = new play.corp.ActionCard(zones, player.pilot);
             var clicks = new ClickPool(3);
+            var actionCard = new play.corp.ActionCard(clicks, zones, player.pilot);
             var credits = new CreditPool();
             return new Corp(player.pilot, turn, paidWindow, actionCard, zones, clicks, credits, player.deck.identity);
         }
@@ -55,7 +58,7 @@ namespace model
             var actionCard = new play.runner.ActionCard(player.pilot);
             var zones = new zones.runner.Zones(
                 new zones.runner.Grip(),
-                new zones.runner.Stack(player.deck, shuffling),
+                new zones.runner.Stack(shuffling),
                 new zones.runner.Heap(),
                 new zones.runner.Rig(this, player.pilot),
                 new zones.runner.Score(this)
@@ -65,10 +68,10 @@ namespace model
             return new Runner(player.pilot, turn, paidWindow, actionCard, 0, zones, clicks, credits, player.deck.identity);
         }
 
-        async public void Start()
+        async public void Start(Deck corpDeck, Deck runnerDeck)
         {
-            await corp.Start(this);
-            await runner.Start(this);
+            await corp.Start(this, corpDeck);
+            await runner.Start(this, runnerDeck);
             await StartTurns();
         }
 

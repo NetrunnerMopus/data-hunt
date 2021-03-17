@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace model.costs
@@ -6,7 +6,7 @@ namespace model.costs
     public class ActionPermission : ICost
     {
         private bool allowed = false;
-        private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
+        public event Action<ICost, bool> PayabilityChanged = delegate { };
 
         bool ICost.Payable(Game game) => allowed;
 
@@ -18,12 +18,6 @@ namespace model.costs
             }
             Revoke();
             await Task.CompletedTask;
-        }
-
-        void ICost.Observe(IPayabilityObserver observer, Game game)
-        {
-            observers.Add(observer);
-            observer.NotifyPayable(allowed, this);
         }
 
         public void Grant()
@@ -40,10 +34,7 @@ namespace model.costs
 
         private void Update()
         {
-            foreach (var observer in observers)
-            {
-                observer.NotifyPayable(allowed, this);
-            }
+            PayabilityChanged(this, allowed);
         }
     }
 }

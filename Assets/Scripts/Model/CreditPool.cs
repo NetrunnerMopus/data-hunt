@@ -1,18 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using model.cards;
 
 namespace model
 {
     public class CreditPool
     {
         public int Balance { get; private set; } = 0;
-        private HashSet<IBalanceObserver> observers = new HashSet<IBalanceObserver>();
+        public event Action<CreditPool> Changed = delegate { };
 
         public void Pay(int cost)
         {
             if (Balance >= cost)
             {
                 Balance -= cost;
-                UpdateBalance(Balance);
+                Changed(this);
             }
             else
             {
@@ -23,27 +26,68 @@ namespace model
         public void Gain(int income)
         {
             Balance += income;
-            UpdateBalance(Balance);
+            Changed(this);
         }
 
-        private void UpdateBalance(int newBalance)
+        public IEffect Gaining(int income)
         {
-            Balance = newBalance;
-            foreach (IBalanceObserver observer in observers)
+            return new Income(this, income);
+        }
+
+        private class Income : IEffect
+        {
+            public bool Impactful => true;
+            public event Action<IEffect, bool> ChangedImpact;
+            private CreditPool pool;
+            private int credits;
+            IEnumerable<string> IEffect.Graphics => new string[] { "Images/UI/credit" };
+
+            public Income(CreditPool pool, int credits)
             {
-                observer.NotifyBalance(newBalance);
+                this.pool = pool;
+                this.credits = credits;
+            }
+
+            async Task IEffect.Resolve(Game game)
+            {
+                pool.Gain(credits);
+                await Task.CompletedTask;
             }
         }
 
-        public void Observe(IBalanceObserver observer)
+        public ICost PayingFor(Card card, int credits)
         {
-            observers.Add(observer);
-            observer.NotifyBalance(Balance);
+            return new Price(this, credits);
         }
-    }
 
-    public interface IBalanceObserver
-    {
-        void NotifyBalance(int balance);
+        private class Price : ICost
+        {
+            private CreditPool pool;
+            private int credits;
+            public event Action<ICost, bool> PayabilityChanged = delegate { };
+
+            public Price(CreditPool pool, int credits)
+            {
+                this.credits = credits;
+                pool.Changed += NotifyBalance;
+            }
+
+            private void NotifyBalance(CreditPool pool)
+            {
+                var payable = pool.Balance >= credits;
+                PayabilityChanged(this, payable);
+            }
+
+            bool ICost.Payable(Game game)
+            {
+                return pool.Balance >= credits;
+            }
+
+            async Task ICost.Pay(Game game)
+            {
+                pool.Pay(credits);
+                await Task.CompletedTask;
+            }
+        }
     }
 }

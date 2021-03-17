@@ -4,6 +4,7 @@ namespace model.cards.corp
 {
     public class TheShadow : Card
     {
+        public TheShadow(Game game) : base(game) { }
         override public string FaceupArt => "the-shadow";
         override public string Name => "The Shadow";
         override public Faction Faction => Factions.SHADOW;

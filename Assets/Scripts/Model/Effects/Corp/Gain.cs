@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace model.effects.corp
@@ -6,6 +7,9 @@ namespace model.effects.corp
     public class Gain : IEffect
     {
         private int credits;
+        public bool Impactful => true;
+        public event Action<IEffect, bool> ChangedImpact;
+
         IEnumerable<string> IEffect.Graphics => new string[] { "Images/UI/credit" };
         public Gain(int credits)
         {
@@ -16,11 +20,6 @@ namespace model.effects.corp
         {
             game.corp.credits.Gain(credits);
             await Task.CompletedTask;
-        }
-
-        void IEffect.Observe(IImpactObserver observer, Game game)
-        {
-            observer.NotifyImpact(true, this);
         }
     }
 }

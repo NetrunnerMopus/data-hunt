@@ -1,4 +1,5 @@
 ﻿using model.cards.types;
+using model.costs;
 using model.player;
 using model.timing;
 using System.Linq;
@@ -10,12 +11,10 @@ namespace model.zones.corp
     {
         public Zone Zone { get; } = new Zone("Archives");
         public IceColumn Ice { get; }
-        private Game game;
 
-        public Archives(Game game)
+        public Archives(Costs costs)
         {
-            this.game = game;
-            Ice = new IceColumn(game);
+            Ice = new IceColumn(this, costs);
         }
 
         async Task IServer.Access(int accessCount, IPilot pilot, Game game)

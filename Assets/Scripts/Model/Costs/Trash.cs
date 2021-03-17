@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using model.cards;
 using model.zones;
 
@@ -8,6 +9,7 @@ namespace model.costs
     {
         private readonly Card card;
         private readonly Zone bin;
+        public event Action<ICost, bool> PayabilityChanged = delegate { };
 
         public Trash(Card card, Zone bin)
         {
@@ -15,12 +17,7 @@ namespace model.costs
             this.bin = bin;
         }
 
-        void ICost.Observe(IPayabilityObserver observer, Game game)
-        {
-            observer.NotifyPayable(true, this);
-        }
-
-        bool ICost.Payable(Game game) => true;
+        bool ICost.Payable(Game game) => true; // TODO cannot trash something already in the bin (or RFG)
 
         async Task ICost.Pay(Game game)
         {

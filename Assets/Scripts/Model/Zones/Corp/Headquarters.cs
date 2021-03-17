@@ -15,13 +15,11 @@ namespace model.zones.corp
         private HashSet<IHqDiscardObserver> discards = new HashSet<IHqDiscardObserver>();
         private TaskCompletionSource<bool> discarding;
         private Random random;
-        private Game game;
 
-        public Headquarters(Game game, Random random)
+        public Headquarters(Costs costs, Random random)
         {
             this.random = random;
-            this.game = game;
-            Ice = new IceColumn(game);
+            Ice = new IceColumn(this, costs);
         }
 
         async public Task Discard()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.cards;
 using model.player;
@@ -6,11 +7,13 @@ using model.zones;
 
 namespace model.effects
 {
-    public class GenericInstall : IEffect, IPayabilityObserver
+    public class GenericInstall : IEffect
     {
         private readonly Card card;
         private readonly IPilot pilot;
-        private readonly HashSet<IImpactObserver> impactObservers = new HashSet<IImpactObserver>();
+        public bool Impactful { get; private set; }
+        public event Action<IEffect, bool> ChangedImpact = delegate { };
+
         IEnumerable<string> IEffect.Graphics
         {
             get
@@ -30,6 +33,21 @@ namespace model.effects
         {
             this.card = card;
             this.pilot = pilot;
+            if (card.Faction.Side == Side.RUNNER)
+            {
+                card.PlayCost.PayabilityChanged += CheckIfRunnerCanInstall;
+            }
+            if (card.Faction.Side == Side.CORP)
+            {
+                Impactful = true;
+                ChangedImpact(this, Impactful);
+            }
+        }
+
+        private void CheckIfRunnerCanInstall(ICost cost, bool payable)
+        {
+            Impactful = payable;
+            ChangedImpact(this, Impactful);
         }
 
         // CR: 8.3
@@ -87,28 +105,6 @@ namespace model.effects
         async private Task TriggerPostInstall()
         {
             await Task.FromResult("TODO: Implement TriggerPostInstall");
-        }
-
-        public void Observe(IImpactObserver observer, Game game)
-        {
-            if (card.Faction.Side == Side.RUNNER)
-            {
-                impactObservers.Add(observer);
-                card.PlayCost.Observe(this, game);
-            }
-
-            if (card.Faction.Side == Side.CORP)
-            {
-                observer.NotifyImpact(true, this);
-            }
-        }
-
-        void IPayabilityObserver.NotifyPayable(bool payable, ICost source)
-        {
-            foreach (var observer in impactObservers)
-            {
-                observer.NotifyImpact(payable, this);
-            }
         }
     }
 }

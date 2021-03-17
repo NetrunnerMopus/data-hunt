@@ -39,13 +39,13 @@ namespace model
             this.identity = identity;
         }
 
-        async public Task Start(Game game)
+        async public Task Start(Game game, Deck deck)
         {
+            zones.rd.AddDeck(deck);
             identity.FlipFaceUp();
             await identity.Activate(game);
             pilot.Play(game);
             credits.Gain(5);
-            zones.rd.Shuffle();
             zones.rd.Draw(5, zones.hq);
         }
     }

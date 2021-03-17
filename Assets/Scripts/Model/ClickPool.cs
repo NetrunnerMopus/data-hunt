@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace model
 {
@@ -9,8 +10,7 @@ namespace model
         private int allotted = 0;
         public int Spent { get; private set; } = 0;
         public int Remaining { get { return allotted - Spent; } }
-        private HashSet<IClickObserver> observers = new HashSet<IClickObserver>();
-        public event EventHandler<ClickPool> Changed = delegate { };
+        public event Action<ClickPool> Changed = delegate { };
 
         public ClickPool(int defaultReplenishment)
         {
@@ -22,7 +22,7 @@ namespace model
             if (Remaining >= clicks)
             {
                 Spent += clicks;
-                Update();
+                Changed(this);
             }
             else
             {
@@ -38,7 +38,7 @@ namespace model
         private void Gain(int clicks)
         {
             allotted += clicks;
-            Update();
+            Changed(this);
         }
 
         public void Lose(int loss)
@@ -51,34 +51,44 @@ namespace model
             {
                 allotted = 0;
             }
-            Update();
+            Changed(this);
         }
 
         public void Reset()
         {
             allotted = 0;
             Spent = 0;
-            Update();
+            Changed(this);
         }
 
-        private void Update()
+        public IEffect Losing(int clicksToLose) => new LoseClicks(this, clicksToLose);
+
+        private class LoseClicks : IEffect
         {
-            Changed(this, this);
-            foreach (var observer in observers)
+            public bool Impactful { get; private set; }
+            public event System.Action<IEffect, bool> ChangedImpact = delegate { };
+            private ClickPool pool;
+            private int clicksToLose;
+            IEnumerable<string> IEffect.Graphics => new string[] { "" };
+
+            public LoseClicks(ClickPool pool, int clicks)
             {
-                observer.NotifyClicks(Spent, Remaining);
+                this.pool = pool;
+                this.clicksToLose = clicks;
+                pool.Changed += CountClicks;
+            }
+
+            private void CountClicks(ClickPool pool)
+            {
+                Impactful = pool.Remaining > clicksToLose;
+                ChangedImpact(this, Impactful);
+            }
+
+            async Task IEffect.Resolve(Game game)
+            {
+                pool.Lose(clicksToLose);
+                await Task.CompletedTask;
             }
         }
-
-        public void Observe(IClickObserver observer)
-        {
-            observers.Add(observer);
-            observer.NotifyClicks(Spent, Remaining);
-        }
-    }
-
-    public interface IClickObserver
-    {
-        void NotifyClicks(int spent, int remaining);
     }
 }
