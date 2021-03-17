@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using model.cards.types;
 using model.costs;
@@ -17,41 +18,42 @@ namespace model.cards.runner
         override public Faction Faction => Factions.MASQUE;
         override public int InfluenceCost => 0;
         override public ICost PlayCost => game.Costs.InstallHardware(this, 3);
-        override public IEffect Activation => new SportsHopperActivation(this);
-        override public IType Type => new Hardware();
+        override public IEffect Activation => new SportsHopperActivation(this, game.runner);
+        override public IType Type => new Hardware(game);
 
         private class SportsHopperActivation : IEffect
         {
-            private Card card;
+            private Card hopper;
+            private Runner runner;
             private Ability pop;
-            private Game game;
             public bool Impactful => true;
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { };
-            public SportsHopperActivation(Card card)
+
+            public SportsHopperActivation(Card hopper, Runner runner)
             {
-                this.card = card;
+                this.hopper = hopper;
+                this.runner = runner;
             }
 
-            async Task IEffect.Resolve(Game game)
+            async Task IEffect.Resolve()
             {
-                var paidWindow = game.runner.paidWindow;
-                this.game = game;
-                var heap = game.runner.zones.heap.zone;
+                var paidWindow = runner.paidWindow;
+                var heap = runner.zones.heap.zone;
                 if (pop == null)
                 {
-                    pop = new Ability(new Conjunction(paidWindow.Permission(), new Trash(card, heap)), game.runner.zones.Drawing(3));
+                    pop = new Ability(new Conjunction(paidWindow.Permission(), new Trash(hopper, heap)), runner.zones.Drawing(3));
                 }
-                paidWindow.Add(pop, card);
-                game.runner.zones.rig.zone.Removed += CheckIfUninstalled;
+                paidWindow.Add(pop, hopper);
+                runner.zones.rig.zone.Removed += CheckIfUninstalled;
                 await Task.CompletedTask;
             }
 
             private void CheckIfUninstalled(Zone zone, Card card)
             {
-                if (card == this.card)
+                if (card == this.hopper)
                 {
-                    game.runner.paidWindow.Remove(pop);
+                    runner.paidWindow.Remove(pop);
                 }
             }
         }

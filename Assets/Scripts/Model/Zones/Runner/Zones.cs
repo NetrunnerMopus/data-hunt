@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace model.zones.runner
@@ -49,7 +48,7 @@ namespace model.zones.runner
                 ChangedImpact(this, Impactful);
             }
 
-            async Task IEffect.Resolve(Game game)
+            async Task IEffect.Resolve()
             {
                 stack.Draw(cards, grip);
                 await Task.CompletedTask;

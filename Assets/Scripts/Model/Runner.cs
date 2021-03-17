@@ -4,6 +4,7 @@ using model.cards;
 using model.choices.steal;
 using model.play.runner;
 using model.player;
+using model.stealing;
 using model.timing;
 using model.timing.runner;
 using model.zones.runner;
@@ -22,7 +23,7 @@ namespace model
         public readonly CreditPool credits;
         public readonly Card identity;
         public readonly Player player;
-        public readonly IList<IStealModifier> stealMods = new List<IStealModifier>();
+        public Stealing Stealing { get; }
 
         public Runner(
             IPilot pilot,
@@ -51,16 +52,11 @@ namespace model
         {
             zones.stack.AddDeck(deck);
             identity.FlipFaceUp();
-            await identity.Activate(game);
+            await identity.Activate();
             pilot.Play(game);
             credits.Gain(5);
             zones.stack.Draw(5, zones.grip);
             zones.grip.zone.Added += actionCard.InferPotentialActions;
-        }
-
-        internal void ModifyStealing(IStealModifier mod)
-        {
-            stealMods.Add(mod);
         }
     }
 }

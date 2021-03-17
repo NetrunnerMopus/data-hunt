@@ -1,13 +1,13 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace model.choices.steal
+namespace model.stealing
 {
     public interface IStealOption
     {
-        bool IsLegal(Game game);
+        bool IsLegal();
 
         /// <returns>true if agenda was stolen</returns>
-        Task<bool> Perform(Game game);
+        Task<bool> Perform();
         string Art { get; }
     }
 

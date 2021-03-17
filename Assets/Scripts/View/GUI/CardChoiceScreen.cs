@@ -75,7 +75,7 @@ namespace view.gui
             return parts.Print(optionsRow);
         }
 
-        async Task<Card> IDecision<string, Card>.Declare(string q, IEnumerable<Card> options, Game game)
+        async Task<Card> IDecision<string, Card>.Declare(string q, IEnumerable<Card> options)
         {
             var subject = subjectRow.Print("Which card to access?", "Images/UI/hand-click"); // TODO good for accessing, but `CardChoiceScreen` might be used in other contexts
             blanket.transform.SetAsLastSibling();

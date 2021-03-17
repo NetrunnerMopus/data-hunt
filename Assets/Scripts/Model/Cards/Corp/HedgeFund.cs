@@ -14,7 +14,7 @@ namespace model.cards.corp
         override public string Name => "Hedge Fund";
         override public Faction Faction => Factions.SHADOW;
         override public int InfluenceCost => 0;
-        override public ICost PlayCost => game.corp.credits.PayingFor(this, 5);
+        override public ICost PlayCost => game.corp.credits.PayingForPlaying(this, 5);
         override public IEffect Activation => game.corp.credits.Gaining(9);
         override public IType Type => new Operation();
     }

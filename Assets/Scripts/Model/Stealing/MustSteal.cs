@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using model.cards;
 
-namespace model.choices.steal
+namespace model.stealing
 {
     public class MustSteal : IStealOption
     {

@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using model.cards;
+﻿using controller;
 using model;
-using controller;
-using view.gui;
+using model.cards;
 using model.player;
+using UnityEngine;
+using UnityEngine.UI;
+using view.gui;
 
 namespace view
 {
@@ -61,12 +61,12 @@ namespace view
                 this.card = card;
                 this.perception = perception;
                 this.archives = archives;
-                card.ObserveInformation(UpdateFace);
+                card.ChangedInfo += UpdateFace;
                 Rotate();
                 return this;
             }
 
-            private void UpdateFace(Information information)
+            private void UpdateFace(Card card, Information information)
             {
                 var image = gameObject.GetComponent<Image>();
                 image.sprite = FaceSprites.ChooseFace(card, perception);
@@ -91,7 +91,7 @@ namespace view
 
             void OnDestroy()
             {
-                card.UnobserveInformation(UpdateFace);
+                card.ChangedInfo -= UpdateFace;
             }
         }
     }

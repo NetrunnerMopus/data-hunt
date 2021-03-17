@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.cards.types;
-using model.choices.steal;
+using model.stealing;
 using model.timing;
 
 namespace model.cards.corp
@@ -15,7 +15,7 @@ namespace model.cards.corp
         override public Faction Faction => Factions.NBN;
         override public int InfluenceCost { get { throw new System.Exception("Identities don't have an influence cost"); } }
         override public ICost PlayCost { get { throw new System.Exception("Identities don't have a play cost"); } }
-        override public IEffect Activation => new HaarpsichordEffect();
+        override public IEffect Activation => new HaarpsichordEffect(game);
         override public IType Type => new Identity();
 
         private class HaarpsichordEffect : IEffect
@@ -24,13 +24,17 @@ namespace model.cards.corp
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { };
 
-            async Task IEffect.Resolve(Game game)
+            private Game game;
+
+            public HaarpsichordEffect(Game game) => this.game = game;
+
+            async Task IEffect.Resolve()
             {
                 var memory = new HaarpsichordMemory();
                 game.corp.turn.Started += memory.Reset;
                 game.runner.turn.Started += memory.Reset;
                 var mod = new HaarpsichordModifier(memory);
-                game.runner.ModifyStealing(mod);
+                game.runner.Stealing.ModifyStealing(mod);
                 await Task.CompletedTask;
             }
         }
@@ -72,18 +76,18 @@ namespace model.cards.corp
                 this.original = original;
             }
 
-            public bool IsLegal(Game game)
+            public bool IsLegal()
             {
-                return !memory.AgendaStolenThisTurn && original.IsLegal(game);
+                return !memory.AgendaStolenThisTurn && original.IsLegal();
             }
 
-            async public Task<bool> Perform(Game game)
+            async public Task<bool> Perform()
             {
                 if (memory.AgendaStolenThisTurn)
                 {
                     throw new System.Exception("Illegal steal from Haarpsichord");
                 }
-                var stolen = await original.Perform(game);
+                var stolen = await original.Perform();
                 if (stolen)
                 {
                     memory.AgendaStolenThisTurn = true;

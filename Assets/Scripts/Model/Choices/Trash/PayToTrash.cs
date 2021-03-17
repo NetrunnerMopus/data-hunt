@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using model.cards;
+using model.zones.corp;
 
 namespace model.choices.trash
 {
@@ -7,22 +8,24 @@ namespace model.choices.trash
     {
         private ICost cost;
         private Card card;
+        private Archives archives;
 
-        public PayToTrash(ICost cost, Card card)
+        public PayToTrash(int trashCost, Card card, Game game)
         {
-            this.cost = cost;
+            this.cost = game.runner.credits.PayingFoTrashing(card, trashCost);
             this.card = card;
+            this.archives = game.corp.zones.archives;
         }
 
-        bool ITrashOption.IsLegal(Game game)
+        bool ITrashOption.IsLegal()
         {
-            return cost.Payable(game);
+            return cost.Payable();
         }
 
-        async Task<bool> ITrashOption.Perform(Game game)
+        async Task<bool> ITrashOption.Perform()
         {
-            await cost.Pay(game);
-            card.MoveTo(game.corp.zones.archives.Zone);
+            await cost.Pay();
+            card.MoveTo(archives.Zone);
             return true;
         }
 

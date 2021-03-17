@@ -2,10 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using controller;
-using model;
 using model.cards;
 using model.choices;
-using model.choices.steal;
+using model.stealing;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.RectTransform;
@@ -77,12 +76,12 @@ namespace view.gui
             return optionsRow;
         }
 
-        async Task<IStealOption> IDecision<Card, IStealOption>.Declare(Card card, IEnumerable<IStealOption> options, Game game)
+        async Task<IStealOption> IDecision<Card, IStealOption>.Declare(Card card, IEnumerable<IStealOption> options)
         {
             var subject = subjectRow.Print(card);
             blanket.transform.SetAsLastSibling();
             blanket.SetActive(true);
-            var droppableChoices = options.Select(it => DisplayOption(it, card, subject, game)).ToList();
+            var droppableChoices = options.Select(it => DisplayOption(it, card, subject)).ToList();
             var asyncChoices = droppableChoices.Select(it => it.AwaitChoice()).ToArray();
             var choice = await Task.WhenAny(asyncChoices);
             blanket.SetActive(false);
@@ -97,7 +96,7 @@ namespace view.gui
             Object.Destroy(o);
         }
 
-        private InteractiveChoice<IStealOption> DisplayOption(IStealOption option, Card card, GameObject subject, Game game)
+        private InteractiveChoice<IStealOption> DisplayOption(IStealOption option, Card card, GameObject subject)
         {
             var optionCard = new GameObject("Steal option " + option);
             var image = optionCard.AddComponent<Image>();
@@ -108,7 +107,7 @@ namespace view.gui
             rectangle.SetSizeWithCurrentAnchors(Axis.Vertical, 100);
             optionCard.transform.SetParent(optionsRow.transform);
             var dropZone = optionCard.AddComponent<DropZone>();
-            bool legal = option.IsLegal(game);
+            bool legal = option.IsLegal();
             var choice = new InteractiveChoice<IStealOption>(option, legal, dropZone, optionCard);
             subject.AddComponent<Droppable>().Represent(choice);
             return choice;

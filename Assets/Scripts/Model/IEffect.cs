@@ -6,7 +6,7 @@ namespace model
 {
     public interface IEffect
     {
-        Task Resolve(Game game);
+        Task Resolve();
         bool Impactful { get; }
         event Action<IEffect, bool> ChangedImpact;
         IEnumerable<string> Graphics { get; }

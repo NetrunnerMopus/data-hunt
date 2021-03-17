@@ -27,10 +27,5 @@ namespace model.effects.runner
             card.Deactivate();
             card.MoveTo(game.runner.zones.heap.zone);
         }
-
-        void IEffect.Observe(IImpactObserver observer, Game game)
-        {
-            card.Activation.Observe(observer, game);
-        }
     }
 }
