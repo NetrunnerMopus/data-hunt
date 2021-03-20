@@ -22,7 +22,12 @@ namespace model.zones
             }
             this.card = card;
             this.bin = bin;
-            card.Activation.ChangedImpact += ChangedImpact;
+            card.Activation.ChangedImpact += UpdateImpact;
+        }
+
+        private void UpdateImpact(IEffect cardActivation, bool impactful)
+        {
+            ChangedImpact(this, impactful);
         }
 
         async Task IEffect.Resolve()

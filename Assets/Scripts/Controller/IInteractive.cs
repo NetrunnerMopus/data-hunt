@@ -6,9 +6,8 @@ namespace controller
     {
         DropZone Activation { get; }
         bool Active { get; }
-        void Observe(Update update);
+        event Update Updated;
         Task Interact();
-        void UnobserveAll();
     }
 
     public delegate void Update();

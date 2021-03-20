@@ -52,7 +52,7 @@ namespace model
             }
         }
         public ICost Paying(int credits) => new Price(this, credits);
-        public ICost PayingForPlaying(Card card, int credits) => new Price(this, credits);
+        public ICost PayingForPlaying(Card card, int playCost) => new Price(this, playCost);
         public ICost PayingForTrashing(Card card, int trashCost) => new Price(this, trashCost);
 
         private class Price : ICost
@@ -64,6 +64,7 @@ namespace model
 
             public Price(CreditPool pool, int credits)
             {
+                this.pool = pool;
                 this.credits = credits;
                 pool.Changed += NotifyBalance;
             }

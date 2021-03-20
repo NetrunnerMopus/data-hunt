@@ -5,15 +5,12 @@ namespace model.costs
 {
     public class ActionPermission : ICost
     {
-        private bool allowed = false;
-
-        public bool Payable {get; private set;}
-
+        public bool Payable { get; private set; } = false;
         public event Action<ICost, bool> ChangedPayability = delegate { };
 
         async Task ICost.Pay()
         {
-            if (!allowed)
+            if (!Payable)
             {
                 throw new System.Exception("Tried to fire an action while it was forbidden");
             }
@@ -23,19 +20,14 @@ namespace model.costs
 
         public void Grant()
         {
-            allowed = true;
-            Update();
+            Payable = true;
+            ChangedPayability(this, Payable);
         }
 
         private void Revoke()
         {
-            allowed = false;
-            Update();
-        }
-
-        private void Update()
-        {
-            ChangedPayability(this, allowed);
+            Payable = false;
+            ChangedPayability(this, Payable);
         }
     }
 }

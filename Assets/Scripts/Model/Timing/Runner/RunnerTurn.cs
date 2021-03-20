@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.play;
-using model;
-using System;
 
 namespace model.timing.runner
 {

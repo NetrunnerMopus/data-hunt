@@ -72,13 +72,13 @@ namespace controller
         public void Represent(IInteractive interactive)
         {
             this.interactives.Add(interactive);
-            interactive.Observe(UpdateHighlights);
+            interactive.Updated += UpdateHighlights;
         }
 
         internal void Unlink(IInteractive interactive)
         {
             this.interactives.Remove(interactive);
-            interactive.UnobserveAll();
+            interactive.Updated -= UpdateHighlights;
         }
 
         private void UpdateHighlights()
@@ -186,7 +186,7 @@ namespace controller
         {
             foreach (var interactive in interactives)
             {
-                interactive.UnobserveAll();
+                interactive.Updated -= UpdateHighlights;
             }
         }
     }

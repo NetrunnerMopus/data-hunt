@@ -10,9 +10,7 @@ namespace model.play
         public readonly IEffect effect;
         public event Action<Ability, bool> UsabilityChanged = delegate { };
         public event Action<Ability> Resolved = delegate { };
-        private bool payable = false;
-        private bool impactful = false;
-        public bool Usable => payable && impactful;
+        public bool Usable => cost.Payable && effect.Impactful;
 
         public Ability(ICost cost, IEffect effect)
         {
@@ -24,13 +22,11 @@ namespace model.play
 
         private void UpdateCost(ICost source, bool payable)
         {
-            this.payable = payable;
             UsabilityChanged(this, Usable);
         }
 
         private void UpdateEffect(IEffect source, bool impactful)
         {
-            this.impactful = impactful;
             UsabilityChanged(this, Usable);
         }
 

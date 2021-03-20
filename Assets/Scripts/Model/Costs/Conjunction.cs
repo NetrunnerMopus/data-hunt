@@ -11,7 +11,6 @@ namespace model.costs
     public class Conjunction : ICost
     {
         private ICost[] costs;
-        private IDictionary<ICost, bool> payabilities = new Dictionary<ICost, bool>();
         public bool Payable => costs.All(it => it.Payable);
         public event Action<ICost, bool> ChangedPayability = delegate { };
 
@@ -24,11 +23,9 @@ namespace model.costs
             }
         }
 
-        private void UpdatePayability(ICost source, bool payable)
+        private void UpdatePayability(ICost subCost, bool subCostPayable)
         {
-            payabilities[source] = payable;
-            var allPayable = payabilities.All(payability => payability.Value);
-            ChangedPayability(this, allPayable);
+            ChangedPayability(this, Payable);
         }
 
         async Task ICost.Pay()
