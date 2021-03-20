@@ -37,13 +37,13 @@ namespace view.gui
             serverObject.transform.SetParent(gameObject.transform, false);
             LayoutRebuilder.ForceRebuildLayoutImmediate(layout.GetComponent<RectTransform>());
             boxesPerServer[server] = box;
-            box.ShowCards();
             return box;
         }
 
         private void RenderNewRemote(Remote remote)
         {
             var box = Box(remote);
+            box.ShowCards();
             BoxAdded(box);
         }
 
