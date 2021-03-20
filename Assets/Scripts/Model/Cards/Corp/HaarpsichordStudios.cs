@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.cards.types;
-using model.stealing;
+using model.steal;
 using model.timing;
 
 namespace model.cards.corp
@@ -43,9 +43,10 @@ namespace model.cards.corp
         {
             public bool AgendaStolenThisTurn = false;
 
-            public void Reset(object sender, ITurn turn)
+            async public Task Reset(ITurn turn)
             {
                 AgendaStolenThisTurn = false;
+                await Task.CompletedTask;
             }
         }
 

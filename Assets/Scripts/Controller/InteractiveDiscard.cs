@@ -15,13 +15,13 @@ namespace controller
         public DropZone Activation { get; }
         public bool Active { get; private set; }
 
-        public InteractiveDiscard(Card card, DropZone activation, Game game)
+        public InteractiveDiscard(Card card, DropZone activation, Runner runner)
         {
             this.card = card;
             this.Activation = activation;
             this.Active = false;
-            this.grip = game.runner.zones.grip;
-            this.heap = game.runner.zones.heap;
+            this.grip = runner.zones.grip;
+            this.heap = runner.zones.heap;
             this.grip.ObserveDiscarding(this);
         }
 

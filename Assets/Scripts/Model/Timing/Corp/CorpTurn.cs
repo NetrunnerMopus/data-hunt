@@ -1,8 +1,6 @@
-﻿using model.effects.corp;
-using model.play;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using model.play;
 
 namespace model.timing.corp
 {
@@ -15,7 +13,7 @@ namespace model.timing.corp
         Side ITurn.Side => Side.CORP;
         private List<IEffect> turnBeginningTriggers = new List<IEffect>();
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
-        public event EventHandler<ITurn> Started  = delegate { };
+        public event AsyncAction<ITurn> Started;
         private HashSet<ICorpActionObserver> actions = new HashSet<ICorpActionObserver>();
 
         public CorpTurn(Game game)
@@ -26,7 +24,7 @@ namespace model.timing.corp
         async Task ITurn.Start()
         {
             Active = true;
-            Started(this, this);
+            await Started?.Invoke(this);
             await DrawPhase();
             await ActionPhase();
             await DiscardPhase();
@@ -76,14 +74,13 @@ namespace model.timing.corp
         {
             if (turnBeginningTriggers.Count > 0)
             {
-                await new SimultaneousTriggers(turnBeginningTriggers.Copy()).AllTriggered(game.corp.pilot, game);
+                await new SimultaneousTriggers(turnBeginningTriggers.Copy()).AllTriggered(game.corp.pilot);
             }
         }
 
         async private Task MandatoryDraw()
         {
-            IEffect draw = new Draw(1);
-            await draw.Resolve(game);
+            await game.corp.zones.Drawing(1).Resolve();
         }
 
         async private Task ActionPhase()
@@ -108,7 +105,7 @@ namespace model.timing.corp
 
         async private Task TakeAction()
         {
-            Task<Ability> actionTaking = game.corp.actionCard.TakeAction();
+            Task<Ability> actionTaking = game.corp.Acting.TakeAction();
             foreach (var observer in actions)
             {
                 observer.NotifyActionTaking();

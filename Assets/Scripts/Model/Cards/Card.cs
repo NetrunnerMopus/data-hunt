@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using model.choices.trash;
 using model.player;
-using model.stealing;
+using model.steal;
 using model.zones;
 
 namespace model.cards

@@ -1,7 +1,6 @@
 ﻿using model.cards;
 using model.choices;
-using model.choices.steal;
-using model.choices.trash;
+using model.steal;
 
 namespace model.player
 {

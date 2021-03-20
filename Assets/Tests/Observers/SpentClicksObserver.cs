@@ -2,13 +2,13 @@
 
 namespace tests.observers
 {
-    class SpentClicksObserver : IClickObserver
+    class SpentClicksObserver
     {
         public int Spent { get; private set; }
 
-        void IClickObserver.NotifyClicks(int spent, int remaining)
+        public void RememberSpent(ClickPool clicks)
         {
-            Spent = spent;
+            Spent = clicks.Spent;
         }
     }
 }

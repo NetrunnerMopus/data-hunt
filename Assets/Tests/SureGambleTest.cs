@@ -1,11 +1,11 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
 using model;
 using model.cards;
-using System.Collections.Generic;
 using model.cards.runner;
-using System.Linq;
-using tests.observers;
+using NUnit.Framework;
 using tests.mocks;
+using tests.observers;
 
 namespace tests
 {
@@ -14,29 +14,23 @@ namespace tests
         [Test]
         async public void ShouldPlay()
         {
+            var game = MockGames.Unpiloted();
             var runnerCards = new List<Card>();
             for (int i = 0; i < 5; i++)
             {
-                runnerCards.Add(new SureGamble());
+                runnerCards.Add(new SureGamble(game));
             }
             var sureGamble = runnerCards.First();
-            var game = new MockGames().WithRunnerCards(runnerCards);
-            game.Start();
+            game.Start(Decks.DemoCorp(game), MockGames.MasqueDeck(game, runnerCards));
             await new PassiveCorp(game).SkipTurn();
-            var balance = new LastBalanceObserver();
-            var clicks = new SpentClicksObserver();
-            var grip = new GripObserver();
-            var heap = new HeapObserver();
-            game.runner.credits.Observe(balance);
-            game.runner.clicks.Observe(clicks);
-            game.runner.zones.grip.zone.ObserveRemovals(grip);
-            game.runner.zones.heap.zone.ObserveAdditions(heap);
-            
-            await game.runner.actionCard.TakeAction();
-            await game.runner.actionCard.Play(sureGamble).Trigger(game);
+            var grip = new ZoneObserver( game.runner.zones.grip.zone);
+            var heap = new ZoneObserver( game.runner.zones.heap.zone);
 
-            Assert.AreEqual(9, balance.LastBalance);
-            Assert.AreEqual(1, clicks.Spent);
+            await game.runner.Acting.TakeAction();
+            await game.runner.Acting.Play(sureGamble).Trigger();
+
+            Assert.AreEqual(9, game.runner.credits.Balance);
+            Assert.AreEqual(1, game.runner.clicks.Spent);
             Assert.AreEqual(sureGamble, grip.LastRemoved);
             Assert.AreEqual(sureGamble, heap.LastAdded);
         }

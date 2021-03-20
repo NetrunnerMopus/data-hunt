@@ -1,5 +1,4 @@
 ﻿using model.cards.types;
-using model.costs;
 
 namespace model.cards.runner
 {
@@ -10,7 +9,7 @@ namespace model.cards.runner
         override public string Name { get { return "Spy Camera"; } }
         override public Faction Faction { get { return Factions.CRIMINAL; } }
         override public int InfluenceCost { get { return 1; } }
-        override public ICost PlayCost => game.Costs.InstallHardware(this, 0);
+        override public ICost PlayCost => game.runner.credits.PayingForPlaying(this, 0);
         override public IEffect Activation => new effects.Nothing();
         override public IType Type => new Hardware(game);
     }

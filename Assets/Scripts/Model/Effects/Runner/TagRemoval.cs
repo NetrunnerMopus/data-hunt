@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace model.effects.runner
@@ -6,22 +7,21 @@ namespace model.effects.runner
     public class TagRemoval : IEffect
     {
         private int tags;
+        private Runner runner;
+        public bool Impactful => runner.tags > 0;
+        public event Action<IEffect, bool> ChangedImpact; // TODO observe change in tag count
         IEnumerable<string> IEffect.Graphics => new string[] { };
 
-        public TagRemoval(int tags)
+        public TagRemoval(int tags, Runner runner)
         {
             this.tags = tags;
+            this.runner = runner;
         }
 
-        async Task IEffect.Resolve(Game game)
+        async Task IEffect.Resolve()
         {
-            game.runner.tags -= tags;
+            runner.tags -= tags;
             await Task.CompletedTask;
-        }
-
-        void IEffect.Observe(IImpactObserver observer, Game game)
-        {
-            observer.NotifyImpact(game.runner.tags > 0, this);
         }
     }
 }

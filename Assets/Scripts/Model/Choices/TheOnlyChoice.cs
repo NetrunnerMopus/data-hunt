@@ -13,7 +13,7 @@ namespace model.choices
             this.fallback = fallback;
         }
 
-        public Task<OPTION> Declare(SUBJECT subject, IEnumerable<OPTION> options, Game game)
+        public Task<OPTION> Declare(SUBJECT subject, IEnumerable<OPTION> options)
         {
             if (options.Count() == 1)
             {
@@ -21,7 +21,7 @@ namespace model.choices
             }
             else
             {
-                return fallback.Declare(subject, options, game);
+                return fallback.Declare(subject, options);
             }
         }
     }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using model.stealing;
+using model.steal;
 using model.zones;
 
 namespace model.cards

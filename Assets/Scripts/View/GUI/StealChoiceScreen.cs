@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using controller;
 using model.cards;
 using model.choices;
-using model.stealing;
+using model.steal;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.RectTransform;

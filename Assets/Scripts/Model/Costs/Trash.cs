@@ -9,7 +9,8 @@ namespace model.costs
     {
         private readonly Card card;
         private readonly Zone bin;
-        public event Action<ICost, bool> PayabilityChanged = delegate { };
+        bool ICost.Payable => true; // TODO cannot trash something already in the bin (or RFG)
+        public event Action<ICost, bool> ChangedPayability = delegate { };
 
         public Trash(Card card, Zone bin)
         {
@@ -17,9 +18,7 @@ namespace model.costs
             this.bin = bin;
         }
 
-        bool ICost.Payable(Game game) => true; // TODO cannot trash something already in the bin (or RFG)
-
-        async Task ICost.Pay(Game game)
+        async Task ICost.Pay()
         {
             TrashIt();
             await Task.CompletedTask;

@@ -5,8 +5,8 @@ namespace model
 {
     public interface ICost
     {
+        bool Payable { get; }
         Task Pay();
-        bool Payable();
-        event Action<ICost, bool> PayabilityChanged;
+        event Action<ICost, bool> ChangedPayability;
     }
 }

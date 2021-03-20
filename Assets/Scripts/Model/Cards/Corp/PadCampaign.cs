@@ -13,7 +13,7 @@ namespace model.cards.corp
         override public string Name => "PAD Campaign";
         override public Faction Faction => Factions.SHADOW;
         override public int InfluenceCost => 0;
-        override public ICost PlayCost => game.Costs.Rez(this, 2);
+        override public ICost PlayCost => game.corp.credits.PayingForPlaying(this, 2);
         override public IEffect Activation => new PadCampaignActivation(game.corp);
         override public IType Type => new Asset(game);
         override public IList<ITrashOption> TrashOptions() => new List<ITrashOption> {

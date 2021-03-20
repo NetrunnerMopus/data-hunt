@@ -35,15 +35,15 @@ public class GameConfig : MonoBehaviour
                 )
             )
         );
-        var game = new Game(new Shuffling(10006));
-        var corpDeck = new Decks().DemoCorp(game);
-        var runnerDeck = new Decks().DemoRunner(game);
+        var game = new Game(corpPilot, runnerPilot, new Shuffling(10006));
+        var corpDeck = Decks.DemoCorp(game);
+        var runnerDeck = Decks.DemoRunner(game);
         var flowView = new GameFlowView();
         var flowLog = new GameFlowLog();
         flowView.Display(board, game);
         flowLog.Display(game);
         var corpView = new CorpViewConfig().Display(game, parts);
-        new RunnerViewConfig().Display(game, flowView, corpView, parts);
+        new RunnerViewConfig().Display(game.runner, flowView, corpView, parts);
         game.Start(corpDeck, runnerDeck);
     }
 

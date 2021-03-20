@@ -2,13 +2,13 @@
 
 namespace tests.observers
 {
-    class LastBalanceObserver : IBalanceObserver
+    class LastBalanceObserver
     {
         public int LastBalance { get; private set; }
 
-        void IBalanceObserver.NotifyBalance(int balance)
+        public void RememberBalance(CreditPool credits)
         {
-            LastBalance = balance;
+            LastBalance = credits.Balance;
         }
     }
 }

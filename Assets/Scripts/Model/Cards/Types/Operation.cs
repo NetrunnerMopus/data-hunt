@@ -1,4 +1,4 @@
-﻿using model.stealing;
+﻿using model.steal;
 using model.zones;
 using System.Collections.Generic;
 

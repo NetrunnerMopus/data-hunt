@@ -7,7 +7,9 @@ namespace model
 {
     public class Decks
     {
-        public Deck DemoRunner(Game game)
+        private Decks() { }
+
+        public static Deck DemoRunner(Game game)
         {
             var cards = new List<Card>();
             for (int i = 0; i < 3; i++)
@@ -25,7 +27,7 @@ namespace model
             return new Deck(cards, new OmarKeung(game));
         }
 
-        public Deck DemoCorp(Game game)
+        public static Deck DemoCorp(Game game)
         {
             var cards = new List<Card>();
             for (int i = 0; i < 5; i++)

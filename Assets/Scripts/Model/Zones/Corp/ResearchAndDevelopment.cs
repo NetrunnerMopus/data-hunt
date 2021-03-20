@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.cards;
 using model.player;
@@ -8,17 +9,18 @@ namespace model.zones.corp
 {
     public class ResearchAndDevelopment : IServer
     {
+        private Corp corp;
+        private Shuffling shuffling;
+        private bool reshuffledDuringAccess = false;
         public Zone Zone { get; } = new Zone("R&D");
         public IceColumn Ice { get; }
-        private Shuffling shuffling;
-        private Game game;
-        private bool reshuffledDuringAccess = false;
+        public event Action<Corp> Decked = delegate { };
 
-        public ResearchAndDevelopment(Game game, Shuffling shuffling)
+        public ResearchAndDevelopment(Corp corp, Shuffling shuffling)
         {
-            this.game = game;
+            this.corp = corp;
             this.shuffling = shuffling;
-            Ice = new IceColumn(game);
+            Ice = new IceColumn(this, corp.credits);
         }
 
         public void AddDeck(Deck deck)
@@ -48,7 +50,7 @@ namespace model.zones.corp
                 }
                 else
                 {
-                    game.DeckCorp();
+                    Decked(corp);
                 }
             }
         }
@@ -67,7 +69,7 @@ namespace model.zones.corp
                 // TODO show top of R&D and cards in root
                 // TODO2: should draw facedown
                 // TODO3: nice if we could display the pile, not just the top+root
-                var cardToAccess = await pilot.ChooseACard().Declare("Which card to access now?", new List<Card> { nextCard }, game);
+                var cardToAccess = await pilot.ChooseACard().Declare("Which card to access now?", new List<Card> { nextCard });
                 accessDepth++;
                 await new AccessCard(cardToAccess, game).AwaitEnd(); // TODO show the already seen on the side, maintaining proper order CR: 7.2.1.b
                 if (reshuffledDuringAccess) // CR: 7.2.1.c

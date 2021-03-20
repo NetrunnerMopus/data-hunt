@@ -43,12 +43,12 @@ namespace model.timing
 
         async private Task<bool> Trash()
         {
-            var options = card.TrashOptions(game);
+            var options = card.TrashOptions();
             if (options.Count > 0)
             {
                 var decision = game.runner.pilot.ChooseTrashing();
-                var trashing = await decision.Declare(card, options, game);
-                return await trashing.Perform(game);
+                var trashing = await decision.Declare(card, options);
+                return await trashing.Perform();
             }
             else
             {
@@ -58,12 +58,12 @@ namespace model.timing
 
         async private Task<bool> Steal()
         {
-            var options = card.StealOptions(game);
+            var options = card.StealOptions();
             if (options.Count > 0)
             {
                 var decision = game.runner.pilot.ChooseStealing();
-                var stealing = await decision.Declare(card, options, game);
-                return await stealing.Perform(game);
+                var stealing = await decision.Declare(card, options);
+                return await stealing.Perform();
             }
             else
             {

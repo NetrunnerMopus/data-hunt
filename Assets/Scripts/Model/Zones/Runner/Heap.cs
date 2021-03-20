@@ -1,6 +1,4 @@
-﻿using model.cards;
-
-namespace model.zones.runner
+﻿namespace model.zones.runner
 {
     public class Heap
     {

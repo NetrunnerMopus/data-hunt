@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 using model.cards.types;
 using model.costs;
-using model.effects.runner;
 using model.play;
 using model.zones;
 
@@ -17,7 +15,7 @@ namespace model.cards.runner
         override public string Name => "Sports Hopper";
         override public Faction Faction => Factions.MASQUE;
         override public int InfluenceCost => 0;
-        override public ICost PlayCost => game.Costs.InstallHardware(this, 3);
+        override public ICost PlayCost => game.runner.credits.PayingForPlaying(this, 3);
         override public IEffect Activation => new SportsHopperActivation(this, game.runner);
         override public IType Type => new Hardware(game);
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class CreditSpiral : MonoBehaviour, IBalanceObserver, ILayoutGroup
+    public class CreditSpiral : MonoBehaviour, ILayoutGroup
     {
         private GameObject creditPrefab;
         private IList<RectTransform> credits = new List<RectTransform>();
@@ -35,9 +35,9 @@ namespace view.gui
             spy.color = new Color(0, 0, 0, 0);
         }
 
-        void IBalanceObserver.NotifyBalance(int balance)
+        public void UpdateBalance(CreditPool pool)
         {
-            var diff = balance - credits.Count;
+            var diff = pool.Balance - credits.Count;
             if (diff > 0)
             {
                 for (int i = 0; i < diff; i++)

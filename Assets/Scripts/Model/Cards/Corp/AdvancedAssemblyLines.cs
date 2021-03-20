@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using model.cards.types;
 using model.choices.trash;
 using model.costs;
-using model.effects;
 using model.play;
 using model.zones;
 
@@ -18,8 +17,8 @@ namespace model.cards.corp
         override public string Name => "Advanced Assembly Lines";
         override public Faction Faction => Factions.HAAS_BIOROID;
         override public int InfluenceCost => 2;
-        override public ICost PlayCost => game.Costs.Rez(this, 1);
-        override public IEffect Activation => new AdvancedAssemblyLinesActivation(this, game);
+        override public ICost PlayCost => game.corp.credits.PayingForPlaying(this, 1);
+        override public IEffect Activation => new AdvancedAssemblyLinesActivation(this, game.corp);
         override public IType Type => new Asset(game);
         override public IList<ITrashOption> TrashOptions() => new List<ITrashOption> {
             new Leave(),
@@ -31,26 +30,26 @@ namespace model.cards.corp
             public bool Impactful => true;
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             private readonly Card aal;
-            private readonly Game game;
+            private readonly Corp corp;
             IEnumerable<string> IEffect.Graphics => new string[] { };
 
-            public AdvancedAssemblyLinesActivation(Card aal, Game game)
+            public AdvancedAssemblyLinesActivation(Card aal, Corp corp)
             {
                 this.aal = aal;
-                this.game = game;
+                this.corp = corp;
             }
 
             async Task IEffect.Resolve()
             {
-                await game.corp.credits.Gaining(3).Resolve();
-                var paidWindow = game.corp.paidWindow;
-                var archives = game.corp.zones.archives.Zone;
+                await corp.credits.Gaining(3).Resolve();
+                var paidWindow = corp.paidWindow;
+                var archives = corp.zones.archives.Zone;
                 var pop = new Ability(
                     cost: new Conjunction(paidWindow.Permission(), new Trash(aal, archives), new Active(aal)),
-                    effect: new AdvancedAssemblyLinesInstall(game)
+                    effect: new AdvancedAssemblyLinesInstall(corp)
                 );
                 paidWindow.Add(pop, aal);
-                aal.Moved += delegate (Card card, Zone source, Zone target) { paidWindow.Remove(pop); };
+                aal.Moved += (card, source, target) => paidWindow.Remove(pop);
             }
         }
 
@@ -60,25 +59,23 @@ namespace model.cards.corp
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { };
             private List<Card> installables = new List<Card>();
-            private Game game;
+            private Corp corp;
 
-            public AdvancedAssemblyLinesInstall(Game game)
+            public AdvancedAssemblyLinesInstall(Corp corp)
             {
-                this.game = game;
-                game.corp.zones.hq.Zone.Changed += UpdateInstallables;
+                this.corp = corp;
+                corp.zones.hq.Zone.Changed += UpdateInstallables;
             }
 
             async Task IEffect.Resolve()
             {
-                var pilot = game.corp.pilot;
-                var installable = await pilot.ChooseACard().Declare("Which card to install?", installables);
-                var install = new GenericInstall(installable, game.corp.pilot, game);
-                await install.Resolve();
+                var installable = await corp.pilot.ChooseACard().Declare("Which card to install?", installables);
+                await corp.Installing.InstallingCard(installable).Resolve();
             }
 
             private void UpdateInstallables(Zone hqZone)
             {
-                installables = game.corp.zones.hq.Zone.Cards.Where(card => (card.Type.Installable && !(card.Type is Agenda))).ToList();
+                installables = corp.zones.hq.Zone.Cards.Where(card => (card.Type.Installable && !(card.Type is Agenda))).ToList();
                 ChangedImpact(this, Impactful);
             }
         }

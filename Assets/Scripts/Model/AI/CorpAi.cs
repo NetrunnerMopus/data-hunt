@@ -1,18 +1,17 @@
-﻿using model.cards;
-using model.choices;
-using model.choices.trash;
-using model.play;
-using model.play.corp;
-using model.player;
-using model.stealing;
-using model.timing;
-using model.timing.corp;
-using model.zones;
-using model.zones.corp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using model.cards;
+using model.choices;
+using model.choices.trash;
+using model.play;
+using model.player;
+using model.steal;
+using model.timing;
+using model.timing.corp;
+using model.zones;
+using model.zones.corp;
 
 namespace model.ai
 {
@@ -21,9 +20,7 @@ namespace model.ai
         ICorpActionObserver,
         IHqDiscardObserver,
         IRezWindowObserver,
-        IRezzableObserver,
         IActionPotentialObserver,
-        IUsabilityObserver,
         IPaidWindowObserver,
         IPaidAbilityObserver
     {
@@ -33,7 +30,6 @@ namespace model.ai
         private HashSet<Ability> actions = new HashSet<Ability>();
         private HashSet<Ability> legalActions = new HashSet<Ability>();
         private HashSet<Ability> paidAbilities = new HashSet<Ability>();
-
         private Random random;
 
         public CorpAi(Random random)
@@ -45,7 +41,7 @@ namespace model.ai
         {
             this.game = game;
             zones = game.corp.zones;
-            game.corp.actionCard.ObservePotentialActions(this);
+            game.corp.Acting.ObservePotentialActions(this);
             game.corp.turn.ObserveActions(this);
             game.corp.turn.rezWindow.ObserveWindow(this);
             game.corp.paidWindow.ObserveWindow(this);
@@ -64,9 +60,9 @@ namespace model.ai
             await Thinking();
             var randomLegalAction = legalActions.ElementAt(random.Next(0, legalActions.Count));
             UnityEngine.Debug.Log("Choosing to " + randomLegalAction);
-            await randomLegalAction.Trigger(game);
+            await randomLegalAction.Trigger();
         }
-        void ICorpActionObserver.NotifyActionTaken(Ability ability) {}
+        void ICorpActionObserver.NotifyActionTaken(Ability ability) { }
 
         void IHqDiscardObserver.NotifyDiscarding(bool discarding)
         {
@@ -80,21 +76,19 @@ namespace model.ai
         {
             foreach (var rezzable in rezzables)
             {
-                rezzable.ObserveRezzable(this);
+                rezzable.Changed += NotifyRezzable;
             }
             game.corp.turn.rezWindow.Pass();
         }
 
 
-        async Task IRezzableObserver.NotifyRezzable(Rezzable rezzable)
+        async private Task NotifyRezzable(Rezzable rezzable)
         {
-            await Thinking();
-            await rezzable.Rez(); // TODO debug this, Corp AI seems to never rez stuff anymore
-        }
-
-        async Task IRezzableObserver.NotifyNotRezzable()
-        {
-            await Task.CompletedTask;
+            if (rezzable.CanRez)
+            {
+                await Thinking();
+                await rezzable.Rez(); // TODO debug this, Corp AI seems to never rez stuff anymore  
+            }
         }
 
         void IRezWindowObserver.NotifyRezWindowClosed()
@@ -104,16 +98,16 @@ namespace model.ai
         void IActionPotentialObserver.NotifyPotentialAction(Ability action)
         {
             actions.Add(action);
-            action.ObserveUsability(this, game);
+            action.UsabilityChanged += NotifyUsable;
         }
 
         public void NotifyPaidAbilityAvailable(Ability ability, Card source)
         {
             paidAbilities.Add(ability);
-            ability.ObserveUsability(this, game);
+            ability.UsabilityChanged += NotifyUsable;
         }
 
-        async void IUsabilityObserver.NotifyUsable(bool usable, Ability ability)
+        async private void NotifyUsable(Ability ability, bool usable)
         {
             if (actions.Contains(ability))
             {
@@ -130,7 +124,7 @@ namespace model.ai
             {
                 if (usable)
                 {
-                    await ability.Trigger(game);
+                    await ability.Trigger();
                 }
             }
         }
@@ -166,7 +160,7 @@ namespace model.ai
                 this.random = random;
             }
 
-            Task<Card> IDecision<string, Card>.Declare(string subject, IEnumerable<Card> options) =>  Task.FromResult(options.PickRandom(random));
+            Task<Card> IDecision<string, Card>.Declare(string subject, IEnumerable<Card> options) => Task.FromResult(options.PickRandom(random));
         }
 
         private class InstallDestinationChoice : IDecision<string, IInstallDestination>

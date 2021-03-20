@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using model.cards;
-using model.costs;
 
 namespace model.zones.corp
 {
@@ -8,11 +7,11 @@ namespace model.zones.corp
     {
         public int Height { get; private set; } = 0;
         private IServer server;
-        private Costs costs;
-        public IceColumn(IServer server, Costs costs)
+        private CreditPool credits;
+        public IceColumn(IServer server, CreditPool credits)
         {
             this.server = server;
-            this.costs = costs;
+            this.credits = credits;
         }
 
         void IInstallDestination.Host(Card card)
@@ -28,8 +27,8 @@ namespace model.zones.corp
 
         Task IInstallDestination.PayInstallCost(Card card)
         {
-            // CR: 8.2.11.a    
-            costs.InstallIce(this).Pay(Height);
+            // CR: 8.2.11.a
+            credits.PayingForPlaying(card, Height);
             return Task.CompletedTask;
         }
     }

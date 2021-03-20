@@ -1,7 +1,7 @@
 ﻿using model.cards;
 using model.choices;
 using model.choices.trash;
-using model.stealing;
+using model.steal;
 using model.zones;
 using System.Collections.Generic;
 using System.Threading.Tasks;

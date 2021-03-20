@@ -5,13 +5,8 @@ namespace model.costs
 {
     public class Nothing : ICost
     {
-        public event Action<ICost, bool> PayabilityChanged;
-
-        async Task ICost.Pay(Game game)
-        {
-            await Task.CompletedTask;
-        }
-
-        bool ICost.Payable(Game game) => true;
+        bool ICost.Payable => true;
+        public event Action<ICost, bool> ChangedPayability;
+        async Task ICost.Pay() => await Task.CompletedTask;
     }
 }

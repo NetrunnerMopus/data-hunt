@@ -1,8 +1,8 @@
-﻿using model.costs;
-using model.play;
-using model.play.corp;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using model.costs;
+using model.play;
 
 namespace model.timing.corp
 {
@@ -65,44 +65,28 @@ namespace model.timing.corp
 
         private class RezWindowPermission : ICost
         {
-            private bool allowed = false;
-            private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
+            public bool Payable { get; private set; }
+            public event Action<ICost, bool> ChangedPayability = delegate { };
 
-            bool ICost.Payable(Game game) => allowed;
-
-            async Task ICost.Pay(Game game)
+            async Task ICost.Pay()
             {
-                if (!allowed)
+                if (!Payable)
                 {
                     throw new System.Exception("Tried to rez a card outside of a rez window");
                 }
                 await Task.CompletedTask;
             }
 
-            void ICost.Observe(IPayabilityObserver observer, Game game)
-            {
-                observers.Add(observer);
-                observer.NotifyPayable(allowed, this);
-            }
-
             public void Grant()
             {
-                allowed = true;
-                Update();
+                Payable = true;
+                ChangedPayability(this, Payable);
             }
 
             public void Revoke()
             {
-                allowed = false;
-                Update();
-            }
-
-            private void Update()
-            {
-                foreach (var observer in observers)
-                {
-                    observer.NotifyPayable(allowed, this);
-                }
+                Payable = false;
+                ChangedPayability(this, Payable);
             }
         }
     }

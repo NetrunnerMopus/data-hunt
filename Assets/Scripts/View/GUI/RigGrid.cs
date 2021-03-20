@@ -1,47 +1,45 @@
-﻿using UnityEngine;
-using model.cards;
-using System.Collections.Generic;
-using model.play;
+﻿using System.Collections.Generic;
 using controller;
 using model;
+using model.cards;
+using model.play;
 using model.timing;
 using model.zones;
+using UnityEngine;
 
 namespace view.gui
 {
-    public class RigGrid : IZoneAdditionObserver, IZoneRemovalObserver, IPaidAbilityObserver
+    public class RigGrid : IPaidAbilityObserver
     {
-        private Game game;
         private DropZone paidWindowTrigger;
         public DropZone DropZone { get; private set; }
         private Dictionary<Card, GameObject> visuals = new Dictionary<Card, GameObject>();
         private CardPrinter printer;
 
-        public RigGrid(GameObject gameObject, Game game, DropZone paidWindowTrigger, BoardParts parts)
+        public RigGrid(GameObject gameObject, Runner runner, DropZone paidWindowTrigger, BoardParts parts)
         {
-            this.game = game;
             this.paidWindowTrigger = paidWindowTrigger;
             this.printer = parts.Print(gameObject);
-            game.runner.paidWindow.ObserveAbility(this);
-            game.runner.zones.rig.zone.ObserveAdditions(this);
-            game.runner.zones.rig.zone.ObserveRemovals(this);
+            runner.paidWindow.ObserveAbility(this);
+            runner.zones.rig.zone.Added += RenderInstalledCard;
+            runner.zones.rig.zone.Removed += DestroyUninstalledCard;
             this.DropZone = gameObject.AddComponent<DropZone>();
         }
-        void IZoneAdditionObserver.NotifyCardAdded(Card card)
+        private void RenderInstalledCard(Zone zone, Card card)
         {
-            var visual = printer.Print(card);
-            visuals[card] = visual;
+            visuals[card] = printer.Print(card);
         }
 
-        void IZoneRemovalObserver.NotifyCardRemoved(Card card)
+        private void DestroyUninstalledCard(Zone zone, Card card)
         {
             Object.Destroy(visuals[card]);
         }
 
         void IPaidAbilityObserver.NotifyPaidAbilityAvailable(Ability ability, Card source)
         {
-            var droppable = visuals[source].AddComponent<Droppable>();
-            droppable.Represent(new InteractiveAbility(ability, paidWindowTrigger, game));
+            visuals[source]
+                .AddComponent<Droppable>()
+                .Represent(new InteractiveAbility(ability, paidWindowTrigger));
         }
     }
 }

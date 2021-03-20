@@ -1,16 +1,18 @@
-﻿using model.zones.corp;
+﻿using System;
 using System.Collections.Generic;
+using model.zones.corp;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class ServerRow : IRemoteObserver
+    public class ServerRow
     {
         private GameObject gameObject;
         private HorizontalLayoutGroup layout;
         private readonly Dictionary<IServer, ServerBox> boxesPerServer = new Dictionary<IServer, ServerBox>();
-        private HashSet<IServerBoxObserver> observers = new HashSet<IServerBoxObserver>();
+        public event Action<ServerBox> BoxAdded = delegate { };
+        public event Action<ServerBox> BoxRemoved = delegate { };
         private BoardParts parts;
 
         public ServerRow(GameObject gameObject, BoardParts parts, Zones zones)
@@ -24,7 +26,8 @@ namespace view.gui
             layout.childForceExpandHeight = true;
             layout.childAlignment = TextAnchor.UpperLeft;
             layout.spacing = 4;
-            zones.ObserveRemotes(this);
+            zones.RemoteAdded += RenderNewRemote;
+            zones.RemoteRemoved += DestroyDisappearingRemote;
         }
 
         public ServerBox Box(IServer server)
@@ -34,45 +37,23 @@ namespace view.gui
             serverObject.transform.SetParent(gameObject.transform, false);
             LayoutRebuilder.ForceRebuildLayoutImmediate(layout.GetComponent<RectTransform>());
             boxesPerServer[server] = box;
+            box.ShowCards();
             return box;
         }
 
-        public void Observe(IServerBoxObserver observer)
-        {
-            observers.Add(observer);
-            foreach (var box in boxesPerServer.Values)
-            {
-                observer.NotifyServerBox(box);
-            }
-        }
-
-        void IRemoteObserver.NotifyRemoteExists(Remote remote)
+        private void RenderNewRemote(Remote remote)
         {
             var box = Box(remote);
-            foreach (var observer in observers)
-            {
-                observer.NotifyServerBox(box);
-            }
-            remote.Zone.ObserveAdditions(box);
-            remote.Zone.ObserveRemovals(box);
+            BoxAdded(box);
         }
 
-        void IRemoteObserver.NotifyRemoteDisappeared(Remote remote)
+        private void DestroyDisappearingRemote(Remote remote)
         {
             var box = boxesPerServer[remote];
-            foreach (var observer in observers)
-            {
-                observer.NotifyServerBoxDisappeared(box);
-            }
-            remote.Zone.UnobserveAdditions(box);
-            remote.Zone.UnobserveRemovals(box);
-            Object.Destroy(box.gameObject);
+            BoxRemoved(box);
+            GameObject.Destroy(box.gameObject);
         }
-    }
 
-    public interface IServerBoxObserver
-    {
-        void NotifyServerBox(ServerBox box);
-        void NotifyServerBoxDisappeared(ServerBox box);
+        public IEnumerable<ServerBox> ListBoxes() => boxesPerServer.Values;
     }
 }
