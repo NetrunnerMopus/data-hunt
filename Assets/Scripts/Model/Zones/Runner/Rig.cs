@@ -10,12 +10,12 @@ namespace model.zones.runner
     {
         public readonly Zone zone = new Zone("Rig");
 
-        private Game game;
+        private Runner runner;
         private IPilot pilot;
 
-        public Rig(Game game, IPilot pilot)
+        public Rig(Runner runner, IPilot pilot)
         {
-            this.game = game;
+            this.runner = runner;
             this.pilot = pilot;
         }
 
@@ -31,7 +31,7 @@ namespace model.zones.runner
             {
                 var programs = zone.Cards.Where(it => it.Type is Program);
                 var old = await pilot.ChooseACard().Declare("Which program to trash?", programs); // actually declare zero or many, unless MU is constrained then a minimum
-                old.MoveTo(game.runner.zones.heap.zone); // TODO reuse an actual trash abstraction
+                old.MoveTo(runner.zones.heap.zone); // TODO reuse an actual trash abstraction
             }
         }
 

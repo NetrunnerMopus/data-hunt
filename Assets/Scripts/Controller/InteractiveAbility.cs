@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using model;
 using model.play;
 
 namespace controller
@@ -8,17 +7,15 @@ namespace controller
     public class InteractiveAbility : IInteractive
     {
         private Ability ability;
-        private Game game;
         private IList<Update> updates = new List<Update>();
         public DropZone Activation { get; }
         public bool Active { get; private set; }
 
-        public InteractiveAbility(Ability ability, DropZone activation, Game game)
+        public InteractiveAbility(Ability ability, DropZone activation)
         {
             this.ability = ability;
             this.Activation = activation;
             this.Active = ability.Usable;
-            this.game = game;
             ability.UsabilityChanged += UpdateUsability;
         }
 
@@ -29,7 +26,7 @@ namespace controller
 
         async Task IInteractive.Interact()
         {
-            await ability.Trigger(game);
+            await ability.Trigger();
         }
 
         void IInteractive.UnobserveAll()

@@ -12,14 +12,15 @@ namespace model.costs
     {
         private ICost[] costs;
         private IDictionary<ICost, bool> payabilities = new Dictionary<ICost, bool>();
-        public event Action<ICost, bool> PayabilityChanged;
+        public bool Payable => costs.All(it => it.Payable);
+        public event Action<ICost, bool> ChangedPayability = delegate { };
 
         public Conjunction(params ICost[] costs)
         {
             this.costs = costs;
             foreach (var cost in costs)
             {
-                cost.PayabilityChanged += UpdatePayability;
+                cost.ChangedPayability += UpdatePayability;
             }
         }
 
@@ -27,16 +28,14 @@ namespace model.costs
         {
             payabilities[source] = payable;
             var allPayable = payabilities.All(payability => payability.Value);
-            PayabilityChanged(this, allPayable);
+            ChangedPayability(this, allPayable);
         }
 
-        bool ICost.Payable(Game game) => costs.All(it => it.Payable(game));
-
-        async Task ICost.Pay(Game game)
+        async Task ICost.Pay()
         {
             foreach (var cost in costs)
             {
-                await cost.Pay(game);
+                await cost.Pay();
             }
         }
 

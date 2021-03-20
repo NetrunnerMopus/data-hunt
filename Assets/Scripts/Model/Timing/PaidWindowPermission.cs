@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace model.timing
 {
     public class PaidWindowPermission : ICost
     {
-        private bool allowed = false;
+        public bool Payable { get; private set; } = false;
+        public event Action<ICost, bool> ChangedPayability;
         private bool paid = false;
-        private HashSet<IPayabilityObserver> observers = new HashSet<IPayabilityObserver>();
-
-        bool ICost.Payable(Game game) => allowed;
-        
-        async Task ICost.Pay(Game game)
+        async Task ICost.Pay()
         {
-            if (!allowed)
+            if (!Payable)
             {
                 throw new System.Exception("Tried to fire a paid ability while the window was closed");
             }
@@ -21,31 +18,22 @@ namespace model.timing
             await Task.CompletedTask;
         }
 
-        void ICost.Observe(IPayabilityObserver observer, Game game)
-        {
-            observers.Add(observer);
-            observer.NotifyPayable(allowed, this);
-        }
-
         public void Grant()
         {
-            allowed = true;
+            Payable = true;
             paid = false;
             Update();
         }
 
         public void Revoke()
         {
-            allowed = false;
+            Payable = false;
             Update();
         }
 
         private void Update()
         {
-            foreach (var observer in observers)
-            {
-                observer.NotifyPayable(allowed, this);
-            }
+            ChangedPayability?.Invoke(this, Payable);
         }
 
         public bool WasPaid() => paid;

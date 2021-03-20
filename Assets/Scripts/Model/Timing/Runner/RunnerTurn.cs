@@ -14,7 +14,7 @@ namespace model.timing.runner
         Side ITurn.Side => Side.RUNNER;
         private List<IEffect> turnBeginningTriggers = new List<IEffect>();
         private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
-        public event EventHandler<ITurn> Started = delegate { };
+        public event AsyncAction<ITurn> Started;
         private HashSet<IRunnerActionObserver> actions = new HashSet<IRunnerActionObserver>();
 
         public RunnerTurn(Game game)
@@ -25,7 +25,7 @@ namespace model.timing.runner
         async Task ITurn.Start()
         {
             Active = true;
-            Started(this, this);
+            await Started(this);
             await ActionPhase();
             await DiscardPhase();
             Active = false;
@@ -72,7 +72,7 @@ namespace model.timing.runner
         {
             if (turnBeginningTriggers.Count > 0)
             {
-                await new SimultaneousTriggers(turnBeginningTriggers.Copy()).AllTriggered(game.runner.pilot, game);
+                await new SimultaneousTriggers(turnBeginningTriggers.Copy()).AllTriggered(game.runner.pilot);
             }
         }
 
@@ -80,7 +80,7 @@ namespace model.timing.runner
         {
             while (game.runner.clicks.Remaining > 0)
             {
-                Task<Ability> actionTaking = game.runner.actionCard.TakeAction();
+                Task<Ability> actionTaking = game.runner.Acting.TakeAction();
                 foreach (var observer in actions)
                 {
                     observer.NotifyActionTaking();

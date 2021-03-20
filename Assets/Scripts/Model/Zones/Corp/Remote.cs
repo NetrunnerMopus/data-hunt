@@ -13,12 +13,12 @@ namespace model.zones.corp
     {
         public Zone Zone { get; } = new Zone("Remote");
         public IceColumn Ice { get; }
-        private Game game;
+        private Archives archives;
 
-        public Remote(Game game)
+        public Remote(Corp corp)
         {
-            this.game = game;
-            Ice = new IceColumn(game);
+            this.archives = corp.zones.archives;
+            Ice = new IceColumn(this, corp.credits);
         }
 
         public bool IsEmpty() {
@@ -29,7 +29,7 @@ namespace model.zones.corp
         {
             Zone
                 .Cards
-                .Select(it => new Trash(it, game.corp.zones.archives.Zone))
+                .Select(it => new Trash(it, archives.Zone))
                 .ToList()
                 .ForEach(it => it.TrashIt());
             card.MoveTo(Zone);
@@ -55,7 +55,7 @@ namespace model.zones.corp
             var unaccessed = new List<Card>(Zone.Cards);
             for (var accessesLeft = accessCount; accessesLeft > 0; accessesLeft--)
             {
-                var card = await pilot.ChooseACard().Declare("Which card to access now?", unaccessed, game);
+                var card = await pilot.ChooseACard().Declare("Which card to access now?", unaccessed);
                 unaccessed.Remove(card);
                 await new AccessCard(card, game).AwaitEnd();
             }

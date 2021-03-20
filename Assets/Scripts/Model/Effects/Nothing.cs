@@ -8,7 +8,7 @@ namespace model.effects
     {
         public bool Impactful => false;
         public event Action<IEffect, bool> ChangedImpact;
-        async Task IEffect.Resolve(Game game) => await Task.CompletedTask;
+        async Task IEffect.Resolve() => await Task.CompletedTask;
         IEnumerable<string> IEffect.Graphics => new string[] { };
     }
 }

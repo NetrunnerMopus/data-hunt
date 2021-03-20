@@ -1,6 +1,4 @@
 using model.cards.types;
-using model.costs;
-using model.effects.corp;
 
 namespace model.cards.corp
 {

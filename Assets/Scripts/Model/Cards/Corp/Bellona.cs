@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.cards.types;
-using model.stealing;
+using model.steal;
 
 namespace model.cards.corp
 {
@@ -33,7 +33,7 @@ namespace model.cards.corp
 
             bool IStealOption.IsLegal()
             {
-                return costToSteal.Payable() && stealing.IsLegal();
+                return costToSteal.Payable && stealing.IsLegal();
             }
 
             async Task<bool> IStealOption.Perform()

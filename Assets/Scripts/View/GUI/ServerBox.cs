@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace view.gui
 {
-    public class ServerBox : IZoneAdditionObserver, IZoneRemovalObserver
+    public class ServerBox
     {
         public readonly GameObject gameObject;
         public readonly IServer server;
@@ -24,15 +24,26 @@ namespace view.gui
             image.fillCenter = false;
             image.color = new Color(1f, 1f, 1f, 0f);
             Printer = parts.Print(gameObject);
+
         }
 
-        void IZoneAdditionObserver.NotifyCardAdded(Card card)
+        public void ShowCards()
+        {
+            server.Zone.Added += RenderInstalledCard;
+            server.Zone.Removed += DestroyUninstalledCard;
+            foreach (var card in server.Zone.Cards)
+            {
+                RenderInstalledCard(server.Zone, card);
+            }
+        }
+
+        private void RenderInstalledCard(Zone zone, Card card)
         {
             var printedCard = Printer.Print(card);
             visuals[card] = printedCard;
         }
 
-        void IZoneRemovalObserver.NotifyCardRemoved(Card card)
+        private void DestroyUninstalledCard(Zone zone, Card card)
         {
             var visual = visuals[card];
             visuals.Remove(card);

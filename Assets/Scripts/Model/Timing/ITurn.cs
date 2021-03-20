@@ -14,7 +14,7 @@ namespace model.timing
         /// It's different from "when begins" triggers, because it's not for card effects. It's for tracking the earliest moment when the turn is considered active.
         /// For example for tracking/resetting counters per turn.
         /// </summary>
-        event EventHandler<ITurn> Started;
+        event AsyncAction<ITurn> Started; 
 
         /// <summary>
         /// Registers a game effect to be fired at the beginning of the turn, e.g. PAD Campaign.

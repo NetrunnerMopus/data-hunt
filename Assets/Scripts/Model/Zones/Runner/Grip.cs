@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace model.zones.runner
 {
-    public class Grip : IZoneAdditionObserver
+    public class Grip
     {
         public readonly Zone zone = new Zone("Grip");
         private HashSet<IGripDiscardObserver> discards = new HashSet<IGripDiscardObserver>();
@@ -14,7 +14,7 @@ namespace model.zones.runner
 
         public Grip()
         {
-            zone.ObserveAdditions(this);
+            zone.Added += (zone, card) => card.UpdateInfo(Information.HIDDEN_FROM_CORP); 
         }
 
         async public Task Discard()
@@ -47,11 +47,6 @@ namespace model.zones.runner
         public void UnobserveDiscarding(IGripDiscardObserver observer)
         {
             discards.Remove(observer);
-        }
-
-        void IZoneAdditionObserver.NotifyCardAdded(Card card)
-        {
-            card.UpdateInfo(Information.HIDDEN_FROM_CORP);
         }
     }
 

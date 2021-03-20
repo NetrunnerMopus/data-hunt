@@ -9,34 +9,30 @@ namespace model.effects
     {
         private IEffect[] effects;
         private IDictionary<IEffect, bool> impacts = new Dictionary<IEffect, bool>();
+        public bool Impactful => impacts.Any(impact => impact.Value);
+        public event Action<IEffect, bool> ChangedImpact;
         IEnumerable<string> IEffect.Graphics => effects.SelectMany(it => it.Graphics).ToList();
 
         public Sequence(params IEffect[] effects)
         {
             this.effects = effects;
-        }
-
-        async Task IEffect.Resolve(Game game)
-        {
             foreach (var effect in effects)
             {
-                await effect.Resolve(game);
+                effect.ChangedImpact += UpdateImpact;
             }
         }
 
-        void IEffect.Observe(IImpactObserver observer, Game game)
+        private void UpdateImpact(IEffect effect, bool impactful)
         {
-            observers.Add(observer);
-            Array.ForEach(effects, (effects) => effects.Observe(this, game));
+            impacts[effect] = impactful;
+            ChangedImpact(this, Impactful);
         }
 
-        void IImpactObserver.NotifyImpact(bool impactful, IEffect source)
+        async Task IEffect.Resolve()
         {
-            impacts[source] = impactful;
-            var anyImpact = impacts.Any(impact => impact.Value);
-            foreach (var observer in observers)
+            foreach (var effect in effects)
             {
-                observer.NotifyImpact(anyImpact, this);
+                await effect.Resolve();
             }
         }
     }

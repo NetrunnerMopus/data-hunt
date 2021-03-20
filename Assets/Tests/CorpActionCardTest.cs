@@ -1,7 +1,5 @@
 ﻿using NUnit.Framework;
 using model;
-using model.cards;
-using System.Collections.Generic;
 using tests.observers;
 using tests.mocks;
 using view.log;
@@ -13,20 +11,19 @@ namespace tests
         [Test]
         async public void ShouldClickForCredit()
         {
-            var game = new MockGames().WithRunnerCards(new List<Card>());
+            var game = MockGames.StartUnpiloted();
             var gameFlowLog = new GameFlowLog();
             gameFlowLog.Display(game);
-            game.Start();
             var balance = new LastBalanceObserver();
             var clicks = new SpentClicksObserver();
-            game.corp.credits.Observe(balance);
-            game.corp.clicks.Observe(clicks);
-            var clickForCredit = game.corp.actionCard.credit;
+            game.corp.credits.Changed += balance.RememberBalance;
+            game.corp.clicks.Changed += clicks.RememberSpent;
+            var clickForCredit = game.corp.Acting.credit;
             SkipPaidWindow(game);
             SkipPaidWindow(game);
 
-            await game.corp.actionCard.TakeAction();
-            await clickForCredit.Trigger(game);
+            await game.corp.Acting.TakeAction();
+            await clickForCredit.Trigger();
 
             Assert.AreEqual(6, balance.LastBalance);
             Assert.AreEqual(1, clicks.Spent);

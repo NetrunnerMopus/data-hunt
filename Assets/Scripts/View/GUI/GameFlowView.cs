@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿using controller;
 using model;
 using model.timing;
-using controller;
+using UnityEngine;
 using view.gui.timecross;
 
 namespace view.gui
@@ -36,7 +36,7 @@ namespace view.gui
             rectangle.anchorMax = new Vector2(0.70f, 0.70f);
             rectangle.offsetMin = Vector2.zero;
             rectangle.offsetMax = Vector2.zero;
-            game.ObserveFinish(view.AddComponent<GameFinishPanel>());
+            game.Finished += view.AddComponent<GameFinishPanel>().PopUp;
             return view;
         }
     }

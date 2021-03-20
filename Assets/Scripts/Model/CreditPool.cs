@@ -59,7 +59,8 @@ namespace model
         {
             private CreditPool pool;
             private int credits;
-            public event Action<ICost, bool> PayabilityChanged = delegate { };
+            public bool Payable => pool.Balance >= credits;
+            public event Action<ICost, bool> ChangedPayability = delegate { };
 
             public Price(CreditPool pool, int credits)
             {
@@ -70,12 +71,7 @@ namespace model
             private void NotifyBalance(CreditPool pool)
             {
                 var payable = pool.Balance >= credits;
-                PayabilityChanged(this, payable);
-            }
-
-            bool ICost.Payable()
-            {
-                return pool.Balance >= credits;
+                ChangedPayability(this, payable);
             }
 
             async Task ICost.Pay()

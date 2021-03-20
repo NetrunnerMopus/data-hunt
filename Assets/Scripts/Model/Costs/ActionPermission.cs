@@ -6,11 +6,12 @@ namespace model.costs
     public class ActionPermission : ICost
     {
         private bool allowed = false;
-        public event Action<ICost, bool> PayabilityChanged = delegate { };
 
-        bool ICost.Payable(Game game) => allowed;
+        public bool Payable {get; private set;}
 
-        async Task ICost.Pay(Game game)
+        public event Action<ICost, bool> ChangedPayability = delegate { };
+
+        async Task ICost.Pay()
         {
             if (!allowed)
             {
@@ -34,7 +35,7 @@ namespace model.costs
 
         private void Update()
         {
-            PayabilityChanged(this, allowed);
+            ChangedPayability(this, allowed);
         }
     }
 }

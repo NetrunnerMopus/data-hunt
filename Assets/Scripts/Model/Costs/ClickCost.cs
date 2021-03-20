@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace model.costs
 {
@@ -6,7 +7,8 @@ namespace model.costs
     {
         private int clicks;
         private ClickPool pool;
-        public event System.Action<ICost, bool> PayabilityChanged = delegate { };
+        bool ICost.Payable => pool.Remaining >= clicks;
+        public event Action<ICost, bool> ChangedPayability = delegate { };
 
         public ClickCost(ClickPool pool, int clicks)
         {
@@ -15,15 +17,13 @@ namespace model.costs
             pool.Changed += NotifyClicks;
         }
 
-        bool ICost.Payable(Game game) => pool.Remaining >= clicks;
-
         private void NotifyClicks(ClickPool pool)
         {
             var payable = pool.Remaining >= clicks;
-            PayabilityChanged(this, payable);
+            ChangedPayability(this, payable);
         }
 
-        async Task ICost.Pay(Game game)
+        async Task ICost.Pay()
         {
             pool.Spend(clicks);
             await Task.CompletedTask;

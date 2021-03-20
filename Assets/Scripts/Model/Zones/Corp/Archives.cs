@@ -1,5 +1,4 @@
 ﻿using model.cards.types;
-using model.costs;
 using model.player;
 using model.timing;
 using System.Linq;
@@ -12,9 +11,9 @@ namespace model.zones.corp
         public Zone Zone { get; } = new Zone("Archives");
         public IceColumn Ice { get; }
 
-        public Archives(Costs costs)
+        public Archives(CreditPool credits)
         {
-            Ice = new IceColumn(this, costs);
+            Ice = new IceColumn(this, credits);
         }
 
         async Task IServer.Access(int accessCount, IPilot pilot, Game game)
@@ -22,7 +21,7 @@ namespace model.zones.corp
             var interestingCards = Zone.Cards.Where(it => it.Type is Agenda).ToList();
             while (interestingCards.Count > 0) // TODO actually access the rest of the cards too, e.g. for Obelus-HadesShard
             {
-                var cardToAccess = await pilot.ChooseACard().Declare("Which card to access now?", interestingCards, game);
+                var cardToAccess = await pilot.ChooseACard().Declare("Which card to access now?", interestingCards);
                 interestingCards.Remove(cardToAccess);
                 await new AccessCard(cardToAccess, game).AwaitEnd();
             }

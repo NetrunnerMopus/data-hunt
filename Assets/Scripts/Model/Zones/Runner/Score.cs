@@ -1,4 +1,5 @@
-﻿using model.cards;
+﻿using System;
+using model.cards;
 
 namespace model.zones.runner
 {
@@ -6,12 +7,7 @@ namespace model.zones.runner
     {
         public readonly Zone zone = new Zone("Runner score");
         private int score = 0;
-        private Game game;
-
-        public Score(Game game)
-        {
-            this.game = game;
-        }
+        public event Action StolenEnough = delegate { };
 
         public void Add(Card card, int agendaPoints)
         {
@@ -20,7 +16,7 @@ namespace model.zones.runner
             score += agendaPoints;
             if (score >= 7) // TODO Harmony MedTech
             {
-                game.StealEnough();
+                StolenEnough();
             }
         }
     }

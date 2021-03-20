@@ -13,9 +13,9 @@ namespace model.cards.runner
         override public string Name => "Wyldside";
         override public Faction Faction => Factions.ANARCH;
         override public int InfluenceCost => 3;
-        override public ICost PlayCost => game.Costs.InstallResource(this, 3);
+        override public ICost PlayCost => game.runner.credits.PayingForPlaying(this, 3);
         override public IEffect Activation => new WyldsideActivation(game.runner);
-        override public IType Type => new Resource();
+        override public IType Type => new Resource(game);
 
         private class WyldsideActivation : IEffect
         {

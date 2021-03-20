@@ -7,22 +7,18 @@ namespace model.costs
     public class Active : ICost
     {
         private Card card;
-        public event Action<ICost, bool> PayabilityChanged = delegate { };
+        bool ICost.Payable => card.Active;
+        public event Action<ICost, bool> ChangedPayability = delegate { };
 
         public Active(Card card)
         {
             this.card = card;
             card.Toggled += delegate
             {
-                PayabilityChanged(this, card.Active);
+                ChangedPayability(this, card.Active);
             };
         }
 
-        bool ICost.Payable(Game game) => card.Active;
-
-        async Task ICost.Pay(Game game)
-        {
-            await Task.CompletedTask;
-        }
+        async Task ICost.Pay() => await Task.CompletedTask;
     }
 }

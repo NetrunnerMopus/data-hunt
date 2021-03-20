@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using model.cards;
 using model.zones.corp;
 
@@ -12,15 +12,12 @@ namespace model.choices.trash
 
         public PayToTrash(int trashCost, Card card, Game game)
         {
-            this.cost = game.runner.credits.PayingFoTrashing(card, trashCost);
+            this.cost = game.runner.credits.PayingForTrashing(card, trashCost);
             this.card = card;
             this.archives = game.corp.zones.archives;
         }
 
-        bool ITrashOption.IsLegal()
-        {
-            return cost.Payable();
-        }
+        bool ITrashOption.IsLegal() => cost.Payable;
 
         async Task<bool> ITrashOption.Perform()
         {

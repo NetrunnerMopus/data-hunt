@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace model.play
 {
-    public class Ability : IPayabilityObserver, IImpactObserver
+    public class Ability
     {
         public readonly ICost cost;
         public readonly IEffect effect;
-        public event Action<Ability, bool> UsabilityChanged = delegate {};
-        public event Action<Ability> Resolved = delegate {};
+        public event Action<Ability, bool> UsabilityChanged = delegate { };
+        public event Action<Ability> Resolved = delegate { };
         private bool payable = false;
         private bool impactful = false;
         public bool Usable => payable && impactful;
@@ -18,42 +18,27 @@ namespace model.play
         {
             this.cost = cost;
             this.effect = effect;
+            cost.ChangedPayability += UpdateCost;
+            effect.ChangedImpact += UpdateEffect;
         }
 
-        async public Task Trigger(Game game)
-        {
-            await cost.Pay(game);
-            await effect.Resolve(game);
-            Resolved(this);
-        }
-
-        public void ObserveUsability(IUsabilityObserver observer, Game game)
-        {
-            usabilities.Add(observer);
-            cost.Observe(this, game);
-            effect.Observe(this, game);
-        }
-
-        public void Unobserve(IUsabilityObserver observer)
-        {
-            usabilities.Remove(observer);
-        }
-
-        void IPayabilityObserver.NotifyPayable(bool payable, ICost source)
+        private void UpdateCost(ICost source, bool payable)
         {
             this.payable = payable;
-            Update();
+            UsabilityChanged(this, Usable);
         }
 
-        void IImpactObserver.NotifyImpact(bool impactful, IEffect source)
+        private void UpdateEffect(IEffect source, bool impactful)
         {
             this.impactful = impactful;
-            Update();
+            UsabilityChanged(this, Usable);
         }
 
-        private void Update()
+        async public Task Trigger()
         {
-            UsabilityChanged(this, Usable);
+            await cost.Pay();
+            await effect.Resolve();
+            Resolved(this);
         }
 
         public override bool Equals(object obj)
@@ -73,10 +58,5 @@ namespace model.play
         }
 
         public override string ToString() => "Ability(cost=" + cost + ", effect=" + effect + ")";
-    }
-
-    public interface IUsabilityObserver
-    {
-        void NotifyUsable(bool usable, Ability ability);
     }
 }

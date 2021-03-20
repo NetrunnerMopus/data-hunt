@@ -1,19 +1,17 @@
-﻿using UnityEngine;
-using controller;
+﻿using controller;
 using model;
 using model.zones;
+using UnityEngine;
 
 namespace view.gui
 {
-    public class StackPile : IZoneCountObserver
+    public class StackPile
     {
-        private Game game;
         private DropZone gripZone;
         private GameObject top;
 
-        public StackPile(GameObject gameObject, Game game, DropZone gripZone, BoardParts parts)
+        public StackPile(GameObject gameObject, Runner runner, DropZone gripZone, BoardParts parts)
         {
-            this.game = game;
             this.gripZone = gripZone;
             top = parts.Print(gameObject).PrintRunnerFacedown("Top of stack");
             top.transform.SetAsFirstSibling();
@@ -23,16 +21,18 @@ namespace view.gui
             top
                 .AddComponent<Droppable>()
                 .Represent(
-                    new InteractiveAbility(game.runner.actionCard.draw, gripZone, game)
+                    new InteractiveAbility(runner.Acting.draw, gripZone)
                 );
-            game.runner.zones.stack.zone.ObserveCount(gameObject.AddComponent<PileCount>());
+            var pileCount = gameObject.AddComponent<PileCount>();
+            runner.zones.stack.zone.Changed += pileCount.UpdateCardCount;
+            runner.zones.stack.zone.Changed += UpdateTopOfStack;
         }
 
-        void IZoneCountObserver.NotifyCount(int count)
+        private void UpdateTopOfStack(Zone zone)
         {
             if (top != null)
             {
-                top.SetActive(count > 0);
+                top.SetActive(zone.Count > 0);
             }
         }
     }

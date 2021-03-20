@@ -1,16 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using controller;
-using model.cards;
 using model;
-using System.Collections.Generic;
+using model.cards;
 using model.zones;
+using UnityEngine;
 
 namespace view.gui
 {
-    public class GripFan : IZoneAdditionObserver, IZoneRemovalObserver
+    public class GripFan
     {
         private GameObject gameObject;
-        private Game game;
+        private Runner runner;
         private DropZone playZone;
         private DropZone rigZone;
         private DropZone heapZone;
@@ -19,20 +19,20 @@ namespace view.gui
         private CardPrinter printer;
         public DropZone DropZone { get; private set; }
 
-        public GripFan(GameObject gameObject, Game game, DropZone playZone, DropZone rigZone, DropZone heapZone, BoardParts parts)
+        public GripFan(GameObject gameObject, Runner runner, DropZone playZone, DropZone rigZone, DropZone heapZone, BoardParts parts)
         {
             this.gameObject = gameObject;
-            this.game = game;
+            this.runner = runner;
             this.playZone = playZone;
             this.rigZone = rigZone;
             this.heapZone = heapZone;
             this.printer = parts.Print(gameObject);
             this.DropZone = gameObject.AddComponent<DropZone>();
-            game.runner.zones.grip.zone.ObserveAdditions(this);
-            game.runner.zones.grip.zone.ObserveRemovals(this);
+            runner.zones.grip.zone.Added += RenderNewCard;
+            runner.zones.grip.zone.Removed += DestroyRemovedCard;
         }
 
-        void IZoneAdditionObserver.NotifyCardAdded(Card card)
+        private void RenderNewCard(Zone zone, Card card)
         {
             var visual = printer.Print(card);
             visuals[card] = visual;
@@ -41,16 +41,16 @@ namespace view.gui
             var type = card.Type;
             if (type.Playable)
             {
-                droppable.Represent(new InteractiveAbility(game.runner.actionCard.Play(card), playZone, game));
+                droppable.Represent(new InteractiveAbility(runner.Acting.Play(card), playZone));
             }
             if (type.Installable)
             {
-                droppable.Represent(new InteractiveAbility(game.runner.actionCard.Install(card), rigZone, game));
+                droppable.Represent(new InteractiveAbility(runner.Acting.Install(card), rigZone));
             }
-            droppable.Represent(new InteractiveDiscard(card, heapZone, game));
+            droppable.Represent(new InteractiveDiscard(card, heapZone, runner));
         }
 
-        void IZoneRemovalObserver.NotifyCardRemoved(Card card)
+        private void DestroyRemovedCard(Zone zone, Card card)
         {
             Object.Destroy(visuals[card]);
             visuals.Remove(card);

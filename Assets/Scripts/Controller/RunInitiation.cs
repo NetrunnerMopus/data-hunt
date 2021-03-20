@@ -1,36 +1,41 @@
-﻿using UnityEngine;
-using view.gui;
+﻿using System.Collections.Generic;
 using model;
-using System.Collections.Generic;
+using UnityEngine;
+using view.gui;
 
 namespace controller
 {
-    public class RunInitiation : IServerBoxObserver
+    public class RunInitiation
     {
         private GameObject gameObject;
-        private Game game;
+        private Runner runner;
         private Droppable droppable;
         private IDictionary<ServerBox, DropZone> dropZones = new Dictionary<ServerBox, DropZone>();
         private IDictionary<ServerBox, IInteractive> abilities = new Dictionary<ServerBox, IInteractive>();
 
-        public RunInitiation(GameObject gameObject, Game game, ServerRow serverRow)
+        public RunInitiation(GameObject gameObject, Runner runner, ServerRow serverRow)
         {
             this.gameObject = gameObject;
-            this.game = game;
+            this.runner = runner;
             droppable = gameObject.AddComponent<Droppable>();
-            serverRow.Observe(this);
+            serverRow.BoxAdded += EnableRunning;
+            serverRow.BoxRemoved += DisableRunning;
+            foreach (var box in serverRow.ListBoxes())
+            {
+                EnableRunning(box);
+            }
         }
 
-        void IServerBoxObserver.NotifyServerBox(ServerBox box)
+        private void EnableRunning(ServerBox box)
         {
             var boxZone = box.gameObject.AddComponent<DropZone>();
             dropZones[box] = boxZone;
-            var runOnServer = game.runner.actionCard.Run(box.server);
-            abilities[box] = new InteractiveAbility(runOnServer, boxZone, game);
+            var runOnServer = runner.Acting.Run(box.server);
+            abilities[box] = new InteractiveAbility(runOnServer, boxZone);
             droppable.Represent(abilities[box]);
         }
 
-        void IServerBoxObserver.NotifyServerBoxDisappeared(ServerBox box)
+        private void DisableRunning(ServerBox box)
         {
             Object.Destroy(dropZones[box]);
             droppable.Unlink(abilities[box]);

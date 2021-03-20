@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using model.timing.corp;
 using model;
 using model.zones.corp;
@@ -6,7 +6,6 @@ using model.timing.runner;
 using model.zones.runner;
 using model.timing;
 using System.Collections.Generic;
-using model.play.corp;
 using System.Threading.Tasks;
 using model.play;
 
@@ -79,9 +78,10 @@ namespace view.log
             }
         }
 
-        private void TurnStarted(object sender, ITurn turn)
+       async private Task TurnStarted(ITurn turn)
         {
             Log("turn " + turn + " beginning");
+            await Task.CompletedTask;
         }
 
         void IRunnerActionObserver.NotifyActionTaking()

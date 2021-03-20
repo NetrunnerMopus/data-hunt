@@ -1,9 +1,12 @@
-﻿using System.Threading.Tasks;
-using model.cards;
-using model.play.corp;
+﻿using System;
+using System.Threading.Tasks;
+using model.install;
+using model.play;
 using model.player;
 using model.timing;
 using model.timing.corp;
+using model.zones;
+using model.zones.corp;
 
 namespace model
 {
@@ -12,38 +15,44 @@ namespace model
         public readonly IPilot pilot;
         public readonly CorpTurn turn;
         public readonly PaidWindow paidWindow;
-        public readonly ActionCard actionCard;
         public readonly zones.corp.Zones zones;
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
-        public readonly Card identity;
+        public CorpActing Acting { get; }
+        public Installing Installing { get; }
 
         public Corp(
             IPilot pilot,
             CorpTurn turn,
             PaidWindow paidWindow,
-            ActionCard actionCard,
-            zones.corp.Zones zones,
-            ClickPool clicks,
-            CreditPool credits,
-            Card identity
+            Zone playArea,
+            Shuffling shuffling,
+            Random random
         )
         {
             this.pilot = pilot;
             this.turn = turn;
             this.paidWindow = paidWindow;
-            this.actionCard = actionCard;
-            this.zones = zones;
-            this.clicks = clicks;
-            this.credits = credits;
-            this.identity = identity;
+            clicks = new ClickPool(3);
+            credits = new CreditPool();
+            zones = new Zones(
+               new Headquarters(random, credits),
+               new ResearchAndDevelopment(this, shuffling),
+               new Archives(credits),
+               playArea,
+               this
+            );
+            this.Acting = new CorpActing(this);
+            this.Installing = new Installing(pilot, playArea);
         }
 
         async public Task Start(Game game, Deck deck)
         {
             zones.rd.AddDeck(deck);
+            var identity = deck.identity;
+            zones.identity.Add(identity);
             identity.FlipFaceUp();
-            await identity.Activate(game);
+            await identity.Activate();
             pilot.Play(game);
             credits.Gain(5);
             zones.rd.Draw(5, zones.hq);

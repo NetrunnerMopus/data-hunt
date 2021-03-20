@@ -61,30 +61,47 @@ namespace model
             Changed(this);
         }
 
+        public ICost Spending(int clicksToSpend) => new SpendClicks(this, clicksToSpend);
+
+        private class SpendClicks : ICost
+        {
+            private ClickPool pool;
+            private int clicksToSpend;
+            public bool Payable => pool.Remaining >= clicksToSpend;
+            public event Action<ICost, bool> ChangedPayability = delegate { };
+
+            public SpendClicks(ClickPool pool, int clicksToSpend)
+            {
+                this.pool = pool;
+                this.clicksToSpend = clicksToSpend;
+                pool.Changed += (_) => ChangedPayability(this, Payable);
+            }
+
+            async public Task Pay()
+            {
+                pool.Spend(clicksToSpend);
+                await Task.CompletedTask;
+            }
+        }
+
         public IEffect Losing(int clicksToLose) => new LoseClicks(this, clicksToLose);
 
         private class LoseClicks : IEffect
         {
-            public bool Impactful { get; private set; }
-            public event System.Action<IEffect, bool> ChangedImpact = delegate { };
             private ClickPool pool;
             private int clicksToLose;
+            public bool Impactful => pool.Remaining >= clicksToLose;
+            public event System.Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { "" };
 
             public LoseClicks(ClickPool pool, int clicks)
             {
                 this.pool = pool;
                 this.clicksToLose = clicks;
-                pool.Changed += CountClicks;
+                pool.Changed += (_) => ChangedImpact(this, Impactful);
             }
 
-            private void CountClicks(ClickPool pool)
-            {
-                Impactful = pool.Remaining > clicksToLose;
-                ChangedImpact(this, Impactful);
-            }
-
-            async Task IEffect.Resolve(Game game)
+            async Task IEffect.Resolve()
             {
                 pool.Lose(clicksToLose);
                 await Task.CompletedTask;

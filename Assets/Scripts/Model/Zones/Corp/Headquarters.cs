@@ -16,10 +16,10 @@ namespace model.zones.corp
         private TaskCompletionSource<bool> discarding;
         private Random random;
 
-        public Headquarters(Costs costs, Random random)
+        public Headquarters(Random random, CreditPool credits)
         {
             this.random = random;
-            Ice = new IceColumn(this, costs);
+            Ice = new IceColumn(this, credits);
         }
 
         async public Task Discard()
@@ -61,7 +61,7 @@ namespace model.zones.corp
                 var randomCard = unaccessed
                     .OrderBy(it => random.Next())
                     .First();
-                var cardToAccess = await pilot.ChooseACard().Declare("Which card to access now?", new List<Card> { randomCard }, game); 
+                var cardToAccess = await pilot.ChooseACard().Declare("Which card to access now?", new List<Card> { randomCard }); 
                 unaccessed.Remove(cardToAccess); // TODO : draw already accessed cards on the side
                 await new AccessCard(cardToAccess, game).AwaitEnd();
             }

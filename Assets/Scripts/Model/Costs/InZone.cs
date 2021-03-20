@@ -9,7 +9,8 @@ namespace model.costs
     {
         private Card card;
         private Zone zone;
-        public event Action<ICost, bool> PayabilityChanged = delegate { };
+        public bool Payable => card.Zone == zone;
+        public event Action<ICost, bool> ChangedPayability = delegate { };
 
         public InZone(Card card, Zone zone)
         {
@@ -22,15 +23,10 @@ namespace model.costs
         {
             if (card == this.card)
             {
-                PayabilityChanged(this, target == zone);
+                ChangedPayability(this, target == zone);
             }
         }
 
-        bool ICost.Payable(Game game) => card.Zone == zone;
-
-        async Task ICost.Pay(Game game)
-        {
-            await Task.CompletedTask;
-        }
+        async Task ICost.Pay() => await Task.CompletedTask;
     }
 }

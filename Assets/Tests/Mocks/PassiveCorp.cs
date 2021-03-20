@@ -15,11 +15,11 @@ namespace tests.mocks
         async public Task SkipTurn()
         {
             SkipPaidWindow();
-            var clickForCredit = game.corp.actionCard.credit;
+            var clickForCredit = game.corp.Acting.credit;
             SkipPaidWindow();
             for (int i = 0; i < 3; i++)
             {
-                await clickForCredit.Trigger(game);
+                await clickForCredit.Trigger();
                 SkipPaidWindow();
             }
             DiscardRandomCards();
