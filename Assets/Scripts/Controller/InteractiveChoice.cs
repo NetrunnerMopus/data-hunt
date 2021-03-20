@@ -8,6 +8,7 @@ namespace controller
         public bool Active { get; }
         public DropZone Activation { get; }
         public GameObject GameObject { get; }
+        public event Update Updated;
         private T value;
         private TaskCompletionSource<T> chosen = new TaskCompletionSource<T>();
 
@@ -19,19 +20,10 @@ namespace controller
             this.GameObject = gameObject;
         }
 
-        void IInteractive.Observe(Update update)
-        {
-            update();
-        }
-
         async Task IInteractive.Interact()
         {
             chosen.SetResult(value);
             await Task.CompletedTask;
-        }
-
-        void IInteractive.UnobserveAll()
-        {
         }
 
         public Task<T> AwaitChoice()

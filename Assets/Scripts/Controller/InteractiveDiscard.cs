@@ -11,9 +11,9 @@ namespace controller
         private Card card;
         private Grip grip;
         private Heap heap;
-        private IList<Update> updates = new List<Update>();
         public DropZone Activation { get; }
         public bool Active { get; private set; }
+        public event Update Updated = delegate { };
 
         public InteractiveDiscard(Card card, DropZone activation, Runner runner)
         {
@@ -25,29 +25,16 @@ namespace controller
             this.grip.ObserveDiscarding(this);
         }
 
-        void IInteractive.Observe(Update toggle)
-        {
-            updates.Add(toggle);
-        }
-
         async Task IInteractive.Interact()
         {
             grip.Discard(card, heap);
             await Task.CompletedTask;
         }
 
-        void IInteractive.UnobserveAll()
-        {
-            grip.UnobserveDiscarding(this);
-        }
-
         void IGripDiscardObserver.NotifyDiscarding(bool discarding)
         {
             Active = discarding;
-            foreach (var update in updates)
-            {
-                update();
-            }
+            Updated();
         }
     }
 }

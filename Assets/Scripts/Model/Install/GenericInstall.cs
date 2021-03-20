@@ -38,6 +38,7 @@ namespace model.install
             this.playArea = playArea;
             if (card.Faction.Side == Side.RUNNER)
             {
+                Impactful = card.PlayCost.Payable;
                 card.PlayCost.ChangedPayability += CheckIfRunnerCanInstall;
             }
             if (card.Faction.Side == Side.CORP)

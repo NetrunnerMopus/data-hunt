@@ -8,9 +8,8 @@ namespace model.effects
     public class Sequence : IEffect
     {
         private IEffect[] effects;
-        private IDictionary<IEffect, bool> impacts = new Dictionary<IEffect, bool>();
-        public bool Impactful => impacts.Any(impact => impact.Value);
-        public event Action<IEffect, bool> ChangedImpact;
+        public bool Impactful => effects.Any(effects => effects.Impactful);
+        public event Action<IEffect, bool> ChangedImpact = delegate { };
         IEnumerable<string> IEffect.Graphics => effects.SelectMany(it => it.Graphics).ToList();
 
         public Sequence(params IEffect[] effects)
@@ -24,7 +23,6 @@ namespace model.effects
 
         private void UpdateImpact(IEffect effect, bool impactful)
         {
-            impacts[effect] = impactful;
             ChangedImpact(this, Impactful);
         }
 
