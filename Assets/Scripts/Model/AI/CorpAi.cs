@@ -16,7 +16,6 @@ namespace model.ai
 {
     public class CorpAi :
         IPilot,
-        ICorpActionObserver,
         IRezWindowObserver,
         IActionPotentialObserver
     {
@@ -38,7 +37,7 @@ namespace model.ai
             this.game = game;
             zones = game.corp.zones;
             game.corp.Acting.ObservePotentialActions(this);
-            game.corp.turn.ObserveActions(this);
+            game.corp.turn.TakingAction += TakeAction;
             game.corp.turn.rezWindow.ObserveWindow(this);
             game.corp.paidWindow.Opened += Pass;
             game.corp.paidWindow.Added += RememberPaidAbility;
@@ -52,14 +51,13 @@ namespace model.ai
             return effects.First();
         }
 
-        async void ICorpActionObserver.NotifyActionTaking()
+        private async Task TakeAction(ITurn turn)
         {
             await Thinking();
             var randomLegalAction = legalActions.ElementAt(random.Next(0, legalActions.Count));
             UnityEngine.Debug.Log("Choosing to " + randomLegalAction);
             await randomLegalAction.Trigger();
         }
-        void ICorpActionObserver.NotifyActionTaken(Ability ability) { }
 
         private void DiscardOne()
         {

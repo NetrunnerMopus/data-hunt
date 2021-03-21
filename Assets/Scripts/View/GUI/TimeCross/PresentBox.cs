@@ -1,14 +1,14 @@
-﻿using model;
+﻿using System.Threading.Tasks;
+using model;
 using model.cards;
 using model.play;
-using model.timing.corp;
-using model.timing.runner;
+using model.timing;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace view.gui.timecross
 {
-    public class PresentBox : MonoBehaviour, IRunnerActionObserver, ICorpActionObserver
+    public class PresentBox : MonoBehaviour
     {
         public GameObject RunnerActionPhase { get; private set; }
         private GameObject corpActionPhase;
@@ -36,7 +36,8 @@ namespace view.gui.timecross
             dayNight.Paint(background, Side.RUNNER);
             BankCredit = GameObject.Find("Bank/Credit");
             SetRunnerActions(false);
-            game.runner.turn.ObserveActions(this);
+            game.runner.turn.TakingAction += BeginRunnerAction;
+            game.runner.turn.ActionTaken += EndRunnerAction;
         }
 
         private void SetRunnerActions(bool takingAction)
@@ -51,7 +52,8 @@ namespace view.gui.timecross
             var background = corpActionPhase.GetComponent<Image>();
             dayNight.Paint(background, Side.CORP);
             corpActionPhase.SetActive(false);
-            game.corp.turn.ObserveActions(this);
+            game.corp.turn.TakingAction += BeginCorpAction;
+            game.corp.turn.ActionTaken += EndCorpAction;
         }
 
         private void WireDiscardPhase(Game game)
@@ -65,26 +67,30 @@ namespace view.gui.timecross
             game.corp.zones.hq.DiscardedOne += RenderCorpNotDiscardingAnymore;
         }
 
-        void IRunnerActionObserver.NotifyActionTaking()
+        async private Task BeginRunnerAction(ITurn turn)
         {
             SetRunnerActions(true);
             future.CurrentTurn.UpdateClicks(game.runner.clicks.Remaining - 1);
+            await Task.CompletedTask;
         }
 
-        void IRunnerActionObserver.NotifyActionTaken(Ability ability)
+        async private Task EndRunnerAction(ITurn turn, Ability action)
         {
             SetRunnerActions(false);
+            await Task.CompletedTask;
         }
 
-        void ICorpActionObserver.NotifyActionTaking()
+        async private Task BeginCorpAction(ITurn turn)
         {
             corpActionPhase.SetActive(true);
             future.CurrentTurn.UpdateClicks(game.corp.clicks.Remaining - 1);
+            await Task.CompletedTask;
         }
 
-        void ICorpActionObserver.NotifyActionTaken(Ability ability)
+        async private Task EndCorpAction(ITurn turn, Ability action)
         {
             corpActionPhase.SetActive(false);
+            await Task.CompletedTask;
         }
 
         private void RenderRunnerDiscarding()
