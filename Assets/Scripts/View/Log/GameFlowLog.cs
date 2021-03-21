@@ -13,7 +13,6 @@ namespace view.log
 {
     public class GameFlowLog :
         IStepObserver,
-        IPaidWindowObserver,
         ICorpActionObserver,
         IRezWindowObserver,
         IHqDiscardObserver,
@@ -24,8 +23,10 @@ namespace view.log
 
         public void Display(Game game)
         {
-            game.corp.paidWindow.ObserveWindow(this);
-            game.runner.paidWindow.ObserveWindow(this);
+            game.corp.paidWindow.Opened += LogOpened;
+            game.corp.paidWindow.Closed += LogClosed;
+            game.runner.paidWindow.Opened += LogOpened;
+            game.runner.paidWindow.Closed += LogClosed;
             var runnerTurn = game.runner.turn;
             var corpTurn = game.corp.turn;
             corpTurn.ObserveSteps(this);
@@ -50,12 +51,12 @@ namespace view.log
             Debug.Log(currentStep + message);
         }
 
-        void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
+        private void LogOpened(PaidWindow window)
         {
             Log(window + " opened");
         }
 
-        void IPaidWindowObserver.NotifyPaidWindowClosed(PaidWindow window)
+        private void LogClosed(PaidWindow window)
         {
             Log(window + " closed");
         }

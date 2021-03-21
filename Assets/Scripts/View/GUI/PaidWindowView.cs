@@ -3,7 +3,7 @@ using model.timing;
 
 namespace view.gui
 {
-    internal class PaidWindowView : IPaidWindowObserver
+    internal class PaidWindowView
     {
         private PaidWindow window;
         private PaidWindowPass pass;
@@ -16,7 +16,8 @@ namespace view.gui
             this.paidChoice = paidChoice;
             pass.Represent(window, paidChoice);
             SetActive(false);
-            window.ObserveWindow(this);
+            window.Opened += Open;
+            window.Closed += Close;
         }
 
         private void SetActive(bool active)
@@ -25,12 +26,12 @@ namespace view.gui
             paidChoice.gameObject.SetActive(active);
         }
 
-        void IPaidWindowObserver.NotifyPaidWindowClosed(PaidWindow window)
+        private void Close(PaidWindow window)
         {
             SetActive(false);
         }
 
-        void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
+        private void Open(PaidWindow window)
         {
             SetActive(true);
             pass.transform.SetAsLastSibling();

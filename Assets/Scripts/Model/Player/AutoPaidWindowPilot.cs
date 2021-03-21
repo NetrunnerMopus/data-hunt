@@ -1,11 +1,11 @@
-using model.play;
-using model.timing;
 using System.Collections.Generic;
 using System.Linq;
+using model.play;
+using model.timing;
 
 namespace model.player
 {
-    public class AutoPaidWindowPilot : DelegatingPilot, IPaidWindowObserver
+    public class AutoPaidWindowPilot : DelegatingPilot
     {
         private HashSet<Ability> paidAbilities = new HashSet<Ability>();
 
@@ -15,19 +15,15 @@ namespace model.player
         {
             base.Play(game);
             var window = game.runner.paidWindow;
-            window.ObserveWindow(this);
+            window.Opened += PassIfNoneAvailable;
         }
 
-        void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
+        private void PassIfNoneAvailable(PaidWindow window)
         {
             if (window.ListAbilities().All(ability => !ability.Usable))
             {
                 window.Pass();
             }
-        }
-
-        void IPaidWindowObserver.NotifyPaidWindowClosed(PaidWindow window)
-        {
         }
     }
 }
