@@ -25,9 +25,9 @@ namespace model.ai
         private Game game;
         private zones.corp.Zones zones;
         private Task Thinking() => Task.Delay(1700);
-        private HashSet<Ability> actions = new HashSet<Ability>();
-        private HashSet<Ability> legalActions = new HashSet<Ability>();
-        private HashSet<CardAbility> paidAbilities = new HashSet<CardAbility>();
+        private IList<Ability> actions = new List<Ability>();
+        private IList<Ability> legalActions = new List<Ability>();
+        private IList<CardAbility> paidAbilities = new List<CardAbility>();
         private Random random;
 
         public CorpAi(Random random)

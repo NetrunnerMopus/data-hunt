@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using model.costs;
 using model.play;
 
 namespace model.timing.corp
@@ -12,7 +11,7 @@ namespace model.timing.corp
         private TaskCompletionSource<bool> windowClosing;
         private bool used = false;
         private List<Rezzable> rezzables = new List<Rezzable>();
-        private HashSet<IRezWindowObserver> windowObservers = new HashSet<IRezWindowObserver>();
+        private IList<IRezWindowObserver> windowObservers = new List<IRezWindowObserver>();
 
         public ICost Permission() => permission;
 
