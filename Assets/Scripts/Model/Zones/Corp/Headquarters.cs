@@ -12,7 +12,8 @@ namespace model.zones.corp
     {
         public Zone Zone { get; } = new Zone("HQ");
         public IceColumn Ice { get; }
-        private IList<IHqDiscardObserver> discards = new List<IHqDiscardObserver>();
+        public event Action DiscardingOne = delegate {};
+        public event Action<Card> DiscardedOne = delegate {};
         private TaskCompletionSource<bool> discarding;
         private Random random;
 
@@ -25,29 +26,18 @@ namespace model.zones.corp
         async public Task Discard()
         {
             discarding = new TaskCompletionSource<bool>();
-            foreach (var observer in discards)
-            {
-                observer.NotifyDiscarding(true);
-            }
+            DiscardingOne();
             await discarding.Task;
         }
 
         public void Discard(Card card, Archives archives)
         {
             card.MoveTo(archives.Zone);
-            foreach (var observer in discards)
-            {
-                observer.NotifyDiscarding(false);
-            }
+            DiscardedOne(card);
             discarding.SetResult(true);
         }
 
         public Card Random() => Zone.Cards[random.Next(0, Zone.Count)];
-
-        public void ObserveDiscarding(IHqDiscardObserver observer)
-        {
-            discards.Add(observer);
-        }
 
         async Task IServer.Access(int accessCount, IPilot pilot, Game game)
         {
@@ -66,9 +56,5 @@ namespace model.zones.corp
                 await new AccessCard(cardToAccess, game).AwaitEnd();
             }
         }
-    }
-    public interface IHqDiscardObserver
-    {
-        void NotifyDiscarding(bool discarding);
     }
 }

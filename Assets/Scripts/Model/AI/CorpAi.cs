@@ -11,14 +11,12 @@ using model.steal;
 using model.timing;
 using model.timing.corp;
 using model.zones;
-using model.zones.corp;
 
 namespace model.ai
 {
     public class CorpAi :
         IPilot,
         ICorpActionObserver,
-        IHqDiscardObserver,
         IRezWindowObserver,
         IActionPotentialObserver
     {
@@ -45,7 +43,7 @@ namespace model.ai
             game.corp.paidWindow.Opened += Pass;
             game.corp.paidWindow.Added += RememberPaidAbility;
             game.corp.paidWindow.Removed += ForgetPaidAbility;
-            zones.hq.ObserveDiscarding(this);
+            zones.hq.DiscardingOne += DiscardOne;
         }
 
         async Task<IEffect> IPilot.TriggerFromSimultaneous(IList<IEffect> effects)
@@ -63,12 +61,9 @@ namespace model.ai
         }
         void ICorpActionObserver.NotifyActionTaken(Ability ability) { }
 
-        void IHqDiscardObserver.NotifyDiscarding(bool discarding)
+        private void DiscardOne()
         {
-            if (discarding)
-            {
-                zones.hq.Discard(zones.hq.Random(), zones.archives);
-            }
+            zones.hq.Discard(zones.hq.Random(), zones.archives);
         }
 
         void IRezWindowObserver.NotifyRezWindowOpened(List<Rezzable> rezzables)
