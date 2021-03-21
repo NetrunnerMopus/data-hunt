@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.play;
-using model.rez;
 
 namespace model.timing.corp
 {
@@ -12,7 +11,6 @@ namespace model.timing.corp
         ClickPool ITurn.Clicks => game.corp.clicks;
         Side ITurn.Side => Side.CORP;
         private IList<IEffect> turnBeginningTriggers = new List<IEffect>();
-        private IList<IStepObserver> steps = new List<IStepObserver>();
         public event AsyncAction<ITurn> Started;
         public event AsyncAction<ITurn> TakingAction;
         public event AsyncAction<ITurn, Ability> ActionTaken;
@@ -34,20 +32,18 @@ namespace model.timing.corp
 
         async private Task DrawPhase()
         {
-            Step(1, 1);
-            game.corp.clicks.Replenish();
-            Step(1, 2);
-            Task paid = OpenPaidWindow();
-            Task rez = OpenRezWindow();
-            await paid;
+            game.corp.clicks.Replenish(); // CR: 5.6.1.a
+            var rez = OpenRezWindow(); // CR: 5.6.1.b
+            var score = OpenScoreWindow(); // CR: 5.6.1.b
+            var paid = OpenPaidWindow(); // CR: 5.6.1.b
             await rez;
-            OpenScoreWindow();
-            Step(1, 3);
-            RefillRecurringCredits();
-            Step(1, 4);
-            await TriggerTurnBeginning();
-            Step(1, 5);
-            await MandatoryDraw();
+            await score;
+            await paid;
+            RefillRecurringCredits(); // CR: 5.6.1.c
+            await TriggerTurnBeginning(); // CR: 5.6.1.d
+            await game.Checkpoint();// CR: 5.6.1.e
+            await MandatoryDraw(); // CR: 5.6.1.f
+            await game.Checkpoint(); // CR: 5.6.1.g
         }
 
         async private Task OpenPaidWindow()
@@ -63,8 +59,9 @@ namespace model.timing.corp
             await game.corp.Rezzing.Window.Open();
         }
 
-        private void OpenScoreWindow()
+        async private Task OpenScoreWindow()
         {
+            await Task.FromResult("TODO let corp score");
         }
 
         private void RefillRecurringCredits()
@@ -86,50 +83,43 @@ namespace model.timing.corp
 
         async private Task ActionPhase()
         {
-            Step(2, 1);
-            Task paid = OpenPaidWindow();
-            Task rez = OpenRezWindow();
-            await paid;
+            var rez = OpenRezWindow(); // CR: 5.6.2.a
+            var score = OpenScoreWindow(); // CR: 5.6.2.a
+            var paid = OpenPaidWindow(); // CR: 5.6.2.a
             await rez;
-            OpenScoreWindow();
-            Step(2, 2);
-            await TakeActions();
-        }
-
-        async private Task TakeActions()
-        {
-            while (game.corp.clicks.Remaining > 0)
+            await score;
+            await paid;
+            while (game.corp.clicks.Remaining > 0) // CR: 5.6.2.c
             {
-                await TakeAction();
+                await TakeAction(); // CR: 5.6.2.b
             }
+            await game.Checkpoint(); // CR: 5.6.2.d
         }
 
         async private Task TakeAction()
         {
-            Task<Ability> actionTaking = game.corp.Acting.TakeAction();
+            var actionTaking = game.corp.Acting.TakeAction();
             TakingAction?.Invoke(this);
             var action = await actionTaking;
             ActionTaken?.Invoke(this, action);
-            Task paid = OpenPaidWindow();
-            Task rez = OpenRezWindow();
-            OpenScoreWindow();
-            await paid;
+            var rez = OpenRezWindow();
+            var score = OpenScoreWindow();
+            var paid = OpenPaidWindow();
             await rez;
+            await score;
+            await paid;
         }
 
         async private Task DiscardPhase()
         {
-            Step(3, 1);
-            await Discard();
-            Step(3, 2);
-            Task paid = OpenPaidWindow();
-            Task rez = OpenRezWindow();
-            await paid;
+            await Discard(); // CR: 5.6.3.a
+            var rez = OpenRezWindow();  // CR: 5.6.3.b
+            var paid = OpenPaidWindow();  // CR: 5.6.3.b
             await rez;
-            Step(3, 3);
-            game.corp.clicks.Reset();
-            Step(3, 4);
-            TriggerTurnEnding();
+            await paid;
+            game.corp.clicks.Reset(); // CR: 5.6.3.c
+            TriggerTurnEnding(); // CR: 5.6.3.d
+            await game.Checkpoint(); // CR: 5.6.3.e
         }
 
         async private Task Discard()
@@ -145,22 +135,9 @@ namespace model.timing.corp
         {
         }
 
-        private void Step(int phase, int step)
-        {
-            foreach (var observer in steps)
-            {
-                observer.NotifyStep("Corp turn", phase, step);
-            }
-        }
-
         public void WhenBegins(IEffect effect)
         {
             turnBeginningTriggers.Add(effect);
-        }
-
-        public void ObserveSteps(IStepObserver observer)
-        {
-            steps.Add(observer);
         }
     }
 }

@@ -5,8 +5,7 @@ using UnityEngine;
 
 namespace view.log
 {
-    public class GameFlowLog :
-        IStepObserver
+    public class GameFlowLog
     {
         private string currentStep = "";
 
@@ -18,24 +17,16 @@ namespace view.log
             game.runner.paidWindow.Closed += LogClosed;
             var runnerTurn = game.runner.turn;
             var corpTurn = game.corp.turn;
-            corpTurn.ObserveSteps(this);
             corpTurn.Started += TurnStarted;
             corpTurn.TakingAction += (turn) => LogAsync("corp taking action");
             corpTurn.ActionTaken += (turn, action) => LogAsync("corp took action");
             game.corp.Rezzing.Window.Opened += (window, rezzables) => LogAsync("rez window opened, up to " + rezzables.Count + " could be rezzed");
             game.corp.Rezzing.Window.Closed += (window) => Log("rez window closed");
             game.corp.zones.hq.DiscardingOne += () => Log("discarding");
-            runnerTurn.ObserveSteps(this);
             runnerTurn.Started += TurnStarted;
             runnerTurn.TakingAction += (turn) => LogAsync("runner taking action");
             runnerTurn.ActionTaken += (turn, action) => LogAsync("runner took action");
             game.runner.zones.grip.DiscardingOne += () => Log("discarding");
-        }
-
-        void IStepObserver.NotifyStep(string structure, int phase, int step)
-        {
-            currentStep = $"{structure}, step {phase}.{step}: ";
-            Debug.Log(currentStep);
         }
 
         async private Task LogAsync(string message)
