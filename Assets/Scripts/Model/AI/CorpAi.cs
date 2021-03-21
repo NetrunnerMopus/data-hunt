@@ -21,7 +21,6 @@ namespace model.ai
         IHqDiscardObserver,
         IRezWindowObserver,
         IActionPotentialObserver,
-        IPaidWindowObserver,
         IPaidAbilityObserver
     {
         private Game game;
@@ -44,7 +43,7 @@ namespace model.ai
             game.corp.Acting.ObservePotentialActions(this);
             game.corp.turn.ObserveActions(this);
             game.corp.turn.rezWindow.ObserveWindow(this);
-            game.corp.paidWindow.ObserveWindow(this);
+            game.corp.paidWindow.Opened += Pass;
             game.corp.paidWindow.ObserveAbility(this);
             zones.hq.ObserveDiscarding(this);
         }
@@ -132,13 +131,9 @@ namespace model.ai
         IDecision<string, Card> IPilot.ChooseACard() => new CardChoice(random);
         IDecision<string, IInstallDestination> IPilot.ChooseAnInstallDestination() => new InstallDestinationChoice(random);
 
-        void IPaidWindowObserver.NotifyPaidWindowOpened(PaidWindow window)
+        private void Pass(PaidWindow window)
         {
             window.Pass();
-        }
-
-        void IPaidWindowObserver.NotifyPaidWindowClosed(PaidWindow window)
-        {
         }
 
         IDecision<Card, ITrashOption> IPilot.ChooseTrashing()
