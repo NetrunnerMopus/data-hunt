@@ -1,57 +1,38 @@
-﻿using model.cards;
-using model.player;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using model.cards;
+using model.player;
 
 namespace model.zones.runner
 {
     public class Grip
     {
         public readonly Zone zone = new Zone("Grip");
-        private IList<IGripDiscardObserver> discards = new List<IGripDiscardObserver>();
+        public event Action DiscardingOne = delegate { };
+        public event Action<Card> DiscardedOne = delegate { };
         private TaskCompletionSource<bool> discarded;
 
         public Grip()
         {
-            zone.Added += (zone, card) => card.UpdateInfo(Information.HIDDEN_FROM_CORP); 
+            zone.Added += (zone, card) => card.UpdateInfo(Information.HIDDEN_FROM_CORP);
         }
 
         async public Task Discard()
         {
             discarded = new TaskCompletionSource<bool>();
-            foreach (var observer in discards)
-            {
-                observer.NotifyDiscarding(true);
-            }
+            DiscardingOne();
             await discarded.Task;
         }
 
         public void Discard(Card card, Heap heap)
         {
             card.MoveTo(heap.zone);
-            foreach (var observer in discards)
-            {
-                observer.NotifyDiscarding(false);
-            }
+            DiscardedOne(card);
             discarded.SetResult(true);
         }
 
         public Card Find<T>() where T : Card => zone.Cards.OfType<T>().First();
-
-        public void ObserveDiscarding(IGripDiscardObserver observer)
-        {
-            discards.Add(observer);
-        }
-
-        public void UnobserveDiscarding(IGripDiscardObserver observer)
-        {
-            discards.Remove(observer);
-        }
-    }
-
-    public interface IGripDiscardObserver
-    {
-        void NotifyDiscarding(bool discarding);
     }
 }

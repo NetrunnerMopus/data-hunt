@@ -5,7 +5,7 @@ using model.zones.runner;
 
 namespace controller
 {
-    public class InteractiveDiscard : IInteractive, IGripDiscardObserver
+    public class InteractiveDiscard : IInteractive
     {
         private Card card;
         private Grip grip;
@@ -21,7 +21,8 @@ namespace controller
             this.Active = false;
             this.grip = runner.zones.grip;
             this.heap = runner.zones.heap;
-            this.grip.ObserveDiscarding(this);
+            this.grip.DiscardingOne += ActivateDiscarding;
+            this.grip.DiscardedOne += DeactivateDiscarding;
         }
 
         async Task IInteractive.Interact()
@@ -30,9 +31,15 @@ namespace controller
             await Task.CompletedTask;
         }
 
-        void IGripDiscardObserver.NotifyDiscarding(bool discarding)
+        private void ActivateDiscarding()
         {
-            Active = discarding;
+            Active = true;
+            Updated();
+        }
+
+        private void DeactivateDiscarding(Card discarded)
+        {
+            Active = false;
             Updated();
         }
     }
