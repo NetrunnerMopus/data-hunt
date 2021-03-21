@@ -11,17 +11,18 @@ namespace model.zones.corp
 {
     public class Remote : IServer, IInstallDestination
     {
-        public Zone Zone { get; } = new Zone("Remote");
+        public Zone Zone { get; } = new Zone("Remote", true);
         public IceColumn Ice { get; }
-        private Archives archives;
+        private Corp corp;
 
         public Remote(Corp corp)
         {
-            this.archives = corp.zones.archives;
+            this.corp = corp;
             Ice = new IceColumn(this, corp.credits);
         }
 
-        public bool IsEmpty() {
+        public bool IsEmpty()
+        {
             return (Ice.Height == 0) && (Zone.Count == 0);
         }
 
@@ -29,7 +30,7 @@ namespace model.zones.corp
         {
             Zone
                 .Cards
-                .Select(it => new Trash(it, archives.Zone))
+                .Select(it => new Trash(it, corp.zones.archives.Zone))
                 .ToList()
                 .ForEach(it => it.TrashIt());
             card.MoveTo(Zone);

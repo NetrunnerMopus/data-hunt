@@ -7,6 +7,10 @@ namespace model.zones.corp
     {
         void IInstallDestination.Host(Card card)
         {
+            // if (card.Type.Rezzable)
+            // {
+            //     corp.turn.rezWindow.Add(new Rezzable(card));
+            // }
             throw new System.NotImplementedException();
         }
 

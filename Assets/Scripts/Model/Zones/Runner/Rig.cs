@@ -8,8 +8,8 @@ namespace model.zones.runner
 {
     public class Rig : IInstallDestination
     {
-        public readonly Zone zone = new Zone("Rig");
-
+        public readonly Zone zone = new Zone("Rig", true);
+ 
         private Runner runner;
         private IPilot pilot;
 

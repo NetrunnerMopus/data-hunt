@@ -9,7 +9,7 @@ namespace model.zones
     {
         private Card card;
         private Zone bin;
-        private Zone playZone = new Zone("Play");
+        private Zone playZone = new Zone("Play", true);
         public bool Impactful => card.Activation.Impactful;
         public event Action<IEffect, bool> ChangedImpact = delegate { };
         IEnumerable<string> IEffect.Graphics => new string[] { "Images/Cards/" + card.FaceupArt };

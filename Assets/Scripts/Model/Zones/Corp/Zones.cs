@@ -7,7 +7,7 @@ namespace model.zones.corp
 {
     public class Zones
     {
-        public readonly Zone identity = new Zone("Corp identity");
+        public readonly Zone identity = new Zone("Corp identity", false);
         public readonly Headquarters hq;
         public readonly ResearchAndDevelopment rd;
         public readonly Archives archives;
@@ -17,11 +17,11 @@ namespace model.zones.corp
         public readonly Zone playArea;
         private Corp corp;
 
-        public Zones(Headquarters hq, ResearchAndDevelopment rd, Archives archives, Zone playArea, Corp corp)
+        public Zones(Corp corp, Zone playArea, Shuffling shuffling)
         {
-            this.hq = hq;
-            this.rd = rd;
-            this.archives = archives;
+            hq = new Headquarters(shuffling, corp.credits);
+            rd = new ResearchAndDevelopment(corp, shuffling);
+            archives = new Archives(corp.credits);
             this.playArea = playArea;
             this.corp = corp;
         }

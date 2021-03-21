@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.play;
+using model.rez;
 
 namespace model.timing.corp
 {
     public class CorpTurn : ITurn
     {
         private Game game;
-        public readonly RezWindow rezWindow = new RezWindow();
         public bool Active { get; private set; } = false;
         ClickPool ITurn.Clicks => game.corp.clicks;
         Side ITurn.Side => Side.CORP;
@@ -60,7 +60,7 @@ namespace model.timing.corp
 
         async private Task OpenRezWindow()
         {
-            await rezWindow.Open();
+            await game.corp.Rezzing.Window.Open();
         }
 
         private void OpenScoreWindow()

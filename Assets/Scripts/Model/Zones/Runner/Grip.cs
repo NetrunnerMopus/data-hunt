@@ -9,7 +9,7 @@ namespace model.zones.runner
 {
     public class Grip
     {
-        public readonly Zone zone = new Zone("Grip");
+        public readonly Zone zone = new Zone("Grip", false);
         public event Action DiscardingOne = delegate { };
         public event Action<Card> DiscardedOne = delegate { };
         private TaskCompletionSource<bool> discarded;

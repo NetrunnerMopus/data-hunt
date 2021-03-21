@@ -44,21 +44,25 @@ namespace model.cards.corp
                 await corp.credits.Gaining(3).Resolve();
                 var paidWindow = corp.paidWindow;
                 var archives = corp.zones.archives.Zone;
+                var aalInstall = new AdvancedAssemblyLinesInstall(corp);
                 var pop = new Ability(
                     cost: new Conjunction(paidWindow.Permission(), new Trash(aal, archives), new Active(aal)),
-                    effect: new AdvancedAssemblyLinesInstall(corp)
+                    effect: aalInstall
                 ).BelongingTo(aal);
                 paidWindow.Add(pop);
-                aal.Moved += (card, source, target) => paidWindow.Remove(pop);
+                aal.Moved += (card, source, target) =>
+                {
+                    paidWindow.Remove(pop);
+                    aalInstall.Dispose();
+                };
             }
         }
 
         private class AdvancedAssemblyLinesInstall : IEffect
         {
-            public bool Impactful => installables.Count > 0;
+            public bool Impactful => Installables().Count > 0;
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { };
-            private List<Card> installables = new List<Card>();
             private Corp corp;
 
             public AdvancedAssemblyLinesInstall(Corp corp)
@@ -67,16 +71,22 @@ namespace model.cards.corp
                 corp.zones.hq.Zone.Changed += UpdateInstallables;
             }
 
+            private IList<Card> Installables() => corp.zones.hq.Zone.Cards.Where(card => (card.Type.Installable && !(card.Type is Agenda))).ToList();
+
             async Task IEffect.Resolve()
             {
-                var installable = await corp.pilot.ChooseACard().Declare("Which card to install?", installables);
+                var installable = await corp.pilot.ChooseACard().Declare("Which card to install?", Installables());
                 await corp.Installing.InstallingCard(installable).Resolve();
             }
 
             private void UpdateInstallables(Zone hqZone)
             {
-                installables = corp.zones.hq.Zone.Cards.Where(card => (card.Type.Installable && !(card.Type is Agenda))).ToList();
                 ChangedImpact(this, Impactful);
+            }
+
+            internal void Dispose()
+            {
+                corp.zones.hq.Zone.Changed -= UpdateInstallables;
             }
         }
     }

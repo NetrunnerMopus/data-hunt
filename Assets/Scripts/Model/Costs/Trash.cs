@@ -9,13 +9,19 @@ namespace model.costs
     {
         private readonly Card card;
         private readonly Zone bin;
-        bool ICost.Payable => true; // TODO cannot trash something already in the bin (or RFG)
+        public bool Payable => card.Zone != bin; // TODO cannot trash a card removed from the game
         public event Action<ICost, bool> ChangedPayability = delegate { };
 
         public Trash(Card card, Zone bin)
         {
             this.card = card;
             this.bin = bin;
+            card.Moved += CheckIfTrashable;
+        }
+
+        private void CheckIfTrashable(Card card, Zone source, Zone destination)
+        {
+            ChangedPayability(this, Payable);
         }
 
         async Task ICost.Pay()

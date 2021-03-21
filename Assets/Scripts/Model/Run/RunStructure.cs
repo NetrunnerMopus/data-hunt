@@ -66,7 +66,7 @@ namespace model.run
         async private Task OpenPostCommitmentWindows()
         {
             var paid = game.OpenPaidWindow(game.runner.paidWindow, game.corp.paidWindow);  // TODO An Offer You Can't Refuse
-            var rez = game.corp.turn.rezWindow.Open();
+            var rez = game.corp.Rezzing.Window.Open();
             await paid;
             await rez;
         }
