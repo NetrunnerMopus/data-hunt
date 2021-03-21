@@ -11,7 +11,6 @@ namespace model.timing.runner
         ClickPool ITurn.Clicks => game.runner.clicks;
         Side ITurn.Side => Side.RUNNER;
         private List<IEffect> turnBeginningTriggers = new List<IEffect>();
-        private IList<IStepObserver> steps = new List<IStepObserver>();
         public event AsyncAction<ITurn> Started;
         public event AsyncAction<ITurn> TakingAction;
         public event AsyncAction<ITurn, Ability> ActionTaken;
@@ -32,21 +31,22 @@ namespace model.timing.runner
 
         async private Task ActionPhase()
         {
-            Step(1, 1);
-            game.runner.clicks.Replenish();
-            Step(1, 2);
-            await OpenPaidWindow();
-            OpenRezWindow();
-            Step(1, 3);
-            RefillRecurringCredits();
-            Step(1, 4);
-            await TriggerTurnBeginning();
-            Step(1, 5);
-            await OpenPaidWindow();
-            OpenRezWindow();
-
-            Step(1, 6);
-            await TakeActions();
+            game.runner.clicks.Replenish(); // CR: 5.7.1.a
+            var rez = OpenRezWindow(); // CR: 5.7.1.b
+            var paid = OpenPaidWindow(); // CR: 5.7.1.b
+            await rez;
+            await paid;
+            RefillRecurringCredits(); // CR: 5.7.1.c
+            await TriggerTurnBeginning(); // CR: 5.7.1.d
+            var rez2 = OpenRezWindow(); // CR: 5.7.1.e
+            var paid2 = OpenPaidWindow(); // CR: 5.7.1.e
+            await rez2;
+            await paid2;
+            while (game.runner.clicks.Remaining > 0) // CR: 5.7.1.g
+            {
+                await TakeAction(); // CR: 5.7.1.f
+            }
+            await game.Checkpoint(); // CR: 5.7.1.g
         }
 
         async private Task OpenPaidWindow()
@@ -57,9 +57,9 @@ namespace model.timing.runner
             );
         }
 
-        private void OpenRezWindow()
+        async private Task OpenRezWindow()
         {
-
+            await game.corp.Rezzing.Window.Open();
         }
 
         private void RefillRecurringCredits()
@@ -75,30 +75,28 @@ namespace model.timing.runner
             }
         }
 
-        async private Task TakeActions()
+        async private Task TakeAction()
         {
-            while (game.runner.clicks.Remaining > 0)
-            {
-                Task<Ability> actionTaking = game.runner.Acting.TakeAction();
-                TakingAction?.Invoke(this);
-                var action = await actionTaking;
-                ActionTaken?.Invoke(this, action);
-                await OpenPaidWindow();
-                OpenRezWindow();
-            }
+            var actionTaking = game.runner.Acting.TakeAction();
+            TakingAction?.Invoke(this);
+            var action = await actionTaking;
+            ActionTaken?.Invoke(this, action);
+            var rez = OpenRezWindow();
+            var paid = OpenPaidWindow();
+            await rez;
+            await paid;
         }
 
         async private Task DiscardPhase()
         {
-            Step(2, 1);
-            await Discard();
-            Step(2, 2);
-            await OpenPaidWindow();
-            OpenRezWindow();
-            Step(2, 3);
-            game.runner.clicks.Reset();
-            Step(2, 4);
-            TriggerTurnEnding();
+            await Discard(); // CR: 5.7.2.a
+            var rez = OpenRezWindow(); // CR: 5.7.2.b
+            var paid = OpenPaidWindow(); // CR: 5.7.2.b
+            await rez;
+            await paid;
+            game.runner.clicks.Reset(); // CR: 5.7.2.c
+            TriggerTurnEnding(); // CR: 5.7.2.d
+            await game.Checkpoint(); // CR: 5.7.2.e
         }
 
         async private Task Discard()
@@ -112,24 +110,11 @@ namespace model.timing.runner
 
         private void TriggerTurnEnding()
         {
-
         }
 
-        private void Step(int phase, int step)
-        {
-            foreach (var observer in steps)
-            {
-                observer.NotifyStep("Runner turn", phase, step);
-            }
-        }
         public void WhenBegins(IEffect effect)
         {
             turnBeginningTriggers.Add(effect);
-        }
-
-        public void ObserveSteps(IStepObserver observer)
-        {
-            steps.Add(observer);
         }
     }
 }
