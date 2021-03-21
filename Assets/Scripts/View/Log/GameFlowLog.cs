@@ -5,7 +5,6 @@ using model.play;
 using model.timing;
 using model.timing.corp;
 using model.timing.runner;
-using model.zones.runner;
 using UnityEngine;
 
 namespace view.log
@@ -14,8 +13,7 @@ namespace view.log
         IStepObserver,
         ICorpActionObserver,
         IRezWindowObserver,
-        IRunnerActionObserver,
-        IGripDiscardObserver
+        IRunnerActionObserver
     {
         private string currentStep = "";
 
@@ -35,7 +33,7 @@ namespace view.log
             runnerTurn.ObserveSteps(this);
             runnerTurn.Started += TurnStarted;
             runnerTurn.ObserveActions(this);
-            game.runner.zones.grip.ObserveDiscarding(this);
+            game.runner.zones.grip.DiscardingOne += () => Log("discarding");
         }
 
         void IStepObserver.NotifyStep(string structure, int phase, int step)
@@ -83,14 +81,6 @@ namespace view.log
         void IRunnerActionObserver.NotifyActionTaken(Ability ability)
         {
             Log("runner action taken");
-        }
-
-        void IGripDiscardObserver.NotifyDiscarding(bool discarding)
-        {
-            if (discarding)
-            {
-                Log("discarding");
-            }
         }
 
         void IRezWindowObserver.NotifyRezWindowOpened(List<Rezzable> rezzables)

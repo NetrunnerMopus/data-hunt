@@ -3,13 +3,12 @@ using model.cards;
 using model.play;
 using model.timing.corp;
 using model.timing.runner;
-using model.zones.runner;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace view.gui.timecross
 {
-    public class PresentBox : MonoBehaviour, IRunnerActionObserver, ICorpActionObserver, IGripDiscardObserver
+    public class PresentBox : MonoBehaviour, IRunnerActionObserver, ICorpActionObserver
     {
         public GameObject RunnerActionPhase { get; private set; }
         private GameObject corpActionPhase;
@@ -60,7 +59,8 @@ namespace view.gui.timecross
             discardPhase = GameObject.Find("Discard phase");
             discardBackground = discardPhase.GetComponent<Image>();
             discardPhase.SetActive(false);
-            game.runner.zones.grip.ObserveDiscarding(this);
+            game.runner.zones.grip.DiscardingOne += RenderRunnerDiscarding;
+            game.runner.zones.grip.DiscardedOne += RenderRunnerNotDiscardingAnymore;
             game.corp.zones.hq.DiscardingOne += RenderCorpDiscarding;
             game.corp.zones.hq.DiscardedOne += RenderCorpNotDiscardingAnymore;
         }
@@ -87,14 +87,15 @@ namespace view.gui.timecross
             corpActionPhase.SetActive(false);
         }
 
-
-        void IGripDiscardObserver.NotifyDiscarding(bool discarding)
+        private void RenderRunnerDiscarding()
         {
-            discardPhase.SetActive(discarding);
-            if (discarding)
-            {
-                dayNight.Paint(discardBackground, Side.RUNNER);
-            }
+            discardPhase.SetActive(true);
+            dayNight.Paint(discardBackground, Side.RUNNER);
+        }
+
+        private void RenderRunnerNotDiscardingAnymore(Card discarded)
+        {
+            discardPhase.SetActive(false);
         }
 
         private void RenderCorpDiscarding()
