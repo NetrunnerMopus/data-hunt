@@ -1,13 +1,12 @@
-using UnityEngine;
-using model.timing.corp;
-using model;
-using model.zones.corp;
-using model.timing.runner;
-using model.zones.runner;
-using model.timing;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using model;
 using model.play;
+using model.timing;
+using model.timing.corp;
+using model.timing.runner;
+using model.zones.runner;
+using UnityEngine;
 
 namespace view.log
 {
@@ -15,7 +14,6 @@ namespace view.log
         IStepObserver,
         ICorpActionObserver,
         IRezWindowObserver,
-        IHqDiscardObserver,
         IRunnerActionObserver,
         IGripDiscardObserver
     {
@@ -33,7 +31,7 @@ namespace view.log
             corpTurn.Started += TurnStarted;
             corpTurn.ObserveActions(this);
             corpTurn.rezWindow.ObserveWindow(this);
-            game.corp.zones.hq.ObserveDiscarding(this);
+            game.corp.zones.hq.DiscardingOne += () => Log("discarding");
             runnerTurn.ObserveSteps(this);
             runnerTurn.Started += TurnStarted;
             runnerTurn.ObserveActions(this);
@@ -71,15 +69,7 @@ namespace view.log
             Log("corp action taken");
         }
 
-        void IHqDiscardObserver.NotifyDiscarding(bool discarding)
-        {
-            if (discarding)
-            {
-                Log("discarding");
-            }
-        }
-
-       async private Task TurnStarted(ITurn turn)
+        async private Task TurnStarted(ITurn turn)
         {
             Log("turn " + turn + " beginning");
             await Task.CompletedTask;
