@@ -13,7 +13,8 @@ namespace model.timing.runner
         private List<IEffect> turnBeginningTriggers = new List<IEffect>();
         private IList<IStepObserver> steps = new List<IStepObserver>();
         public event AsyncAction<ITurn> Started;
-        private IList<IRunnerActionObserver> actions = new List<IRunnerActionObserver>();
+        public event AsyncAction<ITurn> TakingAction;
+        public event AsyncAction<ITurn, Ability> ActionTaken;
 
         public RunnerTurn(Game game)
         {
@@ -23,7 +24,7 @@ namespace model.timing.runner
         async Task ITurn.Start()
         {
             Active = true;
-            await Started(this);
+            await Started?.Invoke(this);
             await ActionPhase();
             await DiscardPhase();
             Active = false;
@@ -79,15 +80,9 @@ namespace model.timing.runner
             while (game.runner.clicks.Remaining > 0)
             {
                 Task<Ability> actionTaking = game.runner.Acting.TakeAction();
-                foreach (var observer in actions)
-                {
-                    observer.NotifyActionTaking();
-                }
+                TakingAction?.Invoke(this);
                 var action = await actionTaking;
-                foreach (var observer in actions)
-                {
-                    observer.NotifyActionTaken(action);
-                }
+                ActionTaken?.Invoke(this, action);
                 await OpenPaidWindow();
                 OpenRezWindow();
             }
@@ -136,16 +131,5 @@ namespace model.timing.runner
         {
             steps.Add(observer);
         }
-
-        public void ObserveActions(IRunnerActionObserver observer)
-        {
-            actions.Add(observer);
-        }
-    }
-
-    public interface IRunnerActionObserver
-    {
-        void NotifyActionTaking();
-        void NotifyActionTaken(Ability ability);
     }
 }

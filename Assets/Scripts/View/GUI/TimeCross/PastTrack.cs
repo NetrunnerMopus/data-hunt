@@ -1,19 +1,20 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using model;
-using model.timing.corp;
 using model.play;
-using model.timing.runner;
+using model.timing;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace view.gui.timecross
 {
-    public class PastTrack : MonoBehaviour, ICorpActionObserver, IRunnerActionObserver
+    public class PastTrack : MonoBehaviour
     {
         private Sprite clickSprite;
         private HorizontalLayoutGroup horizontal;
         private List<GameObject> renderedClicks = new List<GameObject>();
+
         public DayNightCycle DayNight { private get; set; }
 
         void Awake()
@@ -27,16 +28,13 @@ namespace view.gui.timecross
             horizontal.childForceExpandHeight = true;
         }
 
-        void ICorpActionObserver.NotifyActionTaking()
+        internal void Wire(Game game)
         {
+            game.corp.turn.ActionTaken += RenderCompleteCorpAction;
+            game.runner.turn.ActionTaken += RenderCompleteRunnerAction;
         }
 
-        void ICorpActionObserver.NotifyActionTaken(Ability ability)
-        {
-            RenderCorpAction(ability);
-        }
-
-        private void RenderCorpAction(Ability ability)
+        async private Task RenderCompleteCorpAction(ITurn turn, Ability ability)
         {
             var envelope = new GameObject("Corp envelope");
             var background = envelope.AddComponent<Image>();
@@ -44,6 +42,7 @@ namespace view.gui.timecross
             envelope.AttachTo(gameObject);
             RenderAction(ability, envelope);
             Expand(envelope);
+            await Task.CompletedTask;
         }
 
         private void RenderAction(Ability ability, GameObject parent)
@@ -64,11 +63,7 @@ namespace view.gui.timecross
             pastAction.AttachTo(parent);
         }
 
-        void IRunnerActionObserver.NotifyActionTaking()
-        {
-        }
-
-        void IRunnerActionObserver.NotifyActionTaken(Ability ability)
+        async private Task RenderCompleteRunnerAction(ITurn turn, Ability ability)
         {
             var envelope = new GameObject("Runner envelope");
             var background = envelope.AddComponent<Image>();
@@ -76,6 +71,7 @@ namespace view.gui.timecross
             envelope.AttachTo(gameObject);
             RenderAction(ability, envelope);
             Expand(envelope);
+            await Task.CompletedTask;
         }
 
 

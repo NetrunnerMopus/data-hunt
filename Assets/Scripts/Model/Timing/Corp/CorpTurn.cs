@@ -14,7 +14,8 @@ namespace model.timing.corp
         private IList<IEffect> turnBeginningTriggers = new List<IEffect>();
         private IList<IStepObserver> steps = new List<IStepObserver>();
         public event AsyncAction<ITurn> Started;
-        private IList<ICorpActionObserver> actions = new List<ICorpActionObserver>();
+        public event AsyncAction<ITurn> TakingAction;
+        public event AsyncAction<ITurn, Ability> ActionTaken;
 
         public CorpTurn(Game game)
         {
@@ -106,15 +107,9 @@ namespace model.timing.corp
         async private Task TakeAction()
         {
             Task<Ability> actionTaking = game.corp.Acting.TakeAction();
-            foreach (var observer in actions)
-            {
-                observer.NotifyActionTaking();
-            }
+            TakingAction?.Invoke(this);
             var action = await actionTaking;
-            foreach (var observer in actions)
-            {
-                observer.NotifyActionTaken(action);
-            }
+            ActionTaken?.Invoke(this, action);
             Task paid = OpenPaidWindow();
             Task rez = OpenRezWindow();
             OpenScoreWindow();
@@ -167,16 +162,5 @@ namespace model.timing.corp
         {
             steps.Add(observer);
         }
-
-        public void ObserveActions(ICorpActionObserver observer)
-        {
-            actions.Add(observer);
-        }
-    }
-
-    public interface ICorpActionObserver
-    {
-        void NotifyActionTaking();
-        void NotifyActionTaken(Ability ability);
     }
 }

@@ -11,8 +11,7 @@ namespace view.gui.timecross
         {
             var pastTrack = GameObject.Find("Past").AddComponent<PastTrack>();
             pastTrack.DayNight = dayNight;
-            game.corp.turn.ObserveActions(pastTrack);
-            game.runner.turn.ObserveActions(pastTrack);
+            pastTrack.Wire(game);
             var futureTrack = GameObject.Find("Future").AddComponent<FutureTrack>();
             futureTrack.Wire(game, dayNight);
             PresentBox = GameObject.Find("Present").AddComponent<PresentBox>();

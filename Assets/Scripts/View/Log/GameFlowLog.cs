@@ -4,16 +4,13 @@ using model;
 using model.play;
 using model.timing;
 using model.timing.corp;
-using model.timing.runner;
 using UnityEngine;
 
 namespace view.log
 {
     public class GameFlowLog :
         IStepObserver,
-        ICorpActionObserver,
-        IRezWindowObserver,
-        IRunnerActionObserver
+        IRezWindowObserver
     {
         private string currentStep = "";
 
@@ -27,12 +24,14 @@ namespace view.log
             var corpTurn = game.corp.turn;
             corpTurn.ObserveSteps(this);
             corpTurn.Started += TurnStarted;
-            corpTurn.ObserveActions(this);
+            corpTurn.TakingAction += (turn) => LogAsync("corp taking action");
+            corpTurn.ActionTaken += (turn, action) => LogAsync("corp took action");
             corpTurn.rezWindow.ObserveWindow(this);
             game.corp.zones.hq.DiscardingOne += () => Log("discarding");
             runnerTurn.ObserveSteps(this);
             runnerTurn.Started += TurnStarted;
-            runnerTurn.ObserveActions(this);
+            runnerTurn.TakingAction += (turn) => LogAsync("runner taking action");
+            runnerTurn.ActionTaken += (turn, action) => LogAsync("runner took action");
             game.runner.zones.grip.DiscardingOne += () => Log("discarding");
         }
 
@@ -40,6 +39,12 @@ namespace view.log
         {
             currentStep = $"{structure}, step {phase}.{step}: ";
             Debug.Log(currentStep);
+        }
+
+        async private Task LogAsync(string message)
+        {
+            Debug.Log(currentStep + message);
+            await Task.CompletedTask;
         }
 
         private void Log(string message)
@@ -57,30 +62,10 @@ namespace view.log
             Log(window + " closed");
         }
 
-        void ICorpActionObserver.NotifyActionTaking()
-        {
-            Log("taking action");
-        }
-
-        void ICorpActionObserver.NotifyActionTaken(Ability ability)
-        {
-            Log("corp action taken");
-        }
-
         async private Task TurnStarted(ITurn turn)
         {
             Log("turn " + turn + " beginning");
             await Task.CompletedTask;
-        }
-
-        void IRunnerActionObserver.NotifyActionTaking()
-        {
-            Log("taking action");
-        }
-
-        void IRunnerActionObserver.NotifyActionTaken(Ability ability)
-        {
-            Log("runner action taken");
         }
 
         void IRezWindowObserver.NotifyRezWindowOpened(List<Rezzable> rezzables)
