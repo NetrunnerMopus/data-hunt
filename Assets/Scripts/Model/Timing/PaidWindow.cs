@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using model.cards;
 using model.play;
 
 namespace model.timing
@@ -12,8 +11,9 @@ namespace model.timing
         private PaidWindowPermission permission = new PaidWindowPermission();
         public event Action<PaidWindow> Opened = delegate { };
         public event Action<PaidWindow> Closed = delegate { };
-        private HashSet<IPaidAbilityObserver> abilityObservers = new HashSet<IPaidAbilityObserver>();
-        private List<Ability> abilities = new List<Ability>();
+        public event Action<PaidWindow, CardAbility> Added = delegate { };
+        public event Action<PaidWindow, CardAbility> Removed = delegate { };
+        private List<CardAbility> abilities = new List<CardAbility>();
         private TaskCompletionSource<bool> pass;
 
         public PaidWindow(string label)
@@ -21,7 +21,7 @@ namespace model.timing
             this.label = label;
         }
 
-        public List<Ability> ListAbilities() => new List<Ability>(abilities);
+        public List<CardAbility> ListAbilities() => new List<CardAbility>(abilities);
 
         public ICost Permission() => permission;
 
@@ -41,33 +41,21 @@ namespace model.timing
             pass.SetResult(true);
         }
 
-        public void Add(Ability ability, Card source)
+        public void Add(CardAbility ability)
         {
             abilities.Add(ability);
-            foreach (var observer in abilityObservers)
-            {
-                observer.NotifyPaidAbilityAvailable(ability, source);
-            }
+            Added(this, ability);
         }
 
-        public void Remove(Ability ability)
+        public void Remove(CardAbility ability)
         {
             abilities.Remove(ability);
-        }
-
-        public void ObserveAbility(IPaidAbilityObserver observer)
-        {
-            abilityObservers.Add(observer);
+            Removed(this, ability);
         }
 
         public override string ToString()
         {
             return "PaidWindow(label=" + label + ")";
         }
-    }
-
-    public interface IPaidAbilityObserver
-    {
-        void NotifyPaidAbilityAvailable(Ability ability, Card source);
     }
 }

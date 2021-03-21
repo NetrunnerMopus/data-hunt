@@ -1,14 +1,18 @@
-﻿using model.cards;
-using model.play;
+﻿using model.play;
 using model.timing;
 
 namespace tests.observers
 {
-    class PaidAbilityObserver : IPaidAbilityObserver
+    class PaidAbilityObserver
     {
-        public Ability NewestPaidAbility { get; private set; }
+        public CardAbility NewestPaidAbility { get; private set; }
 
-        void IPaidAbilityObserver.NotifyPaidAbilityAvailable(Ability ability, Card source)
+        public PaidAbilityObserver(PaidWindow window)
+        {
+            window.Added += NotifyPaidAbilityAvailable;
+        }
+
+        void NotifyPaidAbilityAvailable(PaidWindow window, CardAbility ability)
         {
             NewestPaidAbility = ability;
         }

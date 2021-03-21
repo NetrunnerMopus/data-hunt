@@ -20,15 +20,14 @@ namespace model.ai
         ICorpActionObserver,
         IHqDiscardObserver,
         IRezWindowObserver,
-        IActionPotentialObserver,
-        IPaidAbilityObserver
+        IActionPotentialObserver
     {
         private Game game;
         private zones.corp.Zones zones;
         private Task Thinking() => Task.Delay(1700);
         private HashSet<Ability> actions = new HashSet<Ability>();
         private HashSet<Ability> legalActions = new HashSet<Ability>();
-        private HashSet<Ability> paidAbilities = new HashSet<Ability>();
+        private HashSet<CardAbility> paidAbilities = new HashSet<CardAbility>();
         private Random random;
 
         public CorpAi(Random random)
@@ -44,7 +43,8 @@ namespace model.ai
             game.corp.turn.ObserveActions(this);
             game.corp.turn.rezWindow.ObserveWindow(this);
             game.corp.paidWindow.Opened += Pass;
-            game.corp.paidWindow.ObserveAbility(this);
+            game.corp.paidWindow.Added += RememberPaidAbility;
+            game.corp.paidWindow.Removed += ForgetPaidAbility;
             zones.hq.ObserveDiscarding(this);
         }
 
@@ -100,10 +100,16 @@ namespace model.ai
             action.UsabilityChanged += NotifyUsable;
         }
 
-        public void NotifyPaidAbilityAvailable(Ability ability, Card source)
+        private void RememberPaidAbility(PaidWindow window, CardAbility ability)
         {
             paidAbilities.Add(ability);
-            ability.UsabilityChanged += NotifyUsable;
+            ability.Ability.UsabilityChanged += NotifyUsable;
+        }
+
+        private void ForgetPaidAbility(PaidWindow window, CardAbility ability)
+        {
+            paidAbilities.Add(ability);
+            ability.Ability.UsabilityChanged -= NotifyUsable;
         }
 
         async private void NotifyUsable(Ability ability, bool usable)
@@ -119,7 +125,7 @@ namespace model.ai
                     legalActions.Remove(ability);
                 }
             }
-            if (paidAbilities.Contains(ability))
+            if (paidAbilities.Select(it => it.Ability).Contains(ability))
             {
                 if (usable)
                 {
