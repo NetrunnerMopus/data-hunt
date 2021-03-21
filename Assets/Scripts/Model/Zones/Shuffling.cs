@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using model.cards;
 
@@ -5,18 +6,18 @@ namespace model.zones
 {
     public class Shuffling
     {
-        private System.Random rng;
+        public Random Random { get; }
 
-        public Shuffling() : this(new System.Random().Next()) { }
+        public Shuffling() : this(new Random().Next()) { }
 
         public Shuffling(int seed)
         {
-            rng = new System.Random(seed);
+            Random = new Random(seed);
         }
 
         public void Shuffle(List<Card> cards)
         {
-            cards.Sort((card1, card2) => rng.Next().CompareTo(rng.Next()));
+            cards.Sort((card1, card2) => Random.Next().CompareTo(Random.Next()));
         }
     }
 }

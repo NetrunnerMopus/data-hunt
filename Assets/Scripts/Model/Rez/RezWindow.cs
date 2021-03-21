@@ -1,39 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using model.cards;
 using model.play;
 
-namespace model.timing.corp
+namespace model.rez
 {
     public class RezWindow
     {
         private RezWindowPermission permission = new RezWindowPermission();
         private TaskCompletionSource<bool> windowClosing;
         private bool used = false;
-        private List<Rezzable> rezzables = new List<Rezzable>();
-        private IList<IRezWindowObserver> windowObservers = new List<IRezWindowObserver>();
+        private List<Ability> rezzes = new List<Ability>();
+
+        internal RezWindow() { }
+
+        public event AsyncAction<RezWindow, List<Ability>> Opened;
+        public event Action<RezWindow> Closed = delegate { };
 
         public ICost Permission() => permission;
 
         async public Task<bool> Open()
         {
             windowClosing = new TaskCompletionSource<bool>();
-            if (rezzables.Count == 0)
+            if (rezzes.Count == 0)
             {
                 return false;
             }
             used = false;
             permission.Grant();
-            foreach (var observer in windowObservers)
-            {
-                observer.NotifyRezWindowOpened(rezzables);
-            }
+            await Opened?.Invoke(this, rezzes);
             var result = await windowClosing.Task;
             permission.Revoke();
-            foreach (var observer in windowObservers)
-            {
-                observer.NotifyRezWindowClosed();
-            }
+            Closed(this);
             return result;
         }
 
@@ -47,19 +46,9 @@ namespace model.timing.corp
             windowClosing.SetResult(used);
         }
 
-        public void Add(Rezzable rezzable)
+        internal void Add(Ability rez)
         {
-            rezzables.Add(rezzable);
-        }
-
-        public void ObserveWindow(IRezWindowObserver observer)
-        {
-            windowObservers.Add(observer);
-        }
-
-        public void UnobserveWindow(IRezWindowObserver observer)
-        {
-            windowObservers.Remove(observer);
+            rezzes.Add(rez);
         }
 
         private class RezWindowPermission : ICost
@@ -88,11 +77,5 @@ namespace model.timing.corp
                 ChangedPayability(this, Payable);
             }
         }
-    }
-
-    public interface IRezWindowObserver
-    {
-        void NotifyRezWindowOpened(List<Rezzable> rezzables);
-        void NotifyRezWindowClosed();
     }
 }

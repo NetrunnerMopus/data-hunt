@@ -5,7 +5,7 @@ namespace model.zones.runner
 {
     public class Score
     {
-        public readonly Zone zone = new Zone("Runner score");
+        public readonly Zone zone = new Zone("Runner score", false);
         private int score = 0;
         public event Action StolenEnough = delegate { };
 

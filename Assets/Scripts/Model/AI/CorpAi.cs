@@ -7,6 +7,7 @@ using model.choices;
 using model.choices.trash;
 using model.play;
 using model.player;
+using model.rez;
 using model.steal;
 using model.timing;
 using model.timing.corp;
@@ -16,7 +17,6 @@ namespace model.ai
 {
     public class CorpAi :
         IPilot,
-        IRezWindowObserver,
         IActionPotentialObserver
     {
         private Game game;
@@ -38,7 +38,7 @@ namespace model.ai
             zones = game.corp.zones;
             game.corp.Acting.ObservePotentialActions(this);
             game.corp.turn.TakingAction += TakeAction;
-            game.corp.turn.rezWindow.ObserveWindow(this);
+            game.corp.Rezzing.Window.Opened += RezSomething;
             game.corp.paidWindow.Opened += Pass;
             game.corp.paidWindow.Added += RememberPaidAbility;
             game.corp.paidWindow.Removed += ForgetPaidAbility;
@@ -64,27 +64,17 @@ namespace model.ai
             zones.hq.Discard(zones.hq.Random(), zones.archives);
         }
 
-        void IRezWindowObserver.NotifyRezWindowOpened(List<Rezzable> rezzables)
+        async private Task RezSomething(RezWindow window, List<Ability> rezzables)
         {
             foreach (var rezzable in rezzables)
             {
-                rezzable.Changed += NotifyRezzable;
+                if (rezzable.Usable)
+                {
+                    await Thinking();
+                    await rezzable.Trigger();
+                }
             }
-            game.corp.turn.rezWindow.Pass();
-        }
-
-
-        async private Task NotifyRezzable(Rezzable rezzable)
-        {
-            if (rezzable.CanRez)
-            {
-                await Thinking();
-                await rezzable.Rez(); // TODO debug this, Corp AI seems to never rez stuff anymore  
-            }
-        }
-
-        void IRezWindowObserver.NotifyRezWindowClosed()
-        {
+            window.Pass();
         }
 
         void IActionPotentialObserver.NotifyPotentialAction(Ability action)

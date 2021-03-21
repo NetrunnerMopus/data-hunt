@@ -9,13 +9,15 @@ namespace model.zones
         public readonly string Name;
         public List<Card> Cards = new List<Card>();
         public int Count => Cards.Count;
+        public bool InPlayArea { get; }
         public event Action<Zone, Card> Added = delegate { };
         public event Action<Zone, Card> Removed = delegate { };
         public event Action<Zone> Changed = delegate { };
 
-        public Zone(string name)
+        public Zone(string name, bool inPlayArea)
         {
             this.Name = name;
+            this.InPlayArea = inPlayArea;
         }
 
         public void Add(Card card)

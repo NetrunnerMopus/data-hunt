@@ -2,6 +2,6 @@
 {
     public class Heap
     {
-        public readonly Zone zone = new Zone("Heap");
+        public readonly Zone zone = new Zone("Heap", false);
     }
 }

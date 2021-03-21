@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.choices.trash;
+using model.play;
 using model.player;
 using model.steal;
 using model.zones;
@@ -30,7 +32,7 @@ namespace model.cards
         public Card(Game game)
         {
             this.game = game;
-            this.Zone = new Zone("Outside of the game");
+            this.Zone = new Zone("Outside of the game", false);
             this.Zone.Add(this);
         }
 
@@ -58,6 +60,14 @@ namespace model.cards
             target.Add(this);
             Zone = target;
             Moved(this, source, target);
+        }
+
+        public void Installed()
+        {
+            if (Type.Rezzable)
+            {
+                game.corp.Rezzing.Track(this);
+            }
         }
 
         internal void FlipPreInstall()

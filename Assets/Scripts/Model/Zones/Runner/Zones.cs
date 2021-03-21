@@ -7,7 +7,7 @@ namespace model.zones.runner
 {
     public class Zones
     {
-        public readonly Zone identity = new Zone("Corp identity");
+        public readonly Zone identity = new Zone("Corp identity", false);
         public readonly Grip grip;
         public readonly Stack stack;
         public readonly Heap heap;

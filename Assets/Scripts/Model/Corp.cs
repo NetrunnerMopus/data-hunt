@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using model.install;
 using model.play;
 using model.player;
+using model.rez;
 using model.timing;
 using model.timing.corp;
 using model.zones;
@@ -20,6 +21,7 @@ namespace model
         public readonly CreditPool credits;
         public CorpActing Acting { get; }
         public Installing Installing { get; }
+        public Rezzing Rezzing { get; }
 
         public Corp(
             IPilot pilot,
@@ -35,15 +37,10 @@ namespace model
             this.paidWindow = paidWindow;
             clicks = new ClickPool(3);
             credits = new CreditPool();
-            zones = new Zones(
-               new Headquarters(random, credits),
-               new ResearchAndDevelopment(this, shuffling),
-               new Archives(credits),
-               playArea,
-               this
-            );
+            zones = new Zones(this, playArea, shuffling);
             this.Acting = new CorpActing(this);
             this.Installing = new Installing(pilot, playArea);
+            this.Rezzing = new Rezzing(this);
         }
 
         async public Task Start(Game game, Deck deck)

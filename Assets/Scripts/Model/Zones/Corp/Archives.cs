@@ -8,7 +8,7 @@ namespace model.zones.corp
 {
     public class Archives : IServer
     {
-        public Zone Zone { get; } = new Zone("Archives");
+        public Zone Zone { get; } = new Zone("Archives", false);
         public IceColumn Ice { get; }
 
         public Archives(CreditPool credits)

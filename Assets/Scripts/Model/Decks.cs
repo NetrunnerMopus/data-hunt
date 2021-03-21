@@ -35,11 +35,11 @@ namespace model
                 cards.Add(new HedgeFund(game));
                 cards.Add(new PadCampaign(game));
                 cards.Add(new AdvancedAssemblyLines(game));
-                cards.Add(new CorporateSalesTeam(game));
-                cards.Add(new Bellona(game));
             }
             for (int i = 0; i < 2; i++)
             {
+                cards.Add(new CorporateSalesTeam(game));
+                cards.Add(new Bellona(game));
                 cards.Add(new AnonymousTip(game));
                 cards.Add(new VanityProject(game));
             }

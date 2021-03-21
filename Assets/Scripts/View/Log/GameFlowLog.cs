@@ -1,16 +1,12 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using model;
-using model.play;
 using model.timing;
-using model.timing.corp;
 using UnityEngine;
 
 namespace view.log
 {
     public class GameFlowLog :
-        IStepObserver,
-        IRezWindowObserver
+        IStepObserver
     {
         private string currentStep = "";
 
@@ -26,7 +22,8 @@ namespace view.log
             corpTurn.Started += TurnStarted;
             corpTurn.TakingAction += (turn) => LogAsync("corp taking action");
             corpTurn.ActionTaken += (turn, action) => LogAsync("corp took action");
-            corpTurn.rezWindow.ObserveWindow(this);
+            game.corp.Rezzing.Window.Opened += (window, rezzables) => LogAsync("rez window opened, up to " + rezzables.Count + " could be rezzed");
+            game.corp.Rezzing.Window.Closed += (window) => Log("rez window closed");
             game.corp.zones.hq.DiscardingOne += () => Log("discarding");
             runnerTurn.ObserveSteps(this);
             runnerTurn.Started += TurnStarted;
@@ -66,16 +63,6 @@ namespace view.log
         {
             Log("turn " + turn + " beginning");
             await Task.CompletedTask;
-        }
-
-        void IRezWindowObserver.NotifyRezWindowOpened(List<Rezzable> rezzables)
-        {
-            Log("rez window opened, up to " + rezzables.Count + " could be rezzed");
-        }
-
-        void IRezWindowObserver.NotifyRezWindowClosed()
-        {
-            Log("rez window closed");
         }
     }
 }

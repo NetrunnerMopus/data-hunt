@@ -2,7 +2,7 @@
 {
     public class Stack
     {
-        public readonly Zone zone = new Zone("Stack");
+        public readonly Zone zone = new Zone("Stack", false);
         private Shuffling shuffling;
 
         public Stack(Shuffling shuffling)

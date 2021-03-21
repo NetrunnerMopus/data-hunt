@@ -12,7 +12,7 @@ namespace model.zones.corp
         private Corp corp;
         private Shuffling shuffling;
         private bool reshuffledDuringAccess = false;
-        public Zone Zone { get; } = new Zone("R&D");
+        public Zone Zone { get; } = new Zone("R&D", false);
         public IceColumn Ice { get; }
         public event Action<Corp> Decked = delegate { };
 

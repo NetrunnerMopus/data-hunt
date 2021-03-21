@@ -23,7 +23,7 @@ namespace model
         public Game(IPilot corpPilot, IPilot runnerPilot, Shuffling shuffling)
         {
             this.shuffling = shuffling;
-            playArea = new Zone("Play area");
+            playArea = new Zone("Play area", true);
             corp = CreateCorp(corpPilot);
             runner = CreateRunner(runnerPilot);
             this.checkpoint = new Checkpoint(this);

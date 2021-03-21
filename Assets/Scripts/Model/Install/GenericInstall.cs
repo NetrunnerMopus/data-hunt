@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.cards;
+using model.play;
 using model.player;
 using model.zones;
 
@@ -97,6 +98,7 @@ namespace model.install
         async private Task Place(IInstallDestination destination)
         {
             destination.Host(card);
+            card.Installed();
             if (card.Faction.Side == Side.RUNNER)
             {
                 // CR: 8.2.3
