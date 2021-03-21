@@ -12,7 +12,7 @@ namespace model.zones.corp
     {
         public Zone Zone { get; } = new Zone("HQ");
         public IceColumn Ice { get; }
-        private HashSet<IHqDiscardObserver> discards = new HashSet<IHqDiscardObserver>();
+        private IList<IHqDiscardObserver> discards = new List<IHqDiscardObserver>();
         private TaskCompletionSource<bool> discarding;
         private Random random;
 

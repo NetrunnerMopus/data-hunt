@@ -2,10 +2,7 @@
 using System.Threading.Tasks;
 using model.cards;
 using model.costs;
-using model.effects;
-using model.player;
 using model.zones;
-using model.zones.corp;
 
 namespace model.play
 {
@@ -17,7 +14,7 @@ namespace model.play
         private TaskCompletionSource<Ability> actionTaking;
         private ActionPermission permission = new ActionPermission();
         private List<Ability> potentialActions = new List<Ability>();
-        private HashSet<IActionPotentialObserver> actionPotentialObservers = new HashSet<IActionPotentialObserver>();
+        private IList<IActionPotentialObserver> actionPotentialObservers = new List<IActionPotentialObserver>();
 
         public CorpActing(Corp corp)
         {

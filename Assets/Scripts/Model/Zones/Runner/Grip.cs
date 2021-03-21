@@ -9,7 +9,7 @@ namespace model.zones.runner
     public class Grip
     {
         public readonly Zone zone = new Zone("Grip");
-        private HashSet<IGripDiscardObserver> discards = new HashSet<IGripDiscardObserver>();
+        private IList<IGripDiscardObserver> discards = new List<IGripDiscardObserver>();
         private TaskCompletionSource<bool> discarded;
 
         public Grip()

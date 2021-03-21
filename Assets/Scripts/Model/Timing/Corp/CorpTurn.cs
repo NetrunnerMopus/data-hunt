@@ -11,10 +11,10 @@ namespace model.timing.corp
         public bool Active { get; private set; } = false;
         ClickPool ITurn.Clicks => game.corp.clicks;
         Side ITurn.Side => Side.CORP;
-        private List<IEffect> turnBeginningTriggers = new List<IEffect>();
-        private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
+        private IList<IEffect> turnBeginningTriggers = new List<IEffect>();
+        private IList<IStepObserver> steps = new List<IStepObserver>();
         public event AsyncAction<ITurn> Started;
-        private HashSet<ICorpActionObserver> actions = new HashSet<ICorpActionObserver>();
+        private IList<ICorpActionObserver> actions = new List<ICorpActionObserver>();
 
         public CorpTurn(Game game)
         {

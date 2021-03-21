@@ -11,9 +11,9 @@ namespace model.timing.runner
         ClickPool ITurn.Clicks => game.runner.clicks;
         Side ITurn.Side => Side.RUNNER;
         private List<IEffect> turnBeginningTriggers = new List<IEffect>();
-        private HashSet<IStepObserver> steps = new HashSet<IStepObserver>();
+        private IList<IStepObserver> steps = new List<IStepObserver>();
         public event AsyncAction<ITurn> Started;
-        private HashSet<IRunnerActionObserver> actions = new HashSet<IRunnerActionObserver>();
+        private IList<IRunnerActionObserver> actions = new List<IRunnerActionObserver>();
 
         public RunnerTurn(Game game)
         {

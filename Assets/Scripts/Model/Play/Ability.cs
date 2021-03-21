@@ -41,22 +41,6 @@ namespace model.play
 
         public CardAbility BelongingTo(Card card) => new CardAbility(this, card);
 
-        public override bool Equals(object obj)
-        {
-            var ability = obj as Ability;
-            return ability != null &&
-                   EqualityComparer<ICost>.Default.Equals(cost, ability.cost) &&
-                   EqualityComparer<IEffect>.Default.Equals(effect, ability.effect);
-        }
-
-        public override int GetHashCode()
-        {
-            var hashCode = 1540118860;
-            hashCode = hashCode * -1521134295 + EqualityComparer<ICost>.Default.GetHashCode(cost);
-            hashCode = hashCode * -1521134295 + EqualityComparer<IEffect>.Default.GetHashCode(effect);
-            return hashCode;
-        }
-
         public override string ToString() => "Ability(cost=" + cost + ", effect=" + effect + ")";
     }
 }
