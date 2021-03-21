@@ -23,7 +23,7 @@ namespace model.cards.runner
         {
             private Card hopper;
             private Runner runner;
-            private Ability pop;
+            private CardAbility pop;
             public bool Impactful => true;
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { };
@@ -40,9 +40,9 @@ namespace model.cards.runner
                 var heap = runner.zones.heap.zone;
                 if (pop == null)
                 {
-                    pop = new Ability(new Conjunction(paidWindow.Permission(), new Trash(hopper, heap)), runner.zones.Drawing(3));
+                    pop = new Ability(new Conjunction(paidWindow.Permission(), new Trash(hopper, heap)), runner.zones.Drawing(3)).BelongingTo(hopper);
                 }
-                paidWindow.Add(pop, hopper);
+                paidWindow.Add(pop);
                 runner.zones.rig.zone.Removed += CheckIfUninstalled;
                 await Task.CompletedTask;
             }

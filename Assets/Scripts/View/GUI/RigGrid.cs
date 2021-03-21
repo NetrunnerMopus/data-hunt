@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace view.gui
 {
-    public class RigGrid : IPaidAbilityObserver
+    public class RigGrid
     {
         private DropZone paidWindowTrigger;
         public DropZone DropZone { get; private set; }
@@ -20,7 +20,7 @@ namespace view.gui
         {
             this.paidWindowTrigger = paidWindowTrigger;
             this.printer = parts.Print(gameObject);
-            runner.paidWindow.ObserveAbility(this);
+            runner.paidWindow.Added += LinkPaidAbility;
             runner.zones.rig.zone.Added += RenderInstalledCard;
             runner.zones.rig.zone.Removed += DestroyUninstalledCard;
             this.DropZone = gameObject.AddComponent<DropZone>();
@@ -35,11 +35,11 @@ namespace view.gui
             Object.Destroy(visuals[card]);
         }
 
-        void IPaidAbilityObserver.NotifyPaidAbilityAvailable(Ability ability, Card source)
+        private void LinkPaidAbility(PaidWindow window, CardAbility ability)
         {
-            visuals[source]
+            visuals[ability.Card]
                 .AddComponent<Droppable>()
-                .Represent(new InteractiveAbility(ability, paidWindowTrigger));
+                .Represent(new InteractiveAbility(ability.Ability, paidWindowTrigger));
         }
     }
 }

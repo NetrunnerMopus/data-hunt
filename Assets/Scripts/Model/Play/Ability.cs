@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
+using model.cards;
 
 namespace model.play
 {
@@ -36,6 +38,8 @@ namespace model.play
             await effect.Resolve();
             Resolved(this);
         }
+
+        public CardAbility BelongingTo(Card card) => new CardAbility(this, card);
 
         public override bool Equals(object obj)
         {

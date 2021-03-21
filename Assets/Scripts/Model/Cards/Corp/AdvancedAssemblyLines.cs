@@ -47,8 +47,8 @@ namespace model.cards.corp
                 var pop = new Ability(
                     cost: new Conjunction(paidWindow.Permission(), new Trash(aal, archives), new Active(aal)),
                     effect: new AdvancedAssemblyLinesInstall(corp)
-                );
-                paidWindow.Add(pop, aal);
+                ).BelongingTo(aal);
+                paidWindow.Add(pop);
                 aal.Moved += (card, source, target) => paidWindow.Remove(pop);
             }
         }

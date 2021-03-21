@@ -32,9 +32,8 @@ namespace tests
             gameFlowLog.Display(game);
             passiveCorp = new PassiveCorp(game);
             ffRunner = new FastForwardRunner(game);
-            paidAbilityObserver = new PaidAbilityObserver();
+            paidAbilityObserver = new PaidAbilityObserver(game.runner.paidWindow);
             hopper = new SportsHopper(game);
-            game.runner.paidWindow.ObserveAbility(paidAbilityObserver);
             game.Start(Decks.DemoCorp(game), MockGames.MasqueDeck(game, runnerCards));
         }
 
@@ -51,7 +50,7 @@ namespace tests
             await game.runner.Acting.Install(hopper).Trigger(); // TODO `GenericInstall` refactoring broke this
             var popHopper = paidAbilityObserver.NewestPaidAbility;
 
-            await popHopper.Trigger();
+            await popHopper.Ability.Trigger();
 
             Assert.AreEqual(3, gripObserver.TotalAdded);
             Assert.AreEqual(hopper, rigObserver.LastRemoved);
@@ -88,7 +87,7 @@ namespace tests
             await RunnerAction();
             PassWindow();
             await RunnerAction();
-            await popHopper.Trigger();
+            await popHopper.Ability.Trigger();
             PassWindow();
             await RunnerAction();
             await RunnerAction();
@@ -113,7 +112,7 @@ namespace tests
             await CorpAction();
             PassWindow();
             await CorpAction();
-            await popHopper.Trigger();
+            await popHopper.Ability.Trigger();
             PassWindow();
             await CorpAction();
             passiveCorp.DiscardRandomCards();

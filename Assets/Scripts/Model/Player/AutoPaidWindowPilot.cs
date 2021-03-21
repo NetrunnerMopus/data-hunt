@@ -20,7 +20,7 @@ namespace model.player
 
         private void PassIfNoneAvailable(PaidWindow window)
         {
-            if (window.ListAbilities().All(ability => !ability.Usable))
+            if (window.ListAbilities().All(ability => !ability.Ability.Usable))
             {
                 window.Pass();
             }
