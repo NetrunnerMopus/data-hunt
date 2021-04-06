@@ -14,8 +14,6 @@ namespace model
     public class Runner
     {
         public readonly IPilot pilot;
-        public readonly RunnerTurn turn;
-        public readonly PaidWindow paidWindow;
         public int tags = 0;
         public readonly Zones zones;
         public readonly ClickPool clicks;
@@ -27,16 +25,12 @@ namespace model
 
         public Runner(
             IPilot pilot,
-            RunnerTurn turn,
-            PaidWindow paidWindow,
             Zone playArea,
             Shuffling shuffling,
             Game game
         )
         {
             this.pilot = pilot;
-            this.turn = turn;
-            this.paidWindow = paidWindow;
             zones = new Zones(
                new Grip(),
                new Stack(shuffling),

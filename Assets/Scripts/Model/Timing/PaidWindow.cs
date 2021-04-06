@@ -5,7 +5,7 @@ using model.play;
 
 namespace model.timing
 {
-    public class PaidWindow
+    public class PaidWindow : ITimingStructure<PaidWindow>
     {
         private readonly string label;
         private PaidWindowPermission permission = new PaidWindowPermission();

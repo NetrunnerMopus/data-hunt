@@ -31,8 +31,8 @@ namespace model.cards.corp
             async Task IEffect.Resolve()
             {
                 var memory = new HaarpsichordMemory();
-                game.corp.turn.Started += memory.Reset;
-                game.runner.turn.Started += memory.Reset;
+                game.corp.turn.Opened += memory.Reset;
+                game.runner.turn.Opened += memory.Reset;
                 var mod = new HaarpsichordModifier(memory);
                 game.runner.Stealing.ModifyStealing(mod);
                 await Task.CompletedTask;

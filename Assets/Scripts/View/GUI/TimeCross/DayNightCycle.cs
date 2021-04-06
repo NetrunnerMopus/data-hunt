@@ -16,7 +16,7 @@ namespace view.gui.timecross
 
         public void Wire(Game game)
         {
-            game.CurrentTurn += UpdateBackground;
+            game.CurrentTurnQueued += UpdateBackground;
         }
 
         void UpdateBackground(ITurn turn)

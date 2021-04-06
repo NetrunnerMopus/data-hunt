@@ -6,32 +6,34 @@ namespace model.timing.runner
 {
     public class RunnerTurn : ITurn
     {
-        private Game game;
-        public bool Active { get; private set; } = false;
-        ClickPool ITurn.Clicks => game.runner.clicks;
+        private Runner runner;
+        private Timing timing;
+        ClickPool ITurn.Clicks => runner.clicks;
         Side ITurn.Side => Side.RUNNER;
         private List<IEffect> turnBeginningTriggers = new List<IEffect>();
-        public event AsyncAction<ITurn> Started;
+        public int Number { get; private set; } = 0;
+        public event AsyncAction<ITurn> Opened;
+        public event AsyncAction<ITurn> Closed;
         public event AsyncAction<ITurn> TakingAction;
         public event AsyncAction<ITurn, Ability> ActionTaken;
 
-        public RunnerTurn(Game game)
+        public RunnerTurn(Runner runner, Timing timing)
         {
-            this.game = game;
+            this.runner = runner;
         }
 
-        async Task ITurn.Start()
+        async Task ITimingStructure.Open()
         {
-            Active = true;
-            await Started?.Invoke(this);
+            Number++;
+            await Opened?.Invoke(this);
             await ActionPhase();
             await DiscardPhase();
-            Active = false;
+            await Closed?.Invoke(this);
         }
 
         async private Task ActionPhase()
         {
-            game.runner.clicks.Replenish(); // CR: 5.7.1.a
+            runner.clicks.Replenish(); // CR: 5.7.1.a
             var rez = OpenRezWindow(); // CR: 5.7.1.b
             var paid = OpenPaidWindow(); // CR: 5.7.1.b
             await rez;
@@ -42,16 +44,16 @@ namespace model.timing.runner
             var paid2 = OpenPaidWindow(); // CR: 5.7.1.e
             await rez2;
             await paid2;
-            while (game.runner.clicks.Remaining > 0) // CR: 5.7.1.g
+            while (runner.clicks.Remaining > 0) // CR: 5.7.1.g
             {
                 await TakeAction(); // CR: 5.7.1.f
             }
-            await game.Checkpoint(); // CR: 5.7.1.g
+            await timing.Checkpoint(); // CR: 5.7.1.g
         }
 
         async private Task OpenPaidWindow()
         {
-            await game.OpenPaidWindow(
+            await timing.OpenPaidWindow(
                 acting: game.runner.paidWindow,
                 reacting: game.corp.paidWindow
             );

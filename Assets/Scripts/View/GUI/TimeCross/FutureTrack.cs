@@ -25,11 +25,11 @@ namespace view.gui.timecross
         {
             CurrentTurn = new GameObject("Current turn").AddComponent<FutureTurn>();
             CurrentTurn.gameObject.AttachTo(gameObject);
-            game.CurrentTurn += CurrentTurn.DisplayCurrent;
+            game.CurrentTurnQueued += CurrentTurn.DisplayCurrent;
             CurrentTurn.dayNight = dayNight;
             var nextTurn = new GameObject("Next turn").AddComponent<FutureTurn>();
             nextTurn.gameObject.AttachTo(gameObject);
-            game.NextTurn += nextTurn.DisplayNext;
+            game.NextTurnPredicted += nextTurn.DisplayNext;
             nextTurn.dayNight = dayNight;
         }
     }

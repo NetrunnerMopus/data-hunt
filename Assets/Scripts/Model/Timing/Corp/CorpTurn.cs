@@ -1,113 +1,53 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
 using model.play;
 
 namespace model.timing.corp
 {
-    public class CorpTurn : ITurn
+    public class CorpTurn : ITimingStructure<CorpTurn>
     {
-        private Game game;
-        public bool Active { get; private set; } = false;
-        ClickPool ITurn.Clicks => game.corp.clicks;
-        Side ITurn.Side => Side.CORP;
-        private IList<IEffect> turnBeginningTriggers = new List<IEffect>();
-        public event AsyncAction<ITurn> Started;
-        public event AsyncAction<ITurn> TakingAction;
-        public event AsyncAction<ITurn, Ability> ActionTaken;
+        private Corp corp;
+        private Timing timing;
+        public ClickPool Clicks => corp.clicks;
+        public Side Side => Side.CORP;
+        public string Name { get; }
+        public event AsyncAction<CorpTurn> Opened;
+        public event AsyncAction<CorpTurn> Closed;
+        private CorpDrawPhase drawPhase;
+        private CorpActionPhase actionPhase;
+        private CorpDiscardPhase discardPhase;
+        public event Action<CorpDrawPhase> DrawPhaseDefined = delegate { };
+        public event Action<CorpActionPhase> ActionPhaseDefined = delegate { };
+        public event Action<CorpDiscardPhase> DiscardPhaseDefined = delegate { };
 
-        public CorpTurn(Game game)
+        public CorpTurn(Corp corp, Timing timing, int number)
         {
-            this.game = game;
+            this.corp = corp;
+            this.timing = timing;
+            Name = "Corp turn " + number;
+            drawPhase = new CorpDrawPhase(corp, timing);
+            actionPhase = new CorpActionPhase(corp, timing);
         }
 
-        async Task ITurn.Start()
+        public CorpTurn(Corp corp, Timing timing)
         {
-            Active = true;
-            await Started?.Invoke(this);
-            await DrawPhase();
-            await ActionPhase();
-            await DiscardPhase();
-            Active = false;
+            this.corp = corp;
+            this.timing = timing;
         }
 
-        async private Task DrawPhase()
+        internal void DefinePhases()
         {
-            game.corp.clicks.Replenish(); // CR: 5.6.1.a
-            var rez = OpenRezWindow(); // CR: 5.6.1.b
-            var score = OpenScoreWindow(); // CR: 5.6.1.b
-            var paid = OpenPaidWindow(); // CR: 5.6.1.b
-            await rez;
-            await score;
-            await paid;
-            RefillRecurringCredits(); // CR: 5.6.1.c
-            await TriggerTurnBeginning(); // CR: 5.6.1.d
-            await game.Checkpoint();// CR: 5.6.1.e
-            await MandatoryDraw(); // CR: 5.6.1.f
-            await game.Checkpoint(); // CR: 5.6.1.g
+            DrawPhaseDefined(drawPhase);
+            ActionPhaseDefined(actionPhase);
         }
 
-        async private Task OpenPaidWindow()
+        public async Task Open()
         {
-            await game.OpenPaidWindow(
-                acting: game.corp.paidWindow,
-                reacting: game.runner.paidWindow
-            );
-        }
-
-        async private Task OpenRezWindow()
-        {
-            await game.corp.Rezzing.Window.Open();
-        }
-
-        async private Task OpenScoreWindow()
-        {
-            await Task.FromResult("TODO let corp score");
-        }
-
-        private void RefillRecurringCredits()
-        {
-        }
-
-        async private Task TriggerTurnBeginning()
-        {
-            if (turnBeginningTriggers.Count > 0)
-            {
-                await new SimultaneousTriggers(turnBeginningTriggers.Copy()).AllTriggered(game.corp.pilot);
-            }
-        }
-
-        async private Task MandatoryDraw()
-        {
-            await game.corp.zones.Drawing(1).Resolve();
-        }
-
-        async private Task ActionPhase()
-        {
-            var rez = OpenRezWindow(); // CR: 5.6.2.a
-            var score = OpenScoreWindow(); // CR: 5.6.2.a
-            var paid = OpenPaidWindow(); // CR: 5.6.2.a
-            await rez;
-            await score;
-            await paid;
-            while (game.corp.clicks.Remaining > 0) // CR: 5.6.2.c
-            {
-                await TakeAction(); // CR: 5.6.2.b
-            }
-            await game.Checkpoint(); // CR: 5.6.2.d
-        }
-
-        async private Task TakeAction()
-        {
-            var actionTaking = game.corp.Acting.TakeAction();
-            TakingAction?.Invoke(this);
-            var action = await actionTaking;
-            ActionTaken?.Invoke(this, action);
-            var rez = OpenRezWindow();
-            var score = OpenScoreWindow();
-            var paid = OpenPaidWindow();
-            await rez;
-            await score;
-            await paid;
+            await Opened?.Invoke(this);
+            await drawPhase.Open();
+            await actionPhase.Open();
+            await discardPhase.Open();
+            await Closed?.Invoke(this);
         }
 
         async private Task DiscardPhase()
@@ -117,14 +57,14 @@ namespace model.timing.corp
             var paid = OpenPaidWindow();  // CR: 5.6.3.b
             await rez;
             await paid;
-            game.corp.clicks.Reset(); // CR: 5.6.3.c
+            corp.clicks.Reset(); // CR: 5.6.3.c
             TriggerTurnEnding(); // CR: 5.6.3.d
-            await game.Checkpoint(); // CR: 5.6.3.e
+            await timing.Checkpoint(); // CR: 5.6.3.e
         }
 
         async private Task Discard()
         {
-            var hq = game.corp.zones.hq;
+            var hq = corp.zones.hq;
             while (hq.Zone.Count > 5)
             {
                 await hq.Discard();
