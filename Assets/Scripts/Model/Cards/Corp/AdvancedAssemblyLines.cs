@@ -6,6 +6,7 @@ using model.cards.types;
 using model.choices.trash;
 using model.costs;
 using model.play;
+using model.timing;
 using model.zones;
 
 namespace model.cards.corp
@@ -18,7 +19,7 @@ namespace model.cards.corp
         override public Faction Faction => Factions.HAAS_BIOROID;
         override public int InfluenceCost => 2;
         override public ICost PlayCost => game.corp.credits.PayingForPlaying(this, 1);
-        override public IEffect Activation => new AdvancedAssemblyLinesActivation(this, game.corp);
+        override public IEffect Activation => new AdvancedAssemblyLinesActivation(this, game);
         override public IType Type => new Asset(game);
         override public IList<ITrashOption> TrashOptions() => new List<ITrashOption> {
             new Leave(),
@@ -30,21 +31,25 @@ namespace model.cards.corp
             public bool Impactful => true;
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             private readonly Card aal;
-            private readonly Corp corp;
+            private readonly Game game;
             IEnumerable<string> IEffect.Graphics => new string[] { };
 
-            public AdvancedAssemblyLinesActivation(Card aal, Corp corp)
+            public AdvancedAssemblyLinesActivation(Card aal, Game game)
             {
                 this.aal = aal;
-                this.corp = corp;
+                this.game = game;
             }
 
             async Task IEffect.Resolve()
             {
-                await corp.credits.Gaining(3).Resolve();
-                var paidWindow = corp.paidWindow;
-                var archives = corp.zones.archives.Zone;
-                var aalInstall = new AdvancedAssemblyLinesInstall(corp);
+                await game.corp.credits.Gaining(3).Resolve();
+                game.Timing.PaidWindowDefined += DefineTrashAbility;
+            }
+
+            private void DefineTrashAbility(PaidWindow paidWindow)
+            {
+                var archives = game.corp.zones.archives.Zone;
+                var aalInstall = new AdvancedAssemblyLinesInstall(game.corp);
                 var pop = new Ability(
                     cost: new Conjunction(paidWindow.Permission(), new Trash(aal, archives), new Active(aal)),
                     effect: aalInstall
@@ -58,7 +63,7 @@ namespace model.cards.corp
             }
         }
 
-        private class AdvancedAssemblyLinesInstall : IEffect
+        private class AdvancedAssemblyLinesInstall : IEffect, IDisposable
         {
             public bool Impactful => Installables().Count > 0;
             public event Action<IEffect, bool> ChangedImpact = delegate { };
@@ -84,7 +89,7 @@ namespace model.cards.corp
                 ChangedImpact(this, Impactful);
             }
 
-            internal void Dispose()
+            public void Dispose()
             {
                 corp.zones.hq.Zone.Changed -= UpdateInstallables;
             }

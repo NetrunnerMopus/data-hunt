@@ -5,7 +5,6 @@ using model.play;
 using model.player;
 using model.rez;
 using model.timing;
-using model.timing.corp;
 using model.zones;
 using model.zones.corp;
 
@@ -14,8 +13,6 @@ namespace model
     public class Corp
     {
         public readonly IPilot pilot;
-        public readonly CorpTurn turn;
-        public readonly PaidWindow paidWindow;
         public readonly zones.corp.Zones zones;
         public readonly ClickPool clicks;
         public readonly CreditPool credits;
@@ -25,16 +22,12 @@ namespace model
 
         public Corp(
             IPilot pilot,
-            CorpTurn turn,
-            PaidWindow paidWindow,
             Zone playArea,
             Shuffling shuffling,
             Random random
         )
         {
             this.pilot = pilot;
-            this.turn = turn;
-            this.paidWindow = paidWindow;
             clicks = new ClickPool(3);
             credits = new CreditPool();
             zones = new Zones(this, playArea, shuffling);

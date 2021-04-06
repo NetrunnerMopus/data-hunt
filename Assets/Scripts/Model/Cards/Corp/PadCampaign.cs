@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.cards.types;
 using model.choices.trash;
+using model.timing;
+using model.timing.corp;
 
 namespace model.cards.corp
 {
@@ -14,7 +16,7 @@ namespace model.cards.corp
         override public Faction Faction => Factions.SHADOW;
         override public int InfluenceCost => 0;
         override public ICost PlayCost => game.corp.credits.PayingForPlaying(this, 2);
-        override public IEffect Activation => new PadCampaignActivation(game.corp);
+        override public IEffect Activation => new PadCampaignActivation(game);
         override public IType Type => new Asset(game);
         override public IList<ITrashOption> TrashOptions() => new List<ITrashOption> {
             new Leave(),
@@ -26,14 +28,19 @@ namespace model.cards.corp
             public bool Impactful => true;
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { };
-            private Corp corp;
+            private Game game;
 
-            public PadCampaignActivation(Corp corp) => this.corp = corp;
+            public PadCampaignActivation(Game game) => this.game = game;
 
             async Task IEffect.Resolve()
             {
-                corp.turn.WhenBegins(corp.credits.Gaining(1));
+                game.Timing.CorpTurnDefined += RegisterDrip;
                 await Task.CompletedTask;
+            }
+
+            private void RegisterDrip(CorpTurn turn)
+            {
+                turn.WhenBegins(game.corp.credits.Gaining(1));
             }
         }
     }
