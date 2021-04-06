@@ -12,12 +12,14 @@ namespace view.gui.brackets
         private GameObject opening;
         private GameObject content;
         private GameObject closing;
+        private float margin;
 
-        public Bracket(string name, GameObject container) : this(name, container, siblingIndex: 0) { }
+        public Bracket(string name, GameObject container) : this(name, container, siblingIndex: 0, margin: 0.00f) { }
 
-        public Bracket(string name, GameObject container, int siblingIndex)
+        private Bracket(string name, GameObject container, int siblingIndex, float margin)
         {
             this.container = container;
+            this.margin = margin;
             opening = RenderOpening(siblingIndex, name);
             content = RenderContent(siblingIndex + 1);
             closing = RenderClosing(siblingIndex + 2);
@@ -31,8 +33,8 @@ namespace view.gui.brackets
             var image = gameObject.AddComponent<Image>();
             image.color = Color.magenta;
             var rect = gameObject.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0.00f, 0.05f);
-            rect.anchorMax = new Vector2(EDGE_WIDTH_RATIO, 0.95f);
+            rect.anchorMin = new Vector2(0.00f, margin);
+            rect.anchorMax = new Vector2(EDGE_WIDTH_RATIO, 1.00f - margin);
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
             var label = new GameObject("Label").AttachTo(gameObject);
@@ -58,8 +60,8 @@ namespace view.gui.brackets
             var image = gameObject.AddComponent<Image>();
             image.color = Color.white - new Color(0, 0, 0, 0.50f);
             var rect = gameObject.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0.00f, 0.15f);
-            rect.anchorMax = new Vector2(0.30f, 0.85f);
+            rect.anchorMin = new Vector2(0.00f, margin);
+            rect.anchorMax = new Vector2(0.30f, 1.00f - margin);
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
             return gameObject;
@@ -72,8 +74,8 @@ namespace view.gui.brackets
             var image = gameObject.AddComponent<Image>();
             image.color = Color.cyan;
             var rect = gameObject.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0.00f, 0.05f);
-            rect.anchorMax = new Vector2(EDGE_WIDTH_RATIO, 0.95f);
+            rect.anchorMin = new Vector2(0.00f, margin);
+            rect.anchorMax = new Vector2(EDGE_WIDTH_RATIO, 1.00f - margin);
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
             return gameObject;
@@ -82,7 +84,7 @@ namespace view.gui.brackets
         public Bracket Nest(string name)
         {
             var nestedIndex = closing.transform.GetSiblingIndex() - 1;
-            return new Bracket(name, container, nestedIndex);
+            return new Bracket(name, container, nestedIndex, margin + 0.08f);
         }
 
         public void Open()
