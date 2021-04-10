@@ -46,6 +46,7 @@ namespace model.cards
         public void Deactivate()
         {
             Active = false;
+            Activation.Disable();
             Toggled(this, Active);
         }
 

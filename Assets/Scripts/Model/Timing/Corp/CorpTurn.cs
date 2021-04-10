@@ -1,11 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using model.play;
+﻿using System.Threading.Tasks;
 
 namespace model.timing.corp
 {
     public class CorpTurn : ITimingStructure<CorpTurn>
     {
+        public CorpDrawPhase drawPhase { get; }
+        public CorpActionPhase actionPhase { get; }
+        public CorpDiscardPhase discardPhase { get; }
         private Corp corp;
         private Timing timing;
         public ClickPool Clicks => corp.clicks;
@@ -13,12 +14,6 @@ namespace model.timing.corp
         public string Name { get; }
         public event AsyncAction<CorpTurn> Opened;
         public event AsyncAction<CorpTurn> Closed;
-        private CorpDrawPhase drawPhase;
-        private CorpActionPhase actionPhase;
-        private CorpDiscardPhase discardPhase;
-        public event Action<CorpDrawPhase> DrawPhaseDefined = delegate { };
-        public event Action<CorpActionPhase> ActionPhaseDefined = delegate { };
-        public event Action<CorpDiscardPhase> DiscardPhaseDefined = delegate { };
 
         public CorpTurn(Corp corp, Timing timing, int number)
         {
@@ -27,18 +22,13 @@ namespace model.timing.corp
             Name = "Corp turn " + number;
             drawPhase = new CorpDrawPhase(corp, timing);
             actionPhase = new CorpActionPhase(corp, timing);
+            discardPhase = new CorpDiscardPhase();
         }
 
         public CorpTurn(Corp corp, Timing timing)
         {
             this.corp = corp;
             this.timing = timing;
-        }
-
-        internal void DefinePhases()
-        {
-            DrawPhaseDefined(drawPhase);
-            ActionPhaseDefined(actionPhase);
         }
 
         public async Task Open()
@@ -73,11 +63,6 @@ namespace model.timing.corp
 
         private void TriggerTurnEnding()
         {
-        }
-
-        public void WhenBegins(IEffect effect)
-        {
-            turnBeginningTriggers.Add(effect);
         }
     }
 }

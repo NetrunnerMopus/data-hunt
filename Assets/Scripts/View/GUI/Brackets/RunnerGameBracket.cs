@@ -16,14 +16,18 @@ namespace view.gui.brackets
             bracket = new Bracket("Game", container);
             container.AddComponent<HorizontalLayoutWithAnchoredSize>();
             game.Timing.CorpTurnDefined += DisplayCorpTurn;
-            game.runner.turn.Opened += DisplayRunnerTurn;
-            game.corp.turn.Opened += DisplayCorpTurn;
         }
 
-        async private Task DisplayCorpTurn(CorpTurn turn)
+        private void DisplayCorpTurn(CorpTurn turn)
         {
             var turnContainer = bracket.Nest(turn.Name);
-        turn.ActionPhaseDefined += DisplayCorpActionPhase;
+            turn.ActionPhaseDefined += DisplayCorpActionPhase;
+
+        }
+
+        private void DisplayCorpActionPhase(CorpActionPhase phase)
+        {
+            phase.ActionWindowDefined += DisplayCorpActionWindow;
             for (int i = 0; i < turn.Clicks.NextReplenishment; i++)
             {
                 int actionOrder = i + 1;
@@ -34,9 +38,10 @@ namespace view.gui.brackets
             await Task.CompletedTask;
         }
 
-          private void DisplayCorpActionPhase(CorpActionPhase actionPhase) {
-actionPhase.
-          }
+        private void DisplayCorpActionWindow(CorpActionWindow window)
+        {
+
+        }
 
         async private Task DisplayRunnerTurn(ITurn turn)
         {
