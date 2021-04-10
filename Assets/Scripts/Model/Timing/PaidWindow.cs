@@ -1,61 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using model.play;
+using model.player;
 
 namespace model.timing
 {
-    public class PaidWindow : ITimingStructure<PaidWindow>
+    public class PaidWindow : PriorityWindow
     {
-        private readonly string label;
-        private PaidWindowPermission permission = new PaidWindowPermission();
-        public event Action<PaidWindow> Opened = delegate { };
-        public event Action<PaidWindow> Closed = delegate { };
-        public event Action<PaidWindow, CardAbility> Added = delegate { };
-        public event Action<PaidWindow, CardAbility> Removed = delegate { };
-        private List<CardAbility> abilities = new List<CardAbility>();
-        private TaskCompletionSource<bool> pass;
+        private bool rezzing;
+        private bool scoring;
+        private IPilot acting;
+        private IPilot reacting;
 
-        public PaidWindow(string label)
+        public PaidWindow(bool rezzing, bool scoring, IPilot acting, IPilot reacting, string name) : base(name)
         {
-            this.label = label;
+            this.rezzing = rezzing;
+            this.scoring = scoring;
+            this.acting = acting;
+            this.reacting = reacting;
         }
 
-        public List<CardAbility> ListAbilities() => new List<CardAbility>(abilities);
-
-        public ICost Permission() => permission;
-
-        async public Task<bool> AwaitPass()
+        async override public Task Open()
         {
             pass = new TaskCompletionSource<bool>();
-            permission.Grant();
             Opened(this);
+
+            var bothPlayersCouldAct = false;
+            while (true)
+            {
+                var actingDeclined = await AwaitPass(acting);
+                if (actingDeclined && bothPlayersCouldAct)
+                {
+                    break;
+                }
+                var reactingDeclined = await AwaitPass(reacting);
+                bothPlayersCouldAct = true;
+                if (reactingDeclined && bothPlayersCouldAct)
+                {
+                    break;
+                }
+            }
+            if (abilities.Count > 0)
+            {
+                await new SimultaneousTriggers(abilities.Copy()).AllTriggered(game.corp.pilot);
+            }
             await pass.Task;
             Closed(this);
-            permission.Revoke();
-            return !permission.WasPaid();
         }
 
-        public void Pass()
+        async private Task<bool> AwaitPass(IPilot pilot)
         {
-            pass.SetResult(true);
-        }
-
-        public void Add(CardAbility ability)
-        {
-            abilities.Add(ability);
-            Added(this, ability);
-        }
-
-        public void Remove(CardAbility ability)
-        {
-            abilities.Remove(ability);
-            Removed(this, ability);
-        }
-
-        public override string ToString()
-        {
-            return "PaidWindow(label=" + label + ")";
+            var options = abilities
+                .Where(it => it.Ability.Active)
+                .Where(it => it.Ability.controller == pilot);
+            CardAbility pass = new PassOption();
+            var option = await pilot.TriggerFromSimultaneous(options);
+            await option.Ability.Trigger();
+            return pass.Used;
         }
     }
 }

@@ -96,6 +96,8 @@ namespace model.rez
                 await card.PlayCost.Pay();
                 await card.Activate();
             }
+
+            public void Disable() { }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.cards.types;
 using model.choices.trash;
+using model.play;
 using model.timing;
 using model.timing.corp;
 
@@ -16,7 +17,7 @@ namespace model.cards.corp
         override public Faction Faction => Factions.SHADOW;
         override public int InfluenceCost => 0;
         override public ICost PlayCost => game.corp.credits.PayingForPlaying(this, 2);
-        override public IEffect Activation => new PadCampaignActivation(game);
+        override public IEffect Activation => new PadCampaignActivation(this, game);
         override public IType Type => new Asset(game);
         override public IList<ITrashOption> TrashOptions() => new List<ITrashOption> {
             new Leave(),
@@ -28,9 +29,15 @@ namespace model.cards.corp
             public bool Impactful => true;
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { };
+            private CardAbility drip;
             private Game game;
+            private IList<CorpDrawPhase> phases = new List<CorpDrawPhase>();
 
-            public PadCampaignActivation(Game game) => this.game = game;
+            public PadCampaignActivation(PadCampaign padCampaign, Game game)
+            {
+                this.game = game;
+                this.drip = game.corp.credits.Gaining(1).ToMandatoryAbility().BelongingTo(padCampaign);
+            }
 
             async Task IEffect.Resolve()
             {
@@ -40,7 +47,18 @@ namespace model.cards.corp
 
             private void RegisterDrip(CorpTurn turn)
             {
-                turn.WhenBegins(game.corp.credits.Gaining(1));
+                var phase = turn.drawPhase;
+                phases.Add(phase);
+                phase.TurnBegins.Add(drip);
+            }
+
+            void IEffect.Disable()
+            {
+                game.Timing.CorpTurnDefined -= RegisterDrip;
+                foreach (var phase in phases)
+                {
+                    phase.TurnBegins.Remove(drip);
+                }
             }
         }
     }

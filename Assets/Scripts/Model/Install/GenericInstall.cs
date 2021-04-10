@@ -112,5 +112,7 @@ namespace model.install
         {
             await Task.FromResult("TODO: Implement TriggerPostInstall");
         }
+
+        void IEffect.Disable() { }
     }
 }

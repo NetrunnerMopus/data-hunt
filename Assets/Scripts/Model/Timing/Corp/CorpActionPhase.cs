@@ -13,7 +13,7 @@ namespace model.timing.corp
         public event AsyncAction TakingAction;
         public event AsyncAction<Ability> ActionTaken;
 
-        public CorpActionPhase(Corp corp, Timing timing)
+        internal CorpActionPhase(Corp corp, Timing timing)
         {
             this.corp = corp;
             this.timing = timing;
@@ -22,7 +22,7 @@ namespace model.timing.corp
         public async Task Open()
         {
             Opened?.Invoke(this);
-            var paidWindow = timing.DefinePaidWindow(rezzing: true, scoring: true)
+            var paidWindow = timing.DefinePaidWindow(rezzing: true, scoring: true);
             await paidWindow.Open(); // CR: 5.6.2.a
             while (corp.clicks.Remaining > 0) // CR: 5.6.2.c
             {

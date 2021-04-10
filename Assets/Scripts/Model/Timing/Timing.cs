@@ -11,6 +11,7 @@ namespace model.timing
         private Game game;
         private Checkpoint checkpoint;
         public event Action<CorpTurn> CorpTurnDefined = delegate { };
+        public event Action<PaidWindow> PaidWindowDefined = delegate { };
         public event Action<ITurn> CurrentTurnQueued = delegate { };
         public event Action<ITurn> NextTurnPredicted = delegate { };
         public event Action<GameFinish> Finished = delegate { };
@@ -31,7 +32,7 @@ namespace model.timing
             {
                 while (!gameEnded)
                 {
-                    CorpTurn corpTurn = new CorpTurn(game.corp, this);
+                    var corpTurn = new CorpTurn(game.corp, this);
                     CorpTurnDefined(corpTurn);
                     corpTurn.DefinePhases();
                     turns.Enqueue(corpTurn);
@@ -69,12 +70,14 @@ namespace model.timing
 
         public PaidWindow DefinePaidWindow(bool rezzing, bool scoring)
         {
-           return new PaidWindow(
-                rezzing,
-                scoring,
-                acting: game.corp,
-                reacting: game.runner
-             );
+            var window = new PaidWindow(
+                 rezzing,
+                 scoring,
+                 acting: game.corp.pilot,
+                 reacting: game.runner.pilot
+              );
+            PaidWindowDefined(window);
+            return window;
         }
 
         async public Task OpenPaidWindow(PaidWindow acting, PaidWindow reacting)
