@@ -1,5 +1,6 @@
-﻿using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
+using model.play;
 using model.player;
 
 namespace model.timing
@@ -10,6 +11,7 @@ namespace model.timing
         private bool scoring;
         private IPilot acting;
         private IPilot reacting;
+        public event Action<Priority> PriorityGiven = delegate { };
 
         public PaidWindow(bool rezzing, bool scoring, IPilot acting, IPilot reacting, string name) : base(name)
         {
@@ -19,12 +21,17 @@ namespace model.timing
             this.reacting = reacting;
         }
 
+        internal void GiveOption(IPilot pilot, IPlayOption pop)
+        {
+            throw new System.NotImplementedException();
+        }
+
         async override public Task Open()
         {
-            pass = new TaskCompletionSource<bool>();
-            Opened(this);
-
-            var bothPlayersCouldAct = false;
+            Opened(this); // TODO inherited events don't work
+            priority.Add(new Rez(PadCampaign));
+            priority.Add(new Aal());
+            var bothPlayersCouldAct = false; // CR: 9.2.7.a
             while (true)
             {
                 var actingDeclined = await AwaitPass(acting);
@@ -39,23 +46,19 @@ namespace model.timing
                     break;
                 }
             }
-            if (abilities.Count > 0)
-            {
-                await new SimultaneousTriggers(abilities.Copy()).AllTriggered(game.corp.pilot);
-            }
-            await pass.Task;
             Closed(this);
         }
 
         async private Task<bool> AwaitPass(IPilot pilot)
         {
-            var options = abilities
-                .Where(it => it.Ability.Active)
-                .Where(it => it.Ability.controller == pilot);
-            CardAbility pass = new PassOption();
-            var option = await pilot.TriggerFromSimultaneous(options);
-            await option.Ability.Trigger();
-            return pass.Used;
+            var priority = new Priority(pilot, canPass: true); // CR: 9.2.4.b
+            PriorityGiven(priority);
+            var declined = false;
+            while (!priority.Passed) // CR: 9.2.4.c
+            {
+                await priority.Choose(); // CR: 9.2.7.f
+            }
+            return declined;
         }
     }
 }

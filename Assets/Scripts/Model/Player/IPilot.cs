@@ -18,5 +18,6 @@ namespace model.player
         IDecision<string, IInstallDestination> ChooseAnInstallDestination();
         IDecision<Card, ITrashOption> ChooseTrashing();
         IDecision<Card, IStealOption> ChooseStealing();
+        IPlayOption Choose(IList<IPlayOption> options);
     }
 }

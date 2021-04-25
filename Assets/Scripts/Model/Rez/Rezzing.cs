@@ -24,7 +24,7 @@ namespace model.rez
         }
 
         // CR: 8.1.2.a
-        public Ability Rez(Card card)
+        public IPlayOption Rez(Card card)
         {
             var rezCost = new Conjunction(
                 card.PlayCost,
