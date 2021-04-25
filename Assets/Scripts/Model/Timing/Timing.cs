@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using model.player;
 using model.timing.corp;
 using model.timing.runner;
 
@@ -16,8 +17,9 @@ namespace model.timing
         public event Action<ITurn> NextTurnPredicted = delegate { };
         public event Action<GameFinish> Finished = delegate { };
         private bool gameEnded = false;
-        private Queue<ITimingStructure> turns = new Queue<ITimingStructure>();
-        private IPilot priority;
+        private Queue<ITurn> turns = new Queue<ITurn>();
+        private IPilot active;
+        private IPilot inactive;
 
         public Timing(Game game)
         {
@@ -33,10 +35,11 @@ namespace model.timing
                 while (!gameEnded)
                 {
                     var corpTurn = new CorpTurn(game.corp, this);
+                    var runnerTurn = new RunnerTurn(game.runner, this);
                     CorpTurnDefined(corpTurn);
-                    corpTurn.DefinePhases();
+                    RunnerTurnDefined(runnerTurn);
                     turns.Enqueue(corpTurn);
-                    turns.Enqueue(new RunnerTurn(game.runner, this));
+                    turns.Enqueue(runnerTurn);
                     await StartNextTurn();
                     await StartNextTurn();
                 }
@@ -59,7 +62,21 @@ namespace model.timing
             var currentTurn = turns.Dequeue();
             CurrentTurnQueued(currentTurn);
             NextTurnPredicted(turns.Peek());
+            UpdateActivePlayer(currentTurn.Owner)ł;
             await currentTurn.Open();
+        }
+
+        private void UpdateActivePlayer(IPilot active)
+        {
+            this.active = active;
+            if (active == game.corp.pilot)
+            {
+                inactive = game.runner.pilot;
+            }
+            else
+            {
+                inactive = game.corp.pilot;
+            }
         }
 
         async public Task OpenActionWindow()
@@ -73,8 +90,8 @@ namespace model.timing
             var window = new PaidWindow(
                  rezzing,
                  scoring,
-                 acting: game.corp.pilot,
-                 reacting: game.runner.pilot
+                 acting: active,
+                 reacting: inactive
               );
             PaidWindowDefined(window);
             return window;

@@ -6,6 +6,7 @@ using model.cards.types;
 using model.choices.trash;
 using model.costs;
 using model.play;
+using model.player;
 using model.timing;
 using model.zones;
 
@@ -78,10 +79,10 @@ namespace model.cards.corp
 
             private IList<Card> Installables() => corp.zones.hq.Zone.Cards.Where(card => (card.Type.Installable && !(card.Type is Agenda))).ToList();
 
-            async Task IEffect.Resolve()
+            async Task IEffect.Resolve(IPilot pilot)
             {
                 var installable = await corp.pilot.ChooseACard().Declare("Which card to install?", Installables());
-                await corp.Installing.InstallingCard(installable).Resolve();
+                await corp.Installing.InstallingCard(installable).Resolve(pilot);
             }
 
             private void UpdateInstallables(Zone hqZone)

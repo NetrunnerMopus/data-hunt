@@ -5,7 +5,7 @@ using model.player;
 
 namespace model.play
 {
-    public class Ability
+    public class Ability : IPlayOption
     {
         public readonly ICost cost;
         public readonly IEffect effect;
@@ -14,7 +14,8 @@ namespace model.play
         public event Action<Ability, bool> UsabilityChanged = delegate { };
         public event Action<Ability> Resolved = delegate { };
         public bool Active { get; private set; }
-        public bool Usable => cost.Payable && effect.Impactful;
+        public bool Usable => cost.Payable && effect.Impactful; // CR: 1.2.5
+        public bool Legal => Active && Usable;
 
         public Ability(ICost cost, IEffect effect, ISource source)
         {
@@ -35,6 +36,11 @@ namespace model.play
         private void UpdateEffect(IEffect source, bool impactful)
         {
             UsabilityChanged(this, Usable);
+        }
+
+        async public Task Resolve()
+        {
+            await Trigger();
         }
 
         async public Task Trigger()

@@ -34,33 +34,25 @@ namespace model.cards.runner
                 this.hopper = hopper;
                 this.game = game;
                 var zones = game.runner.zones;
-                pop = new Ability(new Trash(hopper, zones.heap.zone), zones.Drawing(3)).BelongingTo(hopper);
+                pop = new Ability(new Trash(hopper, zones.heap.zone), zones.Drawing(3), hopper).BelongingTo(hopper);
             }
 
             async Task IEffect.Resolve()
             {
                 game.Timing.PaidWindowDefined += Register;
-                game.runner.zones.rig.zone.Removed += CheckIfUninstalled;
                 await Task.CompletedTask;
             }
 
             private void Register(PaidWindow paidWindow)
             {
-                paidWindow.Opened += Enable;
-                // TODO one or another
-                paidWindow.Add(pop);
+                paidWindow.PriorityGiven += Register;
             }
 
-            private void Enable(PaidWindow paidWindow)
+            private void Register(Priority priority)
             {
-                paidWindow.Add(pop);
-            }
-
-            private void CheckIfUninstalled(Zone zone, Card card)
-            {
-                if (card == this.hopper)
+                if (priority.Pilot == game.runner.pilot)
                 {
-                    game.runner.paidWindow.Remove(pop);
+                    priority.Add(pop);
                 }
             }
         }
