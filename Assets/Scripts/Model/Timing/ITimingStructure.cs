@@ -2,11 +2,15 @@
 
 namespace model.timing
 {
-    public interface ITimingStructure<T> where T : ITimingStructure<T>
+    public interface ITimingStructure<T> where T : ITimingStructure
     {
-        Task Open();
         event AsyncAction<T> Opened;
         event AsyncAction<T> Closed;
+    }
+
+    public interface ITimingStructure
+    {
+        Task Open();
         string Name { get; }
     }
 }

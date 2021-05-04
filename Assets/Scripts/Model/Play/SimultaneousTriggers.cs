@@ -6,9 +6,9 @@ namespace model.play
 {
     public class SimultaneousTriggers
     {
-        public IList<CardAbility> untriggered;
+        public IList<Ability> untriggered;
 
-        public SimultaneousTriggers(IList<CardAbility> effects)
+        public SimultaneousTriggers(IList<Ability> effects)
         {
             untriggered = effects;
         }

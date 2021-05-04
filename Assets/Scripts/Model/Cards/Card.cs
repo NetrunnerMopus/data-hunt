@@ -1,114 +1,121 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.choices.trash;
 using model.play;
 using model.player;
 using model.steal;
+using model.timing;
 using model.zones;
 
-namespace model.cards
-{
-    public abstract class Card
-    {
-        public event NotifyActivity Toggled = delegate { };
+namespace model.cards {
+    public abstract class Card : ISource {
         public event NotifyMoved Moved = delegate { };
         public event NotifyInfo ChangedInfo = delegate { };
         public abstract string Name { get; }
         public abstract IType Type { get; }
         public Zone Zone { get; private set; }
         public abstract ICost PlayCost { get; }
-        public abstract IEffect Activation { get; }
         public abstract Faction Faction { get; }
         public abstract int InfluenceCost { get; }
         public abstract string FaceupArt { get; }
         public bool Faceup { get; private set; } = false;
         public Information Information { get; private set; } = Information.HIDDEN_FROM_ALL;
         public bool Active { get; private set; } = false;
+        public IList<ITimingStructure> Used { get; private set; } = new List<ITimingStructure>();
+        public IPilot Controller { get; private set; }
+        private bool Installed = false; // CR: 8.1.1
+        private bool Rezzed => Installed && Faceup && Type.Rezzable; // CR: 8.1.2
+        private bool Unrezzed => Installed && !Faceup && !Type.Playable && !Type.Runner; // CR: 8.1.2
         public virtual IList<IStealOption> StealOptions() => Type.DefaultStealing(this);
         public virtual IList<ITrashOption> TrashOptions() => new List<ITrashOption>();
         protected Game game;
 
-        public Card(Game game)
-        {
+        public Card(Game game) {
             this.game = game;
+            this.Controller = game.Pilot(Faction.Side);
             this.Zone = new Zone("Outside of the game", false);
             this.Zone.Add(this);
         }
 
-        async public Task Activate()
-        {
-            Active = true;
-            await Activation.Resolve(); // TODO either keep this or `public Activation`, because it's risking double resolution
-            Toggled(this, Active);
+        protected abstract Task Activate();
+
+        async protected virtual Task Deactivate() {
+            await Task.CompletedTask;
         }
 
-        public void Deactivate()
-        {
-            Active = false;
-            Activation.Disable();
-            Toggled(this, Active);
-        }
-
-        public void MoveTo(Zone target)
-        {
+        async public Task MoveTo(Zone target) {
             var source = Zone;
-            if (source == target)
-            {
+            if (source == target) {
                 throw new System.Exception("Tried to move " + Name + " from " + source.Name + " to " + target.Name);
             }
             source.Remove(this);
             target.Add(this);
             Zone = target;
+            await UpdateInstalled();
             Moved(this, source, target);
         }
 
-        public void Installed()
-        {
-            if (Type.Rezzable)
+        async private Task UpdateInstalled() {
+            await UpdateActivity();
+        }
+
+        async private Task UpdateActivity() {
+            if (Zone.InPlayArea && Faceup) // CR: 1.8.3.a
             {
+                if (!Active) {
+                    Active = true;
+                    await Activate();
+                }
+            } else {
+                if (Active) {
+                    Active = false;
+                    await Deactivate();
+                }
+            }
+        }
+
+        public void SetInstalled() {
+            Installed = true;
+            await UpdateInstalled();
+            if (Type.Rezzable) {
                 game.corp.Rezzing.Track(this);
             }
         }
 
-        internal void FlipPreInstall()
-        {
-            switch (Faction.Side)
-            {
-                case Side.CORP: FlipFaceDown(); break;
-                case Side.RUNNER: FlipFaceUp(); break;
+        internal void FlipPreInstall() {
+            if (Type.Corp) {
+                FlipFaceDown();
+            }
+            if (Type.Runner) {
+                FlipFaceUp();
             }
         }
 
-        public IList<IInstallDestination> FindInstallDestinations()
-        {
+        public IList<IInstallDestination> FindInstallDestinations() {
             return Type.FindInstallDestinations();
         }
 
-        public void FlipFaceUp()
-        {
+        public void FlipFaceUp() {
             Faceup = true;
             UpdateInfo(Information.OPEN);
         }
 
-        private void FlipFaceDown()
-        {
+        private void FlipFaceDown() {
             Faceup = false;
-            switch (Faction.Side)
-            {
-                case Side.CORP: UpdateInfo(Information.HIDDEN_FROM_RUNNER); break;
-                case Side.RUNNER: UpdateInfo(Information.HIDDEN_FROM_CORP); break;
+            if (Type.Corp) {
+                UpdateInfo(Information.HIDDEN_FROM_RUNNER);
+            }
+            if (Type.Runner) {
+                UpdateInfo(Information.HIDDEN_FROM_CORP);
             }
         }
 
-        public void UpdateInfo(Information information)
-        {
+        public void UpdateInfo(Information information) {
             Information = information;
             ChangedInfo(this, Information);
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return Name + " [" + GetHashCode() + "]";
         }
     }

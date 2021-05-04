@@ -28,5 +28,15 @@ namespace model
             await runner.Start(this, runnerDeck);
             await Timing.StartTurns();
         }
+
+        public IPilot Pilot(Side side)
+        {
+            switch (side)
+            {
+                case Side.CORP: return corp.pilot;
+                case Side.RUNNER: return runner.pilot;
+                default: throw new Exception("Unclear how to pilot an unknown side: " + side);
+            }
+        }
     }
 }

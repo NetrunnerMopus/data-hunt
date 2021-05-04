@@ -62,7 +62,7 @@ namespace model.timing
             var currentTurn = turns.Dequeue();
             CurrentTurnQueued(currentTurn);
             NextTurnPredicted(turns.Peek());
-            UpdateActivePlayer(currentTurn.Owner)ł;
+            UpdateActivePlayer(currentTurn.Owner);
             await currentTurn.Open();
         }
 
