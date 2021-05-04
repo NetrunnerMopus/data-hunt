@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using model.cards;
 using model.player;
 
 namespace model.play
@@ -45,12 +44,10 @@ namespace model.play
 
         async public Task Trigger()
         {
-            await cost.Pay(controller);
-            await effect.Resolve(controller);
+            await cost.Pay();
+            await effect.Resolve();
             Resolved(this);
         }
-
-        public CardAbility BelongingTo(Card card) => new CardAbility(this, card);
 
         public override string ToString() => cost + " : " + effect;
     }

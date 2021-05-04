@@ -9,7 +9,7 @@ namespace model
 {
     public interface IEffect
     {
-        Task Resolve(IPilot controller);
+        Task Resolve();
         void Disable();
         bool Impactful { get; }
         event Action<IEffect, bool> ChangedImpact;

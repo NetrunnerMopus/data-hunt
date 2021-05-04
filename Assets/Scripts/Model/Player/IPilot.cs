@@ -12,7 +12,7 @@ namespace model.player
     public interface IPilot
     {
         void Play(Game game);
-        Task<CardAbility> TriggerFromSimultaneous(IEnumerable<CardAbility> abilities);
+        Task<Ability> TriggerFromSimultaneous(IEnumerable<Ability> abilities);
         IDecision<string, Card> ChooseACard();
         // IDecision<Card> ChooseAZone(); TODO for central access
         IDecision<string, IInstallDestination> ChooseAnInstallDestination();
