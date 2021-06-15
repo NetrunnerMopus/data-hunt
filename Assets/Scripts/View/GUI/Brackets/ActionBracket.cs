@@ -7,14 +7,12 @@ namespace view.gui.brackets
     public class ActionBracket
     {
         private readonly ITurn turn;
-        private readonly int turnNumber;
         private readonly int actionNumber;
         private readonly Bracket bracket;
 
         public ActionBracket(ITurn turn, int actionNumber, Bracket bracket)
         {
             this.turn = turn;
-            this.turnNumber = turn.Number;
             this.actionNumber = actionNumber;
             this.bracket = bracket;
             turn.TakingAction += UpdateActivation;

@@ -20,6 +20,8 @@ namespace model.timing
         private Queue<ITurn> turns = new Queue<ITurn>();
         private IPilot active;
         private IPilot inactive;
+        private int corpTurns = 0;
+        private int runnerTurns = 0;
 
         public Timing(Game game)
         {
@@ -35,7 +37,7 @@ namespace model.timing
                 while (!gameEnded)
                 {
                     var corpTurn = new CorpTurn(game.corp, this);
-                    var runnerTurn = new RunnerTurn(game.runner, this);
+                    var runnerTurn = new RunnerTurn(game.runner, this, runnerTurns++);
                     CorpTurnDefined(corpTurn);
                     RunnerTurnDefined(runnerTurn);
                     turns.Enqueue(corpTurn);

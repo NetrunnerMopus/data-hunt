@@ -42,7 +42,7 @@ namespace tests
         {
             await passiveCorp.SkipTurn();
             var zones = game.runner.zones;
-            hopper.MoveTo(zones.grip.zone);
+            await hopper.MoveTo(zones.grip.zone);
             var gripObserver = new ZoneObserver(zones.grip.zone);
             var rigObserver = new ZoneObserver(zones.rig.zone);
             var heapObserver = new ZoneObserver(zones.heap.zone);
@@ -61,7 +61,7 @@ namespace tests
         async public void ShouldUsePaidAbilityOnRunnerTurn()
         {
             await passiveCorp.SkipTurn();
-            hopper.MoveTo(game.runner.zones.grip.zone);
+            await hopper.MoveTo(game.runner.zones.grip.zone);
 
             ffRunner.FastForwardToActionPhase();
             await RunnerAction();
@@ -80,7 +80,7 @@ namespace tests
             PassWindow();
             await CorpAction();
             PassWindow();
-            passiveCorp.DiscardRandomCards();
+            await passiveCorp.DiscardRandomCards();
             PassWindow();
             PassWindow();
             PassWindow();
@@ -97,7 +97,7 @@ namespace tests
         async public void ShouldUsePaidAbilityOnCorpTurn()
         {
             await passiveCorp.SkipTurn();
-            hopper.MoveTo(game.runner.zones.grip.zone);
+            await hopper.MoveTo(game.runner.zones.grip.zone);
 
             await RunnerAction();
             await RunnerAction();
@@ -115,7 +115,7 @@ namespace tests
             await popHopper.Ability.Trigger();
             PassWindow();
             await CorpAction();
-            passiveCorp.DiscardRandomCards();
+            await passiveCorp.DiscardRandomCards();
             await RunnerAction();
             await RunnerAction();
             await RunnerAction();

@@ -51,12 +51,11 @@ namespace model.cards {
             source.Remove(this);
             target.Add(this);
             Zone = target;
-            await UpdateInstalled();
-            Moved(this, source, target);
-        }
-
-        async private Task UpdateInstalled() {
+            if (!Zone.InPlayArea) {
+                Installed = false;
+            }
             await UpdateActivity();
+            Moved(this, source, target);
         }
 
         async private Task UpdateActivity() {
@@ -74,9 +73,9 @@ namespace model.cards {
             }
         }
 
-        public void SetInstalled() {
+        async public Task SetInstalled() {
             Installed = true;
-            await UpdateInstalled();
+            await UpdateActivity();
             if (Type.Rezzable) {
                 game.corp.Rezzing.Track(this);
             }

@@ -4,6 +4,7 @@ using model.cards.types;
 using model.choices.trash;
 using model.costs;
 using model.play;
+using model.timing;
 using model.timing.corp;
 
 namespace model.cards.corp {
@@ -33,16 +34,17 @@ namespace model.cards.corp {
         }
 
         private void RegisterDrip(CorpTurn turn) {
-            var phase = turn.drawPhase;
-            phases.Add(phase);
-            phase.TurnBegins.Add(drip);
+            turn.Began += Drip; // TODO actually this should register to a REACTION WINDOW
+        }
+
+        async private Task Drip(ITurn turn) {
+            if (Active) {
+                await drip.Resolve();
+            }
         }
 
         async override protected Task Deactivate() {
             game.Timing.CorpTurnDefined -= RegisterDrip;
-            foreach (var phase in phases) {
-                phase.TurnBegins.Remove(drip);
-            }
             await Task.CompletedTask;
         }
     }

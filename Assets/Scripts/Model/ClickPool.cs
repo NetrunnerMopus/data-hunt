@@ -78,13 +78,11 @@ namespace model
                 pool.Changed += (_) => ChangedPayability(this, Payable);
             }
 
-            async public Task Pay(IPilot controller)
+            async public Task Pay()
             {
                 pool.Spend(clicksToSpend);
                 await Task.CompletedTask;
             }
-
-            public void Disable() {}
         }
 
         public IEffect Losing(int clicksToLose) => new LoseClicks(this, clicksToLose);
@@ -104,13 +102,11 @@ namespace model
                 pool.Changed += (_) => ChangedImpact(this, Impactful);
             }
 
-            async Task IEffect.Resolve(IPilot controller)
+            async Task IEffect.Resolve()
             {
                 pool.Lose(clicksToLose);
                 await Task.CompletedTask;
             }
-
-            void IEffect.Disable() {}
         }
     }
 }

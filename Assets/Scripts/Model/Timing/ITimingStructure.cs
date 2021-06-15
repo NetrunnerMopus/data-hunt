@@ -1,16 +1,17 @@
 ﻿using System.Threading.Tasks;
 
-namespace model.timing
-{
-    public interface ITimingStructure<T> where T : ITimingStructure
-    {
-        event AsyncAction<T> Opened;
-        event AsyncAction<T> Closed;
-    }
-
-    public interface ITimingStructure
-    {
-        Task Open();
+namespace model.timing {
+    public abstract class ITimingStructure {
+        event AsyncAction<ITimingStructure> Initiated;
+        event AsyncAction<ITimingStructure> Completed;
         string Name { get; }
+
+        async Task Initiate() {
+            await Initiated?.Invoke(this);
+            await Proceed();
+            await Completed?.Invoke(this);
+        }
+
+        protected abstract Task Proceed();
     }
 }

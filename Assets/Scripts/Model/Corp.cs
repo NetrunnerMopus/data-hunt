@@ -38,14 +38,14 @@ namespace model
 
         async public Task Start(Game game, Deck deck)
         {
-            zones.rd.AddDeck(deck);
+            await zones.rd.AddDeck(deck);
             var identity = deck.identity;
             zones.identity.Add(identity);
             identity.FlipFaceUp();
             await identity.Activate();
             pilot.Play(game);
             credits.Gain(5);
-            zones.rd.Draw(5, zones.hq);
+            await zones.rd.Draw(5, zones.hq);
         }
     }
 }
