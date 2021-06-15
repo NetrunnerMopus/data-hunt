@@ -97,7 +97,7 @@ namespace model.install
         // CR: 8.3.5
         async private Task Place(IInstallDestination destination)
         {
-            destination.Host(card);
+            await destination.Host(card);
             card.SetInstalled();
             if (card.Faction.Side == Side.RUNNER)
             {
@@ -112,7 +112,5 @@ namespace model.install
         {
             await Task.FromResult("TODO: Implement TriggerPostInstall");
         }
-
-        void IEffect.Disable() { }
     }
 }

@@ -1,5 +1,4 @@
-﻿using model.play;
-using model.timing;
+﻿using model.timing;
 
 namespace tests.observers
 {

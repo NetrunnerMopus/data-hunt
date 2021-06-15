@@ -2,7 +2,7 @@
 
 namespace model.timing.corp
 {
-    public class CorpTurn : ITimingStructure<CorpTurn>
+    public class CorpTurn : ITurn
     {
         public CorpDrawPhase drawPhase { get; }
         public CorpActionPhase actionPhase { get; }

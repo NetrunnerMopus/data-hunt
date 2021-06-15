@@ -1,38 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.play;
+using model.player;
 
-namespace model.timing.runner
-{
-    public class RunnerTurn : ITurn
-    {
+namespace model.timing.runner {
+    public class RunnerTurn : ITurn {
         private Runner runner;
         private Timing timing;
-        ClickPool ITurn.Clicks => runner.clicks;
-        Side ITurn.Side => Side.RUNNER;
+        override public ClickPool Clicks => runner.clicks;
+        override public Side Side => Side.RUNNER;
+        override public IPilot Owner { get; }
+        public string Name { get; }
         private List<IEffect> turnBeginningTriggers = new List<IEffect>();
-        public int Number { get; private set; } = 0;
-        public event AsyncAction<ITurn> Opened;
-        public event AsyncAction<ITurn> Closed;
+        public event AsyncAction Begins;
         public event AsyncAction<ITurn> TakingAction;
         public event AsyncAction<ITurn, Ability> ActionTaken;
 
-        public RunnerTurn(Runner runner, Timing timing)
-        {
-            this.runner = runner;
+        public RunnerTurn(Runner runner, Timing timing, int turnNumber) {
+            Owner = runner.pilot;
+            Name = "Runner turn " + turnNumber;
         }
 
-        async Task ITimingStructure.Open()
-        {
-            Number++;
-            await Opened?.Invoke(this);
+        override async protected Task Proceed() {
             await ActionPhase();
             await DiscardPhase();
-            await Closed?.Invoke(this);
         }
 
-        async private Task ActionPhase()
-        {
+        async private Task ActionPhase() {
             runner.clicks.Replenish(); // CR: 5.7.1.a
             var rez = OpenRezWindow(); // CR: 5.7.1.b
             var paid = OpenPaidWindow(); // CR: 5.7.1.b
@@ -51,34 +45,28 @@ namespace model.timing.runner
             await timing.Checkpoint(); // CR: 5.7.1.g
         }
 
-        async private Task OpenPaidWindow()
-        {
+        async private Task OpenPaidWindow() {
             await timing.OpenPaidWindow(
                 acting: game.runner.paidWindow,
                 reacting: game.corp.paidWindow
             );
         }
 
-        async private Task OpenRezWindow()
-        {
+        async private Task OpenRezWindow() {
             await game.corp.Rezzing.Window.Open();
         }
 
-        private void RefillRecurringCredits()
-        {
+        private void RefillRecurringCredits() {
 
         }
 
-        async private Task TriggerTurnBeginning()
-        {
-            if (turnBeginningTriggers.Count > 0)
-            {
+        async private Task TriggerTurnBeginning() {
+            if (turnBeginningTriggers.Count > 0) {
                 await new SimultaneousTriggers(turnBeginningTriggers.Copy()).AllTriggered(game.runner.pilot);
             }
         }
 
-        async private Task TakeAction()
-        {
+        async private Task TakeAction() {
             var actionTaking = game.runner.Acting.TakeAction();
             TakingAction?.Invoke(this);
             var action = await actionTaking;
@@ -89,8 +77,7 @@ namespace model.timing.runner
             await paid;
         }
 
-        async private Task DiscardPhase()
-        {
+        async private Task DiscardPhase() {
             await Discard(); // CR: 5.7.2.a
             var rez = OpenRezWindow(); // CR: 5.7.2.b
             var paid = OpenPaidWindow(); // CR: 5.7.2.b
@@ -101,22 +88,14 @@ namespace model.timing.runner
             await game.Checkpoint(); // CR: 5.7.2.e
         }
 
-        async private Task Discard()
-        {
+        async private Task Discard() {
             var grip = game.runner.zones.grip;
-            while (grip.zone.Count > 5)
-            {
+            while (grip.zone.Count > 5) {
                 await grip.Discard();
             }
         }
 
-        private void TriggerTurnEnding()
-        {
-        }
-
-        public void WhenBegins(IEffect effect)
-        {
-            turnBeginningTriggers.Add(effect);
+        private void TriggerTurnEnding() {
         }
     }
 }

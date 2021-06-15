@@ -1,20 +1,22 @@
-﻿using System;
-using System.Threading.Tasks;
-using model.play;
+﻿using System.Threading.Tasks;
 
-namespace model.timing
-{
-    public abstract class PriorityWindow : ITimingStructure<PriorityWindow>
-    {
-        public event AsyncAction<PriorityWindow> Opened;
-        public event AsyncAction<PriorityWindow> Closed;
+namespace model.timing {
+
+    public abstract class PriorityWindow {
+        public event AsyncAction Opened;
+        public event AsyncAction Closed;
         public string Name { get; }
 
-        public PriorityWindow(string name)
-        {
+        public PriorityWindow(string name) {
             Name = name;
         }
-        
-        public abstract Task Open();
+
+        async public Task Open() {
+            await Opened?.Invoke();
+            await Proceed();
+            await Closed?.Invoke();
+        }
+
+        protected abstract Task Proceed();
     }
 }

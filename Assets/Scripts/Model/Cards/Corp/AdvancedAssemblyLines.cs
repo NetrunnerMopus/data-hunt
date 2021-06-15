@@ -29,18 +29,19 @@ namespace model.cards.corp {
             game.Timing.PaidWindowDefined += DefineTrashAbility;
         }
 
+        async protected override Task Deactivate() {
+            game.Timing.PaidWindowDefined -= DefineTrashAbility;
+        }
+
         private void DefineTrashAbility(PaidWindow paidWindow) {
             var archives = game.corp.zones.archives.Zone;
             var aalInstall = new AdvancedAssemblyLinesInstall(game.corp);
             var pop = new Ability(
                 cost: new Conjunction(paidWindow.Permission(), new Trash(aal, archives), new Active(aal)),
-                effect: aalInstall
+                effect: aalInstall,
+                aal
             ).BelongingTo(aal);
             paidWindow.Add(pop);
-            aal.Moved += (card, source, target) => {
-                paidWindow.Remove(pop);
-                aalInstall.Dispose();
-            };
         }
 
         private class AdvancedAssemblyLinesInstall : IEffect, IDisposable {
