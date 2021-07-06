@@ -1,47 +1,37 @@
 ﻿using System.Threading.Tasks;
+using model.player;
 
-namespace model.timing.corp
-{
-    public class CorpTurn : ITurn
-    {
+namespace model.timing.corp {
+    public class CorpTurn : ITurn {
         public CorpDrawPhase drawPhase { get; }
         public CorpActionPhase actionPhase { get; }
         public CorpDiscardPhase discardPhase { get; }
         private Corp corp;
         private Timing timing;
-        public ClickPool Clicks => corp.clicks;
-        public Side Side => Side.CORP;
-        public string Name { get; }
-        public event AsyncAction<CorpTurn> Opened;
-        public event AsyncAction<CorpTurn> Closed;
+        override public ClickPool Clicks => corp.clicks;
+        override public Side Side => Side.CORP;
+        override public IPilot Owner => corp.pilot;
 
-        public CorpTurn(Corp corp, Timing timing, int number)
-        {
+        public CorpTurn(Corp corp, Timing timing, int number) : base("Corp turn " + number) {
             this.corp = corp;
             this.timing = timing;
-            Name = "Corp turn " + number;
-            drawPhase = new CorpDrawPhase(corp, timing);
+            drawPhase = new CorpDrawPhase(corp, timing, Begins);
             actionPhase = new CorpActionPhase(corp, timing);
             discardPhase = new CorpDiscardPhase();
         }
 
-        public CorpTurn(Corp corp, Timing timing)
-        {
+        public CorpTurn(Corp corp, Timing timing) {
             this.corp = corp;
             this.timing = timing;
         }
 
-        public async Task Open()
-        {
-            await Opened?.Invoke(this);
+        async protected override Task Proceed() {
             await drawPhase.Open();
             await actionPhase.Open();
             await discardPhase.Open();
-            await Closed?.Invoke(this);
         }
 
-        async private Task DiscardPhase()
-        {
+        async private Task DiscardPhase() {
             await Discard(); // CR: 5.6.3.a
             var rez = OpenRezWindow();  // CR: 5.6.3.b
             var paid = OpenPaidWindow();  // CR: 5.6.3.b
@@ -52,17 +42,14 @@ namespace model.timing.corp
             await timing.Checkpoint(); // CR: 5.6.3.e
         }
 
-        async private Task Discard()
-        {
+        async private Task Discard() {
             var hq = corp.zones.hq;
-            while (hq.Zone.Count > 5)
-            {
+            while (hq.Zone.Count > 5) {
                 await hq.Discard();
             }
         }
 
-        private void TriggerTurnEnding()
-        {
+        private void TriggerTurnEnding() {
         }
     }
 }

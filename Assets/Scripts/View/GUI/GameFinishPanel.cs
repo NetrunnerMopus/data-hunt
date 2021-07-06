@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using model.timing;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace view.gui

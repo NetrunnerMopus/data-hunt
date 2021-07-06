@@ -4,7 +4,6 @@ using model.cards.types;
 using model.choices.trash;
 using model.costs;
 using model.play;
-using model.timing;
 using model.timing.corp;
 
 namespace model.cards.corp {
@@ -25,27 +24,26 @@ namespace model.cards.corp {
         private IList<CorpDrawPhase> phases = new List<CorpDrawPhase>();
 
         public PadCampaign(Game game) : base(game) {
-            drip = new Ability(new Free(), game.corp.credits.Gaining(1), this);
+            drip = new Ability(
+                cost: new Free(),
+                effect: game.corp.credits.Gaining(1),
+                source: this,
+                mandatory: true
+            );
         }
 
-        async protected override Task Activate() {
-            game.Timing.CorpTurnDefined += RegisterDrip;
-            await Task.CompletedTask;
+        protected override Task Activate() {
+            game.Timing.CorpTurnDefined += DeferDrip;
+            return Task.CompletedTask;
         }
 
-        private void RegisterDrip(CorpTurn turn) {
-            turn.Began += Drip; // TODO actually this should register to a REACTION WINDOW
+        override protected Task Deactivate() {
+            game.Timing.CorpTurnDefined -= DeferDrip;
+            return Task.CompletedTask;
         }
 
-        async private Task Drip(ITurn turn) {
-            if (Active) {
-                await drip.Resolve();
-            }
-        }
-
-        async override protected Task Deactivate() {
-            game.Timing.CorpTurnDefined -= RegisterDrip;
-            await Task.CompletedTask;
+        private void DeferDrip(CorpTurn turn) {
+            turn.Begins.Offer(game.corp.pilot, drip);
         }
     }
 }

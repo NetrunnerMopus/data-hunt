@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using model.play;
 using model.player;
 
@@ -9,7 +8,6 @@ namespace model.timing {
         private bool scoring;
         private IPilot acting;
         private IPilot reacting;
-        public event Action<Priority> PriorityGiven = delegate { };
 
         public PaidWindow(bool rezzing, bool scoring, IPilot acting, IPilot reacting, string name) : base(name) {
             this.rezzing = rezzing;
@@ -38,11 +36,11 @@ namespace model.timing {
         }
 
         async private Task<Priority> AwaitPass(IPilot pilot) {
-            var priority = new Priority(pilot, canPass: true); // CR: 9.2.4.b
+            var priority = new Priority(canPass: true); // CR: 9.2.4.b
             PriorityGiven(priority);
             while (!priority.Passed) // CR: 9.2.4.c
             {
-                await priority.Choose(); // CR: 9.2.7.f
+                await pilot.Receive(priority); // CR: 9.2.7.f
             }
             return priority;
         }

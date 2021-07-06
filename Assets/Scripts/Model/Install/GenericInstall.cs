@@ -98,12 +98,12 @@ namespace model.install
         async private Task Place(IInstallDestination destination)
         {
             await destination.Host(card);
-            card.SetInstalled();
+            await card.SetInstalled();
             if (card.Faction.Side == Side.RUNNER)
             {
                 // CR: 8.2.3
                 card.FlipFaceUp();
-                await card.Activate();
+                await card.BecomeActive();
             }
         }
 
