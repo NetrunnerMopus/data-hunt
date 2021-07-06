@@ -6,13 +6,12 @@ using model.cards.types;
 using model.choices.trash;
 using model.costs;
 using model.play;
-using model.player;
 using model.timing;
 using model.zones;
 
 namespace model.cards.corp {
     public class AdvancedAssemblyLines : Card {
-        public AdvancedAssemblyLines(Game game) : base(game) { }
+        private Ability pop;
         override public string FaceupArt => "advanced-assembly-lines";
         override public string Name => "Advanced Assembly Lines";
         override public Faction Faction => Factions.HAAS_BIOROID;
@@ -24,27 +23,30 @@ namespace model.cards.corp {
             new PayToTrash(1, this, game)
         };
 
+        public AdvancedAssemblyLines(Game game) : base(game) {
+            pop = new Ability(
+                cost: new Trash(this, game.corp.zones.archives.Zone),
+                effect: new AdvancedAssemblyLinesInstall(game.corp),
+                source: this,
+                mandatory: false
+            );
+        }
+
         async protected override Task Activate() {
             await game.corp.credits.Gaining(3).Resolve();
-            game.Timing.PaidWindowDefined += DefineTrashAbility;
+            game.Timing.PaidWindowDefined += DeferPop;
         }
 
-        async protected override Task Deactivate() {
-            game.Timing.PaidWindowDefined -= DefineTrashAbility;
+        protected override Task Deactivate() {
+            game.Timing.PaidWindowDefined -= DeferPop;
+            return Task.CompletedTask;
         }
 
-        private void DefineTrashAbility(PaidWindow paidWindow) {
-            var archives = game.corp.zones.archives.Zone;
-            var aalInstall = new AdvancedAssemblyLinesInstall(game.corp);
-            var pop = new Ability(
-                cost: new Conjunction(paidWindow.Permission(), new Trash(aal, archives), new Active(aal)),
-                effect: aalInstall,
-                aal
-            ).BelongingTo(aal);
-            paidWindow.Add(pop);
+        private void DeferPop(PaidWindow paidWindow) {
+            paidWindow.GiveOption(game.corp.pilot, pop);
         }
 
-        private class AdvancedAssemblyLinesInstall : IEffect, IDisposable {
+        private class AdvancedAssemblyLinesInstall : IEffect {
             public bool Impactful => Installables().Count > 0;
             public event Action<IEffect, bool> ChangedImpact = delegate { };
             IEnumerable<string> IEffect.Graphics => new string[] { };
@@ -55,19 +57,17 @@ namespace model.cards.corp {
                 corp.zones.hq.Zone.Changed += UpdateInstallables;
             }
 
-            private IList<Card> Installables() => corp.zones.hq.Zone.Cards.Where(card => (card.Type.Installable && !(card.Type is Agenda))).ToList();
-
-            async Task IEffect.Resolve(IPilot pilot) {
-                var installable = await corp.pilot.ChooseACard().Declare("Which card to install?", Installables());
-                await corp.Installing.InstallingCard(installable).Resolve(pilot);
-            }
-
             private void UpdateInstallables(Zone hqZone) {
                 ChangedImpact(this, Impactful);
             }
 
-            public void Dispose() {
-                corp.zones.hq.Zone.Changed -= UpdateInstallables;
+            private IList<Card> Installables() => corp.zones.hq.Zone.Cards
+                .Where(card => (card.Type.Installable && !(card.Type is Agenda)))
+                .ToList();
+
+            async Task IEffect.Resolve() {
+                var installable = await corp.pilot.ChooseACard().Declare("Which card to install?", Installables());
+                await corp.Installing.InstallingCard(installable).Resolve();
             }
         }
     }

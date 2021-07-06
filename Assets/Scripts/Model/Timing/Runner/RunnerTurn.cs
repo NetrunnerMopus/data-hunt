@@ -9,16 +9,13 @@ namespace model.timing.runner {
         private Timing timing;
         override public ClickPool Clicks => runner.clicks;
         override public Side Side => Side.RUNNER;
-        override public IPilot Owner { get; }
-        public string Name { get; }
+        override public IPilot Owner => runner.pilot;
         private List<IEffect> turnBeginningTriggers = new List<IEffect>();
-        public event AsyncAction Begins;
         public event AsyncAction<ITurn> TakingAction;
         public event AsyncAction<ITurn, Ability> ActionTaken;
 
-        public RunnerTurn(Runner runner, Timing timing, int turnNumber) {
-            Owner = runner.pilot;
-            Name = "Runner turn " + turnNumber;
+        public RunnerTurn(Runner runner, Timing timing, int turnNumber): base("Runner turn " + turnNumber) {
+
         }
 
         override async protected Task Proceed() {
@@ -33,7 +30,7 @@ namespace model.timing.runner {
             await rez;
             await paid;
             RefillRecurringCredits(); // CR: 5.7.1.c
-            await TriggerTurnBeginning(); // CR: 5.7.1.d
+            await Begins.Open(); // CR: 5.7.1.d
             var rez2 = OpenRezWindow(); // CR: 5.7.1.e
             var paid2 = OpenPaidWindow(); // CR: 5.7.1.e
             await rez2;
@@ -58,12 +55,6 @@ namespace model.timing.runner {
 
         private void RefillRecurringCredits() {
 
-        }
-
-        async private Task TriggerTurnBeginning() {
-            if (turnBeginningTriggers.Count > 0) {
-                await new SimultaneousTriggers(turnBeginningTriggers.Copy()).AllTriggered(game.runner.pilot);
-            }
         }
 
         async private Task TakeAction() {

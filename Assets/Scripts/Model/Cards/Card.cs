@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using model.choices.trash;
 using model.play;
@@ -11,6 +12,7 @@ namespace model.cards {
     public abstract class Card : ISource {
         public event NotifyMoved Moved = delegate { };
         public event NotifyInfo ChangedInfo = delegate { };
+        public event Action<ISource> ChangedActivation = delegate { };
         public abstract string Name { get; }
         public abstract IType Type { get; }
         public Zone Zone { get; private set; }
@@ -37,10 +39,22 @@ namespace model.cards {
             this.Zone.Add(this);
         }
 
+        async public Task BecomeActive() {
+            await Activate();
+            Active = true;
+            ChangedActivation(this);
+        }
+
         protected abstract Task Activate();
 
-        async protected virtual Task Deactivate() {
-            await Task.CompletedTask;
+        async protected virtual Task BecomeInactive() {
+            await Deactivate();
+            Active = false;
+            ChangedActivation(this);
+        }
+
+        protected virtual Task Deactivate() {
+            return Task.CompletedTask;
         }
 
         async public Task MoveTo(Zone target) {

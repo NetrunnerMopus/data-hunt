@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace model.timing {
 
     public abstract class PriorityWindow {
         public event AsyncAction Opened;
         public event AsyncAction Closed;
+        public event Action<Priority> PriorityGiven = delegate { };
         public string Name { get; }
 
         public PriorityWindow(string name) {
@@ -18,5 +20,7 @@ namespace model.timing {
         }
 
         protected abstract Task Proceed();
+
+        protected 
     }
 }
