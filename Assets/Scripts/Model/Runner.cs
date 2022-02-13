@@ -9,7 +9,7 @@ using model.zones.runner;
 
 namespace model
 {
-    public class Runner
+    public class Runner : IPlayer
     {
         public readonly IPilot pilot;
         public int tags = 0;

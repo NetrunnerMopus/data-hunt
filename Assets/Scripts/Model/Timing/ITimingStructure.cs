@@ -5,8 +5,6 @@ namespace model.timing {
         event AsyncAction<ITimingStructure> Initiated;
         event AsyncAction<ITimingStructure> Completed;
         public string Name { get; }
-        public readonly ReactionWindow Begins;
-        public readonly ReactionWindow Ends;
 
         protected ITimingStructure(string name) {
             this.Name = name;

@@ -10,7 +10,7 @@ using model.zones.corp;
 
 namespace model
 {
-    public class Corp
+    public class Corp : IPlayer
     {
         public readonly IPilot pilot;
         public readonly zones.corp.Zones zones;

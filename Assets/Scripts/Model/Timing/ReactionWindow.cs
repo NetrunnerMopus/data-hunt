@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using model.abilities;
 using model.play;
 using model.player;
 
@@ -10,11 +11,12 @@ namespace model.timing {
     public class ReactionWindow : PriorityWindow {
         private IPilot acting;
         private IPilot reacting;
+        private IList<ConditionalAbility.Instance> pending;
         private Dictionary<IPilot, Ability> mandatory = new Dictionary<IPilot, Ability>();
         private Dictionary<IPilot, Ability> optional = new Dictionary<IPilot, Ability>();
 
-        public ReactionWindow(string name) : base(name) {
-
+        public ReactionWindow(IList<ConditionalAbility.Instance> pending) : base("Reaction window") {
+            this.pending = pending;
         }
 
         internal void Offer(IPilot pilot, Ability ability) {
