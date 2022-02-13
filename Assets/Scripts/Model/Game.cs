@@ -1,4 +1,5 @@
 using System;
+using model.abilities;
 using model.player;
 using model.timing;
 using model.zones;
@@ -10,6 +11,7 @@ namespace model
         public readonly Corp corp;
         public readonly Runner runner;
         public readonly Timing Timing;
+        public readonly Abilities Abilities;
         private readonly Zone playArea;
         private Shuffling shuffling;
 
@@ -20,6 +22,7 @@ namespace model
             corp = new Corp(corpPilot, playArea, shuffling, new Random());
             runner = new Runner(runnerPilot, playArea, shuffling, this);
             this.Timing = new Timing(this);
+            this.Abilities = new Abilities();
         }
 
         async public void Start(Deck corpDeck, Deck runnerDeck)

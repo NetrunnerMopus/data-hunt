@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using model.abilities;
+using model.cards.text;
 using model.choices.trash;
 using model.play;
 using model.player;
@@ -31,12 +33,19 @@ namespace model.cards {
         public virtual IList<IStealOption> StealOptions() => Type.DefaultStealing(this);
         public virtual IList<ITrashOption> TrashOptions() => new List<ITrashOption>();
         protected Game game;
+        protected readonly YourText your;
+        protected readonly YouText you;
+        protected readonly SelfText self;
 
         public Card(Game game) {
             this.game = game;
             this.Controller = game.Pilot(Faction.Side);
             this.Zone = new Zone("Outside of the game", false);
             this.Zone.Add(this);
+        }
+
+        protected ThenText when(TriggerCondition condition) {
+            return new ThenText();
         }
 
         async public Task BecomeActive() {

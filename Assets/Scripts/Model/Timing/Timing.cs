@@ -8,7 +8,8 @@ using model.timing.runner;
 namespace model.timing {
     public class Timing {
         private Game game;
-        private Checkpoint checkpoint;
+        private Checkpoint nextCheckpoint;
+        private bool checking = false;
         public event Action<CorpTurn> CorpTurnDefined = delegate { };
         public event Action<RunnerTurn> RunnerTurnDefined = delegate { };
         public event Action<PaidWindow> PaidWindowDefined = delegate { };
@@ -24,6 +25,7 @@ namespace model.timing {
 
         public Timing(Game game) {
             this.game = game;
+            this.nextCheckpoint = new Checkpoint(game);
             game.corp.zones.rd.Decked += DeckCorp;
             game.runner.zones.score.StolenEnough += StealEnough;
         }
@@ -121,7 +123,13 @@ namespace model.timing {
         }
 
         async public Task Checkpoint() {
-            await checkpoint.Check();
+            if (checking) {
+                throw new Exception("Checkpoints cannot be nested");
+            }
+            checking = true;
+            await nextCheckpoint.Check();
+            checking = false;
+            nextCheckpoint = new Checkpoint(game);
         }
     }
 
