@@ -4,18 +4,14 @@ using model.play;
 using model.player;
 using model.run;
 using model.steal;
-using model.timing;
-using model.timing.runner;
 using model.zones;
 using model.zones.runner;
 
 namespace model
 {
-    public class Runner
+    public class Runner : IPlayer
     {
         public readonly IPilot pilot;
-        public readonly RunnerTurn turn;
-        public readonly PaidWindow paidWindow;
         public int tags = 0;
         public readonly Zones zones;
         public readonly ClickPool clicks;
@@ -27,16 +23,12 @@ namespace model
 
         public Runner(
             IPilot pilot,
-            RunnerTurn turn,
-            PaidWindow paidWindow,
             Zone playArea,
             Shuffling shuffling,
             Game game
         )
         {
             this.pilot = pilot;
-            this.turn = turn;
-            this.paidWindow = paidWindow;
             zones = new Zones(
                new Grip(),
                new Stack(shuffling),
@@ -55,14 +47,14 @@ namespace model
 
         async public Task Start(Game game, Deck deck)
         {
-            zones.stack.AddDeck(deck);
+            await zones.stack.AddDeck(deck);
             var identity = deck.identity;
             zones.identity.Add(identity);
             identity.FlipFaceUp();
             await identity.Activate();
             pilot.Play(game);
             credits.Gain(5);
-            zones.stack.Draw(5, zones.grip);
+            await zones.stack.Draw(5, zones.grip);
         }
     }
 }

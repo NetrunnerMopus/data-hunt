@@ -6,6 +6,8 @@ namespace model.cards.types
 {
     public class Event : IType
     {
+        bool IType.Corp => false;
+        bool IType.Runner => true;
         bool IType.Playable => true;
         bool IType.Installable => false;
         bool IType.Rezzable => false;
