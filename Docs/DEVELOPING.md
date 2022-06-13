@@ -22,7 +22,7 @@ A pull request is a great place to discuss the change, exchange technical detail
 ### Unity
 
 The project is built upon [Unity](https://unity.com/). The [personal version](https://store.unity.com/download?ref=personal) is perfectly fine.
-When you get your Unity Hub downloaded and running, download the [2019.4.17f1](unityhub://2019.4.17f1/667c8606c536).
+When you get your Unity Hub downloaded and running, download the [2021.3.4f1](unityhub://2021.3.4f1).
 The default's should suffice, no need for additional support packages.
 To open the project, just hit the big `Add` button, select the folder you cloned and click onto the project.
 
@@ -54,6 +54,9 @@ Use any editor you want, e.g.: Visual Studio, Visual Studio Code, Monodevelop.
 * Run tests to quickly check if things are working.
 
 The architecture is still in much flux, as new game mechanics are added. If you have any coding questions or suggestions, please [raise an issue](ISSUES.md).
+
+#### Visual Studio Code
+[VS Code has prerequisites for Unity](https://code.visualstudio.com/docs/other/unity#_prerequisites), especially `"omnisharp.useModernNet": false`.
 
 ### Assets
 
