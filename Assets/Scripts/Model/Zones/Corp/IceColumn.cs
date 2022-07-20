@@ -14,7 +14,7 @@ namespace model.zones.corp
             this.credits = credits;
         }
 
-        void IInstallDestination.Host(Card card)
+        Task IInstallDestination.Host(Card card)
         {
             throw new System.NotImplementedException();
         }

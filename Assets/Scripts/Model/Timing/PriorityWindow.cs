@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace model.timing {
@@ -20,7 +20,8 @@ namespace model.timing {
         }
 
         protected abstract Task Proceed();
-
-        protected 
+        protected void OnPriorityGiven(Priority priority) {
+            PriorityGiven(priority);
+        }
     }
 }

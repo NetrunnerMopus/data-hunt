@@ -12,8 +12,8 @@ namespace model.timing {
         private IPilot acting;
         private IPilot reacting;
         private IList<ConditionalAbility.Instance> pending;
-        private Dictionary<IPilot, Ability> mandatory = new Dictionary<IPilot, Ability>();
-        private Dictionary<IPilot, Ability> optional = new Dictionary<IPilot, Ability>();
+        private Dictionary<IPilot, Ability> mandatory = new();
+        private Dictionary<IPilot, Ability> optional = new();
 
         public ReactionWindow(IList<ConditionalAbility.Instance> pending) : base("Reaction window") {
             this.pending = pending;

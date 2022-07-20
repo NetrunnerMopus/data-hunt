@@ -19,6 +19,7 @@ namespace model.cards {
         public abstract IType Type { get; }
         public Zone Zone { get; private set; }
         public abstract ICost PlayCost { get; }
+        public virtual IEffect Activation { get; }
         public abstract Faction Faction { get; }
         public abstract int InfluenceCost { get; }
         public abstract string FaceupArt { get; }
@@ -54,7 +55,10 @@ namespace model.cards {
             ChangedActivation(this);
         }
 
-        protected abstract Task Activate();
+        protected async Task Activate() {
+            // TODO remove, replace by text/syntax parsing in constructors
+            await Task.CompletedTask;
+        }
 
         async protected virtual Task BecomeInactive() {
             await Deactivate();

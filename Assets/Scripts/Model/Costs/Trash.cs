@@ -31,7 +31,6 @@ namespace model.costs
 
         async public Task TrashIt()
         {
-            await card.Deactivate();
             await card.MoveTo(bin);
         }
     }

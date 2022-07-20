@@ -27,7 +27,7 @@ namespace model.rez {
                 new Installed(card),
                 Window.Permission()
             );
-            return new Ability(rezCost, new RezUnconditionally(card));
+            return new Ability(rezCost, new RezUnconditionally(card), new GameRule(), false);
         }
 
         private class FaceDown : ICost {

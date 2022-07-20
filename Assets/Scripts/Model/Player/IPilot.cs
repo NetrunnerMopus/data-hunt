@@ -3,6 +3,7 @@ using model.choices;
 using model.choices.trash;
 using model.play;
 using model.steal;
+using model.timing;
 using model.zones;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,5 +20,6 @@ namespace model.player
         IDecision<Card, ITrashOption> ChooseTrashing();
         IDecision<Card, IStealOption> ChooseStealing();
         IPlayOption Choose(IList<IPlayOption> options);
+        Task Receive(Priority priority);
     }
 }

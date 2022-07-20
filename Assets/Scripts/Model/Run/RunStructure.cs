@@ -1,100 +1,73 @@
-﻿using model.timing;
+﻿using System.Threading.Tasks;
+using model.timing;
 using model.zones.corp;
-using System.Threading.Tasks;
 
-namespace model.run
-{
-    public class RunStructure
-    {
+namespace model.run {
+    public class RunStructure {
         private IServer server;
         private readonly Game game;
         private int position;
 
-        public RunStructure(IServer server, Game game)
-        {
+        public RunStructure(IServer server, Game game) {
             this.server = server;
             this.game = game;
         }
 
-        async public Task AwaitEnd()
-        {
+        async public Task AwaitEnd() {
             var ice = server.Ice;
             position = ice.Height;
             // TODO
-            if (position == 0)
-            {
+            if (position == 0) {
                 await ApproachServer(); // 6.9.5
-            }
-            else
-            {
+            } else {
                 // TODO
             }
             await End(); // 6.9.6
         }
 
-        async private Task ApproachServer()
-        {
+        async private Task ApproachServer() {
             await TriggerServerApproached(); // 6.9.5.a
-            await OpenPreCommitmentWindows(); // 6.9.5.b
+            await game.Timing.DefinePaidWindow(rezzing: false, scoring: false).Open(); // 6.9.5.b
             var jackedOut = await OfferJackOut(); // 6.9.5.c
-            if (jackedOut)
-            {
+            if (jackedOut) {
                 return;
             }
-            await OpenPostCommitmentWindows(); // 6.9.5.d
+            await game.Timing.DefinePaidWindow(rezzing: true, scoring: false).Open(); // 6.9.5.d
             await MakeRunSuccessful(); // 6.9.5.e
-            await game.Checkpoint(); // 6.9.5.f
+            await game.Timing.Checkpoint(); // 6.9.5.f
             await Access(); // 6.9.5.g
-            await game.Checkpoint(); // 6.9.5.h
+            await game.Timing.Checkpoint(); // 6.9.5.h
         }
 
-        async private Task TriggerServerApproached()
-        {
+        async private Task TriggerServerApproached() {
             await Task.CompletedTask; // TODO
         }
 
-        async private Task OpenPreCommitmentWindows()
-        {
-            await game.OpenPaidWindow(game.runner.paidWindow, game.corp.paidWindow);  // TODO An Offer You Can't Refuse
-        }
 
-        async private Task<bool> OfferJackOut()
-        {
+
+        async private Task<bool> OfferJackOut() {
             return await Task.FromResult(false); // TODO
         }
 
-        async private Task OpenPostCommitmentWindows()
-        {
-            var rez = game.corp.Rezzing.Window.Open();
-            var paid = game.OpenPaidWindow(game.runner.paidWindow, game.corp.paidWindow);  // TODO An Offer You Can't Refuse
-            await paid;
-            await rez;
-        }
-
-        async private Task MakeRunSuccessful()
-        {
+        async private Task MakeRunSuccessful() {
             await Task.CompletedTask; // TODO
         }
 
-        async private Task Access()
-        {
+        async private Task Access() {
             await new AccessStructure(server, game).AwaitEnd();
         }
 
-        async private Task End()
-        {
+        async private Task End() {
             await LoseBadPublicity(); // 6.9.6.a
             // TODO 6.9.6.b
             await game.Checkpoint(); // 6.9.6.c
         }
 
-        async private Task LoseBadPublicity()
-        {
+        async private Task LoseBadPublicity() {
             await Task.CompletedTask; // TODO
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return "Run(server=" + server + ")";
         }
     }

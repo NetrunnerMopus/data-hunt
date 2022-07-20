@@ -16,9 +16,9 @@ namespace model.play
         public RunnerActing(Runner runner)
         {
             this.runner = runner;
-            draw = new Ability(new Conjunction(runner.clicks.Spending(1), permission), runner.zones.Drawing(1));
+            draw = new Ability(new Conjunction(runner.clicks.Spending(1), permission), runner.zones.Drawing(1), new GameRule(), true);
             draw.Resolved += CompleteAction;
-            credit = new Ability(new Conjunction(runner.clicks.Spending(1), permission), runner.credits.Gaining(1));
+            credit = new Ability(new Conjunction(runner.clicks.Spending(1), permission), runner.credits.Gaining(1), new GameRule(), true);
             credit.Resolved += CompleteAction;
         }
 
@@ -26,21 +26,21 @@ namespace model.play
 
         public Ability Play(Card card)
         {
-            Ability play = new Ability(new Conjunction(runner.clicks.Spending(1), card.PlayCost, permission), runner.zones.Playing(card));
+            Ability play = new Ability(new Conjunction(runner.clicks.Spending(1), card.PlayCost, permission), runner.zones.Playing(card), new GameRule(), true);
             play.Resolved += CompleteAction;
             return play;
         }
 
         public Ability Install(Card card)
         {
-            Ability install = new Ability(new Conjunction(runner.clicks.Spending(1), permission), runner.Installing.InstallingCard(card));
+            Ability install = new Ability(new Conjunction(runner.clicks.Spending(1), permission), runner.Installing.InstallingCard(card), new GameRule(), true);
             install.Resolved += CompleteAction;
             return install;
         }
 
         public Ability Run(IServer server)
         {
-            Ability run = new Ability(new Conjunction(runner.clicks.Spending(1), permission), runner.Running.RunningOn(server));
+            Ability run = new Ability(new Conjunction(runner.clicks.Spending(1), permission), runner.Running.RunningOn(server), new GameRule(), true);
             run.Resolved += CompleteAction;
             return run;
         }

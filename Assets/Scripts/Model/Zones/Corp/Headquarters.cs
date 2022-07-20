@@ -12,7 +12,7 @@ namespace model.zones.corp
     {
         public Zone Zone { get; } = new Zone("HQ", false);
         public IceColumn Ice { get; }
-        public event Action DiscardingOne = delegate {};
+        public event AsyncAction DiscardingOne;
         public event Action<Card> DiscardedOne = delegate {};
         private TaskCompletionSource<bool> discarding;
         private Shuffling shuffling;
@@ -26,7 +26,7 @@ namespace model.zones.corp
         async public Task Discard()
         {
             discarding = new TaskCompletionSource<bool>();
-            DiscardingOne();
+            await DiscardingOne?.Invoke();
             await discarding.Task;
         }
 

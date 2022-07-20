@@ -19,7 +19,7 @@ namespace model.play
             {
                 UnityEngine.Debug.Log("Picking the next effect to fire among " + untriggered);
                 var ability = await pilot.TriggerFromSimultaneous(untriggered);
-                await ability.Ability.Trigger();
+                await ability.Trigger();
                 untriggered.Remove(ability);
             }
         }

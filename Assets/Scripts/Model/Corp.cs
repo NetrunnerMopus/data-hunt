@@ -42,7 +42,6 @@ namespace model
             var identity = deck.identity;
             zones.identity.Add(identity);
             identity.FlipFaceUp();
-            await identity.Activate();
             pilot.Play(game);
             credits.Gain(5);
             await zones.rd.Draw(5, zones.hq);

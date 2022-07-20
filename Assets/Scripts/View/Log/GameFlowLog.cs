@@ -22,7 +22,7 @@ namespace view.log
             corpTurn.ActionTaken += (turn, action) => LogAsync("corp took action");
             game.corp.Rezzing.Window.Opened += (window, rezzables) => LogAsync("rez window opened, up to " + rezzables.Count + " could be rezzed");
             game.corp.Rezzing.Window.Closed += (window) => Log("rez window closed");
-            game.corp.zones.hq.DiscardingOne += () => Log("discarding");
+            game.corp.zones.hq.DiscardingOne += async () => await Log("discarding");
             runnerTurn.Opened += TurnStarted;
             runnerTurn.TakingAction += (turn) => LogAsync("runner taking action");
             runnerTurn.ActionTaken += (turn, action) => LogAsync("runner took action");
@@ -35,9 +35,10 @@ namespace view.log
             await Task.CompletedTask;
         }
 
-        private void Log(string message)
+        private Task Log(string message)
         {
             Debug.Log(currentStep + message);
+            return Task.CompletedTask;
         }
 
         private void LogOpened(PaidWindow window)
@@ -52,8 +53,7 @@ namespace view.log
 
         async private Task TurnStarted(ITurn turn)
         {
-            Log("turn " + turn + " beginning");
-            await Task.CompletedTask;
+            await Log("turn " + turn + " beginning");
         }
     }
 }

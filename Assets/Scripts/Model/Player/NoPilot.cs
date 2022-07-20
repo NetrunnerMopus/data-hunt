@@ -1,21 +1,27 @@
-﻿using model.cards;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using model.cards;
 using model.choices;
 using model.choices.trash;
 using model.play;
 using model.steal;
+using model.timing;
 using model.zones;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace model.player
-{
-    public class NoPilot : IPilot
-    {
+namespace model.player {
+    public class NoPilot : IPilot {
         void IPilot.Play(Game game) { }
 
-        Task<CardAbility> IPilot.TriggerFromSimultaneous(IList<CardAbility> abilities)
-        {
+        IPlayOption IPilot.Choose(IList<IPlayOption> options) {
+            throw new System.NotImplementedException();
+        }
+
+        Task IPilot.Receive(Priority priority) {
+            throw new System.NotImplementedException();
+        }
+
+        Task<Ability> IPilot.TriggerFromSimultaneous(IEnumerable<Ability> abilities) {
             return Task.FromResult(abilities.First());
         }
 

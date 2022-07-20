@@ -14,9 +14,9 @@ namespace model.player
     {
         public SingleChoiceMaker(IPilot basic) : base(basic) { }
 
-        async override public Task<CardAbility> TriggerFromSimultaneous(IList<CardAbility> abilities)
+        async override public Task<Ability> TriggerFromSimultaneous(IEnumerable<Ability> abilities)
         {
-            if (abilities.Count == 1)
+            if (abilities.Count() == 1)
             {
                 return abilities.Single();
             }

@@ -37,7 +37,7 @@ namespace model.timing.corp
             TakingAction?.Invoke();
             var action = await actionTaking;
             ActionTaken?.Invoke(action);
-            await timing.OpenPaidWindow(rezzing: true, scoring: true);
+            await timing.DefinePaidWindow(rezzing: true, scoring: true).Open();
         }
     }
 }

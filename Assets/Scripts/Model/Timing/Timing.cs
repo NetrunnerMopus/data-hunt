@@ -85,21 +85,6 @@ namespace model.timing {
             return window;
         }
 
-        async public Task OpenPaidWindow(PaidWindow acting, PaidWindow reacting) {
-            var bothPlayersCouldAct = false;
-            while (true) {
-                var actingDeclined = await acting.AwaitPass();
-                if (actingDeclined && bothPlayersCouldAct) {
-                    break;
-                }
-                var reactingDeclined = await reacting.AwaitPass();
-                bothPlayersCouldAct = true;
-                if (reactingDeclined && bothPlayersCouldAct) {
-                    break;
-                }
-            }
-        }
-
         private void DeckCorp(Corp corp) {
             Finish(new GameFinish(
                 winner: "The Runner",

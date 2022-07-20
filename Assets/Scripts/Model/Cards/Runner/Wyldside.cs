@@ -23,19 +23,5 @@ namespace model.cards.runner {
                 mandatory: true
             );
         }
-
-        async protected override Task Activate() {
-            game.Timing.RunnerTurnDefined += DeferParty;
-            await Task.CompletedTask;
-        }
-
-        override protected Task Deactivate() {
-            game.Timing.RunnerTurnDefined -= DeferParty;
-            return Task.CompletedTask;
-        }
-
-        private void DeferParty(RunnerTurn turn) {
-            turn.Begins.Offer(game.runner.pilot, party);
-        }
     }
 }

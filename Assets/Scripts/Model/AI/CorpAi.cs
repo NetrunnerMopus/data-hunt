@@ -24,7 +24,7 @@ namespace model.ai
         private Task Thinking() => Task.Delay(1700);
         private IList<Ability> actions = new List<Ability>();
         private IList<Ability> legalActions = new List<Ability>();
-        private IList<CardAbility> paidAbilities = new List<CardAbility>();
+        private IList<Ability> paidAbilities = new List<Ability>();
         private Random random;
 
         public CorpAi(Random random)
@@ -45,10 +45,10 @@ namespace model.ai
             zones.hq.DiscardingOne += DiscardOne;
         }
 
-        async Task<IEffect> IPilot.TriggerFromSimultaneous(IList<IEffect> effects)
+        async Task<Ability> IPilot.TriggerFromSimultaneous(IEnumerable<Ability> abilities)
         {
             await Thinking();
-            return effects.First();
+            return abilities.First();
         }
 
         private async Task TakeAction(ITurn turn)
@@ -59,9 +59,9 @@ namespace model.ai
             await randomLegalAction.Trigger();
         }
 
-        private void DiscardOne()
+        private async Task DiscardOne()
         {
-            zones.hq.Discard(zones.hq.Random(), zones.archives);
+            await zones.hq.Discard(zones.hq.Random(), zones.archives);
         }
 
         async private Task RezSomething(RezWindow window, List<Ability> rezzables)

@@ -13,7 +13,7 @@ namespace model.timing.corp {
 
         async protected override Task Proceed() {
             corp.clicks.Replenish(); // CR: 5.6.1.a
-            await timing.OpenPaidWindow(rezzing: true, scoring: true); // CR: 5.6.1.b
+            await timing.DefinePaidWindow(rezzing: true, scoring: true).Open(); // CR: 5.6.1.b
             RefillRecurringCredits(); // CR: 5.6.1.c
             await turnBegins.Open(); // CR: 5.6.1.d
             await timing.Checkpoint();// CR: 5.6.1.e

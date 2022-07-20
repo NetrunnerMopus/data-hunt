@@ -9,7 +9,7 @@ namespace model.timing {
         private IPilot acting;
         private IPilot reacting;
 
-        public PaidWindow(bool rezzing, bool scoring, IPilot acting, IPilot reacting, string name) : base(name) {
+        public PaidWindow(bool rezzing, bool scoring, IPilot acting, IPilot reacting) : base("Paid ability window") {
             this.rezzing = rezzing;
             this.scoring = scoring;
             this.acting = acting;
@@ -37,7 +37,7 @@ namespace model.timing {
 
         async private Task<Priority> AwaitPass(IPilot pilot) {
             var priority = new Priority(canPass: true); // CR: 9.2.4.b
-            PriorityGiven(priority);
+            OnPriorityGiven(priority);
             while (!priority.Passed) // CR: 9.2.4.c
             {
                 await pilot.Receive(priority); // CR: 9.2.7.f

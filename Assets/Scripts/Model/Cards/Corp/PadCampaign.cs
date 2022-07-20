@@ -30,10 +30,7 @@ namespace model.cards.corp {
             new PayToTrash(4, this, game)
         };
 
-        private Ability drip;
-        private IList<CorpDrawPhase> phases = new List<CorpDrawPhase>();
-
-        public PadCampaign(Game game) : base(game, game.corp) {
+        public PadCampaign(Game game) : base(game) {
             ///// SYNTAX /////
 
             // PAD Campaign
@@ -60,23 +57,7 @@ namespace model.cards.corp {
             new ConditionalAbility(condition: new TriggerCondition(this.trashed().byTaking(NET, MEAT)))
 
             //// TRY TO COMPILE ////
-            game.Abilities.AddConditional(new ConditionalAbility(condition: your.turn.begins, instruction: you.gain(1).credits));
-        }
-
-        protected override Task Activate() {
-
-
-            game.Timing.CorpTurnDefined += DeferDrip;
-            return Task.CompletedTask;
-        }
-
-        override protected Task Deactivate() {
-            game.Timing.CorpTurnDefined -= DeferDrip;
-            return Task.CompletedTask;
-        }
-
-        private void DeferDrip(CorpTurn turn) {
-            turn.Begins.Offer(game.corp.pilot, drip);
+            game.Abilities.AddConditional(new ConditionalAbility(condition: your.Turn.Begins, instruction: you.Gain(1).Credits));
         }
     }
 }

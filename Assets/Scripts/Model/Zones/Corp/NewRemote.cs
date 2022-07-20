@@ -12,10 +12,10 @@ namespace model.zones.corp
             this.zones = zones;
         }
 
-        void IInstallDestination.Host(Card card)
+        async Task IInstallDestination.Host(Card card)
         {
             var newRemote = zones.CreateRemote() as IInstallDestination;
-            newRemote.Host(card);
+            await newRemote.Host(card);
         }
 
         Task IInstallDestination.PayInstallCost(Card card)

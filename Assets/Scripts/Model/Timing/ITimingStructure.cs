@@ -8,8 +8,6 @@ namespace model.timing {
 
         protected ITimingStructure(string name) {
             this.Name = name;
-            Begins = new ReactionWindow(Name + " begins");
-            Ends = new ReactionWindow(Name + " ends");
         }
 
         async public Task Initiate() {
