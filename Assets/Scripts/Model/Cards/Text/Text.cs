@@ -3,29 +3,29 @@ using model.abilities;
 namespace model.cards.text {
 
     public class YourText {
-        public readonly TurnText turn;
-        public TurnText nextTurn() {
+        public TurnText Turn { get; private set; }
+        public TurnText NextTurn() {
             return new TurnText();
         }
     }
 
 
     public class YouText {
-        public GainingText gain(int number) {
+        public GainingText Gain(int number) {
             return new GainingText();
         }
 
-        public DrawingText draw(int number) {
+        public DrawingText Draw(int number) {
             return new DrawingText();
         }
     }
 
     public class SelfText {
-        public PlayedText played() {
+        public PlayedText Played() {
             return new PlayedText();
         }
 
-        public TrashedText trashed() {
+        public TrashedText Trashed() {
             return new TrashedText();
         }
     }
@@ -35,35 +35,44 @@ namespace model.cards.text {
     }
 
     public class TrashedText : TriggerCondition {
-        public TrashedText byTaking(params object[] damageType) {
-            return new TrashedText();
+
+        internal object[] damageTypes;
+
+        public TrashedText ByTaking(params object[] damageTypes) {
+            return new TrashedText {
+                damageTypes = damageTypes
+            };
         }
     }
 
     public class GainingText {
-        public readonly CreditsText credits;
+        public CreditsText Credits { get; private set; }
     }
 
     public class DrawingText : IInstruction {
-        public readonly DrawingText cards;
+        public DrawingText Cards { get; private set; }
+
+        internal DrawingText() {
+            Cards = this;
+        }
     }
 
     public class CreditsText : IInstruction {
     }
 
     public class TurnText {
-        public readonly TriggerCondition begins;
+        public TriggerCondition Begins { get; private set; }
     }
 
     public class ThenText {
 
-        private TriggerCondition condition;
+        private readonly TriggerCondition condition;
 
         public ThenText(TriggerCondition condition) {
             this.condition = condition;
         }
 
-        public ConditionalAbility then(IInstruction instruction) {
+        public ConditionalAbility Then(IInstruction instruction) {
             return new ConditionalAbility(condition, instruction);
         }
     }

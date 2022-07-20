@@ -10,12 +10,6 @@ using model.timing.corp;
 
 namespace model.cards.corp {
 
-    public static class costs2 {
-        public static string credits(this System.Int32 creds) {
-            return creds + " credits";
-        }
-    }
-
     public class PadCampaign : Card {
 
 
@@ -34,27 +28,27 @@ namespace model.cards.corp {
             ///// SYNTAX /////
 
             // PAD Campaign
-            when(your.turn.begins)
-                .then(you.gain(1).credits);
+            When(your.Turn.Begins)
+                .Then(you.Gain(1).Credits);
 
             // I've Had Worse
-            when(self.played())
-                .then(you.draw(3).cards);
-            when(self.trashed().byTaking("NET", "MEAT"))
-                .then(you.draw(3).cards);
+            When(self.Played())
+                .Then(you.Draw(3).Cards);
+            When(self.Trashed().ByTaking("NET", "MEAT"))
+                .Then(you.Draw(3).Cards);
 
             // Hyoubu Precog Manifold
-            statically(self.restrict(play.when(game.Abilities.noLockdown())));
-            when(self.played())
-                .then(self.deferTrashUntil(your.nextTurn().begins));
-            var precogChoice = when(self.played())
-                .then(choose().server());
-            when(game.runner.runs.successfully().on(precogChoice.server))
-                .then(game.psi().miss(game.run.end()))
+            // self.Play.OnlyIf(game.Abilities.NoLockdown());
+            // When(self.Played())
+            //     .Then(self.DeferTrashUntil(your.NextTurn().Begins));
+            // var precogChoice = When(self.Played())
+            //     .Then(Choose().Server());
+            // When(game.Runner.Runs.Successfully().On(precogChoice.Server))
+            //     .Then(game.Corp.Psi().Miss(game.Run.End()));
 
-            //// SEMANTICS //// CR: 9.3.7
-            new StaticAbility(restrictions: null, declarations: null, conditions: null)
-            new ConditionalAbility(condition: new TriggerCondition(this.trashed().byTaking(NET, MEAT)))
+            // //// SEMANTICS //// CR: 9.3.7
+            // new StaticAbility(restrictions: null, declarations: null, conditions: null);
+            // new ConditionalAbility(condition: new TriggerCondition(this.Trashed().ByTaking(NET, MEAT)));
 
             //// TRY TO COMPILE ////
             game.Abilities.AddConditional(new ConditionalAbility(condition: your.Turn.Begins, instruction: you.Gain(1).Credits));

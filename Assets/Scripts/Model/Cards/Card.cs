@@ -45,8 +45,8 @@ namespace model.cards {
             this.Zone.Add(this);
         }
 
-        protected ThenText when(TriggerCondition condition) {
-            return new ThenText();
+        protected ThenText When(TriggerCondition condition) {
+            return new ThenText(condition);
         }
 
         async public Task BecomeActive() {

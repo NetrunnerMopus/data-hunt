@@ -24,11 +24,20 @@ namespace model.cards.corp {
         };
 
         public AdvancedAssemblyLines(Game game) : base(game) {
+            When(self.Rezzed()).Then(Gain(3).Credits);
+            OutsideOfRun(Pay(self.Trash()).To(Install(Non(Agenda())).From().Hq())); // SYNTAX PAID ABILITY CR: 9.5
+            // OLD SEMANTICS:
             pop = new Ability(
                 cost: new Trash(this, game.corp.zones.archives.Zone),
                 effect: new AdvancedAssemblyLinesInstall(game.corp),
                 source: this,
                 mandatory: false
+            );
+            // NEW SEMANTICS:
+            new PaidAbility(
+                restrictions: OutsideOfRun(),
+                triggerCost: this.SelfTrash(),
+                effect: new AdvancedAssemblyLinesInstall(game.corp)
             );
         }
 
