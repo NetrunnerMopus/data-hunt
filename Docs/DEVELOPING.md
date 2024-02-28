@@ -22,7 +22,7 @@ A pull request is a great place to discuss the change, exchange technical detail
 ### Unity
 
 The project is built upon [Unity](https://unity.com/). The [personal version](https://store.unity.com/download?ref=personal) is perfectly fine.
-When you get your Unity Hub downloaded and running, download the [2021.3.4f1](unityhub://2021.3.4f1).
+When you get your Unity Hub downloaded and running, download the 2022.3.20f1.
 The default's should suffice, no need for additional support packages.
 To open the project, just hit the big `Add` button, select the folder you cloned and click onto the project.
 
